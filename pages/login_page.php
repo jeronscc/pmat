@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Procurement Tracking and Monitoring System</title>
-    <link rel="stylesheet" href="../css/loginpage.css">
+    <link rel="stylesheet" href="../src/css/loginpage.css">
+    <link rel="stylesheet" href="../src/css/landingheader.css">
+    <?php include '../src/components/landing_header.html'; ?>
 </head>
 <body>
     <div class="procurement-app">
