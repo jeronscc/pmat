@@ -11,6 +11,14 @@
 header {
   padding: 5px 15px;
   height: 110px; /* Adjust header height as needed */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
 }
 
 .logo img {
@@ -60,26 +68,32 @@ h1 {
   }
 }
 
-@media (max-width: 576px) {
+@media (max-width: 976px) {
   header {
     flex-direction: column;
+    align-items: center;
+    justify-content: center;
     text-align: center;
-    padding: 5px;
+    height: auto;
+    padding: 10px 5px;
   }
 
-  .logo img {
-    height: 40px;
+  .logo {
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
   }
 
   h1 {
     font-size: 14px;
+    margin: 5px 0;
   }
 
   .custom-btn {
-    margin-top: 5px;
     width: 50px; /* Maintain square button for smaller screens */
     height: 50px;
-    font-size: 22px; /* Increase font size for smaller screens */
+    font-size: 22px; /* Adjust icon size */
+    margin-top: 10px;
   }
 }
 
