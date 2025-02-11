@@ -26,13 +26,14 @@ body {
 
 main {
     display: flex;
-    flex-wrap: wrap;
-    width: 100%;
-    max-width: 1200px;
+    flex-wrap: nowrap; 
+    width: 100vw; 
+    height: 100vh; 
     padding: 20px;
-    flex-grow: 1;
-    justify-content: center;
+    justify-content: flex-start; 
+    align-items: stretch; 
 }
+
 
 aside {
     width: 20%;
@@ -61,6 +62,7 @@ aside select {
     background: white;
     min-width: 300px;
     overflow-x: auto;
+    margin-right: 40px;
 }
 
 .header {
@@ -111,7 +113,7 @@ aside select {
     box-sizing: border-box;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 100px) {
     main {
         flex-direction: column;
         align-items: center;
@@ -129,7 +131,7 @@ aside select {
     }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 100px) {
     .search-box {
         flex-direction: column;
         align-items: stretch;
