@@ -9,6 +9,7 @@
 
 header {
   padding: 5px 15px;
+  height: 110px; /* Adjust header height as needed */
 }
 
 .logo img {
@@ -25,7 +26,7 @@ h1 {
   margin: 0;
 }
 
-.custom-btn {
+.custom-btn { /* Menu icon */
   background-color: transparent; /* No background color */
   color: white; /* White icon color */
   border: none;
@@ -41,6 +42,61 @@ h1 {
 
 .custom-btn:hover {
   background-color: #002244; /* Darker background on hover */
+}
+
+/* Side Navigation Styles */
+.side-nav {
+  position: fixed;
+  top: 110px; /* Start below the header */
+  right: -250px; /* Initially off the screen */
+  width: 250px;
+  height: calc(100vh - 60px); /* Adjust height to avoid covering the header */
+  background-color: rgba(0, 51, 102, 0.9); /* Dark background with opacity (0.9) */
+  transition: right 0.3s ease-in-out; /* Smooth slide effect */
+  z-index: 1000; /* Ensures it stays above other content */
+}
+
+.side-nav.active {
+  right: 0; /* Slide in from the right */
+}
+
+.side-nav ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.side-nav ul li {
+  text-align: left;
+  padding: 10px 20px; /* Reduced padding */
+}
+
+.side-nav ul li a {
+  color: white;
+  text-decoration: none;
+  font-size: 16px; /* Reduced font size */
+  display: flex;
+  align-items: center; /* Align items horizontally */
+  gap: 10px; /* Space between the icon and the text */
+}
+
+.side-nav ul li a img {
+  width: 20px; /* Resize the icons */
+  height: auto;
+}
+
+.side-nav ul li a:hover {
+  background-color: #002244; /* Darker hover effect */
+}
+
+/* For overlay effect */
+body {
+  transition: margin-right 0.3s ease-in-out;
+}
+
+/* Optional: Adjust the main content when the side nav is open */
+.side-nav.active ~ body {
+  margin-right: 250px;
 }
 
 @media (max-width: 768px) {
