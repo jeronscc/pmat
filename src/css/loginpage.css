@@ -5,7 +5,6 @@ body, html {
     font-family: 'Inter', sans-serif;
 }
 .procurement-app {
-    min-height: 100vh;
     background-color: #fff;
     display: flex;
     flex-direction: column;
