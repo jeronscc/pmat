@@ -8,7 +8,7 @@
   right: -250px; /* Initially off the screen */
   width: 250px;
   height: calc(100vh - 60px); /* Adjust height to avoid covering the header */
-  background-color: rgba(0, 51, 102, 0.3); /* Dark background with opacity */
+  background-color: rgba(0, 51, 102, 0.4); /* Dark background with opacity */
   transition: right 0.3s ease-in-out; /* Smooth slide effect */
   z-index: 1000; /* Ensures it stays above other content */
   overflow: hidden; /* Prevents the pseudo-element from overflowing */
