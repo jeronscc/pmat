@@ -1,0 +1,163 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: 'Inter', sans-serif;
+}
+.procurement-app {
+    min-height: 100vh;
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+}
+
+.logo-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0px;
+}
+.procurement-logo {
+    width: 205px;
+    height: 96px;
+    object-fit: contain;
+}
+.procurement-title {
+    color: #fff;
+    text-align: center;
+    font-size: 32px;
+    font-weight: 400;
+    margin: 0;
+}
+.procurement-content {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+}
+.login-container {
+    background-color: #d8d8d8;
+    width: 100%;
+    max-width: 500px;
+    border-radius: 4px;
+    overflow: hidden;
+}
+.login-header {
+    background-color: #060511;
+    padding: 9px 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.login-logo {
+    width: 180px;
+    height: auto;
+}
+.close-button {
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.close-icon {
+    width: 100%;
+    height: 100%;
+}
+.login-form {
+    padding: 50px 62px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.form-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+}
+.form-label {
+    color: #000;
+    font-size: 20px;
+    font-weight: 400;
+}
+.form-input {
+    width: 100%;
+    height: 46px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 8px 12px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+.login-submit {
+    background-color: #060511;
+    color: #fff;
+    padding: 11px 27px;
+    border: none;
+    border-radius: 7px;
+    cursor: pointer;
+    align-self: center;
+    margin-top: 13px;
+    transition: background-color 0.2s;
+    font-size: 20px;
+    font-weight: 700;
+}
+.login-submit:hover, .login-submit:focus {
+    background-color: #1a1a2e;
+}
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+@media (max-width: 991px) {
+    .procurement-header {
+        padding: 9px 20px;
+    }
+    .logo-wrapper {
+        flex-direction: column;
+        align-items: center;
+    }
+    .procurement-title {
+        font-size: 28px;
+        margin-top: 10px;
+    }
+    .procurement-content {
+        padding: 20px;
+    }
+    .login-container {
+        max-width: 100%;
+        margin: 0 20px;
+    }
+    .login-form {
+        padding: 40px 20px;
+    }
+}
+@media (max-width: 640px) {
+    .procurement-header {
+        padding: 9px 15px;
+    }
+    .procurement-title {
+        font-size: 24px;
+    }
+    .login-form {
+        padding: 30px 15px;
+    }
+    .form-group,
+    .form-input,
+    .login-submit {
+        width: 100%;
+    }
+}

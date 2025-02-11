@@ -1,0 +1,147 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow-x: hidden;
+}
+
+header {
+    background-color: #000000;
+    color: white;
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+    justify-content: space-between;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.logo img {
+    height: 75px;
+    max-width: 100%;
+}
+
+.login {
+    background-color: #1a3f91;
+    color: white;
+    padding: 8px 15px;
+    border: none;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+main {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    max-width: 1200px;
+    padding: 20px;
+    flex-grow: 1;
+    justify-content: center;
+}
+
+aside {
+    width: 20%;
+    background: gray;
+    color: white;
+    padding: 20px;
+    min-width: 250px;
+    box-sizing: border-box;
+}
+
+aside select {
+    width: 100%;
+    margin: 10px 0;
+    padding: 10px;
+    box-sizing: border-box;
+    background: black;
+    color: white;
+}
+
+.balance {
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.records {
+    flex: 1;
+    padding: 20px;
+    background: white;
+    min-width: 300px;
+    box-sizing: border-box;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #e0e0e0;
+    padding: 10px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.search-box {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    flex-wrap: nowrap;
+}
+
+.search input {
+    flex: 1;
+    padding: 5px;
+    box-sizing: border-box;
+}
+
+.search-box button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.search-box button:hover {
+    background-color: #0056b3;
+}
+
+.record-box {
+    margin-top: 20px;
+    padding: 20px;
+    background: #eef;
+    text-align: center;
+    color: gray;
+    box-sizing: border-box;
+}
+
+@media (max-width: 1024px) {
+    main {
+        flex-direction: column;
+        align-items: center;
+    }
+    aside, .records {
+        width: 100%;
+    }
+}
+
+@media (max-width: 600px) {
+    header {
+        flex-direction: column;
+        text-align: center;
+    }
+    .search-box {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .search input, .search-box button {
+        width: 100%;
+    }
+}
