@@ -1,0 +1,87 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz@9..40&family=Rubik:wght@400;600&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Rubik', sans-serif;
+}
+
+header {
+  padding: 5px 15px;
+}
+
+.logo img {
+  height: 50px;
+  width: auto;
+}
+
+.logo img:first-child {
+  margin-right: 12px;
+}
+
+h1 {
+  font-size: 18px;
+  margin: 0;
+}
+
+.custom-btn {
+  background-color: transparent; /* No background color */
+  color: white; /* White icon color */
+  border: none;
+  padding: 10px; /* Larger padding for the hamburger icon */
+  font-size: 32px; /* Increase the font size of the icon */
+  width: 60px; /* Set width to make it square */
+  height: 60px; /* Set height to make it square */
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Center the icon inside the button */
+  transition: background 0.3s;
+}
+
+.custom-btn:hover {
+  background-color: #002244; /* Darker background on hover */
+}
+
+@media (max-width: 768px) {
+  h1 {
+    font-size: 16px;
+  }
+
+  .logo img {
+    height: 45px;
+  }
+
+  .custom-btn {
+    padding: 10px;
+    font-size: 20px; /* Reduce font size slightly for medium screens */
+  }
+}
+
+@media (max-width: 576px) {
+  header {
+    flex-direction: column;
+    text-align: center;
+    padding: 5px;
+  }
+
+  .logo img {
+    height: 40px;
+  }
+
+  h1 {
+    font-size: 14px;
+  }
+
+  .custom-btn {
+    margin-top: 5px;
+    width: 50px; /* Maintain square button for smaller screens */
+    height: 50px;
+    font-size: 22px; /* Increase font size for smaller screens */
+  }
+}
+
+#dictLogo {
+  height: 80px;
+  width: auto;
+}
