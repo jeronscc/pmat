@@ -11,16 +11,6 @@ body {
     overflow-x: hidden;
 }
 
-header {
-    background-color: #000000;
-    color: white;
-    display: flex;
-    align-items: center;
-    padding: 10px 20px;
-    justify-content: space-between;
-    width: 100%;
-    box-sizing: border-box;
-}
 
 .logo img {
     height: 75px;
