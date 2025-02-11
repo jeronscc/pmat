@@ -29,7 +29,6 @@ body, html {
     margin: 0;
 }
 .procurement-content {
-    flex: 1;
     display: flex;
     justify-content: center;
     align-items: center;
