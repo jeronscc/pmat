@@ -23,12 +23,15 @@
                 </div>
                 <form class="login-form">
                     <div class="form-group">
-                        <label for="email" class="form-label">Email:</label>
-                        <input type="email" id="email" class="form-input" required>
+                        <label for="username" class="form-label">Username:</label>
+                        <input type="text" id="username" class="form-input" required placeholder="Enter your username">
                     </div>
                     <div class="form-group">
                         <label for="password" class="form-label">Password:</label>
-                        <input type="password" id="password" class="form-input" required>
+                        <div class="password-container">
+                            <input type="password" id="password" class="form-input" required placeholder="Enter your password">
+                            <img src="../src/assets/open_eye.png" alt="Show Password" class="eye-icon" id="toggle-password">
+                        </div>
                     </div>
                     <button type="submit" class="login-submit">Login</button>
                 </form>
@@ -36,4 +39,16 @@
         </main>
     </div>
 </body>
+<script>
+    document.getElementById("toggle-password").addEventListener("click", function() {
+        const passwordField = document.getElementById("password");
+        if (passwordField.type === "password") {
+            passwordField.type = "text";
+            this.src = "../src/assets/open_eye.png";
+        } else {
+            passwordField.type = "password";
+            this.src = "../src/assets/close_eye.png";
+        }
+    });
+</script>
 </html>
