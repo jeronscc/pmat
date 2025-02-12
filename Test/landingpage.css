@@ -9,31 +9,19 @@ body {
     flex-direction: column;
     justify-content: space-between;
     overflow-x: hidden;
-}
-
-.logo img {
-    height: 75px;
-}
-
-.login {
-    background-color: #1a3f91;
-    color: white;
-    padding: 8px 15px;
-    border: none;
-    cursor: pointer;
-    white-space: nowrap;
+    overflow-y: auto;
 }
 
 main {
     display: flex;
-    flex-wrap: nowrap; 
-    width: 100vw; 
-    height: 100vh; 
+    flex-wrap: nowrap;
+    width: 100vw;
+    height: 100vh;
     padding: 20px;
-    justify-content: flex-start; 
-    align-items: stretch; 
+    justify-content: flex-start;
+    align-items: stretch;
+    overflow-x: hidden;
 }
-
 
 aside {
     width: 20%;
@@ -43,17 +31,25 @@ aside {
     flex-shrink: 0;
 }
 
-aside select {
-    background: black;
-    color: white;
-    width: 100%;
-    margin: 10px 0;
-    padding: 8px;
+.balance-box {
+    background-color: #000000;
+    color: #ffffff;
+    padding: 5px;
+    margin-bottom: 30px;
+    border: 1px solid #ddd;
+    text-align: left;
 }
 
-.balance {
+.balance-box span {
     font-weight: bold;
-    margin-bottom: 20px;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.balance-box p {
+    font-size: 30px;
+    text-align: center;
+    color: #ffffff;
 }
 
 .records {
@@ -104,24 +100,95 @@ aside select {
 }
 
 .record-box {
-    margin-top: 20px;
-    padding: 20px;
-    background: #eef;
-    text-align: center;
-    color: gray;
     width: 100%;
-    box-sizing: border-box;
+    max-width: 100%;
+    overflow-x: auto;
+    display: block;
 }
 
-@media (max-width: 100px) {
+.record-box table {
+    width: 100%;
+    table-layout:fixed; /* Ensures the table columns adjust to fit */
+    border-collapse: collapse;
+    font-size: 20px;
+    background: #eef;
+}
+
+.record-box th, .record-box td {
+    padding: 8px;
+    text-align: center;
+    word-wrap: break-word; /* Ensures text wraps properly */
+}
+
+/* Remove border from the first row of data */
+.record-box tbody tr:first-child td {
+    border-top: 3px solid black!important;
+}
+
+/* Apply bold border to the second row */
+.record-box tbody tr:nth-child(2) td {
+    border: 3px solid black !important;
+}
+
+/* General cell styling */
+.record-box td {
+    text-align: center;
+    border: 3px solid #000000;
+    padding: 8px;
+}
+
+.accordion {
+    background-color: #000000;
+    color: #ffffff;
+    cursor: pointer;
+    padding: 18px;
+    width: 100%;
+    border: none;
+    text-align: left;
+    outline: none;
+    font-size: 15px;
+    transition: 0.4s;
+}
+
+.active, .accordion:hover {
+    background-color: #000000;
+}
+
+.panel {
+    padding: 0 18px;
+    display: none;
+    background-color: white;
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.2s ease-out;
+    min-height: 50px;
+}
+
+.panel.show {
+    display: block;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+/* Media Queries for Responsive Design */
+@media (max-width: 768px) {
     main {
         flex-direction: column;
         align-items: center;
+        padding: 10px;
+        overflow-x: hidden;
     }
-    aside, .records {
+    aside {
         width: 100%;
+        min-width: 0;
+        margin-bottom: 20px;
     }
-    header {
+    .records {
+        width: 100%;
+        margin-right: 0;
+        overflow-x: hidden;
+    }
+    .header {
         flex-direction: column;
         align-items: center;
         text-align: center;
@@ -131,16 +198,39 @@ aside select {
     }
 }
 
-@media (max-width: 100px) {
+@media (max-width: 480px) {
     .search-box {
-        flex-direction: column;
-        align-items: stretch;
+        flex-direction: row;
+        align-items: center;
+        width: 100%;
+        max-width: 100%;
     }
     .search input {
-        width: 100%;
+        flex: 1;
+        width: auto;
     }
     .search-box button {
+        width: auto;
+        padding: 3px 8px; /* Smaller padding */
+        font-size: 14px;  /* Smaller font size */
+        margin-top: 0; /* Remove extra spacing */
+    }
+    .record-box table {
         width: 100%;
-        margin-top: 5px;
+        display: block;
+        overflow-x: auto;
+    }
+    .record-box thead {
+        display: table-header-group;
+    }
+    .record-box tbody {
+        display: table-row-group;
+    }
+    .record-box tr {
+        display: table-row;
+    }
+    .record-box th, .record-box td {
+        font-size: auto;
+        padding: 5px;
     }
 }
