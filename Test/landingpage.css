@@ -74,7 +74,7 @@ aside {
     display: flex;
     align-items: center;
     gap: 5px;
-    flex-wrap: nowrap; /* Prevents wrapping */
+    flex-wrap: wrap;
     width: 100%;
     max-width: 400px;
 }
@@ -93,7 +93,6 @@ aside {
     padding: 5px 10px;
     cursor: pointer;
     flex-shrink: 0;
-    font-size: 14px; /* Default size */
 }
 
 .search-box button:hover {
@@ -101,34 +100,29 @@ aside {
 }
 
 .record-box {
-    margin-top: 20px;
-    padding: 20px;
-    background: #eef;
-    text-align: center;
-    color: gray;
     width: 100%;
-    box-sizing: border-box;
+    max-width: 100%;
     overflow-x: auto;
-    border-top: none; /* Removes top border */
+    display: block;
 }
 
 .record-box table {
     width: 100%;
+    table-layout:fixed; /* Ensures the table columns adjust to fit */
     border-collapse: collapse;
-    background: #eef; /* Matches the background */
+    font-size: 20px;
+    background: #eef;
 }
 
-/* Style for table headers */
-.record-box th {
-    color: rgb(0, 0, 0);
+.record-box th, .record-box td {
+    padding: 8px;
     text-align: center;
-    font-size: 20px;
-    border-bottom: 2px solid black; /* Thick bottom border for headers */
+    word-wrap: break-word; /* Ensures text wraps properly */
 }
 
 /* Remove border from the first row of data */
 .record-box tbody tr:first-child td {
-    border-top: none !important;
+    border-top: 3px solid black!important;
 }
 
 /* Apply bold border to the second row */
@@ -206,15 +200,20 @@ aside {
 
 @media (max-width: 480px) {
     .search-box {
-        flex-direction: column;
-        align-items: stretch;
+        flex-direction: row;
+        align-items: center;
+        width: 100%;
+        max-width: 100%;
     }
     .search input {
-        width: 100%;
+        flex: 1;
+        width: auto;
     }
     .search-box button {
-        width: 100%;
-        margin-top: 5px;
+        width: auto;
+        padding: 3px 8px; /* Smaller padding */
+        font-size: 14px;  /* Smaller font size */
+        margin-top: 0; /* Remove extra spacing */
     }
     .record-box table {
         width: 100%;
@@ -230,7 +229,8 @@ aside {
     .record-box tr {
         display: table-row;
     }
-    .record-box td, .record-box th {
-        display: table-cell;
+    .record-box th, .record-box td {
+        font-size: auto;
+        padding: 5px;
     }
 }
