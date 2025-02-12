@@ -15,22 +15,22 @@
                 <span>Remaining Balance:</span>
                 <p>₱1,000,000</p> <!-- Replace with dynamic value as needed -->
             </div>
-            <button class="accordion">ILCDB</button>
+            <button class="accordion">ILCDB <span class="dropdown-icon">&#x25BC;</span></button>
             <div class="panel">
             
             </div>
 
-            <button class="accordion">DTC</button>
+            <button class="accordion">DTC <span class="dropdown-icon">&#x25BC;</span></button>
             <div class="panel">
                 
             </div>
 
-            <button class="accordion">SPARK</button>
+            <button class="accordion">SPARK <span class="dropdown-icon">&#x25BC;</span></button>
             <div class="panel">
                 
             </div>
 
-            <button class="accordion">PROJECT CLICK</button>
+            <button class="accordion">PROJECT CLICK <span class="dropdown-icon">&#x25BC;</span></button>
             <div class="panel">
                 
             </div>
