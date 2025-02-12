@@ -10,6 +10,19 @@
     <link rel="stylesheet" href="../css/landingheader.css">
     <?php include '../components/landing_header.html'; ?>
 </head>
+<style>
+    .error-message {
+    color: red;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 10px;
+    background-color: #ffe6e6;
+    padding: 10px;
+    border-radius: 5px;
+    width: 100%;
+}
+
+</style>
 <body>
     <div class="procurement-app">
         <main class="procurement-content">
