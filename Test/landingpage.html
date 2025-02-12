@@ -10,11 +10,29 @@
     
     <main>
         <aside>
-            <div class="balance">Remaining Balance: <span>&#8369;0</span></div>
-            <select><option>ILCDB</option></select>
-            <select><option>DTC</option></select>
-            <select><option>SPARK</option></select>
-            <select><option>PROJECT CLICK</option></select>
+            <div class="balance-box">
+                <span>Remaining Balance:</span>
+                <p>₱1,000,000</p> <!-- Replace with dynamic value as needed -->
+            </div>
+            <button class="accordion">ILCDB</button>
+            <div class="panel">
+            
+            </div>
+
+            <button class="accordion">DTC</button>
+            <div class="panel">
+                
+            </div>
+
+            <button class="accordion">SPARK</button>
+            <div class="panel">
+                
+            </div>
+
+            <button class="accordion">PROJECT CLICK</button>
+            <div class="panel">
+                
+            </div>
         </aside>
         <section class="records">
             <div class="header">
@@ -26,8 +44,27 @@
                     </div>
                 </div>
             </div>
-            <div class="record-box">No records to show</div>
+            <div class="record-box">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>PR NUMBER</th>
+                            <th>ACTIVITY</th>
+                            <th>STATUS</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td data-label="PR NUMBER"></td>
+                            <td data-label="ACTIVITY"></td>
+                            <td data-label="STATUS"></td>
+                        </tr>
+                        <!-- Add more rows as needed -->
+                    </tbody>
+                </table>
+            </div>
         </section>
     </main>
+    <script src="landingpage.js"></script>
 </body>
 </html>
