@@ -6,10 +6,10 @@ $password = "";
 $database = "user"; 
 
 
-$conn_user = new mysqli($servername, $username, $password, $database);
+$conn_user = new mysqli($servername, $username, $password, $database, 3307);
 
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+if ($conn_user->connect_error) {
+    die("Connection failed: " . $conn_user->connect_error);
 }
 
 echo "Connected successfully";
