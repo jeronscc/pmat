@@ -167,13 +167,16 @@ header h3 {
     }
 
     body{
-        overflow-x: hidden;
+        overflow-x: auto;
     }
 
     .container {
         padding: 5px;
         margin: 5px;
         width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+        overflow-x: auto;
     }
 
     .table td, .table th {
