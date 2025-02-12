@@ -41,7 +41,8 @@ aside {
 }
 
 .balance-box span {
-    font-weight: bold;
+    font-style: italic;
+    color: rgb(170, 170, 170) ;
     display: block;
     margin-bottom: 5px;
 }
@@ -66,6 +67,7 @@ aside {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    font-style: italic;
     background: #e0e0e0;
     padding: 10px;
     flex-wrap: wrap;
@@ -75,18 +77,18 @@ aside {
 }
 
 .search-box button {
-    background-color: #02b7ff; /* Sky blue color */
+    background-color: #003366; /* Sky blue color */
     color: white; /* White text */
     border: none;
     padding: 8px 12px;
     font-size: 16px;
     cursor: pointer;
-    border-radius: 5px;
+    border-radius: 0px;
     transition: background 0.3s ease-in-out;
 }
 
 .search-box button:hover {
-    background-color: #62B6E2; /* Slightly darker sky blue on hover */
+    background-color: #002244; /* Slightly darker sky blue on hover */
 }
 
 /* Wrapping div to make only the table scrollable */
