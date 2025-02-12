@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Procurement Tracking and Monitoring System</title>
-    <link rel="stylesheet" href="../src/css/loginpage.css">
-    <link rel="stylesheet" href="../src/css/landingheader.css">
-    <?php include '../src/components/landing_header.html'; ?>
+    <link rel="stylesheet" href="../css/loginpage.css">
+    <link rel="stylesheet" href="../css/landingheader.css">
+    <?php include '../components/landing_header.html'; ?>
 </head>
 <body>
     <div class="procurement-app">
@@ -30,7 +30,7 @@
                         <label for="password" class="form-label">Password:</label>
                         <div class="password-container">
                             <input type="password" id="password" class="form-input" required placeholder="Enter your password">
-                            <img src="../src/assets/open_eye.png" alt="Show Password" class="eye-icon" id="toggle-password">
+                            <img src="../assets/open_eye.png" alt="Show Password" class="eye-icon" id="toggle-password">
                         </div>
                     </div>
                     <button type="submit" class="login-submit">Login</button>
@@ -44,10 +44,10 @@
         const passwordField = document.getElementById("password");
         if (passwordField.type === "password") {
             passwordField.type = "text";
-            this.src = "../src/assets/open_eye.png";
+            this.src = "../assets/open_eye.png";
         } else {
             passwordField.type = "password";
-            this.src = "../src/assets/close_eye.png";
+            this.src = "../assets/close_eye.png";
         }
     });
 </script>
