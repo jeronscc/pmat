@@ -35,7 +35,7 @@ header h3 {
 }
 
 /* Main Container */
-.container {
+.container mt-5 {
     background: #e5e5f5;
     padding: 40px;
     margin: 10px;
@@ -139,7 +139,7 @@ header h3 {
 }
 
 @media (max-width: 768px) {
-    .container {
+    .container mt-5 {
         padding: 10px;
         margin: 10px;
         width: 100%;
@@ -174,7 +174,7 @@ header h3 {
         overflow-x: auto;
     }
 
-    .container {
+    .container mt-5 {
         padding: 5px;
         margin: 5px;
         width: 100%;
