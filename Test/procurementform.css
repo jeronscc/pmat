@@ -177,7 +177,8 @@ header h3 {
     .container {
         padding: 5px;
         margin: 5px;
-        width: 100%;
+        width: 100vw;
+        height: 100vh;
         max-width: 100%;
         box-sizing: border-box;
         overflow-x: auto;
