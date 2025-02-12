@@ -167,7 +167,7 @@ header h3 {
     }
 
     body{
-        overflow-x: hidden;
+        overflow-x: auto;
     }
 
     .container {
