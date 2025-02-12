@@ -21,7 +21,6 @@
     border-radius: 5px;
     width: 100%;
 }
-
 </style>
 <body>
     <div class="procurement-app">

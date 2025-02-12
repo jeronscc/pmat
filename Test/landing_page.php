@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Procurement Tracking and Monitoring System</title>
     <link rel="stylesheet" href="landingpage.css">
-    <?php include '../src/components/landing_header.html'; ?>
+    <?php include '../src/components/header_landing.html'; ?>
 </head>
 <body>
     
