@@ -8,6 +8,10 @@
   font-family: 'Rubik', sans-serif;
 }
 
+#stickyHeader{
+  position: sticky;
+  top: 0px;
+}
 header {
   padding: 5px 15px;
   height: 110px; /* Adjust header height as needed */
