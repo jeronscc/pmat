@@ -36,15 +36,17 @@
             </div>
         </aside>
         <section class="records">
-            <div class="header">
-                <span>Currently Viewing:</span>
-                <div class="search">
-                    <div class="search-box">
-                        <input type="text" placeholder="Search">
-                        <button>Search</button>
-                    </div>
+        <div class="header">
+            <span>Currently Viewing:</span>
+            <div class="search">
+                <div class="search-box">
+                    <input type="text" placeholder="Search">
+                    <button>Search</button>
                 </div>
             </div>
+        </div>
+        <!-- Scrollable table -->
+        <div class="table-container">
             <div class="record-box">
                 <table>
                     <thead>
@@ -64,7 +66,8 @@
                     </tbody>
                 </table>
             </div>
-        </section>
+        </div>
+    </section>
     </main>
     <script src="landingpage.js"></script>
 </body>
