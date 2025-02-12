@@ -108,7 +108,7 @@ aside {
 
 .record-box table {
     width: 100%;
-    table-layout:fixed; /* Ensures the table columns adjust to fit */
+    table-layout:auto; /* Ensures the table columns adjust to fit */
     border-collapse: collapse;
     font-size: 20px;
     background: #eef;
