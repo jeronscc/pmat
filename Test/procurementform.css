@@ -125,7 +125,10 @@ header h3 {
     margin-top: 15px;
 }
 
-/* Responsive Design */
+.modal-footer .btn {
+    margin-left: 10px;
+}
+
 @media (max-width: 768px) {
     .container {
         padding: 10px;
