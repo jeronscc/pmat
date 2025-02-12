@@ -40,7 +40,7 @@
             <span>Currently Viewing:</span>
             <div class="search">
                 <div class="search-box">
-                    <input type="text" placeholder="Search">
+                    <input type="text" placeholder="Enter PR no.">
                     <button>Search</button>
                 </div>
             </div>
