@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,9 +12,6 @@
 </head>
 <body>
     <div class="procurement-app">
-        <header class="procurement-header">
-            
-        </header>
         <main class="procurement-content">
             <div class="login-container">
                 <div class="login-header">
@@ -21,15 +20,21 @@
                         <img src="https://cdn.builder.io/api/v1/image/assets/290409bedf4e4a8c97971a85d2d24dfd/00abdd59772332e39af7af08d008f16f15db6cd08c7b1db3a2f5b032e0b5d5a0?apiKey=290409bedf4e4a8c97971a85d2d24dfd&" alt="" class="close-icon">
                     </button>
                 </div>
-                <form class="login-form">
+
+                <!-- Display error messages -->
+                <?php session_start(); if (isset($_SESSION['error_message'])): ?>
+                    <p class="error-message"><?php echo $_SESSION['error_message']; unset($_SESSION['error_message']); ?></p>
+                <?php endif; ?>
+
+                <form class="login-form" action="fetch_login.php" method="POST"> 
                     <div class="form-group">
                         <label for="username" class="form-label">Username:</label>
-                        <input type="text" id="username" class="form-input" required placeholder="Enter your username">
+                        <input type="text" id="username" name="username" class="form-input" required placeholder="Enter your username">
                     </div>
                     <div class="form-group">
                         <label for="password" class="form-label">Password:</label>
                         <div class="password-container">
-                            <input type="password" id="password" class="form-input" required placeholder="Enter your password">
+                            <input type="password" id="password" name="password" class="form-input" required placeholder="Enter your password">
                             <img src="../assets/open_eye.png" alt="Show Password" class="eye-icon" id="toggle-password">
                         </div>
                     </div>
@@ -39,6 +44,7 @@
         </main>
     </div>
 </body>
+
 <script>
     document.getElementById("toggle-password").addEventListener("click", function() {
         const passwordField = document.getElementById("password");

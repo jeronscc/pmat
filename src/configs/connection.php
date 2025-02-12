@@ -13,8 +13,6 @@ if ($conn_user->connect_error) {
     die("Connection failed: " . $conn_user->connect_error);
 }
 
-echo "Connected successfully";
-
 // ILCDB CONNECTION
 $servername = "localhost";
 $username = "root"; 
@@ -28,7 +26,6 @@ if ($conn_ilcdb->connect_error) {
     die("Connection failed: " . $conn_ilcdb->connect_error);
 }
 
-echo "Connected successfully";
 
 // DTC CONNECTION
 $servername = "localhost";
@@ -43,7 +40,6 @@ if ($conn_dtc->connect_error) {
     die("Connection failed: " . $conn_dtc->connect_error);
 }
 
-echo "Connected successfully";
 
 // SPARK CONNECTION
 $servername = "localhost";
@@ -58,7 +54,6 @@ if ($conn_spark->connect_error) {
     die("Connection failed: " . $conn_spark->connect_error);
 }
 
-echo "Connected successfully";
 
 // PROJECT CLICK CONNECTION
 $servername = "localhost";
@@ -73,6 +68,5 @@ if ($conn_project_click->connect_error) {
     die("Connection failed: " . $conn_project_click->connect_error);
 }
 
-echo "Connected successfully";
 
 ?>
