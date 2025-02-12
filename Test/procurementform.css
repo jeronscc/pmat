@@ -46,6 +46,11 @@ body {
     padding: 10px;
 }
 
+.table-responsive {
+    overflow-x: auto;
+    width: 100%;
+}
+
 .table th {
     background-color: #333;
     color: white;
@@ -112,12 +117,7 @@ body {
 }
 
 @media (max-width: 768px) {
-    .container mt-5 {
-        padding: 10px;
-        margin: 10px;
-        width: 100%;
-        max-width: 100%;
-        box-sizing: border-box;
+    .table-responsive {
         overflow-x: auto;
     }
 
@@ -136,24 +136,16 @@ body {
 }
 
 @media (max-width: 576px) {
-    header {
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
+    .table-responsive {
         overflow-x: auto;
+        display: block;
     }
 
-    body{
-        overflow-x: auto;
-    }
-
-    .container mt-5 {
-        padding: 5px;
-        margin: 5px;
+    .table {
+        display: block;
         width: 100%;
-        max-width: 100%;
-        box-sizing: border-box;
         overflow-x: auto;
+        white-space: nowrap;
     }
 
     .table td, .table th {
