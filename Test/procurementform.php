@@ -6,7 +6,7 @@
     <title>Procurement Tracking and Monitoring System</title>
     <link rel="stylesheet" href="../src/Test/procurementform.css">
     <link rel="stylesheet" href="../src/css/mainheader.css">
-    <?php include '../src/components/'ilcdb_header.html'; ?>
+    <?php include '../src/components/ilcdb_header.html'; ?>
 </head>
 <body>
     <div class="container mt-5">
