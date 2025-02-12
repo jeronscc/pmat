@@ -8,26 +8,6 @@ body {
     overflow-x: auto;
 }
 
-/* Header */
-header {
-    background-color: #0c0c18;
-    color: white;
-    padding: 10px 20px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-header img {
-    height: 50px;
-}
-
-header h3 {
-    font-style: italic;
-    font-size: 16px;
-}
-
-/* Main Container */
 .container mt-5 {
     background: #e5e5f5;
     padding: 40px;
