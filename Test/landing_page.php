@@ -85,7 +85,7 @@
         </aside>
         <section class="records">
         <div class="header">
-            <span>Currently Viewing:</span>
+            <h5><span>Currently Viewing:</span></h5>
             <div class="search">
                 <div class="search-box">
                 <input type="text" class="form-control me-2" id="searchBar" placeholder="Search...">
