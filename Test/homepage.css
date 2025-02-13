@@ -39,13 +39,28 @@ body {
     padding: 10px;
 }
 
-.balance-container {
+section {
+    flex-grow: 1;
+    padding: 20px;
+    height: 100%;
+    overflow-y: auto;
+}
+
+.balance-box {
     background-color: #000000;
     color: #ffffff;
     padding: 5px;
     margin-bottom: 30px;
     border: 1px solid #ddd;
     text-align: left;
+}
+
+.balance-container {
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 5px;
+    margin-bottom: 20px;
 }
 
 .balance-container h6 {
@@ -69,6 +84,16 @@ body {
 
 .left-panel .saro-list, .right-panel .saro-list {
     margin-bottom: 20px;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-style: italic;
+    background: #e0e0e0;
+    padding: 10px;
+    flex-wrap: wrap;
 }
 
 #searchBar {

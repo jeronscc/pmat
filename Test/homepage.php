@@ -50,6 +50,8 @@
     <!-- Right Panel (PR Table) -->
     <div class="col-md-9 right-panel">
         <div class="d-flex justify-content-between align-items-center mb-3">
+        <section class="records">
+        <div class="header">
             <h5>Currently Viewing: <span id="currentSaro">SARO 1</span></h5>
             <div class="d-flex">
                 <button type="button" class="icon-button me-2" data-bs-toggle="modal" data-bs-target="#procurementModal">
@@ -60,7 +62,8 @@
                     <img src="../src/assets/scan.png" alt="Search" style="width: 30px; height: 30px;">
                 </button>
             </div>
-        </div>
+            </div>
+
         <div class="table-container">
             <div class="record-box">
         <table>
@@ -91,6 +94,7 @@
         </table> 
     </div>
     </div>
+                </section>
 </div>
     
 <!-- SARO Modal -->
