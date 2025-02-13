@@ -39,28 +39,28 @@ body {
     padding: 10px;
 }
 
-.balance-box {
-    background-color: #000000;
-    color: #ffffff;
-    padding: 5px;
-    margin-bottom: 30px;
-    border: 1px solid #ddd;
-    text-align: left;
+.balance-container {
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 5px;
+    margin-bottom: 20px;
 }
-.balance-box h6 {
+
+.balance-container h6 {
     font-style: italic;
     color: rgb(170, 170, 170);
     display: block;
     margin-bottom: 5px;
 }
 
-.balance-box span {
+.balance-container span {
     font-style: italic;
     color: rgb(170, 170, 170);
     margin-bottom: 5px;
 }
 
-.balance-box h2 {
+.balance-container h2 {
     font-size: 30px;
     text-align: center;
     color: #ffffff;
