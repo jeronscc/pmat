@@ -106,12 +106,20 @@
                     </div>
                     <div class="mb-3">
                         <label for="budget" class="form-label">BUDGET</label>
-                        <input type="number" class="form-control" id="budget" name="budget" required>
+                        <input type="text" class="form-control" id="budget" name="budget" required>
                     </div>
                     <div class="mb-3">
-                        <label for="year" class="form-label">YEAR</label>
-                        <input type="number" class="form-control" id="year" name="year" required>
-                    </div>
+    <label for="year" class="form-label">YEAR</label>
+    <select class="form-select" id="year" name="year" required>
+        <option value="" disabled selected>Select Year</option>
+        <?php
+        $currentYear = date("Y");
+        for ($year = $currentYear; $year >= $currentYear - 10; $year--) {
+            echo "<option value=\"$year\">$year</option>";
+        }
+        ?>
+    </select>
+</div>
                 </form>
             </div>
             <div class="modal-footer">
