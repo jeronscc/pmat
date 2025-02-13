@@ -204,6 +204,13 @@ function selectSaro(saroName) {
     document.getElementById("procurementTable").innerHTML = tableContent;
 }
 
+document.addEventListener('DOMContentLoaded', function () {
+    var dropdownElementList = [].slice.call(document.querySelectorAll('.dropdown-toggle'))
+    var dropdownList = dropdownElementList.map(function (dropdownToggleEl) {
+        return new bootstrap.Dropdown(dropdownToggleEl)
+    })
+});
+
 function filterSaroByYear(year) {
     const saroList = document.querySelector(".saro-list");
     saroList.innerHTML = "";
