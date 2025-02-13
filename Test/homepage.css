@@ -46,21 +46,13 @@ section {
     overflow-y: auto;
 }
 
-.balance-box {
+.balance-container {
     background-color: #000000;
     color: #ffffff;
     padding: 5px;
     margin-bottom: 30px;
     border: 1px solid #ddd;
     text-align: left;
-}
-
-.balance-container {
-    background-color: #333;
-    color: #fff;
-    text-align: center;
-    border-radius: 5px;
-    margin-bottom: 20px;
 }
 
 .balance-container h6 {
