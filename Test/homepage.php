@@ -24,19 +24,19 @@
 
         <div class="d-flex justify-content-end align-items-center mb-2">
         <div class="dropdown me-2">
-            <button class="icon-button dropdown-toggle" type="button" id="yearDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                <img src="../src/assets/filter.png" alt="Select Year" style="width: 20px; height: 20px; margin-right: 10px;">
-            </button>
-            <ul class="dropdown-menu" aria-labelledby="yearDropdown">
-                <?php
-                $currentYear = date("Y");
-                for ($year = $currentYear; $year >= $currentYear - 10; $year--) {
-                    echo "<li><a class='dropdown-item' href='#' onclick='filterSaroByYear(\"$year\")'>$year</a></li>";
-                }
-                ?>
-            </ul>
-        </div>
-        <div>
+        <button class="icon-button dropdown-toggle" type="button" id="yearDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+            <img src="../src/assets/filter.png" alt="Select Year" style="width: 20px; height: 20px; margin-right: 10px;">
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="yearDropdown">
+            <?php
+            $currentYear = date("Y");
+            for ($year = $currentYear; $year >= $currentYear - 10; $year--) {
+                echo "<li><a class='dropdown-item' href='#' onclick='filterSaroByYear(\"$year\")'>$year</a></li>";
+            }
+            ?>
+        </ul>
+    </div>
+            </div>
             <button class="btn btn-dark" onclick="openAddSaroModal()">+ Add New SARO <i class="bi bi-filter"></i></button>
         </div>
         <ul class="list-group saro-list">
@@ -226,13 +226,6 @@ function selectSaro(saroName) {
         item.classList.remove('active');
     });
     document.querySelector(`.saro-list .list-group-item:contains(${saroName})`).classList.add('active');
-
-    document.addEventListener('DOMContentLoaded', function () {
-    var dropdownElementList = [].slice.call(document.querySelectorAll('.dropdown-toggle'))
-    var dropdownList = dropdownElementList.map(function (dropdownToggleEl) {
-        return new bootstrap.Dropdown(dropdownToggleEl)
-    })
-});
 
 function filterSaroByYear(year) {
     const saroList = document.querySelector(".saro-list");
