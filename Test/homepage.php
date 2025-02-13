@@ -23,7 +23,7 @@
         </div>
 
         <div class="d-flex justify-content-end align-items-center mb-2">
-            <div class="dropdown me-2">
+            <div class="dropdown">
                 <button class="icon-button dropdown-toggle" type="button" id="yearDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                     <img src="../src/assets/filter.png" alt="Select Year" style="width: 20px; height: 20px; margin-right: 10px;">
                 </button>
@@ -109,17 +109,17 @@
                         <input type="text" class="form-control" id="budget" name="budget" required>
                     </div>
                     <div class="mb-3">
-    <label for="year" class="form-label">YEAR</label>
-    <select class="form-select" id="year" name="year" required>
-        <option value="" disabled selected>Select Year</option>
-        <?php
-        $currentYear = date("Y");
-        for ($year = $currentYear; $year >= $currentYear - 10; $year--) {
-            echo "<option value=\"$year\">$year</option>";
-        }
-        ?>
-    </select>
-</div>
+                        <label for="year" class="form-label">YEAR</label>
+                        <select class="form-select" id="year" name="year" required>
+                            <option value="" disabled selected>Select Year</option>
+                            <?php
+                            $currentYear = date("Y");
+                            for ($year = $currentYear; $year >= $currentYear - 10; $year--) {
+                                echo "<option value=\"$year\">$year</option>";
+                            }
+                            ?>
+                        </select>
+                    </div>
                 </form>
             </div>
             <div class="modal-footer">
