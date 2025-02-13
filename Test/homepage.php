@@ -35,7 +35,7 @@
                 }
                 ?>
             </ul>
-            </div>
+        </div>
         <div>
             <button class="btn btn-dark" onclick="openAddSaroModal()">+ Add New SARO <i class="bi bi-filter"></i></button>
         </div>
