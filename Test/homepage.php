@@ -182,19 +182,36 @@ function selectSaro(saroName) {
     document.getElementById("currentSaro").textContent = saroName;
     document.getElementById("currentSaroName").textContent = saroName;
     // Dummy data for different SAROs
-    const dummyData = {
-        "SARO 1": [
-            { pr: "02-05647", activity: "ILCDB Orientation", status: "at Supply Unit", badge: "warning" },
-            { pr: "02-36421", activity: "Cybersecurity Workshop", status: "Done", badge: "success" },
-            { pr: "02-75482", activity: "Training Camp 2025", status: "at Budget Unit", badge: "warning" }
-        ],
-        "SARO 2": [
-            { pr: "03-12345", activity: "IT Conference", status: "at Supply Unit", badge: "warning" },
-            { pr: "03-67890", activity: "Hackathon", status: "Done", badge: "success" }
-        ],
-        "SARO 3": [
-            { pr: "04-11223", activity: "Software Training", status: "at Budget Unit", badge: "warning" }
-        ]
+    const saroData = {
+        "SARO 1": {
+            balance: "₱4,600,000",
+            dummyData: [
+                { pr: "02-05647", activity: "ILCDB Orientation", status: "at Supply Unit", badge: "warning" },
+                { pr: "02-36421", activity: "Cybersecurity Workshop", status: "Done", badge: "success" },
+                { pr: "02-75482", activity: "Training Camp 2025", status: "at Budget Unit", badge: "warning" }
+            ]
+        },
+        "SARO 2": {
+            balance: "₱3,200,000",
+            dummyData: [
+                { pr: "03-12345", activity: "IT Conference", status: "at Supply Unit", badge: "warning" },
+                { pr: "03-67890", activity: "Hackathon", status: "Done", badge: "success" }
+            ]
+        },
+        "SARO 3": {
+            balance: "₱2,800,000",
+            dummyData: [
+                { pr: "04-11223", activity: "Software Training", status: "at Budget Unit", badge: "warning" }
+            ]
+        },
+        "SARO 4": {
+            balance: "₱1,500,000",
+            dummyData: []
+        },
+        "SARO 5": {
+            balance: "₱5,000,000",
+            dummyData: []
+        }
     };
 
     let tableContent = dummyData[saroName] ? dummyData[saroName].map(item =>
@@ -206,17 +223,10 @@ function selectSaro(saroName) {
 
     document.getElementById("procurementTable").innerHTML = tableContent;
 }
-    const balanceData = {
-        "SARO 1": { balance: "₱4,600,000" },
-        "SARO 2": { balance: "₱3,200,000"},
-        "SARO 3": {balance: "₱2,800,000"},
-        "SARO 4": {balance: "₱6,000,000"},
-        "SARO 5": {balance: "₱5,100,000"},
-    };
     // Update remaining balance
     const remainingBalanceElement = document.getElementById("remainingBalance");
-        if (balanceData[saroName]) {
-            remainingBalanceElement.textContent = balanceData[saroName].balance;
+        if (saroData[saroName]) {
+            remainingBalanceElement.textContent = saroData[saroName].balance;
         } else {
             remainingBalanceElement.textContent = "₱0";
         }
