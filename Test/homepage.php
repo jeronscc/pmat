@@ -210,7 +210,7 @@ function selectSaro(saroName) {
         "SARO 3": {balance: "₱2,800,000"},
         "SARO 4": {balance: "₱6,000,000"},
         "SARO 5": {balance: "₱5,100,000"},
-    }
+    };
     // Update remaining balance
     const remainingBalanceElement = document.getElementById("remainingBalance");
         if (balanceData[saroName]) {
