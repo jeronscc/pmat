@@ -240,7 +240,7 @@ function filterSaroByYear(year) {
 
     if (year === "2025") {
         saroList.innerHTML = `
-            <li class="list-group-item" onclick="selectSaro('SARO 1')">SARO 1</li>
+            <li class="list-group-item active" onclick="selectSaro('SARO 1')">SARO 1</li>
             <li class="list-group-item" onclick="selectSaro('SARO 2')">SARO 2</li>
             <li class="list-group-item" onclick="selectSaro('SARO 3')">SARO 3</li>
             <li class="list-group-item" onclick="selectSaro('SARO 4')">SARO 4</li>
