@@ -204,12 +204,12 @@ function selectSaro(saroName) {
 
     document.getElementById("procurementTable").innerHTML = tableContent;
 }
-    const balance = {
-        "SARO 1": "₱4,600,000",
-        "SARO 2": "₱3,200,000",
-        "SARO 3": "₱2,800,000",
-        "SARO 4": "₱6,000,000",
-        "SARO 5": "₱5,100,000"
+    const balanceData = {
+        "SARO 1": { balance: "₱4,600,000" },
+        "SARO 2": { balance: "₱3,200,000"},
+        "SARO 3": {balance: "₱2,800,000"},
+        "SARO 4": {balance: "₱6,000,000"},
+        "SARO 5": {balance: "₱5,100,000"},
     }
     // Update remaining balance
     const remainingBalanceElement = document.getElementById("remainingBalance");
@@ -223,7 +223,7 @@ function selectSaro(saroName) {
         item.classList.remove('active');
     });
     document.querySelector(`.saro-list .list-group-item:contains(${saroName})`).classList.add('active');
-    
+
 function filterSaroByYear(year) {
     const saroList = document.querySelector(".saro-list");
     saroList.innerHTML = "";
