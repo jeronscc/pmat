@@ -31,11 +31,12 @@ body {
     width: 500px; /* Adjust the width as needed */
     margin: auto;
 }
+
 .modal-header {
     background-color: #000;
     color: white;
     text-align: left;
-    padding: 10px
+    padding: 10px;
 }
 
 .left-panel, .right-panel {
