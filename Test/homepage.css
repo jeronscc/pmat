@@ -39,19 +39,31 @@ body {
     padding: 10px;
 }
 
-.left-panel, .right-panel {
-    background-color: #fff;
-    padding: 15px;
-    border-right: 2px solid #ddd;
-    height: 100vh;
+.balance-box {
+    background-color: #000000;
+    color: #ffffff;
+    padding: 5px;
+    margin-bottom: 30px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+.balance-box h6 {
+    font-style: italic;
+    color: rgb(170, 170, 170);
+    display: block;
+    margin-bottom: 5px;
 }
 
-.balance-container {
-    background-color: #333;
-    color: #fff;
+.balance-box span {
+    font-style: italic;
+    color: rgb(170, 170, 170);
+    margin-bottom: 5px;
+}
+
+.balance-box h2 {
+    font-size: 30px;
     text-align: center;
-    border-radius: 5px;
-    margin-bottom: 20px;
+    color: #ffffff;
 }
 
 .left-panel .saro-list, .right-panel .saro-list {
@@ -88,8 +100,36 @@ body {
     color: white;
 }
 
-.table {
-    background-color: #fff;
+.table-container {
+    max-height: 300px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+}
+
+.record-box {
+    width: 100%;
+    max-width: 100%;
+    display: block;
+}
+
+.record-box table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 20px;
+    background: #eef;
+}
+
+.record-box thead {
+    position: sticky;
+    top: 0;
+    background: white;
+    z-index: 10;
+}
+
+.record-box th, .record-box td {
+    padding: 8px;
+    text-align: center;
+    word-wrap: break-word;
 }
 
 .badge {

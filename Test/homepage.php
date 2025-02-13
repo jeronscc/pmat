@@ -17,7 +17,7 @@
     
     <!-- Left Panel (SARO & Balance) -->
     <div class="col-md-3 left-panel">
-        <div class="balance-container p-3 mb-3">
+        <div class="balance-box p-3 mb-3">
             <h6>Remaining Balance (<span id="currentSaroName">SARO 1</span>):</h6>
             <h2 id="remainingBalance">₱4,600,000</h2>
         </div>
@@ -61,7 +61,9 @@
                 </button>
             </div>
         </div>
-        <table class="table table-bordered">
+        <div class="table-container">
+            <div class="record-box">
+        <table>
             <thead>
                 <tr>
                     <th>PR NUMBER</th>
