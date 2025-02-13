@@ -23,18 +23,19 @@
         </div>
 
         <div class="d-flex justify-content-end align-items-center mb-2">
-            <div class="dropdown">
-                <button class="icon-button dropdown-toggle" type="button" id="yearDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                    <img src="../src/assets/filter.png" alt="Select Year" style="width: 20px; height: 20px; margin-right: 10px;">
-                </button>
-                <ul class="dropdown-menu" aria-labelledby="yearDropdown">
-                    <li><a class="dropdown-item" href="#" onclick="filterSaroByYear('2025')">2025</a></li>
-                    <li><a class="dropdown-item" href="#" onclick="filterSaroByYear('2024')">2024</a></li>
-                    <li><a class="dropdown-item" href="#" onclick="filterSaroByYear('2023')">2023</a></li>
-                    <li><a class="dropdown-item" href="#" onclick="filterSaroByYear('2022')">2022</a></li>
-                    <li><a class="dropdown-item" href="#" onclick="filterSaroByYear('2021')">2021</a></li>
-                </ul>
-            </div>
+        <div class="dropdown me-2">
+            <button class="icon-button dropdown-toggle" type="button" id="yearDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                <img src="../src/assets/filter.png" alt="Select Year" style="width: 20px; height: 20px; margin-right: 10px;">
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="yearDropdown">
+                <?php
+                $currentYear = date("Y");
+                for ($year = $currentYear; $year >= $currentYear - 10; $year--) {
+                    echo "<li><a class='dropdown-item' href='#' onclick='filterSaroByYear(\"$year\")'>$year</a></li>";
+                }
+                ?>
+            </ul>
+        </div>
             <button class="btn btn-dark" onclick="openAddSaroModal()">+ Add New SARO <i class="bi bi-filter"></i></button>
         </div>
         <ul class="list-group saro-list">
