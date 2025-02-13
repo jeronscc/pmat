@@ -213,8 +213,8 @@ function selectSaro(saroName) {
     }
     // Update remaining balance
     const remainingBalanceElement = document.getElementById("remainingBalance");
-        if (balance[saroName]) {
-            remainingBalanceElement.textContent = balance[saroName];
+        if (balanceData[saroName]) {
+            remainingBalanceElement.textContent = balanceData[saroName].balance;
         } else {
             remainingBalanceElement.textContent = "₱0";
         }
