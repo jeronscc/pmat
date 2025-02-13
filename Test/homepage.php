@@ -231,7 +231,13 @@ function selectSaro(saroName) {
         item.classList.remove('active');
     });
     document.querySelector(`.saro-list .list-group-item:contains(${saroName})`).classList.add('active');
-
+    document.addEventListener('DOMContentLoaded', function () {
+        var dropdownElementList = [].slice.call(document.querySelectorAll('.dropdown-toggle'))
+        var dropdownList = dropdownElementList.map(function (dropdownToggleEl) {
+            return new bootstrap.Dropdown(dropdownToggleEl)
+        })
+    });
+    
 function filterSaroByYear(year) {
     const saroList = document.querySelector(".saro-list");
     saroList.innerHTML = "";
