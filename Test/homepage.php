@@ -17,7 +17,7 @@
     
     <!-- Left Panel (SARO & Balance) -->
     <div class="col-md-3 left-panel">
-        <div class="balance-box p-3 mb-3">
+        <div class="balance-container p-3 mb-3">
             <h6>Remaining Balance (<span id="currentSaroName">SARO 1</span>):</h6>
             <h2 id="remainingBalance">₱4,600,000</h2>
         </div>
@@ -61,9 +61,7 @@
                 </button>
             </div>
         </div>
-        <div class="table-container">
-            <div class="record-box">
-        <table>
+        <table class="table table-bordered">
             <thead>
                 <tr>
                     <th>PR NUMBER</th>
@@ -182,36 +180,19 @@ function selectSaro(saroName) {
     document.getElementById("currentSaro").textContent = saroName;
     document.getElementById("currentSaroName").textContent = saroName;
     // Dummy data for different SAROs
-    const saroData = {
-        "SARO 1": {
-            balance: "₱4,600,000",
-            dummyData: [
-                { pr: "02-05647", activity: "ILCDB Orientation", status: "at Supply Unit", badge: "warning" },
-                { pr: "02-36421", activity: "Cybersecurity Workshop", status: "Done", badge: "success" },
-                { pr: "02-75482", activity: "Training Camp 2025", status: "at Budget Unit", badge: "warning" }
-            ]
-        },
-        "SARO 2": {
-            balance: "₱3,200,000",
-            dummyData: [
-                { pr: "03-12345", activity: "IT Conference", status: "at Supply Unit", badge: "warning" },
-                { pr: "03-67890", activity: "Hackathon", status: "Done", badge: "success" }
-            ]
-        },
-        "SARO 3": {
-            balance: "₱2,800,000",
-            dummyData: [
-                { pr: "04-11223", activity: "Software Training", status: "at Budget Unit", badge: "warning" }
-            ]
-        },
-        "SARO 4": {
-            balance: "₱1,500,000",
-            dummyData: []
-        },
-        "SARO 5": {
-            balance: "₱5,000,000",
-            dummyData: []
-        }
+    const dummyData = {
+        "SARO 1": [
+            { pr: "02-05647", activity: "ILCDB Orientation", status: "at Supply Unit", badge: "warning" },
+            { pr: "02-36421", activity: "Cybersecurity Workshop", status: "Done", badge: "success" },
+            { pr: "02-75482", activity: "Training Camp 2025", status: "at Budget Unit", badge: "warning" }
+        ],
+        "SARO 2": [
+            { pr: "03-12345", activity: "IT Conference", status: "at Supply Unit", badge: "warning" },
+            { pr: "03-67890", activity: "Hackathon", status: "Done", badge: "success" }
+        ],
+        "SARO 3": [
+            { pr: "04-11223", activity: "Software Training", status: "at Budget Unit", badge: "warning" }
+        ]
     };
 
     let tableContent = dummyData[saroName] ? dummyData[saroName].map(item =>
@@ -222,14 +203,23 @@ function selectSaro(saroName) {
         </tr>`).join("") : "<tr><td colspan='3' class='text-center'>No data available</td></tr>";
 
     document.getElementById("procurementTable").innerHTML = tableContent;
-}
+
+    const balanceData = {
+        "SARO 1": {balance: "₱4,600,000" },
+        "SARO 2": {balance: "₱3,200,000"},
+        "SARO 3": {balance: "₱2,800,000"},
+        "SARO 4": {balance: "₱6,000,000"},
+        "SARO 5": {balance: "₱5,100,000"},
+    };
     // Update remaining balance
     const remainingBalanceElement = document.getElementById("remainingBalance");
-        if (saroData[saroName]) {
-            remainingBalanceElement.textContent = saroData[saroName].balance;
+        if (balanceData[saroName]) {
+            remainingBalanceElement.textContent = balanceData[saroName].balance;
         } else {
             remainingBalanceElement.textContent = "₱0";
         }
+}
+    
         // Update active class
     document.querySelectorAll('.saro-list .list-group-item').forEach(item => {
         item.classList.remove('active');
