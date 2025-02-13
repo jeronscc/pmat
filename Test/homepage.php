@@ -144,13 +144,13 @@
                         <label for="category" class="form-label">Select Procurement Category</label>
                         <select class="form-select" id="category">
                             <option value="" disabled selected>Select Category</option>
-                            <option value="SVA">SVA</option>
+                            <option value="SVA">SVP</option>
                             <option value="Honoraria">Honoraria</option>
-                            <option value="Other expense">Other expense</option>
+                            <option value="Other expense">Other Expenses</option>
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label for="pr-number" class="form-label">PR NUMBER</label>
+                        <label for="pr-number" class="form-label">PR/TRANSACTION NUMBER</label>
                         <input type="text" class="form-control" id="pr-number" placeholder="Enter PR Number">
                     </div>
                     <div class="mb-3">
