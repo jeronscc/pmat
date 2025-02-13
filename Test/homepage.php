@@ -24,7 +24,7 @@
 
         <div class="d-flex justify-content-end align-items-center mb-2">
             <div class="dropdown me-2">
-                <button class="icon-button dropdown-toggle" type="button" id="yearDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                <button class="dropdown-toggle" type="button" id="yearDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                     <img src="../src/assets/filter.png" alt="Select Year" style="width: 20px; height: 20px; margin-right: 10px;">
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="yearDropdown">
@@ -231,7 +231,13 @@ function selectSaro(saroName) {
         item.classList.remove('active');
     });
     document.querySelector(`.saro-list .list-group-item:contains(${saroName})`).classList.add('active');
-
+    document.addEventListener('DOMContentLoaded', function () {
+        var dropdownElementList = [].slice.call(document.querySelectorAll('.dropdown-toggle'))
+        var dropdownList = dropdownElementList.map(function (dropdownToggleEl) {
+            return new bootstrap.Dropdown(dropdownToggleEl)
+        })
+    });
+    
 function filterSaroByYear(year) {
     const saroList = document.querySelector(".saro-list");
     saroList.innerHTML = "";
