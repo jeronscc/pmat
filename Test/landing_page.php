@@ -17,22 +17,70 @@
             </div>
             <button class="accordion">ILCDB <span class="dropdown-icon">&#x25BC;</span></button>
             <div class="panel">
-            
+                 <p>SARO 1</p>
+                 <p>SARO 1</p>
+                 <p>SARO 1</p>
+                 <p>SARO 1</p>
+                 <p>SARO 1</p>
+                 <p>SARO 1</p>
+                 <p>SARO 1</p>
+                 <p>SARO 1</p>
+                 <p>SARO 1</p>
+                 <p>SARO 1</p>
+                 <p>SARO 1</p>
+                 <p>SARO 1</p>
+                 <p>SARO 1</p>
             </div>
 
             <button class="accordion">DTC <span class="dropdown-icon">&#x25BC;</span></button>
             <div class="panel">
-                
+            <p>SARO 1</p>
+                 <p>SARO 1</p>
+                 <p>SARO 1</p>
+                 <p>SARO 1</p>
+                 <p>SARO 1</p>
+                 <p>SARO 1</p>
+                 <p>SARO 1</p>
+                 <p>SARO 1</p>
+                 <p>SARO 1</p>
+                 <p>SARO 1</p>
+                 <p>SARO 1</p>
+                 <p>SARO 1</p>
+                 <p>SARO 1</p>
             </div>
 
             <button class="accordion">SPARK <span class="dropdown-icon">&#x25BC;</span></button>
             <div class="panel">
-                
+            <p>SARO 1</p>
+                 <p>SARO 1</p>
+                 <p>SARO 1</p>
+                 <p>SARO 1</p>
+                 <p>SARO 1</p>
+                 <p>SARO 1</p>
+                 <p>SARO 1</p>
+                 <p>SARO 1</p>
+                 <p>SARO 1</p>
+                 <p>SARO 1</p>
+                 <p>SARO 1</p>
+                 <p>SARO 1</p>
+                 <p>SARO 1</p>
             </div>
 
             <button class="accordion">PROJECT CLICK <span class="dropdown-icon">&#x25BC;</span></button>
             <div class="panel">
-                
+            <p>SARO 1</p>
+                 <p>SARO 1</p>
+                 <p>SARO 1</p>
+                 <p>SARO 1</p>
+                 <p>SARO 1</p>
+                 <p>SARO 1</p>
+                 <p>SARO 1</p>
+                 <p>SARO 1</p>
+                 <p>SARO 1</p>
+                 <p>SARO 1</p>
+                 <p>SARO 1</p>
+                 <p>SARO 1</p>
+                 <p>SARO 1</p>
             </div>
         </aside>
         <section class="records">
@@ -40,8 +88,10 @@
             <span>Currently Viewing:</span>
             <div class="search">
                 <div class="search-box">
-                    <input type="text" placeholder="Enter PR no.">
-                    <button>Search</button>
+                <input type="text" class="form-control me-2" id="searchBar" placeholder="Search...">
+                    <button type="button" class="icon-button" onclick="searchProcurement()">
+                    <img src="../src/assets/scan.png" alt="Search" style="width: 30px; height: 30px;">
+                </button>
                 </div>
             </div>
         </div>
@@ -49,22 +99,31 @@
         <div class="table-container">
             <div class="record-box">
                 <table>
-                    <thead>
-                        <tr>
-                            <th>PR NUMBER</th>
-                            <th>ACTIVITY</th>
-                            <th>STATUS</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td data-label="PR NUMBER">12345</td>
-                            <td data-label="ACTIVITY">Sample Activity</td>
-                            <td data-label="STATUS">Done</td>
-                        </tr>
-                        <!-- Add more rows as needed -->
-                    </tbody>
-                </table>
+            <thead>
+                <tr>
+                    <th>PR NUMBER</th>
+                    <th>ACTIVITY</th>
+                    <th>STATUS</th>
+                </tr>
+            </thead>      
+            <tbody id="procurementTable"> 
+                <tr>
+                    <td>02-05647</td>
+                    <td>ILCDB Orientation</td>
+                    <td><span class="badge bg-warning text-dark">at Supply Unit</span></td>
+                </tr>
+                <tr>
+                    <td>02-36421</td>
+                    <td>Cybersecurity Workshop</td>
+                    <td><span class="badge bg-success">Done</span></td>
+                </tr>
+                <tr>
+                    <td>02-75482</td>
+                    <td>Training Camp 2025</td>
+                    <td><span class="badge bg-warning text-dark">at Budget Unit</span></td> 
+                </tr>  
+            </tbody> 
+        </table> 
             </div>
         </div>
     </section>

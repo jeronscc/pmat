@@ -4,10 +4,9 @@ body {
     padding: 0;
     background-color: #f4f4f4;
     width: 100vw;
-    height: 100vh;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     overflow-x: hidden;
     overflow-y: auto;
 }
@@ -16,7 +15,7 @@ main {
     display: flex;
     flex-wrap: nowrap;
     width: 100vw;
-    height: 100vh;
+    min-height: 100vh;
     padding: 20px;
     justify-content: flex-start;
     align-items: stretch;
@@ -29,6 +28,23 @@ aside {
     padding: 20px;
     min-width: 250px;
     flex-shrink: 0;
+    height: 100vh;
+    overflow-y: auto;
+}
+
+.content-wrapper {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+}
+
+section {
+    flex-grow: 1;
+    padding: 20px;
+    height: 100%;
+    overflow-y: auto;
 }
 
 .balance-box {
@@ -71,34 +87,43 @@ aside {
     background: #e0e0e0;
     padding: 10px;
     flex-wrap: wrap;
-    position: sticky;
-    top: 0;
-    z-index: 20;
+}
+
+.search-box {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+#searchBar {
+    max-width: 300px;
+    flex-grow: 1;
 }
 
 .search-box button {
-    background-color: #003366; /* Sky blue color */
-    color: white; /* White text */
+    height: 40px;
+    padding: 5px 10px;
+}
+
+.icon-button {
+    background-color: transparent;
     border: none;
-    padding: 8px 12px;
-    font-size: 16px;
-    cursor: pointer;
-    border-radius: 0px;
-    transition: background 0.3s ease-in-out;
+    padding: 0;
+    margin: 0;
 }
 
-.search-box button:hover {
-    background-color: #002244; /* Slightly darker sky blue on hover */
+.icon-button img {
+    width: 20px;
+    height: 20px;
+    border: none;
 }
 
-/* Wrapping div to make only the table scrollable */
 .table-container {
-    max-height: 300px; /* Adjust height as needed */
+    max-height: 300px;
     overflow-y: auto;
     border: 1px solid #ddd;
 }
 
-/* Ensures table layout is correct */
 .record-box {
     width: 100%;
     max-width: 100%;
@@ -112,7 +137,6 @@ aside {
     background: #eef;
 }
 
-/* Fix the table header so it remains visible */
 .record-box thead {
     position: sticky;
     top: 0;
@@ -124,16 +148,6 @@ aside {
     padding: 8px;
     text-align: center;
     word-wrap: break-word;
-}
-
-/* Remove border from the first row of data */
-.record-box tbody tr:first-child td {
-    border-top: 3px solid black !important;
-}
-
-/* Apply bold border to the second row */
-.record-box tbody tr:nth-child(2) td {
-    border: 3px solid black !important;
 }
 
 .accordion {
@@ -153,7 +167,7 @@ aside {
 }
 
 .active, .accordion:hover {
-    background-color: #000000;
+    background-color: #222;
 }
 
 .panel {
@@ -172,34 +186,42 @@ aside {
     overflow-y: auto;
 }
 
-.dropdown-icon {
-    font-size: 12px;
-}
-
- /* Media Queries for Responsive Design */
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
     main {
         flex-direction: column;
         align-items: center;
         padding: 10px;
-        overflow-x: hidden;
     }
     aside {
         width: 100%;
         min-width: 0;
         margin-bottom: 20px;
+        height: auto;
     }
     .records {
         width: 100%;
         margin-right: 0;
-        overflow-x: hidden;
     }
     .header {
         flex-direction: column;
-        align-items: center;
         text-align: center;
     }
+}
+
+@media (max-width: 768px) {
+    main {
+        flex-direction: column;
+        padding: 10px;
+    }
+    aside {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+    .records {
+        width: 100%;
+    }
     .search-box {
+        display: flex;
         justify-content: center;
     }
 }
@@ -208,35 +230,21 @@ aside {
     .search-box {
         flex-direction: row;
         align-items: center;
-        width: 100%;
-        max-width: 100%;
     }
     .search input {
-        flex: 1;
-        width: auto;
+        width: 100%;
+        margin-bottom: 5px;
     }
     .search-box button {
         width: auto;
-        padding: 3px 8px; /* Smaller padding */
-        font-size: 14px;  /* Smaller font size */
-        margin-top: 0; /* Remove extra spacing */
     }
     .record-box table {
         width: 100%;
         display: block;
         overflow-x: auto;
     }
-    .record-box thead {
-        display: table-header-group;
-    }
-    .record-box tbody {
-        display: table-row-group;
-    }
-    .record-box tr {
-        display: table-row;
-    }
     .record-box th, .record-box td {
-        font-size: auto;
+        font-size: 16px;
         padding: 5px;
     }
 }
