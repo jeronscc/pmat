@@ -61,7 +61,9 @@
                 </button>
             </div>
         </div>
-        <table class="table table-bordered">
+        <div class="table-container">
+            <div class="record-box">
+        <table>
             <thead>
                 <tr>
                     <th>PR NUMBER</th>
