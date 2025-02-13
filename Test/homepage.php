@@ -25,7 +25,7 @@
         <div class="d-flex justify-content-end align-items-center mb-2">
         <div class="dropdown me-2">
             <button class="icon-button dropdown-toggle" type="button" id="yearDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                <img src="../src/assets/filter.png" alt="Select Year" style="width: 20px; height: 20px; margin-right: 10px;">
+               <!-- <img src="../src/assets/filter.png" alt="Select Year" style="width: 20px; height: 20px; margin-right: 10px;">--> Button
             </button>
             <ul class="dropdown-menu" aria-labelledby="yearDropdown">
                 <?php
@@ -53,7 +53,7 @@
             <h5>Currently Viewing: <span id="currentSaro">SARO 1</span></h5>
             <div class="d-flex">
                 <button type="button" class="icon-button me-2" data-bs-toggle="modal" data-bs-target="#procurementModal">
-                    <!--<img src="../src/assets/add.png" alt="Add Procurement" style="width: 20px; height: 20px;">-->Button
+                    <img src="../src/assets/add.png" alt="Add Procurement" style="width: 20px; height: 20px;">
                 </button>
                 <input type="text" class="form-control me-2" id="searchBar" placeholder="Search...">
                 <button type="button" class="icon-button" onclick="searchProcurement()">
