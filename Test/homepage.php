@@ -228,12 +228,12 @@
         document.querySelector(`.saro-list .list-group-item:contains(${saroName})`).classList.add('active');
 
         // Update table content
-        let tableContent = saroData[saroName].data.length ? saroData[saroName].data.map(item =>
+        let tableContent = saroData[saroName] && saroData[saroName].data.length ? saroData[saroName].data.map(item =>
             `<tr>
                 <td>${item.pr}</td>
                 <td>${item.activity}</td>
                 <td><span class="badge bg-${item.badge}">${item.status}</span></td>
-            </tr>`).join("") : "<tr><td colspan='3' class='text-center'>No data available</td>";
+            </tr>`).join("") : "<tr><td colspan='3' class='text-center'>No data available</td></tr>";
 
         document.getElementById("procurementTable").innerHTML = tableContent;
     }
