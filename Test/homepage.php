@@ -218,7 +218,12 @@ function selectSaro(saroName) {
         } else {
             remainingBalanceElement.textContent = "₱0";
         }
-
+        // Update active class
+    document.querySelectorAll('.saro-list .list-group-item').forEach(item => {
+        item.classList.remove('active');
+    });
+    document.querySelector(`.saro-list .list-group-item:contains(${saroName})`).classList.add('active');
+    
 function filterSaroByYear(year) {
     const saroList = document.querySelector(".saro-list");
     saroList.innerHTML = "";
