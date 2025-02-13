@@ -172,106 +172,85 @@
 </div>
 
 <script>
-    const saroData = {
-        "SARO 1": {
-            balance: "₱4,600,000",
-            data: [
-                { pr: "02-05647", activity: "ILCDB Orientation", status: "at Supply Unit", badge: "warning" },
-                { pr: "02-36421", activity: "Cybersecurity Workshop", status: "Done", badge: "success" },
-                { pr: "02-75482", activity: "Training Camp 2025", status: "at Budget Unit", badge: "warning" }
-            ]
-        },
-        "SARO 2": {
-            balance: "₱3,200,000",
-            data: [
-                { pr: "03-12345", activity: "IT Conference", status: "at Supply Unit", badge: "warning" },
-                { pr: "03-67890", activity: "Hackathon", status: "Done", badge: "success" }
-            ]
-        },
-        "SARO 3": {
-            balance: "₱2,800,000",
-            data: [
-                { pr: "04-11223", activity: "Software Training", status: "at Budget Unit", badge: "warning" }
-            ]
-        },
-        "SARO 4": {
-            balance: "₱1,500,000",
-            data: []
-        },
-        "SARO 5": {
-            balance: "₱5,000,000",
-            data: []
-        }
+    function openAddSaroModal() {
+    new bootstrap.Modal(document.getElementById("addSaroModal")).show();
+}
+
+function selectSaro(saroName) {
+    document.getElementById("currentSaro").textContent = saroName;
+    document.getElementById("currentSaroName").textContent = saroName;
+    // Dummy data for different SAROs
+    const dummyData = {
+        "SARO 1": [
+            { pr: "02-05647", activity: "ILCDB Orientation", status: "at Supply Unit", badge: "warning" },
+            { pr: "02-36421", activity: "Cybersecurity Workshop", status: "Done", badge: "success" },
+            { pr: "02-75482", activity: "Training Camp 2025", status: "at Budget Unit", badge: "warning" }
+        ],
+        "SARO 2": [
+            { pr: "03-12345", activity: "IT Conference", status: "at Supply Unit", badge: "warning" },
+            { pr: "03-67890", activity: "Hackathon", status: "Done", badge: "success" }
+        ],
+        "SARO 3": [
+            { pr: "04-11223", activity: "Software Training", status: "at Budget Unit", badge: "warning" }
+        ]
     };
 
-    function openAddSaroModal() {
-        new bootstrap.Modal(document.getElementById("addSaroModal")).show();
+    let tableContent = dummyData[saroName] ? dummyData[saroName].map(item =>
+        `<tr>
+            <td>${item.pr}</td>
+            <td>${item.activity}</td>
+            <td><span class="badge bg-${item.badge}">${item.status}</span></td>
+        </tr>`).join("") : "<tr><td colspan='3' class='text-center'>No data available</td></tr>";
+
+    document.getElementById("procurementTable").innerHTML = tableContent;
+}
+    const balance = {
+        "SARO 1": "₱4,600,000",
+        "SARO 2": "₱3,200,000",
+        "SARO 3": "₱2,800,000",
+        "SARO 4": "₱6,000,000",
+        "SARO 5": "₱5,100,000"
     }
-
-    function selectSaro(saroName) {
-        document.getElementById("currentSaro").textContent = saroName;
-        document.getElementById("currentSaroName").textContent = saroName;
-        document.getElementById("remainingBalance").textContent = saroData[saroName].balance;
-
-        // Update remaining balance
-        const remainingBalanceElement = document.getElementById("remainingBalance");
-        if (saroData[saroName]) {
-            remainingBalanceElement.textContent = saroData[saroName].balance;
+    // Update remaining balance
+    const remainingBalanceElement = document.getElementById("remainingBalance");
+        if (balance[saroName]) {
+            remainingBalanceElement.textContent = balance[saroName];
         } else {
             remainingBalanceElement.textContent = "₱0";
         }
-
         // Update active class
-        document.querySelectorAll('.saro-list .list-group-item').forEach(item => {
-            item.classList.remove('active');
-        });
-        document.querySelector(`.saro-list .list-group-item:contains(${saroName})`).classList.add('active');
-
-        // Update table content
-        let tableContent = saroData[saroName] && saroData[saroName].data.length ? saroData[saroName].data.map(item =>
-            `<tr>
-                <td>${item.pr}</td>
-                <td>${item.activity}</td>
-                <td><span class="badge bg-${item.badge}">${item.status}</span></td>
-            </tr>`).join("") : "<tr><td colspan='3' class='text-center'>No data available</td></tr>";
-
-        document.getElementById("procurementTable").innerHTML = tableContent;
-    }
-
-    document.addEventListener('DOMContentLoaded', function () {
-        var dropdownElementList = [].slice.call(document.querySelectorAll('.dropdown-toggle'))
-        var dropdownList = dropdownElementList.map(function (dropdownToggleEl) {
-            return new bootstrap.Dropdown(dropdownToggleEl)
-        })
+    document.querySelectorAll('.saro-list .list-group-item').forEach(item => {
+        item.classList.remove('active');
     });
+    document.querySelector(`.saro-list .list-group-item:contains(${saroName})`).classList.add('active');
+    
+function filterSaroByYear(year) {
+    const saroList = document.querySelector(".saro-list");
+    saroList.innerHTML = "";
 
-    function filterSaroByYear(year) {
-        const saroList = document.querySelector(".saro-list");
-        saroList.innerHTML = "";
-
-        if (year === "2025") {
-            saroList.innerHTML = `
-                <li class="list-group-item active" onclick="selectSaro('SARO 1')">SARO 1</li>
-                <li class="list-group-item" onclick="selectSaro('SARO 2')">SARO 2</li>
-                <li class="list-group-item" onclick="selectSaro('SARO 3')">SARO 3</li>
-                <li class="list-group-item" onclick="selectSaro('SARO 4')">SARO 4</li>
-                <li class="list-group-item" onclick="selectSaro('SARO 5')">SARO 5</li>
-            `;
-        } else {
-            saroList.innerHTML = "<li class='list-group-item text-center'>No data available</li>";
-        }
+    if (year === "2025") {
+        saroList.innerHTML = `
+            <li class="list-group-item active" onclick="selectSaro('SARO 1')">SARO 1</li>
+            <li class="list-group-item" onclick="selectSaro('SARO 2')">SARO 2</li>
+            <li class="list-group-item" onclick="selectSaro('SARO 3')">SARO 3</li>
+            <li class="list-group-item" onclick="selectSaro('SARO 4')">SARO 4</li>
+            <li class="list-group-item" onclick="selectSaro('SARO 5')">SARO 5</li>
+        `;
+    } else {
+        saroList.innerHTML = "<li class='list-group-item text-center'>No data available</li>";
     }
+}
 
-    function searchProcurement() {
-        const searchTerm = document.getElementById("searchBar").value.toLowerCase();
-        const rows = document.querySelectorAll("#procurementTable tr");
+function searchProcurement() {
+    const searchTerm = document.getElementById("searchBar").value.toLowerCase();
+    const rows = document.querySelectorAll("#procurementTable tr");
 
-        rows.forEach(row => {
-            const cells = row.querySelectorAll("td");
-            const match = Array.from(cells).some(cell => cell.textContent.toLowerCase().includes(searchTerm));
-            row.style.display = match ? "" : "none";
-        });
-    }
+    rows.forEach(row => {
+        const cells = row.querySelectorAll("td");
+        const match = Array.from(cells).some(cell => cell.textContent.toLowerCase().includes(searchTerm));
+        row.style.display = match ? "" : "none";
+    });
+}
 </script>
 </body>
 </html>
