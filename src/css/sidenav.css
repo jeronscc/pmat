@@ -43,7 +43,7 @@
   padding: 10px 20px; /* Reduced padding */
 }
 
-.side-nav ul li a {
+.side-nav ul li button {
   color: white;
   text-decoration: none;
   font-size: 20px; /* Reduced font size */
@@ -52,12 +52,12 @@
   gap: 10px; /* Space between the icon and the text */
 }
 
-.side-nav ul li a img {
+.side-nav ul li button img {
   width: 25px; /* Resize the icons */
   height: auto;
 }
 
-.side-nav ul li a:hover {
+.side-nav ul li button:hover {
   background-color: #002244; /* Darker hover effect */
 }
 
@@ -69,4 +69,10 @@ body {
 /* Optional: Adjust the main content when the side nav is open */
 .side-nav.active ~ body {
   margin-right: 250px;
+}
+
+button{
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
 }

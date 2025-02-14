@@ -30,10 +30,38 @@
     <!-- Side Nav (Initially hidden) -->
     <div id="side-nav" class="side-nav">
         <ul>
-            <li><a href=""><i class="fas fa-home"></i><img src="../src/assets/home_icon.png" alt=""> Home</a></li>
-            <li><a href="#"><i class="fas fa-users"></i><img src="../src/assets/account_icon.png" alt=""> Accounts</a></li>
-            <li><a href="#"><i class="fas fa-clock"></i><img src="../src/assets/report_icon.png" alt=""> Reports</a></li>
-            <li><a href="#"><i class="fas fa-power-off"></i><img src="../src/assets/logout_icon.png" alt=""> Logout</a></li>
+            <li>
+                <form action="{{route('home')}}" method="POST">
+                    @csrf
+                    <button type="submit">
+                        <i class="fas fa-home"></i><img src="../src/assets/home_icon.png" alt=""> Home
+                    </button>
+                </form>
+            </li>
+            <li>
+                <form action="{{route('accounts')}}" method="POST">
+                    @csrf
+                    <button type="submit">
+                        <i class="fas fa-users"></i><img src="../src/assets/account_icon.png" alt=""> Accounts
+                    </button>
+                </form>
+            </li>
+            <li>
+                <form action="{{route('report')}}" method="POST">
+                    @csrf
+                    <button type="submit">
+                    <i class="fas fa-clock"></i><img src="../src/assets/report_icon.png" alt=""> Reports
+                    </button>
+                </form>
+            </li>
+            <li>
+                <form action="{{route('logout')}}" method="POST">
+                    @csrf
+                    <button type="submit">
+                    <i class="fas fa-power-off"></i><img src="../src/assets/logout_icon.png" alt=""> Logout
+                    </button>
+                </form>
+            </li>
         </ul>
     </div>
     <div class="container-fluid mt-3">
