@@ -6,9 +6,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Procurement Tracking and Monitoring System</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="../css/loginpage.css">
     <link rel="stylesheet" href="../css/landingheader.css">
-    <?php include '../components/landing_header.html'; ?>
 </head>
 <style>
     .error-message {
@@ -23,6 +23,16 @@
 }
 </style>
 <body>
+    <header class="d-flex align-items-center justify-content-between bg-black text-white p-3 shadow">
+        <div class="logo">
+            <img src="../assets/dict-logo.png" alt="DICT Logo" class="img-fluid" id="dictLogo">
+        </div>
+        <h1 class="text-center flex-grow-1 fs-4 m-0">Procurement Tracking and Monitoring System</h1> 
+        
+        <a href="../configs/login.php">
+            <button class="btn custom-btn">Log In</button>
+        </a>
+    </header>
     <div class="procurement-app">
         <main class="procurement-content">
             <div class="login-container">

@@ -6,11 +6,34 @@
     <title>Procurement Tracking and Monitoring System</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <link rel="stylesheet" href="../src/css/mainheader.css"> 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
     <link rel="stylesheet" href="forms.css">
-    <?php include '../src/components/ilcdb_header.html'; ?>
+    <link rel="stylesheet" href="../src/css/mainheader.css"> 
+    <link rel="stylesheet" href="../src/css/sidenav.css">
 </head>
 <body>
+    <header class="d-flex align-items-center justify-content-between bg-black text-white p-3 shadow" id="stickyHeader">
+        <div class="logo d-flex align-items-center">
+            <img src="../src/assets/dict-logo.png" alt="DICT Logo" class="img-fluid" id="dictLogo">
+            <img src="../src/assets/ilcdb-logo-2.png" alt="DTC Logo" class="img-fluid ms-2"> 
+        </div>
+        <h1 class="text-center flex-grow-1 fs-4 m-0">Procurement Tracking and Monitoring System</h1> 
+        <button class="btn custom-btn" id="menu-icon">
+            <i class="bi bi-list"></i> <!-- Hamburger icon -->
+        </button>
+    </header>
+
+    <!-- Side Nav (Initially hidden) -->
+    <div id="side-nav" class="side-nav">
+        <ul>
+            <li><a href=""><i class="fas fa-home"></i><img src="../src/assets/home_icon.png" alt=""> Home</a></li>
+            <li><a href="#"><i class="fas fa-users"></i><img src="../src/assets/account_icon.png" alt=""> Accounts</a></li>
+            <li><a href="#"><i class="fas fa-clock"></i><img src="../src/assets/report_icon.png" alt=""> Reports</a></li>
+            <li><a href="#"><i class="fas fa-power-off"></i><img src="../src/assets/logout_icon.png" alt=""> Logout</a></li>
+        </ul>
+    </div>
     <div class="container mt-5">
         <div class="activity-info">
             <h3>Activity Name: <span id="activityName">Sample Activity</span></h3>
@@ -362,6 +385,8 @@
             </div>
         </div>
     </div>
-
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="../src/js/menu.js"></script>
 </body>
 </html>
