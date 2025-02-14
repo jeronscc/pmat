@@ -151,6 +151,10 @@
                             ?>
                         </select>
                     </div>
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <input type="text" class="form-control" id="description" name="description" required>
+                    </div>
                 </form>
             </div>
             <div class="modal-footer">
