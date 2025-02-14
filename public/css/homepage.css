@@ -1,0 +1,213 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
+.card {
+    text-align: center;
+}
+
+.table th, .table td {
+    text-align: center;
+}
+
+.modal-dialog-centered {
+    display: flex;
+    align-items: center;
+    min-height: calc(100% - 1rem);
+}
+
+.modal-body {
+    overflow-y: auto;
+    text-align: left;
+}
+
+.modal-content {
+    max-height: calc(100vh - 1rem);
+    overflow: hidden;
+    width: 500px; /* Adjust the width as needed */
+    margin: auto;
+}
+
+.modal-header {
+    background-color: #000;
+    color: white;
+    text-align: left;
+    padding: 10px;
+}
+
+section {
+    flex-grow: 1;
+    padding: 20px;
+    height: 100%;
+    overflow-y: auto;
+}
+
+.balance-container {
+    background-color: #000000;
+    color: #ffffff;
+    padding: 5px;
+    margin-bottom: 30px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+.balance-container h6 {
+    font-style: italic;
+    color: rgb(170, 170, 170);
+    display: block;
+    margin-bottom: 5px;
+}
+
+.balance-container span {
+    font-style: italic;
+    color: rgb(170, 170, 170);
+    margin-bottom: 5px;
+}
+
+.balance-container h2 {
+    font-size: 30px;
+    text-align: center;
+    color: #ffffff;
+}
+
+.left-panel .saro-list, .right-panel .saro-list {
+    margin-bottom: 20px;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-style: italic;
+    background: #e0e0e0;
+    padding: 10px;
+    flex-wrap: wrap;
+}
+
+#searchBar {
+    max-width: 300px;
+}
+
+.btn-dark i {
+    margin-left: 5px;
+}
+
+.btn-add {
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.saro-list .list-group-item {
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.saro-list .list-group-item:hover {
+    background-color: #ddd;
+}
+
+.saro-list .active {
+    background-color: #007bff;
+    color: white;
+}
+
+.table-container {
+    max-height: 300px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+}
+
+.record-box {
+    width: 100%;
+    max-width: 100%;
+    display: block;
+}
+
+.record-box table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 20px;
+    background: #eef;
+}
+
+.record-box thead {
+    position: sticky;
+    top: 0;
+    background: white;
+    z-index: 10;
+}
+
+.record-box th, .record-box td {
+    padding: 8px;
+    text-align: center;
+    word-wrap: break-word;
+}
+
+.badge {
+    padding: 8px;
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Buttons */
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 15px;
+}
+
+.btn {
+    padding: 8px 12px;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    border-radius: 4px;
+}
+
+.btn-danger {
+    background-color: #d9534f;
+    color: white;
+}
+
+.btn-success {
+    background-color: #28a745;
+    color: white;
+}
+
+.dropdown-toggle::after {
+    display: none;
+}
+
+.icon-button {
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+
+.icon-button img {
+    width: 20px;
+    height: 20px;
+    border: none;
+}
