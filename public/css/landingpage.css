@@ -7,8 +7,8 @@ body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    overflow-x: hidden;
-    overflow-y: auto;
+    overflow-x: hidden; 
+    overflow-y: scroll; 
 }
 
 main {
@@ -19,8 +19,11 @@ main {
     padding: 20px;
     justify-content: flex-start;
     align-items: stretch;
-    overflow-x: hidden;
+    overflow-x: hidden;  
+    overflow-y: auto;   
+    -webkit-overflow-scrolling: touch; 
 }
+
 
 aside {
     width: 23%;
