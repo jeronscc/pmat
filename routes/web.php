@@ -9,11 +9,11 @@ Route::get('/', function () {
 
 Route::get('/login', function () {
     return view('login');
-});
+})->name('login');
 
 Route::get('/homepage', function () {
     return view('homepage'); 
-});
+})->middleware('auth');
 
 Route::get('/projectClick', function () {
     return view('projectClick'); 

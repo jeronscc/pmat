@@ -23,6 +23,16 @@
 }
 </style>
 <body>
+
+    <!-- Display error pop-up alert if there is an error message in session -->
+    @if(session('error'))
+        <script>
+            window.onload = function() {
+                alert("{{ session('error') }}"); // Show the alert with the error message
+            }
+        </script>
+    @endif
+
     <header class="d-flex align-items-center justify-content-between bg-black text-white p-3 shadow">
         <div class="logo">
             <img src="/assets/dict-logo.png" alt="DICT Logo" class="img-fluid" id="dictLogo">
