@@ -99,12 +99,14 @@
         <div class="header">
             <h5><span>Currently Viewing:</span></h5>
             <div class="search">
+            <form action="" method="POST"> 
                 <div class="search-box">
-                <input type="text" class="form-control me-2" id="searchBar" placeholder="Search...">
-                    <button type="button" class="icon-button" onclick="searchProcurement()">
-                    <img src="/assets/scan.png" alt="Search" style="width: 30px; height: 30px;">
+                <input type="text" class="form-control me-2" id="searchBar" placeholder="Search...">   
+                <button type="submit" class="btn custom-btn" onclick="searchProcurement()">
+                    Search
                 </button>
                 </div>
+            </form>
             </div>
         </div>
         <!-- Scrollable table -->

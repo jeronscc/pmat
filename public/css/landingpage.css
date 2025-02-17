@@ -99,7 +99,6 @@ section {
 .search-box {
     display: flex;
     align-items: center;
-    gap: 5px;
 }
 
 #searchBar {
@@ -108,21 +107,20 @@ section {
 }
 
 .search-box button {
-    height: 40px;
-    padding: 5px 10px;
+    height: 35px;
 }
 
-.icon-button {
-    background-color: transparent;
+.custom-btn {
+    background-color: #003366; /* Darker Blue */
+    color: white;
     border: none;
-    padding: 0;
-    margin: 0;
+    font-size: 14px;
+    border-radius: 0; /* Removed rounded edges */
+    transition: background 0.3s;
 }
 
-.icon-button img {
-    width: 20px;
-    height: 20px;
-    border: none;
+.custom-btn:hover {
+    background-color: #002244; /* Even darker blue on hover */
 }
 
 .table-container {
@@ -232,6 +230,9 @@ section {
         display: flex;
         justify-content: center;
     }
+    .custom-btn {
+        font-size: 13px;
+    }
 }
 
 @media (max-width: 480px) {
@@ -254,5 +255,10 @@ section {
     .record-box th, .record-box td {
         font-size: 16px;
         padding: 5px;
+    }
+    .custom-btn {
+        margin-top: 5px;
+        width: 90px;
+        font-size: 12px;
     }
 }
