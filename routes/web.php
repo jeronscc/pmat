@@ -1,7 +1,8 @@
 <?php
 
-use App\Http\Controllers\userController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\userController;
+use App\Http\Middleware\PreventBackAfterLogout;
 
 Route::get('/', function () {
     return view('index');
@@ -32,3 +33,9 @@ Route::get('/procurementform', function () {
 });
 Route::post('/login', [userController::class, 'login']);
 Route::post('/logout', [UserController::class, 'logout'])->name('logout');
+
+Route::middleware(['auth', PreventBackAfterLogout::class])->group(function () {
+    Route::get('/homepage', function () {
+        return view('homepage');
+    });
+});
