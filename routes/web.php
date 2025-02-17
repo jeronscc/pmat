@@ -18,15 +18,15 @@ Route::get('/homepage', function () {
 
 Route::get('/projectClick', function () {
     return view('projectClick'); 
-});
+})->middleware('auth');
 
 Route::get('/dtc', function () {
     return view('dtc');
-});
+})->middleware('auth');
 
 Route::get('/spark', function () {
     return view('spark');
-});
+})->middleware('auth');
 
 Route::get('/procurementform', function () {
     return view('procurementform');
