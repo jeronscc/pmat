@@ -124,9 +124,58 @@ section {
 }
 
 .table-container {
-    max-height: 300px;
+    max-height: 400px;
     overflow-y: auto;
     border: 1px solid #ddd;
+}
+.record-box {
+    max-height: 400px; /* Limit table height */
+    overflow-y: auto; /* Enable vertical scrolling */
+    overflow-x: auto; /* Enable horizontal scrolling if needed */
+    position: relative; /* Required for sticky positioning */
+}
+
+/* Make the table take full width */
+.record-box table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+/* Keep <thead> sticky at the top */
+.record-box thead {
+    position: sticky;
+    top: 0;
+    background: white; /* Ensure it stays visible */
+    z-index: 10; /* Ensure it stays above tbody */
+}
+
+/* Ensure only <tbody> scrolls */
+.record-box tbody {
+    display: block;
+    max-height: 260px; /* Adjust based on container height */
+    overflow-y: auto;
+}
+
+/* Make sure table rows display properly */
+.record-box tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+}
+
+/* Custom scrollbar for tbody */
+.record-box tbody::-webkit-scrollbar {
+    width: 8px;
+    display: block;
+}
+
+.record-box tbody::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 5px;
+}
+
+.record-box tbody::-webkit-scrollbar-thumb:hover {
+    background: #555;
 }
 
 .record-box {
