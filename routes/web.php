@@ -15,6 +15,18 @@ Route::get('/homepage', function () {
     return view('homepage'); 
 });
 
+Route::get('/projectClick', function () {
+    return view('projectClick'); 
+});
+
+Route::get('/dtc', function () {
+    return view('dtc');
+});
+
+Route::get('/spark', function () {
+    return view('spark');
+});
+
 Route::get('/procurementform', function () {
     return view('procurementform');
 });
