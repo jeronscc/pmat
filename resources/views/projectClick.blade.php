@@ -97,7 +97,7 @@
     </div>
  
     <!-- Right Panel (PR Table) -->
-    <div class="col-md-9 right-panel">
+     <div class="col-md-9 right-panel">
         <div class="d-flex justify-content-between align-items-center mb-3">
         <section class="records">
         <div class="header">
@@ -106,12 +106,15 @@
                 <button type="button" class="icon-button me-2" data-bs-toggle="modal" data-bs-target="#procurementModal">
                     <img src="/assets/add.png" alt="Add Procurement" style="width: 20px; height: 20px;">
                 </button>
+                <div class="search-box">
                 <input type="text" class="form-control me-2" id="searchBar" placeholder="Search...">
-                <button type="button" class="icon-button" onclick="searchProcurement()">
-                    <img src="/assets/scan.png" alt="Search" style="width: 30px; height: 30px;">
+                <button type="submit" class="search-button" onclick="searchProcurement()">
+                    Search
                 </button>
+                <div>
             </div>
             </div>
+        </div>
 
         <div class="table-container">
             <div class="record-box">
