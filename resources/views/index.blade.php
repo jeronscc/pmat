@@ -102,7 +102,7 @@
             <form action="" method="POST"> 
                 <div class="search-box">
                 <input type="text" class="form-control me-2" id="searchBar" placeholder="Search...">   
-                <button type="submit" class="btn custom-btn" onclick="searchProcurement()">
+                <button type="submit" class="search-button" onclick="searchProcurement()">
                     Search
                 </button>
                 </div>

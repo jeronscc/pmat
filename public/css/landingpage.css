@@ -81,7 +81,7 @@ section {
     padding: 20px;
     background: white;
     min-width: 300px;
-    margin-right: 20px;
+    margin-right: 40px;
     display: flex;
     flex-direction: column;
 }
@@ -110,16 +110,17 @@ section {
     height: 35px;
 }
 
-.custom-btn {
+.search-button {
     background-color: #003366; /* Darker Blue */
     color: white;
     border: none;
+    padding: 6px 10px;
     font-size: 14px;
     border-radius: 0; /* Removed rounded edges */
     transition: background 0.3s;
 }
 
-.custom-btn:hover {
+.search-button:hover {
     background-color: #002244; /* Even darker blue on hover */
 }
 
