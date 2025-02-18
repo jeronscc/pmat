@@ -5,8 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Procurement Tracking System</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
     <link rel="stylesheet" href="/css/homepage.css">
@@ -67,8 +66,8 @@
     <!-- Left Panel (SARO & Balance) -->
     <div class="col-md-3 left-panel">
     <div class="balance-container p-3 mb-3">
-        <h6>Remaining Balance (<span id="currentSaroName">SARO 1</span>):</h6>
-        <h2 id="remainingBalance">₱4,600,000</h2>
+        <h6>Remaining Balance (<span id="currentSaroName"></span>):</h6>
+        <h2 id="remainingBalance"></h2>
     </div>
 
     <div class="d-flex justify-content-end align-items-center mb-2">
@@ -77,12 +76,13 @@
                 <img src="/assets/filter.png" alt="Select Year" style="width: 20px; height: 20px; margin-right: 10px;">
             </button>
             <ul class="dropdown-menu" aria-labelledby="yearDropdown">
+                <li><a class="dropdown-item" href="#" onclick="filterSaroByYear('')">Show All</a></li> <!-- Show All option -->
                 <?php
                 $currentYear = date("Y");
                 for ($year = $currentYear; $year >= $currentYear - 10; $year--) {
                     echo "<li><a class='dropdown-item' href='#' onclick='filterSaroByYear(\"$year\")'>$year</a></li>";
                 }
-                ?>
+                ?>                
             </ul>
         </div>
         <button class="btn btn-dark" onclick="openAddSaroModal()">+ Add New SARO <i class="bi bi-filter"></i></button>
@@ -267,6 +267,7 @@
                         <label for="year" class="form-label">YEAR</label>
                         <select class="form-select" id="year" name="year" required>
                             <option value="" disabled selected>Select Year</option>
+                            <option value="all">Show All</option> <!-- Show All option -->
                             <?php
                             $currentYear = date("Y");
                             for ($year = $currentYear; $year >= $currentYear - 10; $year--) {
@@ -337,41 +338,108 @@
 </script>
 <script>
 // Fetch SARO data from the API
-fetch('/api/fetch-saro-ilcdb')
-    .then(response => response.json())
-    .then(data => {
-        // Get the list container element
-        const saroList = document.querySelector('.saro-list');
-        
-        // Clear any previous entries in the list
-        saroList.innerHTML = '';
+// Wait for the window to load
+window.onload = function() {
+    // Initially load all SAROs when the page loads (with no balance)
+    fetchSaroData('');
+};
 
-        // Check if there is any data
-        if (data.length > 0) {
-            // Loop through each SARO record
-            data.forEach(saro => {
-                // Create a new list item for each SARO record
-                const listItem = document.createElement('li');
-                listItem.classList.add('list-group-item');
-
-                // Display only the saro_no
-                listItem.textContent = saro.saro_no;
-
-                // Append the list item to the list
-                saroList.appendChild(listItem);
-            });
-        } else {
-            // Display a message if no SARO records were found
-            const emptyMessage = document.createElement('li');
-            emptyMessage.classList.add('list-group-item');
-            emptyMessage.textContent = 'No SARO records found.';
-            saroList.appendChild(emptyMessage);
-        }
-    })
-    .catch(error => console.error('Error fetching SARO data:', error));
-
+// Function to fetch and display SARO list based on the selected year or "all"
+function filterSaroByYear(year) {
+    // Reset the balance display to "₱0" when the year filter changes
     
-</script>
 
+    // If the user selects "Show All", pass an empty string to fetch all SAROs
+    const url = year === '' ? '/api/fetch-saro-ilcdb' : `/api/fetch-saro-ilcdb?year=${year}`;
+
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            const saroList = document.querySelector('.saro-list');
+            saroList.innerHTML = ''; // Clear previous entries
+
+            if (data.length > 0) {
+                data.forEach(saro => {
+                    // Create list item for each SARO number
+                    const listItem = document.createElement('li');
+                    listItem.classList.add('list-group-item');
+                    listItem.textContent = `${saro.saro_no}`;
+
+                    // Add click event to each SARO number
+                    listItem.addEventListener('click', function() {
+                        displayCurrentBudget(saro); // Show balance when SARO is clicked
+                    });
+
+                    // Append the list item to the SARO list
+                    saroList.appendChild(listItem);
+                });
+            } else {
+                // Show message if no SARO data is available
+                const emptyMessage = document.createElement('li');
+                emptyMessage.classList.add('list-group-item');
+                emptyMessage.textContent = 'No SARO records found.';
+                saroList.appendChild(emptyMessage);
+            }
+        })
+        .catch(error => console.error('Error fetching SARO data:', error));
+}
+
+function fetchSaroData(year) {
+    // Reset the balance display to "₱0" before fetching SAROs
+    document.getElementById('remainingBalance').textContent = '₱0';
+
+    // If no year is selected, fetch all SAROs, otherwise filter by year
+    const url = year === '' ? '/api/fetch-saro-ilcdb' : `/api/fetch-saro-ilcdb?year=${year}`;
+
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            const saroList = document.querySelector('.saro-list');
+            saroList.innerHTML = ''; // Clear previous entries
+
+            if (data.length > 0) {
+                data.forEach(saro => {
+                    // Create list item for each SARO number
+                    const listItem = document.createElement('li');
+                    listItem.classList.add('list-group-item');
+                    listItem.textContent = `${saro.saro_no}`;
+
+                    // Add click event to each SARO number
+                    listItem.addEventListener('click', function() {
+                        displayCurrentBudget(saro); // Show balance when SARO is clicked
+                    });
+
+                    // Append the list item to the SARO list
+                    saroList.appendChild(listItem);
+                });
+            } else {
+                // Show message if no SARO data is available
+                const emptyMessage = document.createElement('li');
+                emptyMessage.classList.add('list-group-item');
+                emptyMessage.textContent = 'No SARO records found.';
+                saroList.appendChild(emptyMessage);
+            }
+        })
+        .catch(error => console.error('Error fetching SARO data:', error));
+}
+
+// Function to display the remaining balance for the clicked SARO
+function displayCurrentBudget(saro) {
+    // Set the current SARO name in the container
+    document.getElementById('currentSaroName').textContent = `${saro.saro_no}`;
+    
+    // Display the current budget in the "remainingBalance" container
+    const currentBudget = saro.current_budget ? `₱${saro.current_budget.toLocaleString()}` : '₱0';
+    document.getElementById('remainingBalance').textContent = currentBudget;
+}
+
+// Add an event listener to the year filter
+document.getElementById('year').addEventListener('change', function() {
+    // When the year changes, fetch the SARO data and reset the balance display
+    fetchSaroData(this.value);
+});
+
+
+</script>
 </body>
 </html>

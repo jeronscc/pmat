@@ -9,10 +9,25 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 //ILCDB FETCH SARO
-Route::get('/fetch-saro-ilcdb', function () {
-    // Fetch data from the saro table in the ilcdb database
-    $data = DB::connection('ilcdb')->table('saro')->get();
+Route::get('/fetch-saro-ilcdb', function (Request $request) {
+    $year = $request->query('year');
 
-    // Return data as JSON
+    if ($year) {
+        // Fetch SARO data for a specific year and order by saro_no in descending order
+        $data = DB::connection('ilcdb')
+                    ->table('saro')
+                    ->whereYear('year', $year)
+                    ->select('saro_no', 'current_budget', 'year')
+                    ->orderBy('saro_no', 'desc')  
+                    ->get();
+    } else {
+        // Fetch all SARO data and order by saro_no in descending order
+        $data = DB::connection('ilcdb')
+                    ->table('saro')
+                    ->select('saro_no', 'current_budget', 'year')  
+                    ->orderBy('saro_no', 'desc')  
+                    ->get();
+    }
+    // Return the data as JSON
     return response()->json($data);
 });
