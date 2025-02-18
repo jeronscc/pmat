@@ -132,7 +132,6 @@ section {
 }
 
 .table-container {
-    max-height: 475px;
     border: 1px solid #ddd;
 }
 
@@ -270,5 +269,41 @@ input, select, textarea {
 @media (max-width: 768px) { /* For mobile devices */
     .saro-container {
         max-height: 210px;
+    }
+}
+
+@media (min-height: 784px) {
+    .saro-container {
+        max-height: 450px; /* Further increase max-height for even larger screens */
+    }
+}
+
+@media (min-height: 834px) {
+    .saro-container {
+        max-height: 500px; /* Further increase max-height for even larger screens */
+    }
+}
+
+@media (min-height: 784px) {
+    .record-box {
+        max-height: 520px; /* Further increase max-height for even larger screens */
+    }
+}
+
+@media (min-height: 834px) {
+    .record-box {
+        max-height: 575px; /* Further increase max-height for even larger screens */
+    }
+}
+
+@media (min-height: 784px) {
+    .record-box tbody {
+        max-height: 460px; /* Further increase max-height for even larger screens */
+    }
+}
+
+@media (min-height: 834px) {
+    .record-box tbody {
+        max-height: 510px; /* Further increase max-height for even larger screens */
     }
 }

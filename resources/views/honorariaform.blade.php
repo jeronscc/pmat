@@ -60,50 +60,12 @@
                 <div class="modal-body">
                     <form>
                         <!-- Checklist for Button 1 -->
+                        @foreach ($checklistItems as $item)
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="ors">
-                            <label class="form-check-label" for="ors">ORS</label>
+                            <input class="form-check-input" type="checkbox" id="{{ $item->id }}">
+                            <label class="form-check-label" for="{{ $item->id }}">{{ $item->requirement_name }}</label>
                         </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="dv">
-                            <label class="form-check-label" for="dv">DV</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="contract">
-                            <label class="form-check-label" for="contract">Service Contract</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="classification">
-                            <label class="form-check-label" for="classification">Certificate Honoraria Classification</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="report">
-                            <label class="form-check-label" for="report">Terminal Report</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="attendance">
-                            <label class="form-check-label" for="attendance">Attendance</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="resume">
-                            <label class="form-check-label" for="resume">Resume/CV</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="govid">
-                            <label class="form-check-label" for="govid">Government ID</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="payslip">
-                            <label class="form-check-label" for="payslip">Payslip/Certificate of Gross Income</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="bank">
-                            <label class="form-check-label" for="bank">TIN and Bank Account details</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="cert">
-                            <label class="form-check-label" for="cert">Certificate of Services Rendered</label>
-                        </div>
+                        @endforeach
                     </form>
                 </div>
                 <div class="modal-footer">
