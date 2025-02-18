@@ -39,3 +39,21 @@ Route::middleware(['auth', PreventBackAfterLogout::class])->group(function () {
         return view('homepage');
     });
 });
+
+Route::middleware(['auth', PreventBackAfterLogout::class])->group(function () {
+    Route::get('/dtc', function () {
+        return view('dtc');
+    });
+});
+
+Route::middleware(['auth', PreventBackAfterLogout::class])->group(function () {
+    Route::get('/projectClick', function () {
+        return view('projectClick');
+    });
+});
+
+Route::middleware(['auth', PreventBackAfterLogout::class])->group(function () {
+    Route::get('/spark', function () {
+        return view('spark');
+    });
+});
