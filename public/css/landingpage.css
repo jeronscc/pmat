@@ -12,14 +12,14 @@ body {
     display: flex;
     flex-direction: column;
     overflow-x: hidden; 
-    overflow-y: scroll; 
+    overflow-y: auto; 
 }
 
 main {
     display: flex;
     flex-wrap: nowrap;
     width: 100vw;
-    min-height: 100vh;
+    min-height: auto;
     padding: 20px;
     justify-content: flex-start;
     align-items: stretch;
@@ -35,9 +35,28 @@ aside {
     padding: 20px;
     min-width: 250px;
     flex-shrink: 0;
-    height: 100vh;
+    height: 550px;
     overflow-y: auto;
 }
+/* Override global scrollbar settings for aside */
+aside::-webkit-scrollbar {
+    display: block; /* Allow the scrollbar to appear when needed */
+    width: 8px; /* Adjust scrollbar width */
+}
+
+aside::-webkit-scrollbar-thumb {
+    background: #888; /* Scrollbar color */
+    border-radius: 5px;
+}
+
+aside::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+aside::-webkit-scrollbar-track {
+    background: #f4f4f4; /* Background of scrollbar track */
+}
+
 
 .content-wrapper {
     flex-grow: 1;
@@ -125,12 +144,11 @@ section {
 }
 
 .table-container {
-    max-height: 400px;
     overflow-y: auto;
     border: 1px solid #ddd;
 }
 .record-box {
-    max-height: 400px; /* Limit table height */
+    max-height: 600px; /* Limit table height */
     overflow-y: auto; /* Enable vertical scrolling */
     overflow-x: auto; /* Enable horizontal scrolling if needed */
     position: relative; /* Required for sticky positioning */
@@ -153,7 +171,7 @@ section {
 /* Ensure only <tbody> scrolls */
 .record-box tbody {
     display: block;
-    max-height: 260px; /* Adjust based on container height */
+    max-height: 405px; /* Adjust based on container height */
     overflow-y: auto;
 }
 
@@ -310,5 +328,42 @@ section {
         margin-top: 5px;
         width: 90px;
         font-size: 12px;
+    }
+}
+
+/* responsive on height */
+@media (min-height: 784px) {
+    aside {
+        height: 605px; /* Further increase max-height for even larger screens */
+    }
+}
+
+@media (min-height: 834px) {
+    aside {
+        height: 655px; /* Further increase max-height for even larger screens */
+    }
+}
+
+@media (min-height: 784px) {
+    .record-box {
+        max-height: 520px; /* Further increase max-height for even larger screens */
+    }
+}
+
+@media (min-height: 834px) {
+    .record-box {
+        max-height: 575px; /* Further increase max-height for even larger screens */
+    }
+}
+
+@media (min-height: 784px) {
+    .record-box tbody {
+        max-height: 460px; /* Further increase max-height for even larger screens */
+    }
+}
+
+@media (min-height: 834px) {
+    .record-box tbody {
+        max-height: 510px; /* Further increase max-height for even larger screens */
     }
 }
