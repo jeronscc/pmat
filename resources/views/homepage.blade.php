@@ -173,6 +173,71 @@
                     <td>Training Camp 2025</td>
                     <td><span class="badge bg-warning text-dark">at Budget Unit</span></td> 
                 </tr>  
+                <tr>
+                    <td>02-75482</td>
+                    <td>Training Camp 2025</td>
+                    <td><span class="badge bg-warning text-dark">at Budget Unit</span></td> 
+                </tr>  
+                <tr>
+                    <td>02-05647</td>
+                    <td>ILCDB Orientation</td>
+                    <td><span class="badge bg-warning text-dark">at Supply Unit</span></td>
+                </tr>
+                <tr>
+                    <td>02-36421</td>
+                    <td>Cybersecurity Workshop</td>
+                    <td><span class="badge bg-success">Done</span></td>
+                </tr>
+                <tr>
+                    <td>02-75482</td>
+                    <td>Training Camp 2025</td>
+                    <td><span class="badge bg-warning text-dark">at Budget Unit</span></td> 
+                </tr> 
+                <tr>
+                    <td>02-75482</td>
+                    <td>Training Camp 2025</td>
+                    <td><span class="badge bg-warning text-dark">at Budget Unit</span></td> 
+                </tr>  
+                <tr>
+                    <td>02-05647</td>
+                    <td>ILCDB Orientation</td>
+                    <td><span class="badge bg-warning text-dark">at Supply Unit</span></td>
+                </tr>
+                <tr>
+                    <td>02-36421</td>
+                    <td>Cybersecurity Workshop</td>
+                    <td><span class="badge bg-success">Done</span></td>
+                </tr>
+                <tr>
+                    <td>02-75482</td>
+                    <td>Training Camp 2025</td>
+                    <td><span class="badge bg-warning text-dark">at Budget Unit</span></td> 
+                </tr> 
+                <tr>
+                    <td>02-75482</td>
+                    <td>Training Camp 2025</td>
+                    <td><span class="badge bg-warning text-dark">at Budget Unit</span></td> 
+                </tr> 
+                <tr>
+                    <td>02-75482</td>
+                    <td>Training Camp 2025</td>
+                    <td><span class="badge bg-warning text-dark">at Budget Unit</span></td> 
+                </tr>  
+                <tr>
+                    <td>02-05647</td>
+                    <td>ILCDB Orientation</td>
+                    <td><span class="badge bg-warning text-dark">at Supply Unit</span></td>
+                </tr>
+                <tr>
+                    <td>02-36421</td>
+                    <td>Cybersecurity Workshop</td>
+                    <td><span class="badge bg-success">Done</span></td>
+                </tr>
+                <tr>
+                    <td>02-75482</td>
+                    <td>Training Camp 2025</td>
+                    <td><span class="badge bg-warning text-dark">at Budget Unit</span></td> 
+                </tr> 
             </tbody> 
         </table> 
     </div>
