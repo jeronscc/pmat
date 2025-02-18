@@ -7,12 +7,10 @@ body {
 }
 
 .saro-container {
-    max-height: 350px; /* Adjust height as needed */
+    max-height: 410px; /* Adjust height as needed */
     overflow-y: auto;
-
     padding: 5px;
 }
-
 
 .card {
     text-align: center;
@@ -134,15 +132,16 @@ section {
 }
 
 .table-container {
-    max-height: 400px;
-    overflow-y: auto;
+    max-height: 475px;
     border: 1px solid #ddd;
 }
+
 .record-box {
-    max-height: 400px; /* Limit table height */
-    overflow-y: auto; /* Enable vertical scrolling */
+    max-height: 475px; /* Limit table height */
+    overflow-y: hidden; /* Hide the natural scrollbar */
     overflow-x: auto; /* Enable horizontal scrolling if needed */
     position: relative; /* Required for sticky positioning */
+    width: 100%; /* Ensure full width */
 }
 
 /* Make the table take full width */
@@ -158,13 +157,16 @@ section {
     top: 0;
     background: white; /* Ensure it stays visible */
     z-index: 10; /* Ensure it stays above tbody */
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1); /* Add slight shadow for better visibility */
 }
 
 /* Ensure only <tbody> scrolls */
 .record-box tbody {
     display: block;
-    max-height: 260px; /* Adjust based on container height */
+    max-height: 430px; /* Adjust based on container height */
     overflow-y: auto;
+    overflow-x: auto; /* Prevent horizontal scroll */
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on touch devices */
 }
 
 /* Make sure table rows display properly */
@@ -174,48 +176,17 @@ section {
     table-layout: fixed;
 }
 
-/* Custom scrollbar for tbody */
-.record-box tbody::-webkit-scrollbar {
-    width: 8px;
-    display: block;
-}
-
-.record-box tbody::-webkit-scrollbar-thumb {
-    background: #888;
-    border-radius: 5px;
-}
-
-.record-box tbody::-webkit-scrollbar-thumb:hover {
-    background: #555;
-}
-
-.record-box {
-    width: 100%;
-    max-width: 100%;
-    display: block;
-    position: relative;
-}
-
-.record-box table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 20px;
-    background: #eef;
-}
-
-.record-box thead {
-    position: sticky;
-    top: 0;
-    background: white;
-    z-index: 10;
-}
-
 .record-box th, .record-box td {
-    padding: 8px;
+    padding: 12px 15px; /* Added more padding for a cleaner look */
     text-align: center;
     word-wrap: break-word;
 }
 
+.record-box td {
+    background-color: #EEEEFF;
+}
+
+/* Badge styling */
 .badge {
     padding: 8px;
     font-size: 0.9rem;
@@ -277,6 +248,7 @@ input, select, textarea {
     height: 20px;
     border: none;
 }
+
 .search-button {
     background-color: #003366; /* Darker Blue */
     color: white;
@@ -294,6 +266,7 @@ input, select, textarea {
 .search-box button {
     height: 35px;
 }
+
 @media (max-width: 768px) { /* For mobile devices */
     .saro-container {
         max-height: 210px;
