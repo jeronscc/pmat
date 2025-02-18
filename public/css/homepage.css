@@ -6,6 +6,14 @@ body {
     text-align: center;
 }
 
+.saro-container {
+    max-height: 350px; /* Adjust height as needed */
+    overflow-y: auto;
+
+    padding: 5px;
+}
+
+
 .card {
     text-align: center;
 }
@@ -285,4 +293,9 @@ input, select, textarea {
 
 .search-box button {
     height: 35px;
+}
+@media (max-width: 768px) { /* For mobile devices */
+    .saro-container {
+        max-height: 210px;
+    }
 }
