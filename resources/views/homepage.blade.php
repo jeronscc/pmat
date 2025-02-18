@@ -91,23 +91,7 @@
     <!-- Scrollable SARO List Container -->
     <div class="saro-container">
         <ul class="list-group saro-list">
-            <li class="list-group-item active" onclick="selectSaro('SARO 1')">SARO 1</li>
-            <li class="list-group-item" onclick="selectSaro('SARO 2')">SARO 2</li>
-            <li class="list-group-item" onclick="selectSaro('SARO 3')">SARO 3</li>
-            <li class="list-group-item" onclick="selectSaro('SARO 4')">SARO 4</li>
-            <li class="list-group-item" onclick="selectSaro('SARO 5')">SARO 5</li>
-            <li class="list-group-item" onclick="selectSaro('SARO 6')">SARO 6</li>
-            <li class="list-group-item" onclick="selectSaro('SARO 7')">SARO 7</li>
-            <li class="list-group-item" onclick="selectSaro('SARO 8')">SARO 8</li>
-            <li class="list-group-item" onclick="selectSaro('SARO 9')">SARO 9</li>
-            <li class="list-group-item" onclick="selectSaro('SARO 10')">SARO 10</li>
-            <li class="list-group-item" onclick="selectSaro('SARO 11')">SARO 11</li>
-            <li class="list-group-item" onclick="selectSaro('SARO 12')">SARO 12</li>
-            <li class="list-group-item" onclick="selectSaro('SARO 13')">SARO 13</li>
-            <li class="list-group-item" onclick="selectSaro('SARO 14')">SARO 14</li>
-            <li class="list-group-item" onclick="selectSaro('SARO 15')">SARO 15</li>
-            <li class="list-group-item" onclick="selectSaro('SARO 16')">SARO 16</li>
-            <li class="list-group-item" onclick="selectSaro('SARO 17')">SARO 17</li>
+
         </ul>
     </div>
 </div>
@@ -125,7 +109,7 @@
                 </button>
                 <div class="search-box">
                 <input type="text" class="form-control me-2" id="searchBar" placeholder="Search...">
-                <button type="submit" class="search-button" onclick="searchProcurement()">
+                <button type="submit" class="search-button" onclick="">
                     Search
                 </button>
                 <div>
@@ -350,89 +334,44 @@
     new bootstrap.Modal(document.getElementById("addSaroModal")).show();
 }
 
-function selectSaro(saroName) {
-    document.getElementById("currentSaro").textContent = saroName;
-    document.getElementById("currentSaroName").textContent = saroName;
-    // Dummy data for different SAROs
-    const dummyData = {
-        "SARO 1": [
-            { pr: "02-05647", activity: "ILCDB Orientation", status: "at Supply Unit", badge: "warning" },
-            { pr: "02-36421", activity: "Cybersecurity Workshop", status: "Done", badge: "success" },
-            { pr: "02-75482", activity: "Training Camp 2025", status: "at Budget Unit", badge: "warning" }
-        ],
-        "SARO 2": [
-            { pr: "03-12345", activity: "IT Conference", status: "at Supply Unit", badge: "warning" },
-            { pr: "03-67890", activity: "Hackathon", status: "Done", badge: "success" }
-        ],
-        "SARO 3": [
-            { pr: "04-11223", activity: "Software Training", status: "at Budget Unit", badge: "warning" }
-        ]
-    };
-
-    let tableContent = dummyData[saroName] ? dummyData[saroName].map(item =>
-        `<tr>
-            <td>${item.pr}</td>
-            <td>${item.activity}</td>
-            <td><span class="badge bg-${item.badge}">${item.status}</span></td>
-        </tr>`).join("") : "<tr><td colspan='3' class='text-center'>No data available</td></tr>";
-
-    document.getElementById("procurementTable").innerHTML = tableContent;
-
-    const balanceData = {
-        "SARO 1": {balance: "₱4,600,000" },
-        "SARO 2": {balance: "₱3,200,000"},
-        "SARO 3": {balance: "₱2,800,000"},
-        "SARO 4": {balance: "₱6,000,000"},
-        "SARO 5": {balance: "₱5,100,000"},
-    };
-    // Update remaining balance
-    const remainingBalanceElement = document.getElementById("remainingBalance");
-        if (balanceData[saroName]) {
-            remainingBalanceElement.textContent = balanceData[saroName].balance;
-        } else {
-            remainingBalanceElement.textContent = "₱0";
-        }
-}
-    
-        // Update active class
-    document.querySelectorAll('.saro-list .list-group-item').forEach(item => {
-        item.classList.remove('active');
-    });
-    document.querySelector(`.saro-list .list-group-item:contains(${saroName})`).classList.add('active');
-    document.addEventListener('DOMContentLoaded', function () {
-        var dropdownElementList = [].slice.call(document.querySelectorAll('.dropdown-toggle'))
-        var dropdownList = dropdownElementList.map(function (dropdownToggleEl) {
-            return new bootstrap.Dropdown(dropdownToggleEl)
-        })
-    });
-    
-function filterSaroByYear(year) {
-    const saroList = document.querySelector(".saro-list");
-    saroList.innerHTML = "";
-
-    if (year === "2025") {
-        saroList.innerHTML = `
-            <li class="list-group-item active" onclick="selectSaro('SARO 1')">SARO 1</li>
-            <li class="list-group-item" onclick="selectSaro('SARO 2')">SARO 2</li>
-            <li class="list-group-item" onclick="selectSaro('SARO 3')">SARO 3</li>
-            <li class="list-group-item" onclick="selectSaro('SARO 4')">SARO 4</li>
-            <li class="list-group-item" onclick="selectSaro('SARO 5')">SARO 5</li>
-        `;
-    } else {
-        saroList.innerHTML = "<li class='list-group-item text-center'>No data available</li>";
-    }
-}
-
-function searchProcurement() {
-    const searchTerm = document.getElementById("searchBar").value.toLowerCase();
-    const rows = document.querySelectorAll("#procurementTable tr");
-
-    rows.forEach(row => {
-        const cells = row.querySelectorAll("td");
-        const match = Array.from(cells).some(cell => cell.textContent.toLowerCase().includes(searchTerm));
-        row.style.display = match ? "" : "none";
-    });
-}
 </script>
+<script>
+// Fetch SARO data from the API
+fetch('/api/fetch-saro-ilcdb')
+    .then(response => response.json())
+    .then(data => {
+        // Get the list container element
+        const saroList = document.querySelector('.saro-list');
+        
+        // Clear any previous entries in the list
+        saroList.innerHTML = '';
+
+        // Check if there is any data
+        if (data.length > 0) {
+            // Loop through each SARO record
+            data.forEach(saro => {
+                // Create a new list item for each SARO record
+                const listItem = document.createElement('li');
+                listItem.classList.add('list-group-item');
+
+                // Display only the saro_no
+                listItem.textContent = saro.saro_no;
+
+                // Append the list item to the list
+                saroList.appendChild(listItem);
+            });
+        } else {
+            // Display a message if no SARO records were found
+            const emptyMessage = document.createElement('li');
+            emptyMessage.classList.add('list-group-item');
+            emptyMessage.textContent = 'No SARO records found.';
+            saroList.appendChild(emptyMessage);
+        }
+    })
+    .catch(error => console.error('Error fetching SARO data:', error));
+
+    
+</script>
+
 </body>
 </html>

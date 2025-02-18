@@ -34,6 +34,8 @@ Route::get('/procurementform', function () {
 Route::post('/login', [userController::class, 'login']);
 Route::post('/logout', [UserController::class, 'logout'])->name('logout');
 
+
+//PREVEHT BACK AFTER LOGOUT
 Route::middleware(['auth', PreventBackAfterLogout::class])->group(function () {
     Route::get('/homepage', function () {
         return view('homepage');
