@@ -141,6 +141,7 @@ section {
 .record-box table {
     width: 100%;
     border-collapse: collapse;
+    font-style: normal;
 }
 
 /* Keep <thead> sticky at the top */
