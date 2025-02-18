@@ -28,6 +28,10 @@ Route::get('/spark', function () {
     return view('spark');
 })->middleware('auth');
 
+Route::get('/honorariaform', function () {
+    return view('honorariaform');
+})->middleware('auth');
+
 Route::get('/procurementform', function () {
     return view('procurementform');
 });
