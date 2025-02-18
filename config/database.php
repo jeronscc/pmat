@@ -16,7 +16,7 @@ return [
     |
     */
 
-    'default' => env('DB_CONNECTION', 'sqlite'),
+    'default' => env('DB_CONNECTION', 'mysql'),
 
     /*
     |--------------------------------------------------------------------------
@@ -60,6 +60,21 @@ return [
             'options' => extension_loaded('pdo_mysql') ? array_filter([
                 PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
             ]) : [],
+        ],
+
+        'ilcdb' => [
+            'driver' => 'mysql',
+            'host' => env('ILCDB_HOST', '127.0.0.1'),
+            'port' => env('ILCDB_PORT', '3306'),
+            'database' => env('ILCDB_DATABASE', 'ilcdb'),
+            'username' => env('ILCDB_USERNAME', 'root'),
+            'password' => env('ILCDB_PASSWORD', ''),
+            'unix_socket' => env('ILCDB_SOCKET', ''),
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+            'prefix' => '',
+            'strict' => true,
+            'engine' => null,
         ],
 
         'mariadb' => [
