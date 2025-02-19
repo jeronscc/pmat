@@ -77,6 +77,21 @@ return [
             'engine' => null,
         ],
 
+        'requirements' => [
+            'driver' => 'mysql',
+            'host' => env('REQUIREMENTS_HOST', '127.0.0.1'),
+            'port' => env('REQUIREMENTS_PORT', '3306'),
+            'database' => env('REQUIREMENTS_DATABASE', 'ilcdb'),
+            'username' => env('REQUIREMENTS_USERNAME', 'root'),
+            'password' => env('REQUIREMENTS_PASSWORD', ''),
+            'unix_socket' => env('REQUIREMENTS_SOCKET', ''),
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+            'prefix' => '',
+            'strict' => true,
+            'engine' => null,
+        ],
+
         'mariadb' => [
             'driver' => 'mariadb',
             'url' => env('DB_URL'),
