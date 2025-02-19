@@ -428,10 +428,22 @@ function displayCurrentBudget(saro) {
     // Set the current SARO name in the container
     document.getElementById('currentSaroName').textContent = `${saro.saro_no}`;
     
+    // Check if current_budget exists and format it with comma separation
+    const currentBudget = saro.current_budget
+        ? `₱${formatNumberWithCommas(saro.current_budget)}`
+        : '₱0';
+    
     // Display the current budget in the "remainingBalance" container
-    const currentBudget = saro.current_budget ? `₱${saro.current_budget.toLocaleString()}` : '₱0';
     document.getElementById('remainingBalance').textContent = currentBudget;
 }
+
+// Custom function to format numbers with commas
+function formatNumberWithCommas(number) {
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+
+
 
 // Add an event listener to the year filter
 document.getElementById('year').addEventListener('change', function() {
