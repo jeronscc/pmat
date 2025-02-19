@@ -32,16 +32,18 @@
                 </tr>
             </thead>
             <tbody>
+                @foreach ($checklistItems as $item)
                 <tr>
                     <td>
-                        <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#requirementsModal1">
+                        <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#requirementsModal{{ $item->id }}">
                             View Details
                         </button>
                     </td>
-                    <td><input type="datetime-local" class="form-control" id="dateSubmitted1"></td>
-                    <td><input type="datetime-local" class="form-control" id="dateReturned1"></td>
-                    <td><span class="indicator" id="indicator1"></span></td>
+                    <td><input type="datetime-local" class="form-control" id="dateSubmitted{{ $item->id }}"></td>
+                    <td><input type="datetime-local" class="form-control" id="dateReturned{{ $item->id }}"></td>
+                    <td><span class="indicator" id="indicator{{ $item->id }}"></span></td>
                 </tr>
+                @endforeach
             </tbody>
         </table>
         <div class="table-buttons">
@@ -50,61 +52,71 @@
         </div>
     </div>
 
-    <!-- Add Procurement Form -->
-    <div class="container mt-5">
-        <h2>Add Procurement</h2>
-        <form action="{{ route('addProcurement') }}" method="POST">
-            @csrf
-            <div class="mb-3">
-                <label for="category" class="form-label">Select Procurement Category</label>
-                <select class="form-select" id="category" name="category" required>
-                    <option value="" disabled selected>Select Category</option>
-                    <option value="SVP">SVP</option>
-                    <option value="Honoraria">Honoraria</option>
-                    <option value="Other expense">Other Expenses</option>
-                </select>
-            </div>
-            <div class="mb-3">
-                <label for="pr-number" class="form-label">PR/TRANSACTION NUMBER</label>
-                <input type="text" class="form-control" id="pr-number" name="pr_number" placeholder="Enter PR Number" required>
-            </div>
-            <div class="mb-3">
-                <label for="activity" class="form-label">ACTIVITY</label>
-                <input type="text" class="form-control" id="activity" name="activity" placeholder="Enter Activity" required>
-            </div>
-            <div class="mb-3">
-                <label for="description" class="form-label">DESCRIPTION</label>
-                <textarea class="form-control" id="description" name="description" rows="3" placeholder="Enter Description" required></textarea>
-            </div>
-            <button type="submit" class="btn btn-success">Add Procurement</button>
-        </form>
-    </div>
-
     <!-- Modals -->
-    <div class="modal fade" id="requirementsModal1" tabindex="-1" aria-labelledby="modalTitle1" aria-hidden="true">
+    @foreach ($checklistItems as $item)
+    <div class="modal fade" id="requirementsModal{{ $item->id }}" tabindex="-1" aria-labelledby="modalTitle{{ $item->id }}" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header bg-dark text-white">
-                    <h5 class="modal-title" id="modalTitle1">REQUIREMENTS DETAILS</h5>
+                    <h5 class="modal-title" id="modalTitle{{ $item->id }}">REQUIREMENTS DETAILS</h5>
                 </div>
                 <div class="modal-body">
                     <form>
-                        <!-- Checklist for Button 1 -->
-                        @foreach ($checklistItems as $item)
+                        <!-- Checklist for Button {{ $item->id }} -->
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="{{ $item->id }}">
-                            <label class="form-check-label" for="{{ $item->id }}">{{ $item->requirement_name }}</label>
+                            <input class="form-check-input" type="checkbox" id="ors{{ $item->id }}">
+                            <label class="form-check-label" for="ors{{ $item->id }}">ORS</label>
                         </div>
-                        @endforeach
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="dv{{ $item->id }}">
+                            <label class="form-check-label" for="dv{{ $item->id }}">DV</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="contract{{ $item->id }}">
+                            <label class="form-check-label" for="contract{{ $item->id }}">Service Contract</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="classification{{ $item->id }}">
+                            <label class="form-check-label" for="classification{{ $item->id }}">Certificate Honoraria Classification</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="report{{ $item->id }}">
+                            <label class="form-check-label" for="report{{ $item->id }}">Terminal Report</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="attendance{{ $item->id }}">
+                            <label class="form-check-label" for="attendance{{ $item->id }}">Attendance</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="resume{{ $item->id }}">
+                            <label class="form-check-label" for="resume{{ $item->id }}">Resume/CV</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="govid{{ $item->id }}">
+                            <label class="form-check-label" for="govid{{ $item->id }}">Government ID</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="payslip{{ $item->id }}">
+                            <label class="form-check-label" for="payslip{{ $item->id }}">Payslip/Certificate of Gross Income</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="bank{{ $item->id }}">
+                            <label class="form-check-label" for="bank{{ $item->id }}">TIN and Bank Account details</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="cert{{ $item->id }}">
+                            <label class="form-check-label" for="cert{{ $item->id }}">Certificate of Services Rendered</label>
+                        </div>
                     </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-success" id="saveBtn1">Save</button>
+                    <button type="button" class="btn btn-success" id="saveBtn{{ $item->id }}">Save</button>
                 </div>
             </div>
         </div>
     </div>
+    @endforeach
 
     <script src="script.js"></script>
 </body>
