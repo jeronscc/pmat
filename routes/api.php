@@ -35,8 +35,8 @@ Route::get('/fetch-saro-ilcdb', function (Request $request) {
 // ILCDB FETCH HONORARIACHECKLIST
 Route::get('/fetch-honorariachecklist', function () {
     // Fetch data from the honorariachecklist table in the ilcdb database
-    $data = DB::connection('requirements')->table('honorariachecklist')->get();
+    $checklistItems = DB::connection('requirements')->table('honorariachecklist')->get();
 
     // Return data as JSON
-    return response()->json($data);
+    return response()->json($checklistItems);
 });
