@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\userController;
 use App\Http\Middleware\PreventBackAfterLogout;
+use Illuminate\Support\Facades\DB;
 
 Route::get('/', function () {
     return view('index');
@@ -29,7 +30,8 @@ Route::get('/spark', function () {
 })->middleware('auth');
 
 Route::get('/honorariaform', function () {
-    return view('honorariaform');
+    $checklistItems = DB::connection('requirements')->table('honorariachecklist')->get();
+    return view('honorariaform', ['checklistItems' => $checklistItems]);
 })->middleware('auth');
 
 Route::get('/procurementform', function () {
@@ -38,8 +40,7 @@ Route::get('/procurementform', function () {
 Route::post('/login', [userController::class, 'login']);
 Route::post('/logout', [UserController::class, 'logout'])->name('logout');
 
-
-//PREVEHT BACK AFTER LOGOUT
+//PREVENT BACK AFTER LOGOUT
 Route::middleware(['auth', PreventBackAfterLogout::class])->group(function () {
     Route::get('/homepage', function () {
         return view('homepage');
