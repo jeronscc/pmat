@@ -50,6 +50,36 @@
         </div>
     </div>
 
+    <!-- Add Procurement Form -->
+    <div class="container mt-5">
+        <h2>Add Procurement</h2>
+        <form action="{{ route('addProcurement') }}" method="POST">
+            @csrf
+            <div class="mb-3">
+                <label for="category" class="form-label">Select Procurement Category</label>
+                <select class="form-select" id="category" name="category" required>
+                    <option value="" disabled selected>Select Category</option>
+                    <option value="SVP">SVP</option>
+                    <option value="Honoraria">Honoraria</option>
+                    <option value="Other expense">Other Expenses</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="pr-number" class="form-label">PR/TRANSACTION NUMBER</label>
+                <input type="text" class="form-control" id="pr-number" name="pr_number" placeholder="Enter PR Number" required>
+            </div>
+            <div class="mb-3">
+                <label for="activity" class="form-label">ACTIVITY</label>
+                <input type="text" class="form-control" id="activity" name="activity" placeholder="Enter Activity" required>
+            </div>
+            <div class="mb-3">
+                <label for="description" class="form-label">DESCRIPTION</label>
+                <textarea class="form-control" id="description" name="description" rows="3" placeholder="Enter Description" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-success">Add Procurement</button>
+        </form>
+    </div>
+
     <!-- Modals -->
     <div class="modal fade" id="requirementsModal1" tabindex="-1" aria-labelledby="modalTitle1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
