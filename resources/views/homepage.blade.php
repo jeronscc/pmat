@@ -245,7 +245,7 @@
     </section>
 </div>
     
-<!-- SARO Modal -->
+<!-- Add SARO Modal -->
 <div class="modal fade" id="addSaroModal" tabindex="-1" aria-labelledby="saroTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -260,14 +260,13 @@
                         <input type="text" class="form-control" id="saro_number" name="saro_number" required>
                     </div>
                     <div class="mb-3">
-                        <label for="budget" class="form-label">BUDGET ALLOCATED</label>
+                        <label for="budget" class="form-label">BUDGET</label>
                         <input type="text" class="form-control" id="budget" name="budget" required>
                     </div>
                     <div class="mb-3">
                         <label for="year" class="form-label">YEAR</label>
                         <select class="form-select" id="year" name="year" required>
                             <option value="" disabled selected>Select Year</option>
-                            <option value="all">Show All</option> <!-- Show All option -->
                             <?php
                             $currentYear = date("Y");
                             for ($year = $currentYear; $year >= $currentYear - 10; $year--) {
