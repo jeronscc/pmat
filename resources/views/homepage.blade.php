@@ -151,7 +151,7 @@
                         <input type="text" class="form-control" id="saro_number" name="saro_number" required>
                     </div>
                     <div class="mb-3">
-                        <label for="budget" class="form-label">BUDGET ALLOCATED</label>
+                        <label for="budget" class="form-label">BUDGET</label>
                         <input type="text" class="form-control" id="budget" name="budget" required>
                     </div>
                     <div class="mb-3">
@@ -236,17 +236,45 @@ window.onload = function() {
 };
 
 // Function to fetch and display SARO list based on the selected year or "all"
-// Function to filter SARO and procurement table based on year selection
 function filterSaroByYear(year) {
-    // Reset the procurement table and balance information
+    // Reset the balance display to "₱0" when the year filter changes
     document.getElementById('remainingBalance').textContent = '₱0';
     document.getElementById('currentViewingSaro').textContent = '';
 
-    // Fetch SARO data and procurement data for the selected year
-    fetchSaroDataAndRequirements(year); // This will fetch both SAROs and procurement requirements for the selected year
+    const url = year === '' ? '/api/fetch-saro-ilcdb' : `/api/fetch-saro-ilcdb?year=${year}`;
+
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            const saroList = document.querySelector('.saro-list');
+            saroList.innerHTML = ''; // Clear previous entries
+
+            if (data.length > 0) {
+                data.forEach(saro => {
+                    // Create list item for each SARO number
+                    const listItem = document.createElement('li');
+                    listItem.classList.add('list-group-item');
+                    listItem.textContent = `${saro.saro_no}`;
+
+                    // Add click event to each SARO number
+                    listItem.addEventListener('click', function() {
+                        displayCurrentBudget(saro); // Show balance when SARO is clicked
+                        fetchProcurementForSaro(saro.saro_no); // Fetch and display requirements for this SARO
+                    });
+
+                    // Append the list item to the SARO list
+                    saroList.appendChild(listItem);
+                });
+            } else {
+                // Show message if no SARO data is available
+                const emptyMessage = document.createElement('li');
+                emptyMessage.classList.add('list-group-item');
+                emptyMessage.textContent = 'No SARO records found.';
+                saroList.appendChild(emptyMessage);
+            }
+        })
+        .catch(error => console.error('Error fetching SARO data:', error));
 }
-
-
 
 function fetchSaroData(year) {
     // Reset the balance display to "₱0" before fetching SAROs
@@ -288,7 +316,7 @@ function fetchSaroData(year) {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-    fetchProcurementsForSaro(''); // Fetch all requirements by default
+    fetchProcurementForSaro(''); // Fetch all requirements by default
 });
 // Function to display the remaining balance for the clicked SARO
 function displayCurrentBudget(saro) {
@@ -305,10 +333,10 @@ function displayCurrentBudget(saro) {
     document.getElementById('remainingBalance').textContent = currentBudget;
 
     // Fetch and display the requirements associated with the selected SARO
-    fetchProcurementsForSaro(saro.saro_no);
+    fetchProcurementForSaro(saro.saro_no);
 }
 
-function fetchProcurementsForSaro(saroNo) {
+function fetchProcurementForSaro(saroNo) {
     const url = saroNo === '' ? '/api/fetch-procurement-ilcdb' : `/api/fetch-procurement-ilcdb?saro_no=${saroNo}`;
 
     fetch(url)
@@ -357,14 +385,13 @@ function fetchProcurementsForSaro(saroNo) {
 }
 
 function fetchSaroDataAndRequirements(year) {
-    // Fetch SARO data for the selected year
-    const saroUrl = year === '' ? '/api/fetch-saro-ilcdb' : `/api/fetch-saro-ilcdb?year=${year}`;
-
-    fetch(saroUrl)
+    const url = year === '' ? '/api/fetch-saro-ilcdb' : `/api/fetch-saro-ilcdb?year=${year}`;
+    
+    fetch(url)
         .then(response => response.json())
         .then(saros => {
             const saroList = document.querySelector('.saro-list');
-            saroList.innerHTML = ''; // Clear previous SARO entries
+            saroList.innerHTML = ''; // Clear previous entries
 
             if (saros.length > 0) {
                 saros.forEach(saro => {
@@ -374,7 +401,7 @@ function fetchSaroDataAndRequirements(year) {
 
                     listItem.addEventListener('click', function() {
                         displayCurrentBudget(saro); 
-                        fetchProcurementRequirements(year, saro.saro_no);  // Fetch procurement data for the selected SARO and year
+                        fetchProcurementRequirements(saro.saro_no);
                     });
 
                     saroList.appendChild(listItem);
@@ -387,27 +414,16 @@ function fetchSaroDataAndRequirements(year) {
             }
         })
         .catch(error => console.error('Error fetching SARO data:', error));
-
-    // Fetch procurement requirements for the selected year (no SARO filter yet)
-    fetchProcurementRequirements(year);  // This will show all procurement requirements for the selected year
 }
 
+function fetchProcurementRequirements(saroNo) {
+    const url = saroNo === '' ? '/api/fetch-procurement-ilcdb' : `/api/fetch-procurement-ilcdb?saro_no=${saroNo}`;
 
-function fetchProcurementRequirements(year = '', saroNo = '') {
-    // Set the URL for the procurement requirements based on the year (no SARO yet)
-    let url = '/api/fetch-procurement-ilcdb';
-    if (year !== '') {
-        url += `?year=${year}`;  // Only filter by year if provided
-    } else if (saroNo !== '') {
-        url += `?saro_no=${saroNo}`;  // Filter by SARO if provided
-    }
-
-    // Fetch procurement requirements based on the constructed URL
     fetch(url)
         .then(response => response.json())
         .then(data => {
             const tableBody = document.getElementById('procurementTable');
-            tableBody.innerHTML = ''; // Clear existing rows
+            tableBody.innerHTML = ''; // Clear existing table rows
 
             if (data.length > 0) {
                 data.forEach(item => {
@@ -427,7 +443,7 @@ function fetchProcurementRequirements(year = '', saroNo = '') {
                     const statusCell = document.createElement('td');
                     const badge = document.createElement('span');
                     badge.classList.add('badge', 'bg-warning', 'text-dark');
-                    badge.textContent = 'Pending';  // Placeholder
+                    badge.textContent = 'Pending'; 
                     statusCell.appendChild(badge);
                     row.appendChild(statusCell);
 
@@ -449,12 +465,19 @@ function fetchProcurementRequirements(year = '', saroNo = '') {
 function formatNumberWithCommas(number) {
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
+
+
+
+
 // Add an event listener to the year filter
 document.getElementById('year').addEventListener('change', function() {
     // When the year changes, fetch the SARO data and reset the balance display
     fetchSaroData(this.value);
 });
+
+
 const apiUrl = '/api/fetch-procurement-ilcdb'; // replace with your actual API endpoint
+
 // Fetch data from the API and populate the table
 window.addEventListener('DOMContentLoaded', (event) => {
     fetch(apiUrl)
