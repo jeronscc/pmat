@@ -136,7 +136,7 @@
     </section>
 </div>
     
-<!-- SARO Modal -->
+<!-- Add SARO Modal -->
 <div class="modal fade" id="addSaroModal" tabindex="-1" aria-labelledby="saroTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -151,14 +151,13 @@
                         <input type="text" class="form-control" id="saro_number" name="saro_number" required>
                     </div>
                     <div class="mb-3">
-                        <label for="budget" class="form-label">BUDGET ALLOCATED</label>
+                        <label for="budget" class="form-label">BUDGET</label>
                         <input type="text" class="form-control" id="budget" name="budget" required>
                     </div>
                     <div class="mb-3">
                         <label for="year" class="form-label">YEAR</label>
                         <select class="form-select" id="year" name="year" required>
                             <option value="" disabled selected>Select Year</option>
-                            <option value="all">Show All</option> <!-- Show All option -->
                             <?php
                             $currentYear = date("Y");
                             for ($year = $currentYear; $year >= $currentYear - 10; $year--) {
@@ -451,8 +450,37 @@ document.getElementById('year').addEventListener('change', function() {
     // When the year changes, fetch the SARO data and reset the balance display
     fetchSaroData(this.value);
 });
-const apiUrl = '/api/fetch-procurement-ilcdb'; // replace with your actual API endpoint
-// Fetch data from the API and populate the table
+
+document.getElementById('saveSaro').addEventListener('click', function() {
+    const saroNumber = document.getElementById('saro_number').value;
+    const budget = document.getElementById('budget').value;
+    const year = document.getElementById('year').value;
+
+    fetch('/add-saro', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        body: JSON.stringify({
+            saro_number: saroNumber,
+            budget: budget,
+            year: year
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.message === 'SARO added successfully') {
+            alert('SARO added successfully');
+            // Optionally, you can refresh the SARO list or close the modal here
+            fetchSaroData('');
+            new bootstrap.Modal(document.getElementById("addSaroModal")).hide();
+        } else {
+            alert('Failed to add SARO');
+        }
+    })
+    .catch(error => console.error('Error:', error));
+});
 
 </script>
 </body>

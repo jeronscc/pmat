@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\userController;
+use App\Http\Controllers\HonorariaController;
+use App\Http\Controllers\AddSaroController;
 use App\Http\Middleware\PreventBackAfterLogout;
 use Illuminate\Support\Facades\DB;
 
@@ -29,17 +31,14 @@ Route::get('/spark', function () {
     return view('spark');
 })->middleware('auth');
 
-Route::get('/honorariaform', function () {
-    $checklistItems = DB::connection('requirements')->table('honorariachecklist')->get();
-    return view('honorariaform', ['checklistItems' => $checklistItems]);
-})->middleware('auth');
+Route::get('/honoraria-form', [HonorariaController::class, 'showHonorariaForm']);
 
 Route::get('/procurementform', function () {
     return view('procurementform');
 });
 Route::post('/login', [userController::class, 'login']);
 Route::post('/logout', [UserController::class, 'logout'])->name('logout');
-
+Route::post('/add-saro', [SaroController::class, 'addSaro'])->name('addSaro');
 //PREVENT BACK AFTER LOGOUT
 Route::middleware(['auth', PreventBackAfterLogout::class])->group(function () {
     Route::get('/homepage', function () {
