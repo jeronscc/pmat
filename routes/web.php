@@ -29,10 +29,7 @@ Route::get('/spark', function () {
     return view('spark');
 })->middleware('auth');
 
-Route::get('/honorariaform', function () {
-    $checklistItems = DB::connection('requirements')->table('honorariachecklist')->get();
-    return view('honorariaform', ['checklistItems' => $checklistItems]);
-})->middleware('auth');
+Route::get('/honoraria-form', [HonorariaController::class, 'showHonorariaForm']);->middleware('auth');
 
 Route::get('/procurementform', function () {
     return view('procurementform');
