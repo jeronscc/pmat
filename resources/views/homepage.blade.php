@@ -136,7 +136,7 @@
     </section>
 </div>
     
-<!-- Add SARO Modal -->
+<!-- SARO Modal -->
 <div class="modal fade" id="addSaroModal" tabindex="-1" aria-labelledby="saroTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -151,13 +151,14 @@
                         <input type="text" class="form-control" id="saro_number" name="saro_number" required>
                     </div>
                     <div class="mb-3">
-                        <label for="budget" class="form-label">BUDGET</label>
+                        <label for="budget" class="form-label">BUDGET ALLOCATED</label>
                         <input type="text" class="form-control" id="budget" name="budget" required>
                     </div>
                     <div class="mb-3">
                         <label for="year" class="form-label">YEAR</label>
                         <select class="form-select" id="year" name="year" required>
                             <option value="" disabled selected>Select Year</option>
+                            <option value="all">Show All</option> <!-- Show All option -->
                             <?php
                             $currentYear = date("Y");
                             for ($year = $currentYear; $year >= $currentYear - 10; $year--) {
@@ -233,6 +234,7 @@ window.onload = function() {
     // Initially load all SAROs when the page loads (with no balance)
     fetchSaroData('');
 };
+
 // Function to fetch and display SARO list based on the selected year or "all"
 // Function to filter SARO and procurement table based on year selection
 function filterSaroByYear(year) {
@@ -243,6 +245,8 @@ function filterSaroByYear(year) {
     // Fetch SARO data and procurement data for the selected year
     fetchSaroDataAndRequirements(year); // This will fetch both SAROs and procurement requirements for the selected year
 }
+
+
 
 function fetchSaroData(year) {
     // Reset the balance display to "₱0" before fetching SAROs
@@ -450,36 +454,48 @@ document.getElementById('year').addEventListener('change', function() {
     // When the year changes, fetch the SARO data and reset the balance display
     fetchSaroData(this.value);
 });
-
-document.getElementById('saveSaro').addEventListener('click', function() {
-    const saroNumber = document.getElementById('saro_number').value;
-    const budget = document.getElementById('budget').value;
-    const year = document.getElementById('year').value;
-
-    fetch('/add-saro', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-        },
-        body: JSON.stringify({
-            saro_number: saroNumber,
-            budget: budget,
-            year: year
-        })
-    })
-    .then(response => response.json())
+const apiUrl = '/api/fetch-procurement-ilcdb'; // replace with your actual API endpoint
+// Fetch data from the API and populate the table
+window.addEventListener('DOMContentLoaded', (event) => {
+    fetch(apiUrl)
+    .then(response => response.json())  // Parse the response as JSON
     .then(data => {
-        if (data.message === 'SARO added successfully') {
-            alert('SARO added successfully');
-            // Optionally, you can refresh the SARO list or close the modal here
-            fetchSaroData('');
-            new bootstrap.Modal(document.getElementById("addSaroModal")).hide();
-        } else {
-            alert('Failed to add SARO');
-        }
+        console.log(data); // Log the data to the console to check the response
+        const tableBody = document.getElementById('procurementTable');
+        
+        // Clear any existing rows in the table
+        tableBody.innerHTML = '';
+
+        // Loop through the fetched data and create table rows
+        data.forEach(item => {
+            const row = document.createElement('tr');
+
+            // PR NUMBER cell (procurement_id)
+            const prNumberCell = document.createElement('td');
+            prNumberCell.textContent = item.procurement_id; // Assuming "procurement_id" is returned
+            row.appendChild(prNumberCell);
+
+            // ACTIVITY cell
+            const activityCell = document.createElement('td');
+            activityCell.textContent = item.activity; // Assuming "activity" is returned
+            row.appendChild(activityCell);
+
+            // STATUS cell (we don't have status in the response, so we can leave it with a placeholder)
+            const statusCell = document.createElement('td');
+            const badge = document.createElement('span');
+            badge.classList.add('badge', 'bg-warning', 'text-dark');
+            badge.textContent = 'Pending';  // Placeholder, since we don't have the status in the API response
+            statusCell.appendChild(badge);
+            row.appendChild(statusCell);
+
+            // Append the row to the table body
+            tableBody.appendChild(row);
+        });
     })
-    .catch(error => console.error('Error:', error));
+    .catch(error => {
+        console.error('Error fetching data:', error);
+    });
+
 });
 
 </script>
