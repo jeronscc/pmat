@@ -102,7 +102,7 @@
         <div class="d-flex justify-content-between align-items-center mb-3">
         <section class="records">
         <div class="header">
-            <h5>Currently Viewing: <span id="currentSaro">SARO 1</span></h5>
+            <h5>Currently Viewing: <span id="currentViewingSaro"></span></h5>
             <div class="d-flex">
                 <button type="button" class="icon-button me-2" data-bs-toggle="modal" data-bs-target="#procurementModal">
                     <img src="/assets/add.png" alt="Add Procurement" style="width: 20px; height: 20px;">
@@ -426,6 +426,7 @@ function fetchSaroData(year) {
 // Function to display the remaining balance for the clicked SARO
 function displayCurrentBudget(saro) {
     // Set the current SARO name in the container
+    document.getElementById('currentViewingSaro').textContent = `${saro.saro_no}`;
     document.getElementById('currentSaroName').textContent = `${saro.saro_no}`;
     
     // Check if current_budget exists and format it with comma separation
