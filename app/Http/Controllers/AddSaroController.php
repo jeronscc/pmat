@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class SaroController extends Controller
+class AddSaroController extends Controller
 {
     public function addSaro(Request $request)
     {
