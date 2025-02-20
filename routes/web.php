@@ -29,7 +29,7 @@ Route::get('/spark', function () {
     return view('spark');
 })->middleware('auth');
 
-Route::get('/honoraria-form', [HonorariaController::class, 'showHonorariaForm']);->middleware('auth');
+Route::get('/honoraria-form', [HonorariaController::class, 'showHonorariaForm']);
 
 Route::get('/procurementform', function () {
     return view('procurementform');
