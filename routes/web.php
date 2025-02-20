@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\userController;
+use App\Http\Controllers\HonorariaController;
 use App\Http\Middleware\PreventBackAfterLogout;
 use Illuminate\Support\Facades\DB;
 
