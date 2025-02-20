@@ -260,7 +260,7 @@
                         <input type="text" class="form-control" id="saro_number" name="saro_number" required>
                     </div>
                     <div class="mb-3">
-                        <label for="budget" class="form-label">BUDGET</label>
+                        <label for="budget" class="form-label">BUDGET ALLOCATED</label>
                         <input type="text" class="form-control" id="budget" name="budget" required>
                     </div>
                     <div class="mb-3">
