@@ -119,129 +119,20 @@
 
         <div class="table-container">
             <div class="record-box">
-        <table>
-            <thead>
-                <tr>
-                    <th>PR NUMBER</th>
-                    <th>ACTIVITY</th>
-                    <th>STATUS</th>
-                </tr>
-            </thead>      
-            <tbody id="procurementTable"> 
-                <tr>
-                    <td>02-05647</td>
-                    <td>ILCDB Orientation</td>
-                    <td><span class="badge bg-warning text-dark">at Supply Unit</span></td>
-                </tr>
-                <tr>
-                    <td>02-36421</td>
-                    <td>Cybersecurity Workshop</td>
-                    <td><span class="badge bg-success">Done</span></td>
-                </tr>
-                <tr>
-                    <td>02-75482</td>
-                    <td>Training Camp 2025</td>
-                    <td><span class="badge bg-warning text-dark">at Budget Unit</span></td> 
-                </tr>  
-                <tr>
-                    <td>02-05647</td>
-                    <td>ILCDB Orientation</td>
-                    <td><span class="badge bg-warning text-dark">at Supply Unit</span></td>
-                </tr>
-                <tr>
-                    <td>02-36421</td>
-                    <td>Cybersecurity Workshop</td>
-                    <td><span class="badge bg-success">Done</span></td>
-                </tr>
-                <tr>
-                    <td>02-75482</td>
-                    <td>Training Camp 2025</td>
-                    <td><span class="badge bg-warning text-dark">at Budget Unit</span></td> 
-                </tr>  
-                <tr>
-                    <td>02-05647</td>
-                    <td>ILCDB Orientation</td>
-                    <td><span class="badge bg-warning text-dark">at Supply Unit</span></td>
-                </tr>
-                <tr>
-                    <td>02-36421</td>
-                    <td>Cybersecurity Workshop</td>
-                    <td><span class="badge bg-success">Done</span></td>
-                </tr>
-                <tr>
-                    <td>02-75482</td>
-                    <td>Training Camp 2025</td>
-                    <td><span class="badge bg-warning text-dark">at Budget Unit</span></td> 
-                </tr>  
-                <tr>
-                    <td>02-75482</td>
-                    <td>Training Camp 2025</td>
-                    <td><span class="badge bg-warning text-dark">at Budget Unit</span></td> 
-                </tr>  
-                <tr>
-                    <td>02-05647</td>
-                    <td>ILCDB Orientation</td>
-                    <td><span class="badge bg-warning text-dark">at Supply Unit</span></td>
-                </tr>
-                <tr>
-                    <td>02-36421</td>
-                    <td>Cybersecurity Workshop</td>
-                    <td><span class="badge bg-success">Done</span></td>
-                </tr>
-                <tr>
-                    <td>02-75482</td>
-                    <td>Training Camp 2025</td>
-                    <td><span class="badge bg-warning text-dark">at Budget Unit</span></td> 
-                </tr> 
-                <tr>
-                    <td>02-75482</td>
-                    <td>Training Camp 2025</td>
-                    <td><span class="badge bg-warning text-dark">at Budget Unit</span></td> 
-                </tr>  
-                <tr>
-                    <td>02-05647</td>
-                    <td>ILCDB Orientation</td>
-                    <td><span class="badge bg-warning text-dark">at Supply Unit</span></td>
-                </tr>
-                <tr>
-                    <td>02-36421</td>
-                    <td>Cybersecurity Workshop</td>
-                    <td><span class="badge bg-success">Done</span></td>
-                </tr>
-                <tr>
-                    <td>02-75482</td>
-                    <td>Training Camp 2025</td>
-                    <td><span class="badge bg-warning text-dark">at Budget Unit</span></td> 
-                </tr> 
-                <tr>
-                    <td>02-75482</td>
-                    <td>Training Camp 2025</td>
-                    <td><span class="badge bg-warning text-dark">at Budget Unit</span></td> 
-                </tr> 
-                <tr>
-                    <td>02-75482</td>
-                    <td>Training Camp 2025</td>
-                    <td><span class="badge bg-warning text-dark">at Budget Unit</span></td> 
-                </tr>  
-                <tr>
-                    <td>02-05647</td>
-                    <td>ILCDB Orientation</td>
-                    <td><span class="badge bg-warning text-dark">at Supply Unit</span></td>
-                </tr>
-                <tr>
-                    <td>02-36421</td>
-                    <td>Cybersecurity Workshop</td>
-                    <td><span class="badge bg-success">Done</span></td>
-                </tr>
-                <tr>
-                    <td>02-75482</td>
-                    <td>Training Camp 2025</td>
-                    <td><span class="badge bg-warning text-dark">at Budget Unit</span></td> 
-                </tr> 
-            </tbody> 
-        </table> 
-    </div>
-    </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>PR NUMBER</th>
+                            <th>ACTIVITY</th>
+                            <th>STATUS</th>
+                        </tr>
+                    </thead>
+                    <tbody id="procurementTable">
+                        <!-- Rows will be inserted dynamically by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </section>
 </div>
     
@@ -343,45 +234,15 @@ window.onload = function() {
     // Initially load all SAROs when the page loads (with no balance)
     fetchSaroData('');
 };
-
 // Function to fetch and display SARO list based on the selected year or "all"
+// Function to filter SARO and procurement table based on year selection
 function filterSaroByYear(year) {
-    // Reset the balance display to "₱0" when the year filter changes
-    
+    // Reset the procurement table and balance information
+    document.getElementById('remainingBalance').textContent = '₱0';
+    document.getElementById('currentViewingSaro').textContent = '';
 
-    // If the user selects "Show All", pass an empty string to fetch all SAROs
-    const url = year === '' ? '/api/fetch-saro-ilcdb' : `/api/fetch-saro-ilcdb?year=${year}`;
-
-    fetch(url)
-        .then(response => response.json())
-        .then(data => {
-            const saroList = document.querySelector('.saro-list');
-            saroList.innerHTML = ''; // Clear previous entries
-
-            if (data.length > 0) {
-                data.forEach(saro => {
-                    // Create list item for each SARO number
-                    const listItem = document.createElement('li');
-                    listItem.classList.add('list-group-item');
-                    listItem.textContent = `${saro.saro_no}`;
-
-                    // Add click event to each SARO number
-                    listItem.addEventListener('click', function() {
-                        displayCurrentBudget(saro); // Show balance when SARO is clicked
-                    });
-
-                    // Append the list item to the SARO list
-                    saroList.appendChild(listItem);
-                });
-            } else {
-                // Show message if no SARO data is available
-                const emptyMessage = document.createElement('li');
-                emptyMessage.classList.add('list-group-item');
-                emptyMessage.textContent = 'No SARO records found.';
-                saroList.appendChild(emptyMessage);
-            }
-        })
-        .catch(error => console.error('Error fetching SARO data:', error));
+    // Fetch SARO data and procurement data for the selected year
+    fetchSaroDataAndRequirements(year); // This will fetch both SAROs and procurement requirements for the selected year
 }
 
 function fetchSaroData(year) {
@@ -423,6 +284,9 @@ function fetchSaroData(year) {
         .catch(error => console.error('Error fetching SARO data:', error));
 }
 
+document.addEventListener('DOMContentLoaded', function () {
+    fetchProcurementsForSaro(''); // Fetch all requirements by default
+});
 // Function to display the remaining balance for the clicked SARO
 function displayCurrentBudget(saro) {
     // Set the current SARO name in the container
@@ -436,22 +300,159 @@ function displayCurrentBudget(saro) {
     
     // Display the current budget in the "remainingBalance" container
     document.getElementById('remainingBalance').textContent = currentBudget;
+
+    // Fetch and display the requirements associated with the selected SARO
+    fetchProcurementsForSaro(saro.saro_no);
 }
 
+function fetchProcurementsForSaro(saroNo) {
+    const url = saroNo === '' ? '/api/fetch-procurement-ilcdb' : `/api/fetch-procurement-ilcdb?saro_no=${saroNo}`;
+
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            const tableBody = document.getElementById('procurementTable');
+            tableBody.innerHTML = ''; // Clear any existing rows in the table
+
+            if (data.length > 0) {
+                // Loop through the fetched data and create table rows
+                data.forEach(item => {
+                    const row = document.createElement('tr');
+
+                    // PR NUMBER cell (procurement_id)
+                    const prNumberCell = document.createElement('td');
+                    prNumberCell.textContent = item.procurement_id; // Assuming "procurement_id" is returned
+                    row.appendChild(prNumberCell);
+
+                    // ACTIVITY cell
+                    const activityCell = document.createElement('td');
+                    activityCell.textContent = item.activity; // Assuming "activity" is returned
+                    row.appendChild(activityCell);
+
+                    // STATUS cell (we don't have status in the response, so we can leave it with a placeholder)
+                    const statusCell = document.createElement('td');
+                    const badge = document.createElement('span');
+                    badge.classList.add('badge', 'bg-warning', 'text-dark');
+                    badge.textContent = 'Pending';  // Placeholder, since we don't have the status in the API response
+                    statusCell.appendChild(badge);
+                    row.appendChild(statusCell);
+
+                    // Append the row to the table body
+                    tableBody.appendChild(row);
+                });
+            } else {
+                // Show message if no procurement data is available
+                const emptyMessage = document.createElement('tr');
+                const emptyCell = document.createElement('td');
+                emptyCell.setAttribute('colspan', '3');
+                emptyCell.textContent = 'No procurement records found.';
+                emptyMessage.appendChild(emptyCell);
+                tableBody.appendChild(emptyMessage);
+            }
+        })
+        .catch(error => console.error('Error fetching procurement requirements:', error));
+}
+
+function fetchSaroDataAndRequirements(year) {
+    // Fetch SARO data for the selected year
+    const saroUrl = year === '' ? '/api/fetch-saro-ilcdb' : `/api/fetch-saro-ilcdb?year=${year}`;
+
+    fetch(saroUrl)
+        .then(response => response.json())
+        .then(saros => {
+            const saroList = document.querySelector('.saro-list');
+            saroList.innerHTML = ''; // Clear previous SARO entries
+
+            if (saros.length > 0) {
+                saros.forEach(saro => {
+                    const listItem = document.createElement('li');
+                    listItem.classList.add('list-group-item');
+                    listItem.textContent = `${saro.saro_no}`;
+
+                    listItem.addEventListener('click', function() {
+                        displayCurrentBudget(saro); 
+                        fetchProcurementRequirements(year, saro.saro_no);  // Fetch procurement data for the selected SARO and year
+                    });
+
+                    saroList.appendChild(listItem);
+                });
+            } else {
+                const emptyMessage = document.createElement('li');
+                emptyMessage.classList.add('list-group-item');
+                emptyMessage.textContent = 'No SARO records found.';
+                saroList.appendChild(emptyMessage);
+            }
+        })
+        .catch(error => console.error('Error fetching SARO data:', error));
+
+    // Fetch procurement requirements for the selected year (no SARO filter yet)
+    fetchProcurementRequirements(year);  // This will show all procurement requirements for the selected year
+}
+
+
+function fetchProcurementRequirements(year = '', saroNo = '') {
+    // Set the URL for the procurement requirements based on the year (no SARO yet)
+    let url = '/api/fetch-procurement-ilcdb';
+    if (year !== '') {
+        url += `?year=${year}`;  // Only filter by year if provided
+    } else if (saroNo !== '') {
+        url += `?saro_no=${saroNo}`;  // Filter by SARO if provided
+    }
+
+    // Fetch procurement requirements based on the constructed URL
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            const tableBody = document.getElementById('procurementTable');
+            tableBody.innerHTML = ''; // Clear existing rows
+
+            if (data.length > 0) {
+                data.forEach(item => {
+                    const row = document.createElement('tr');
+
+                    // PR NUMBER cell (procurement_id)
+                    const prNumberCell = document.createElement('td');
+                    prNumberCell.textContent = item.procurement_id;
+                    row.appendChild(prNumberCell);
+
+                    // ACTIVITY cell
+                    const activityCell = document.createElement('td');
+                    activityCell.textContent = item.activity;
+                    row.appendChild(activityCell);
+
+                    // STATUS cell (this is just a placeholder as we don't have status in the data)
+                    const statusCell = document.createElement('td');
+                    const badge = document.createElement('span');
+                    badge.classList.add('badge', 'bg-warning', 'text-dark');
+                    badge.textContent = 'Pending';  // Placeholder
+                    statusCell.appendChild(badge);
+                    row.appendChild(statusCell);
+
+                    // Append row to table
+                    tableBody.appendChild(row);
+                });
+            } else {
+                const emptyMessage = document.createElement('tr');
+                const emptyCell = document.createElement('td');
+                emptyCell.setAttribute('colspan', '3');
+                emptyCell.textContent = 'No procurement records found.';
+                emptyMessage.appendChild(emptyCell);
+                tableBody.appendChild(emptyMessage);
+            }
+        })
+        .catch(error => console.error('Error fetching procurement requirements:', error));
+}
 // Custom function to format numbers with commas
 function formatNumberWithCommas(number) {
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
-
-
-
-
 // Add an event listener to the year filter
 document.getElementById('year').addEventListener('change', function() {
     // When the year changes, fetch the SARO data and reset the balance display
     fetchSaroData(this.value);
 });
-
+const apiUrl = '/api/fetch-procurement-ilcdb'; // replace with your actual API endpoint
+// Fetch data from the API and populate the table
 
 </script>
 </body>
