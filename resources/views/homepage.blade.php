@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Procurement Tracking System</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
     <link rel="stylesheet" href="/css/homepage.css">
@@ -616,7 +616,38 @@ window.addEventListener('DOMContentLoaded', (event) => {
     });
 
 });
-
 </script>
+<script>
+    document.getElementById('saveSaro').addEventListener('click', function() {
+    const saroNumber = document.getElementById('saro_number').value;
+    const budget = document.getElementById('budget').value;
+    const year = document.getElementById('year').value;
+
+    fetch('/add-saro', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        body: JSON.stringify({
+            saro_number: saroNumber,
+            budget: budget,
+            year: year
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.message === 'SARO added successfully') {
+            alert('SARO added successfully');
+            // Optionally, you can refresh the SARO list or close the modal here
+            fetchSaroData('');
+            new bootstrap.Modal(document.getElementById("addSaroModal")).hide();
+        } else {
+            alert('Failed to add SARO');
+        }
+    })
+    .catch(error => console.error('Error:', error));
+});
+</script
 </body>
 </html>
