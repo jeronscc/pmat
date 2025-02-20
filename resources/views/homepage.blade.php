@@ -241,6 +241,7 @@ function filterSaroByYear(year) {
     document.getElementById('remainingBalance').textContent = '₱0';
     document.getElementById('currentViewingSaro').textContent = '';
 
+    // Update SARO list based on year
     const url = year === '' ? '/api/fetch-saro-ilcdb' : `/api/fetch-saro-ilcdb?year=${year}`;
 
     fetch(url)
@@ -259,7 +260,7 @@ function filterSaroByYear(year) {
                     // Add click event to each SARO number
                     listItem.addEventListener('click', function() {
                         displayCurrentBudget(saro); // Show balance when SARO is clicked
-                        fetchProcurementForSaro(saro.saro_no); // Fetch and display requirements for this SARO
+                        fetchProcurementForSaro(saro.saro_no, year); // Fetch and display procurement for this SARO
                     });
 
                     // Append the list item to the SARO list
@@ -269,12 +270,62 @@ function filterSaroByYear(year) {
                 // Show message if no SARO data is available
                 const emptyMessage = document.createElement('li');
                 emptyMessage.classList.add('list-group-item');
-                emptyMessage.textContent = 'No SARO records found.';
+                emptyMessage.textContent = 'No SARO records found for the selected year.';
                 saroList.appendChild(emptyMessage);
             }
         })
         .catch(error => console.error('Error fetching SARO data:', error));
+
+    // Also fetch and display procurement data for the selected year
+    fetchProcurementForYear(year);
 }
+
+function fetchProcurementForYear(year) {
+    const url = year === '' ? '/api/fetch-procurement-ilcdb' : `/api/fetch-procurement-ilcdb?year=${year}`;
+
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            const tableBody = document.getElementById('procurementTable');
+            tableBody.innerHTML = ''; // Clear any existing rows in the table
+
+            if (data.length > 0) {
+                data.forEach(item => {
+                    const row = document.createElement('tr');
+
+                    // PR NUMBER cell (procurement_id)
+                    const prNumberCell = document.createElement('td');
+                    prNumberCell.textContent = item.procurement_id;
+                    row.appendChild(prNumberCell);
+
+                    // ACTIVITY cell
+                    const activityCell = document.createElement('td');
+                    activityCell.textContent = item.activity;
+                    row.appendChild(activityCell);
+
+                    // STATUS cell (we don't have status in the response, so we can leave it with a placeholder)
+                    const statusCell = document.createElement('td');
+                    const badge = document.createElement('span');
+                    badge.classList.add('badge', 'bg-warning', 'text-dark');
+                    badge.textContent = 'Pending'; // Placeholder
+                    statusCell.appendChild(badge);
+                    row.appendChild(statusCell);
+
+                    // Append the row to the table body
+                    tableBody.appendChild(row);
+                });
+            } else {
+                const emptyMessage = document.createElement('tr');
+                const emptyCell = document.createElement('td');
+                emptyCell.setAttribute('colspan', '3');
+                emptyCell.textContent = 'No procurement records found for the selected year.';
+                emptyMessage.appendChild(emptyCell);
+                tableBody.appendChild(emptyMessage);
+            }
+        })
+        .catch(error => console.error('Error fetching procurement data:', error));
+}
+
 
 function fetchSaroData(year) {
     // Reset the balance display to "₱0" before fetching SAROs
@@ -466,16 +517,61 @@ function formatNumberWithCommas(number) {
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
+function filterProcurementByYear(year) {
+    fetchProcurementData(year);
+}
 
+function fetchProcurementData(year) {
+    const url = year === '' ? '/api/fetch-procurement-ilcdb' : `/api/fetch-procurement-ilcdb?year=${year}`;
 
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            const tableBody = document.getElementById('procurementTable');
+            tableBody.innerHTML = ''; // Clear any existing rows in the table
 
-// Add an event listener to the year filter
+            if (data.length > 0) {
+                // Loop through the fetched data and create table rows
+                data.forEach(item => {
+                    const row = document.createElement('tr');
+
+                    // PR NUMBER cell (procurement_id)
+                    const prNumberCell = document.createElement('td');
+                    prNumberCell.textContent = item.procurement_id;
+                    row.appendChild(prNumberCell);
+
+                    // ACTIVITY cell
+                    const activityCell = document.createElement('td');
+                    activityCell.textContent = item.activity;
+                    row.appendChild(activityCell);
+
+                    // STATUS cell (this is just a placeholder as we don't have status in the data)
+                    const statusCell = document.createElement('td');
+                    const badge = document.createElement('span');
+                    badge.classList.add('badge', 'bg-warning', 'text-dark');
+                    badge.textContent = 'Pending'; 
+                    statusCell.appendChild(badge);
+                    row.appendChild(statusCell);
+
+                    // Append row to table
+                    tableBody.appendChild(row);
+                });
+            } else {
+                const emptyMessage = document.createElement('tr');
+                const emptyCell = document.createElement('td');
+                emptyCell.setAttribute('colspan', '3');
+                emptyCell.textContent = 'No procurement records found.';
+                emptyMessage.appendChild(emptyCell);
+                tableBody.appendChild(emptyMessage);
+            }
+        })
+        .catch(error => console.error('Error fetching procurement data:', error));
+}
+
 document.getElementById('year').addEventListener('change', function() {
-    // When the year changes, fetch the SARO data and reset the balance display
-    fetchSaroData(this.value);
+    // When the year changes, fetch the procurement data based on selected year
+    fetchProcurementData(this.value);
 });
-
-
 const apiUrl = '/api/fetch-procurement-ilcdb'; // replace with your actual API endpoint
 
 // Fetch data from the API and populate the table
