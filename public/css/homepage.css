@@ -12,6 +12,25 @@ body {
     padding: 5px;
 }
 
+/* Override global scrollbar settings for aside */
+.saro-container::-webkit-scrollbar {
+    display: block; /* Allow the scrollbar to appear when needed */
+    width: 8px; /* Adjust scrollbar width */
+}
+
+.saro-container::-webkit-scrollbar-thumb {
+    background: #888; /* Scrollbar color */
+    border-radius: 5px;
+}
+
+.saro-container::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+.saro-container::-webkit-scrollbar-track {
+    background: #f4f4f4; /* Background of scrollbar track */
+}
+
 .card {
     text-align: center;
 }
@@ -183,6 +202,21 @@ section {
 
 .record-box td {
     background-color: #EEEEFF;
+}
+
+/* Custom scrollbar for tbody */
+.record-box tbody::-webkit-scrollbar {
+    width: 8px;
+    display: block;
+}
+
+.record-box tbody::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 5px;
+}
+
+.record-box tbody::-webkit-scrollbar-thumb:hover {
+    background: #555;
 }
 
 /* Badge styling */

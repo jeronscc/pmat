@@ -58,7 +58,10 @@
 }
 
 .side-nav ul li button:hover {
-  background-color: #002244; 
+  background-color: #002244;
+  padding: 10px; /* Maintain padding on hover */
+  width: 100%; /* Full width on hover */
+  height: 100%; /* Full height on hover */
 }
 
 /* For overlay effect */
