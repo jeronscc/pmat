@@ -641,14 +641,15 @@ window.addEventListener('DOMContentLoaded', (event) => {
             alert('SARO added successfully');
             // Optionally, you can refresh the SARO list or close the modal here
             fetchSaroData('');
-            new bootstrap.Modal(document.getElementById("addSaroModal")).hide();
+            const addSaroModal = bootstrap.Modal.getInstance(document.getElementById("addSaroModal"));
+            addSaroModal.hide();
         } else {
             alert('Failed to add SARO');
         }
     })
     .catch(error => console.error('Error:', error));
 });
-</script
+</script>
 </body>
 </html>
 </script>
