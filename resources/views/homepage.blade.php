@@ -145,7 +145,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="saroForm" action="addSaro" method="POST"> method="POST">
+                <form id="saroForm" action="addSaro" method="POST">
                     @csrf
                     <div class="mb-3">
                         <label for="saro_number" class="form-label">SARO NUMBER</label>
