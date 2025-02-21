@@ -27,7 +27,7 @@ class UserController extends Controller
             $request->session()->regenerate();
 
             // Redirect the user to the homepage or their intended destination
-            return redirect()->intended('/homepage');
+            return redirect()->intended('/homepage-ilcdb');
         } else {
     // If the credentials are invalid, pass a custom error message to the session
     return redirect()->back()->with('error', 'Invalid username or password');

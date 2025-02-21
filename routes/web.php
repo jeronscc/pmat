@@ -15,7 +15,7 @@ Route::get('/login', function () {
     return view('login');
 })->name('login');
 
-Route::get('/homepage', function () {
+Route::get('/homepage-ilcdb', function () {
     return view('homepage'); 
 })->middleware('auth');
 
@@ -39,27 +39,29 @@ Route::get('/procurementform', function () {
 Route::post('/login', [userController::class, 'login']);
 Route::post('/logout', [UserController::class, 'logout'])->name('logout');
 Route::post('/add-saro', [SaroController::class, 'store']);
+
+
 //PREVENT BACK AFTER LOGOUT
 Route::middleware(['auth', PreventBackAfterLogout::class])->group(function () {
-    Route::get('/homepage', function () {
+    Route::get('/homepage-ilcdb', function () {
         return view('homepage');
     });
 });
 
 Route::middleware(['auth', PreventBackAfterLogout::class])->group(function () {
-    Route::get('/dtc', function () {
+    Route::get('/homepage-dtc', function () {
         return view('dtc');
     });
 });
 
 Route::middleware(['auth', PreventBackAfterLogout::class])->group(function () {
-    Route::get('/projectClick', function () {
+    Route::get('/homepage-projectClick', function () {
         return view('projectClick');
     });
 });
 
 Route::middleware(['auth', PreventBackAfterLogout::class])->group(function () {
-    Route::get('/spark', function () {
+    Route::get('/homepage-spark', function () {
         return view('spark');
     });
 });

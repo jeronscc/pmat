@@ -30,7 +30,7 @@
     <div id="side-nav" class="side-nav">
         <ul>
             <li>
-                <form action="/homepage">
+                <form action="/homepage-ilcdb">
                     <button type="submit">
                         <i class="fas fa-home"></i><img src="/assets/home_icon.png" alt=""> Home
                     </button>
