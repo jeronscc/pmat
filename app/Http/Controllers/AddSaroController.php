@@ -11,9 +11,9 @@ class AddSaroController extends Controller
     {
         // Validate the request data
         $request->validate([
-            'saro_number' => 'required|string|max:255',
-            'budget' => 'required|numeric',
-            'year' => 'required|integer',
+            'saro_number' => 'required|varchar|max:64',
+            'budget' => 'required|decimal',
+            'year' => 'required|year',
         ]);
 
         // Insert the new SARO into the database
