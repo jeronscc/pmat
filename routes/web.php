@@ -3,7 +3,6 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\userController;
 use App\Http\Controllers\HonorariaController;
-use App\Http\Controllers\AddSaroController;
 use App\Http\Controllers\SaroController;
 use App\Http\Middleware\PreventBackAfterLogout;
 use Illuminate\Support\Facades\DB;
@@ -39,7 +38,6 @@ Route::get('/procurementform', function () {
 });
 Route::post('/login', [userController::class, 'login']);
 Route::post('/logout', [UserController::class, 'logout'])->name('logout');
-Route::post('/add-saro', [AddSaroController::class, 'addSaro'])->name('addSaro');
 Route::post('/add-saro', [SaroController::class, 'store']);
 //PREVENT BACK AFTER LOGOUT
 Route::middleware(['auth', PreventBackAfterLogout::class])->group(function () {
