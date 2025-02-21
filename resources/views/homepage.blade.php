@@ -711,6 +711,43 @@ function searchProcurement() {
         .catch(error => console.error('Error fetching procurement data:', error));
 }
 </script>
+<script>
+    document.getElementById('addProcurement').addEventListener('click', function() {
+        const category = document.getElementById('category').value;
+        const prNumber = document.getElementById('pr-number').value;
+        const activity = document.getElementById('activity').value;
+        const description = document.getElementById('description').value;
+
+        fetch('/add-procurement', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+            body: JSON.stringify({
+                category: category,
+                pr_number: prNumber,
+                activity: activity,
+                description: description
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.message === 'Procurement added successfully') {
+                alert('Procurement added successfully');
+                fetchProcurementForSaro(''); // Refresh the procurement table
+                const procurementModal = bootstrap.Modal.getInstance(document.getElementById("procurementModal"));
+                procurementModal.hide();
+            } else {
+                alert('Failed to add procurement');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred while adding procurement');
+        });
+    });
+</script>
 </body>
 </html>
 </script>
