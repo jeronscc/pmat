@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Procurement Tracking System</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
     <link rel="stylesheet" href="/css/homepage.css">
@@ -146,6 +146,7 @@
             </div>
             <div class="modal-body">
                 <form id="saroForm">
+                    @csrf
                     <div class="mb-3">
                         <label for="saro_number" class="form-label">SARO NUMBER</label>
                         <input type="text" class="form-control" id="saro_number" name="saro_number" required>
@@ -158,7 +159,6 @@
                         <label for="year" class="form-label">YEAR</label>
                         <select class="form-select" id="year" name="year" required>
                             <option value="" disabled selected>Select Year</option>
-                            <option value="all">Show All</option> <!-- Show All option -->
                             <?php
                             $currentYear = date("Y");
                             for ($year = $currentYear; $year >= $currentYear - 10; $year--) {
@@ -241,6 +241,7 @@ function filterSaroByYear(year) {
     document.getElementById('remainingBalance').textContent = '₱0';
     document.getElementById('currentViewingSaro').textContent = '';
 
+    // Update SARO list based on year
     const url = year === '' ? '/api/fetch-saro-ilcdb' : `/api/fetch-saro-ilcdb?year=${year}`;
 
     fetch(url)
@@ -259,7 +260,7 @@ function filterSaroByYear(year) {
                     // Add click event to each SARO number
                     listItem.addEventListener('click', function() {
                         displayCurrentBudget(saro); // Show balance when SARO is clicked
-                        fetchProcurementForSaro(saro.saro_no); // Fetch and display requirements for this SARO
+                        fetchProcurementForSaro(saro.saro_no, year); // Fetch and display procurement for this SARO
                     });
 
                     // Append the list item to the SARO list
@@ -269,12 +270,62 @@ function filterSaroByYear(year) {
                 // Show message if no SARO data is available
                 const emptyMessage = document.createElement('li');
                 emptyMessage.classList.add('list-group-item');
-                emptyMessage.textContent = 'No SARO records found.';
+                emptyMessage.textContent = 'No SARO records found for the selected year.';
                 saroList.appendChild(emptyMessage);
             }
         })
         .catch(error => console.error('Error fetching SARO data:', error));
+
+    // Also fetch and display procurement data for the selected year
+    fetchProcurementForYear(year);
 }
+
+function fetchProcurementForYear(year) {
+    const url = year === '' ? '/api/fetch-procurement-ilcdb' : `/api/fetch-procurement-ilcdb?year=${year}`;
+
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            const tableBody = document.getElementById('procurementTable');
+            tableBody.innerHTML = ''; // Clear any existing rows in the table
+
+            if (data.length > 0) {
+                data.forEach(item => {
+                    const row = document.createElement('tr');
+
+                    // PR NUMBER cell (procurement_id)
+                    const prNumberCell = document.createElement('td');
+                    prNumberCell.textContent = item.procurement_id;
+                    row.appendChild(prNumberCell);
+
+                    // ACTIVITY cell
+                    const activityCell = document.createElement('td');
+                    activityCell.textContent = item.activity;
+                    row.appendChild(activityCell);
+
+                    // STATUS cell (we don't have status in the response, so we can leave it with a placeholder)
+                    const statusCell = document.createElement('td');
+                    const badge = document.createElement('span');
+                    badge.classList.add('badge', 'bg-warning', 'text-dark');
+                    badge.textContent = 'Pending'; // Placeholder
+                    statusCell.appendChild(badge);
+                    row.appendChild(statusCell);
+
+                    // Append the row to the table body
+                    tableBody.appendChild(row);
+                });
+            } else {
+                const emptyMessage = document.createElement('tr');
+                const emptyCell = document.createElement('td');
+                emptyCell.setAttribute('colspan', '3');
+                emptyCell.textContent = 'No procurement records found for the selected year.';
+                emptyMessage.appendChild(emptyCell);
+                tableBody.appendChild(emptyMessage);
+            }
+        })
+        .catch(error => console.error('Error fetching procurement data:', error));
+}
+
 
 function fetchSaroData(year) {
     // Reset the balance display to "₱0" before fetching SAROs
@@ -330,12 +381,12 @@ function displayCurrentBudget(saro) {
         : '₱0';
     
     // Display the current budget in the "remainingBalance" container
+    // Display the current budget in the "remainingBalance" containerBudget;
     document.getElementById('remainingBalance').textContent = currentBudget;
-
+    // Fetch and display the requirements associated with the selected SARO
     // Fetch and display the requirements associated with the selected SARO
     fetchProcurementForSaro(saro.saro_no);
 }
-
 function fetchProcurementForSaro(saroNo) {
     const url = saroNo === '' ? '/api/fetch-procurement-ilcdb' : `/api/fetch-procurement-ilcdb?saro_no=${saroNo}`;
 
@@ -466,16 +517,61 @@ function formatNumberWithCommas(number) {
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
+function filterProcurementByYear(year) {
+    fetchProcurementData(year);
+}
 
+function fetchProcurementData(year) {
+    const url = year === '' ? '/api/fetch-procurement-ilcdb' : `/api/fetch-procurement-ilcdb?year=${year}`;
 
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            const tableBody = document.getElementById('procurementTable');
+            tableBody.innerHTML = ''; // Clear any existing rows in the table
 
-// Add an event listener to the year filter
+            if (data.length > 0) {
+                // Loop through the fetched data and create table rows
+                data.forEach(item => {
+                    const row = document.createElement('tr');
+
+                    // PR NUMBER cell (procurement_id)
+                    const prNumberCell = document.createElement('td');
+                    prNumberCell.textContent = item.procurement_id;
+                    row.appendChild(prNumberCell);
+
+                    // ACTIVITY cell
+                    const activityCell = document.createElement('td');
+                    activityCell.textContent = item.activity;
+                    row.appendChild(activityCell);
+
+                    // STATUS cell (this is just a placeholder as we don't have status in the data)
+                    const statusCell = document.createElement('td');
+                    const badge = document.createElement('span');
+                    badge.classList.add('badge', 'bg-warning', 'text-dark');
+                    badge.textContent = 'Pending'; 
+                    statusCell.appendChild(badge);
+                    row.appendChild(statusCell);
+
+                    // Append row to table
+                    tableBody.appendChild(row);
+                });
+            } else {
+                const emptyMessage = document.createElement('tr');
+                const emptyCell = document.createElement('td');
+                emptyCell.setAttribute('colspan', '3');
+                emptyCell.textContent = 'No procurement records found.';
+                emptyMessage.appendChild(emptyCell);
+                tableBody.appendChild(emptyMessage);
+            }
+        })
+        .catch(error => console.error('Error fetching procurement data:', error));
+}
+
 document.getElementById('year').addEventListener('change', function() {
-    // When the year changes, fetch the SARO data and reset the balance display
-    fetchSaroData(this.value);
+    // When the year changes, fetch the procurement data based on selected year
+    fetchProcurementData(this.value);
 });
-
-
 const apiUrl = '/api/fetch-procurement-ilcdb'; // replace with your actual API endpoint
 
 // Fetch data from the API and populate the table
@@ -520,7 +616,47 @@ window.addEventListener('DOMContentLoaded', (event) => {
     });
 
 });
+</script>
+<script>
+    document.getElementById('saveSaro').addEventListener('click', function() {
+    const saroNumber = document.getElementById('saro_number').value;
+    const budget = document.getElementById('budget').value;
+    const year = document.getElementById('year').value;
 
+    fetch('/add-saro', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        body: JSON.stringify({
+            saro_number: saroNumber,
+            budget: budget,
+            year: year
+        })
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.message === 'SARO added successfully') {
+            alert('SARO added successfully');
+            // Optionally, you can refresh the SARO list or close the modal here
+            fetchSaroData('');
+            const addSaroModal = bootstrap.Modal.getInstance(document.getElementById("addSaroModal"));
+            addSaroModal.hide();
+        } else {
+            alert('Failed to add SARO');
+        }
+    })
+    .catch(error => console.error('Error:', error));
+});
+</script>
+</body>
+</html>
 </script>
 </body>
 </html>

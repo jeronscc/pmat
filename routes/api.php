@@ -44,21 +44,27 @@ Route::get('/fetch-honorariachecklist', function () {
 // Fetch requirements for a specific SARO or all requirements if no saro_no is provided
 Route::get('/fetch-procurement-ilcdb', function (Request $request) {
     $saroNo = $request->query('saro_no'); // Get the saro_no from the request
+    $year = $request->query('year'); // Get the year from the request
 
-    // If a specific saro_no is provided, filter by it, otherwise fetch all requirements
     $query = DB::connection('ilcdb')
         ->table('procurement')
         ->select('procurement_id', 'activity')
         ->orderBy('procurement_id', 'desc');
-    
+
+    // If a specific saro_no is provided, filter by it
     if ($saroNo) {
-        $query->where('saro_no', $saroNo); // Filter by saro_no if provided
+        $query->where('saro_no', $saroNo);
+    }
+
+    // If a year is provided, filter by the 'year' field
+    if ($year) {
+        $query->where('year', '=', $year); // Adjust this based on your actual year field
     }
 
     // Execute the query
-    $requirements = $query->get();
+    $procurement = $query->get();
 
     // Return the requirements as JSON
-    return response()->json($requirements);
+    return response()->json($procurement);
 });
 
