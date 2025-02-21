@@ -157,12 +157,12 @@
                     </div>
                     <div class="mb-3">
                         <label for="year" class="form-label">YEAR</label>
-                        <select class="form-select" id="year" name="year" required>
+                        <select class="form-select" name="year" required>
                             <option value="" disabled selected>Select Year</option>
                             <?php
-                            $currentYear = date("Y");
-                            for ($year = $currentYear; $year >= $currentYear - 10; $year--) {
-                                echo "<option value=\"$year\">$year</option>";
+                            $startYear = max(2026, date("Y")); // Start from 2026, or the current year if it's later
+                            for ($year = $startYear; $year >= $startYear - 10; $year--) {
+                            echo "<option value=\"$year\">$year</option>";
                             }
                             ?>
                         </select>
