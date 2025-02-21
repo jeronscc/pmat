@@ -68,3 +68,17 @@ Route::get('/fetch-procurement-ilcdb', function (Request $request) {
     return response()->json($procurement);
 });
 
+//SEARCH PROCUREMENTS
+Route::get('/search-procurement-ilcdb', function (Request $request) {
+    $query = $request->query('query');
+
+    $procurements = DB::connection('ilcdb')
+        ->table('procurement')
+        ->select('procurement_id', 'activity')
+        ->where('procurement_id', 'like', "%{$query}%")
+        ->orWhere('activity', 'like', "%{$query}%")
+        ->orderBy('procurement_id', 'desc')
+        ->get();
+
+    return response()->json($procurements);
+});
