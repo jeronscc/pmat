@@ -367,3 +367,9 @@ section {
         max-height: 510px; /* Further increase max-height for even larger screens */
     }
 }
+
+@media (max-width: 1024px) {
+    aside {
+        height: auto; /* Replace with your desired height */
+    }
+}
