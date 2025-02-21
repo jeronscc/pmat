@@ -38,7 +38,7 @@ Route::get('/procurementform', function () {
 });
 Route::post('/login', [userController::class, 'login']);
 Route::post('/logout', [UserController::class, 'logout'])->name('logout');
-Route::post('/add-saro', [SaroController::class, 'store']);
+Route::post('/add-saro', [SaroController::class, 'addSaro'])->name('addSaro');
 
 
 //PREVENT BACK AFTER LOGOUT
