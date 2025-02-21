@@ -39,6 +39,10 @@ body {
     text-align: center;
 }
 
+.modal {
+  z-index: 9999 !important;
+}
+
 .modal-dialog-centered {
     display: flex;
     align-items: center;
