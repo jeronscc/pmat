@@ -81,7 +81,7 @@ return [
             'driver' => 'mysql',
             'host' => env('REQUIREMENTS_HOST', '127.0.0.1'),
             'port' => env('REQUIREMENTS_PORT', '3306'),
-            'database' => env('REQUIREMENTS_DATABASE', 'ilcdb'),
+            'database' => env('REQUIREMENTS_DATABASE', 'requirements'),
             'username' => env('REQUIREMENTS_USERNAME', 'root'),
             'password' => env('REQUIREMENTS_PASSWORD', ''),
             'unix_socket' => env('REQUIREMENTS_SOCKET', ''),
