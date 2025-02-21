@@ -200,6 +200,22 @@
                         <input type="text" class="form-control" id="pr-number" placeholder="Enter PR Number">
                     </div>
                     <div class="mb-3">
+                        <label for="saro-number" class="form-label">SARO NUMBER</label>
+                        <input type="text" class="form-control" id="saro-number" placeholder="Enter Activity">
+                    </div>
+                    <div class="mb-3">
+                        <label for="pr-year" class="form-label">YEAR</label>
+                        <select class="form-select" id="pr-year" placeholder="Enter Activity">
+                        <option value="" disabled selected>Select Year</option>
+                        <option>2026</option> 
+                        <option>2025</option>
+                        <option>2024</option> 
+                        <option>2023</option> 
+                        <option>2022</option> 
+                        <option>2021</option>    
+                        </select>
+                    </div>
+                    <div class="mb-3">
                         <label for="activity" class="form-label">ACTIVITY</label>
                         <input type="text" class="form-control" id="activity" placeholder="Enter Activity">
                     </div>
@@ -732,26 +748,43 @@ function searchProcurement() {
 }
 </script>
 <script>
+document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('addProcurement').addEventListener('click', function() {
         const category = document.getElementById('category').value;
         const prNumber = document.getElementById('pr-number').value;
+        const saroNumber = document.getElementById('saro-number').value;
+        const prYear = document.getElementById('pr-year').value;
         const activity = document.getElementById('activity').value;
         const description = document.getElementById('description').value;
 
-        fetch('/add-procurement', {
+        console.log({ category, prNumber, saroNumber, prYear, activity, description });
+
+        fetch('/api/add-procurement-ilcdb', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'Accept': 'application/json',
                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
             },
             body: JSON.stringify({
                 category: category,
                 pr_number: prNumber,
+                saro_number: saroNumber,
+                pr_year: prYear,
                 activity: activity,
                 description: description
             })
         })
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(errData => {
+                    console.error('Validation/Error:', errData);
+                    alert('Error: ' + JSON.stringify(errData));
+                    throw new Error('Request failed');
+                });
+            }
+            return response.json();
+        })
         .then(data => {
             if (data.message === 'Procurement added successfully') {
                 alert('Procurement added successfully');
@@ -767,6 +800,8 @@ function searchProcurement() {
             alert('An error occurred while adding procurement');
         });
     });
+});
+
 </script>
 </body>
 </html>
