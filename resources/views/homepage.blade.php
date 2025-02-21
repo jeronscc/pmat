@@ -145,7 +145,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="saroForm" action="addSaro" method="POST">
+                <form id="saroForm" action="addSaro" method="POST"> method="POST">
                     @csrf
                     <div class="mb-3">
                         <label for="saro_number" class="form-label">SARO NUMBER</label>
@@ -159,7 +159,6 @@
                         <label for="year" class="form-label">YEAR</label>
                         <select class="form-select" id="year" name="year" required>
                             <option value="" disabled selected>Select Year</option>
-                            <option value="all">Show All</option> <!-- Show All option -->
                             <?php
                             $currentYear = date("Y");
                             for ($year = $currentYear; $year >= $currentYear - 10; $year--) {
@@ -382,12 +381,12 @@ function displayCurrentBudget(saro) {
         : '₱0';
     
     // Display the current budget in the "remainingBalance" container
+    // Display the current budget in the "remainingBalance" containerBudget;
     document.getElementById('remainingBalance').textContent = currentBudget;
-
+    // Fetch and display the requirements associated with the selected SARO
     // Fetch and display the requirements associated with the selected SARO
     fetchProcurementForSaro(saro.saro_no);
 }
-
 function fetchProcurementForSaro(saroNo) {
     const url = saroNo === '' ? '/api/fetch-procurement-ilcdb' : `/api/fetch-procurement-ilcdb?saro_no=${saroNo}`;
 
@@ -650,5 +649,8 @@ window.addEventListener('DOMContentLoaded', (event) => {
     .catch(error => console.error('Error:', error));
 });
 </script
+</body>
+</html>
+</script>
 </body>
 </html>
