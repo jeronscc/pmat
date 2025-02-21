@@ -228,6 +228,7 @@
 
 </script>
 <script>
+
 // Fetch SARO data from the API
 // Wait for the window to load
 window.onload = function() {
@@ -617,40 +618,59 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
 });
 </script>
-<script>
-    document.getElementById('saveSaro').addEventListener('click', function() {
-        const saroNumber = document.getElementById('saro_number').value;
-        const budget = document.getElementById('budget').value;
-        const year = document.getElementById('year').value;
 
-        fetch('/add-saro', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-            },
-            body: JSON.stringify({
-                saro_number: saroNumber,
-                budget: budget,
-                year: year
-            })
+<script>
+document.getElementById('saveSaro').addEventListener('click', function() {
+    const saroNumber = document.getElementById('saro_number').value;
+    const budget = document.getElementById('budget').value;
+    const year = document.getElementById('year').value;
+    
+    console.log('saroNumber:', saroNumber, 'budget:', budget, 'year:', year);
+
+    if (!saroNumber || !budget || !year) {
+        alert('All fields must be filled out.');
+        return;
+    }
+
+    fetch('/api/add-saro-ilcdb', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',  // Helps Laravel parse JSON properly
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        body: JSON.stringify({
+            saro_number: saroNumber,
+            budget: budget,
+            year: year
         })
-        .then(response => response.json())
-        .then(data => {
-            if (data.message === 'SARO added successfully') {
-                alert('SARO added successfully');
-                fetchSaroData('');
-                const addSaroModal = bootstrap.Modal.getInstance(document.getElementById("addSaroModal"));
-                addSaroModal.hide();
-            } else {
-                alert('Failed to add SARO');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('An error occurred while adding SARO');
-        });
+    })
+    .then(response => {
+        if (!response.ok) {
+            return response.json().then(errData => {
+                console.error('Validation/Error:', errData);
+                alert('Error: ' + JSON.stringify(errData));
+                throw new Error('Request failed');
+            });
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.message === 'SARO added successfully') {
+            alert('SARO added successfully');
+            fetchSaroData('');
+            const addSaroModal = bootstrap.Modal.getInstance(document.getElementById("addSaroModal"));
+            addSaroModal.hide();
+            document.getElementById('saroForm').reset();
+        } else {
+            alert('Failed to add SARO');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred while adding SARO');
     });
+});
 
 //Add eventlistener for the search button
 document.getElementById('searchBar').addEventListener('keypress', function(event) {

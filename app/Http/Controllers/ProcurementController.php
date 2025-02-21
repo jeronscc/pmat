@@ -25,8 +25,6 @@ class ProcurementController extends Controller
                 'pr_number' => $request->input('pr_number'),
                 'activity' => $request->input('activity'),
                 'description' => $request->input('description'),
-                'created_at' => now(),
-                'updated_at' => now(),
             ]);
 
             // Return a success response
