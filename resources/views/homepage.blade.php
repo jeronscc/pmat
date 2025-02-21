@@ -635,7 +635,12 @@ window.addEventListener('DOMContentLoaded', (event) => {
             year: year
         })
     })
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
     .then(data => {
         if (data.message === 'SARO added successfully') {
             alert('SARO added successfully');

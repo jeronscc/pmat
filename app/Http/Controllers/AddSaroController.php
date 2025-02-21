@@ -25,7 +25,7 @@ class AddSaroController extends Controller
             'updated_at' => now(),
         ]);
 
-        // Redirect back with a success message
-        return redirect()->back()->with('success', 'SARO added successfully');
+        // Return a JSON response
+        return response()->json(['message' => 'SARO added successfully']);
     }
 }
