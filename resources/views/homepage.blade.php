@@ -619,41 +619,38 @@ window.addEventListener('DOMContentLoaded', (event) => {
 </script>
 <script>
     document.getElementById('saveSaro').addEventListener('click', function() {
-    const saroNumber = document.getElementById('saro_number').value;
-    const budget = document.getElementById('budget').value;
-    const year = document.getElementById('year').value;
+        const saroNumber = document.getElementById('saro_number').value;
+        const budget = document.getElementById('budget').value;
+        const year = document.getElementById('year').value;
 
-    fetch('/add-saro', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-        },
-        body: JSON.stringify({
-            saro_number: saroNumber,
-            budget: budget,
-            year: year
+        fetch('/add-saro', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+            body: JSON.stringify({
+                saro_number: saroNumber,
+                budget: budget,
+                year: year
+            })
         })
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        return response.json();
-    })
-    .then(data => {
-        if (data.message === 'SARO added successfully') {
-            alert('SARO added successfully');
-            // Optionally, you can refresh the SARO list or close the modal here
-            fetchSaroData('');
-            const addSaroModal = bootstrap.Modal.getInstance(document.getElementById("addSaroModal"));
-            addSaroModal.hide();
-        } else {
-            alert('Failed to add SARO');
-        }
-    })
-    .catch(error => console.error('Error:', error));
-});
+        .then(response => response.json())
+        .then(data => {
+            if (data.message === 'SARO added successfully') {
+                alert('SARO added successfully');
+                fetchSaroData('');
+                const addSaroModal = bootstrap.Modal.getInstance(document.getElementById("addSaroModal"));
+                addSaroModal.hide();
+            } else {
+                alert('Failed to add SARO');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred while adding SARO');
+        });
+    });
 </script>
 </body>
 </html>
