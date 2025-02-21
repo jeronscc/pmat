@@ -30,7 +30,7 @@
     <div id="side-nav" class="side-nav">
         <ul>
             <li>
-                <form action="" method="POST">
+                <form action="/homepage">
                     <button type="submit">
                         <i class="fas fa-home"></i><img src="/assets/home_icon.png" alt=""> Home
                     </button>
@@ -44,7 +44,7 @@
                 </form>
             </li>
             <li>
-                <form action="" method="POST">
+                <form action="">
                     <button type="submit">
                         <i class="fas fa-clock"></i><img src="/assets/report_icon.png" alt=""> Reports
                     </button>
