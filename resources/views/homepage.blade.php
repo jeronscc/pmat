@@ -800,6 +800,9 @@ document.addEventListener('DOMContentLoaded', function() {
         const activity = document.getElementById('activity').value;
         const description = document.getElementById('description').value;
 
+        // Log the values to the console for debugging
+        console.log({ category, prNumber, saroNumber, prYear, activity, description });
+
         if (!category || !prNumber || !saroNumber || !prYear || !activity || !description) {
             alert('All fields must be filled out.');
             return;
