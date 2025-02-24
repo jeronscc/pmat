@@ -33,6 +33,8 @@ Route::get('/fetch-saro-ilcdb', function (Request $request) {
     // Return the data as JSON
     return response()->json($data);
 });
+// ILCDB FETCH SARO
+Route::get('/fetch-saro-ilcdb', [SaroController::class, 'fetchSaroData'])->name('fetchSaroData');
 
 // ILCDB FETCH HONORARIACHECKLIST
 Route::get('/fetch-honorariachecklist', function () {
