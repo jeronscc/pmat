@@ -771,7 +771,10 @@ document.addEventListener('DOMContentLoaded', function() {
         const activity = document.getElementById('activity').value;
         const description = document.getElementById('description').value;
 
-        console.log({ category, prNumber, saroNumber, prYear, activity, description });
+        if (!category || !prNumber || !saroNumber || !prYear || !activity || !description) {
+            alert('All fields must be filled out.');
+            return;
+        }
 
         fetch('/api/add-procurement-ilcdb', {
             method: 'POST',
@@ -823,7 +826,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
-
 </script>
 </body>
 </html>
