@@ -38,7 +38,7 @@ class SaroController extends Controller
 
         public function fetchSaroData()
     {
-        $data = DB::connection('ilcdb')->table('saro')->get();
+        $data = DB::connection('ilcdb')->table('saro')->orderBy('year', 'desc')->get();
         return response()->json($data);
     }
 
