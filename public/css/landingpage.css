@@ -268,7 +268,9 @@ button {
     display: block;
     max-height: 200px;
     overflow-y: auto;
+    cursor: pointer;
 }
+
 
 @media (max-width: 1024px) {
     main {
@@ -383,3 +385,4 @@ button {
         height: auto; /* Replace with your desired height */
     }
 }
+
