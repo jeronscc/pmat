@@ -98,6 +98,8 @@
                         data.forEach(saro => {
                             const saroElement = document.createElement('p');
                             saroElement.textContent = saro.saro_no;
+                            saroElement.style.margin = '5px 0'; // 10px space above & below
+                            saroElement.style.padding = '5px';  
                             saroElement.addEventListener('click', function() {
                                 remainingBalance.textContent = `₱${Number(saro.current_budget).toLocaleString()}`;
                                 fetchProcurementData(saro.saro_no);
