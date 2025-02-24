@@ -157,7 +157,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="year" class="form-label">YEAR</label>
-                        <select class="form-select" name="year" required>
+                        <select class="form-select" name="saro_year" id="saro_year" required>
                             <option value="" disabled selected>Select Year</option>
                             <?php
                             $startYear = max(2026, date("Y")); // Start from 2026, or the current year if it's later
@@ -639,11 +639,11 @@ window.addEventListener('DOMContentLoaded', (event) => {
 document.getElementById('saveSaro').addEventListener('click', function() {
     const saroNumber = document.getElementById('saro_number').value;
     const budget = document.getElementById('budget').value;
-    const year = document.getElementById('year').value;
+    const year = document.getElementById('saro_year').value;
     
-    console.log('saroNumber:', saroNumber, 'budget:', budget, 'year:', year);
+    console.log('saroNumber:', saroNumber, 'budget:', budget, 'year:', saro_year);
 
-    if (!saroNumber || !budget || !year) {
+    if (!saroNumber || !budget || !saro_year) {
         alert('All fields must be filled out.');
         return;
     }
@@ -658,7 +658,7 @@ document.getElementById('saveSaro').addEventListener('click', function() {
         body: JSON.stringify({
             saro_number: saroNumber,
             budget: budget,
-            year: year
+            saro_year: year
         })
     })
     .then(response => {
