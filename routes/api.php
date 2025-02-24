@@ -49,6 +49,9 @@ Route::get('/search-procurement-ilcdb', function (Request $request) {
 
     return response()->json($procurements);
 });
+// ILCDB FETCH for FORM
+Route::get('/fetch-procurement-ilcdb', [ProcurementController::class, 'fetchProcurementData'])->name('fetchProcurementData');
+Route::post('/update-requirement/{id}', [ProcurementController::class, 'updateRequirement'])->name('updateRequirement');
 
 // ILCDB FETCH HONORARIACHECKLIST
 Route::get('/fetch-honorariachecklist', function () {
