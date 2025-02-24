@@ -207,7 +207,7 @@
                         const emptyMessage = document.createElement('tr');
                         const emptyCell = document.createElement('td');
                         emptyCell.setAttribute('colspan', '3');
-                        emptyCell.textContent = 'No procurement records found.';
+                        emptyCell.textContent = 'No result is found.';
                         emptyMessage.appendChild(emptyCell);
                         procurementTable.appendChild(emptyMessage);
                     }
