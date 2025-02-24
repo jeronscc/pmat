@@ -766,6 +766,32 @@ function searchProcurement() {
 </script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    // Populate SARO options for the current year
+    const currentYear = new Date().getFullYear();
+    fetch(`/api/fetch-saro-ilcdb?year=${currentYear}`)
+        .then(response => response.json())
+        .then(data => {
+            const saroSelect = document.getElementById('saro-number');
+            saroSelect.innerHTML = '<option value="" disabled selected>Select SARO Number</option>'; // Clear existing options
+
+            if (data.length > 0) {
+                data.forEach(saro => {
+                    const option = document.createElement('option');
+                    option.value = saro.saro_no;
+                    option.textContent = saro.saro_no;
+                    saroSelect.appendChild(option);
+                });
+            } else {
+                const emptyOption = document.createElement('option');
+                emptyOption.value = '';
+                emptyOption.textContent = 'No SARO records found for the current year';
+                saroSelect.appendChild(emptyOption);
+            }
+        })
+        .catch(error => console.error('Error fetching SARO data:', error));
+});
+
+document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('addProcurement').addEventListener('click', function() {
         const category = document.getElementById('category').value;
         const prNumber = document.getElementById('pr-number').value;
@@ -828,32 +854,6 @@ document.addEventListener('DOMContentLoaded', function() {
             alert('An error occurred while adding procurement');
         });
     });
-});
-
-document.addEventListener('DOMContentLoaded', function() {
-    // Populate SARO options for the current year
-    const currentYear = new Date().getFullYear();
-    fetch(`/api/fetch-saro-ilcdb?year=${currentYear}`)
-        .then(response => response.json())
-        .then(data => {
-            const saroSelect = document.getElementById('saro-number');
-            saroSelect.innerHTML = '<option value="" disabled selected>Select SARO Number</option>'; // Clear existing options
-
-            if (data.length > 0) {
-                data.forEach(saro => {
-                    const option = document.createElement('option');
-                    option.value = saro.saro_no;
-                    option.textContent = saro.saro_no;
-                    saroSelect.appendChild(option);
-                });
-            } else {
-                const emptyOption = document.createElement('option');
-                emptyOption.value = '';
-                emptyOption.textContent = 'No SARO records found for the current year';
-                saroSelect.appendChild(emptyOption);
-            }
-        })
-        .catch(error => console.error('Error fetching SARO data:', error));
 });
 </script>
 </body>
