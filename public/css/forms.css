@@ -8,6 +8,10 @@ body {
     overflow-x: auto;
 }
 
+.modal {
+    z-index: 9999 !important;
+  }
+
 .container mt-5 {
     background: #e5e5f5;
     padding: 40px;
