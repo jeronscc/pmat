@@ -194,7 +194,7 @@
                         <label for="category" class="form-label">Select Procurement Category</label>
                         <select class="form-select" id="category">
                             <option value="" disabled selected>Select Category</option>
-                            <option value="SVA">SVP</option>
+                            <option value="SVP">SVP</option>
                             <option value="Honoraria">Honoraria</option>
                             <option value="Other expense">Other Expenses</option>
                         </select>
@@ -205,18 +205,21 @@
                     </div>
                     <div class="mb-3">
                         <label for="saro-number" class="form-label">SARO NUMBER</label>
-                        <input type="text" class="form-control" id="saro-number" placeholder="Enter Activity">
+                        <select class="form-select" id="saro-number">
+                            <option value="" disabled selected>Select SARO Number</option>
+                            <!-- SARO options will be populated dynamically -->
+                        </select>
                     </div>
                     <div class="mb-3">
                         <label for="pr-year" class="form-label">YEAR</label>
                         <select class="form-select" id="pr-year" placeholder="Enter Activity">
-                        <option value="" disabled selected>Select Year</option>
-                        <option>2026</option> 
-                        <option>2025</option>
-                        <option>2024</option> 
-                        <option>2023</option> 
-                        <option>2022</option> 
-                        <option>2021</option>    
+                            <option value="" disabled selected>Select Year</option>
+                            <option>2026</option> 
+                            <option>2025</option>
+                            <option>2024</option> 
+                            <option>2023</option> 
+                            <option>2022</option> 
+                            <option>2021</option>    
                         </select>
                     </div>
                     <div class="mb-3">
@@ -771,7 +774,10 @@ document.addEventListener('DOMContentLoaded', function() {
         const activity = document.getElementById('activity').value;
         const description = document.getElementById('description').value;
 
-        console.log({ category, prNumber, saroNumber, prYear, activity, description });
+        if (!category || !prNumber || !saroNumber || !prYear || !activity || !description) {
+            alert('All fields must be filled out.');
+            return;
+        }
 
         fetch('/api/add-procurement-ilcdb', {
             method: 'POST',
@@ -801,10 +807,18 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .then(data => {
             if (data.message === 'Procurement added successfully') {
-                alert('Procurement added successfully');
-                fetchProcurementForSaro(''); // Refresh the procurement table
+                alert('New Procurement added successfully');
                 const procurementModal = bootstrap.Modal.getInstance(document.getElementById("procurementModal"));
                 procurementModal.hide();
+
+                // Redirect based on category
+                if (category === 'SVP') {
+                    window.location.href = '/procurementform';
+                } else if (category === 'Honoraria') {
+                    window.location.href = '/honorariaform';
+                } else if (category === 'Other expense') {
+                    window.location.href = '/otherexpenseform';
+                }
             } else {
                 alert('Failed to add procurement');
             }
@@ -816,6 +830,31 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+document.addEventListener('DOMContentLoaded', function() {
+    // Populate SARO options for the current year
+    const currentYear = new Date().getFullYear();
+    fetch(`/api/fetch-saro-ilcdb?year=${currentYear}`)
+        .then(response => response.json())
+        .then(data => {
+            const saroSelect = document.getElementById('saro-number');
+            saroSelect.innerHTML = '<option value="" disabled selected>Select SARO Number</option>'; // Clear existing options
+
+            if (data.length > 0) {
+                data.forEach(saro => {
+                    const option = document.createElement('option');
+                    option.value = saro.saro_no;
+                    option.textContent = saro.saro_no;
+                    saroSelect.appendChild(option);
+                });
+            } else {
+                const emptyOption = document.createElement('option');
+                emptyOption.value = '';
+                emptyOption.textContent = 'No SARO records found for the current year';
+                saroSelect.appendChild(emptyOption);
+            }
+        })
+        .catch(error => console.error('Error fetching SARO data:', error));
+});
 </script>
 </body>
 </html>

@@ -40,6 +40,18 @@ Route::get('/procurementform', function () {
 Route::post('/login', [userController::class, 'login']);
 Route::post('/logout', [UserController::class, 'logout'])->name('logout');
 
+//REDIRECT TO FORM PAGES
+Route::get('/procurementform', function () {
+    return view('procurementform');
+});
+
+Route::get('/honorariaform', function () {
+    return view('honorariaform');
+});
+
+Route::get('/otherexpenseform', function () {
+    return view('otherexpenseform');
+});
 
 //PREVENT BACK AFTER LOGOUT
 Route::middleware(['auth', PreventBackAfterLogout::class])->group(function () {

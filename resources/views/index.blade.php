@@ -114,6 +114,8 @@
                         data.forEach(saro => {
                             const saroElement = document.createElement('p');
                             saroElement.textContent = saro.saro_no;
+                            saroElement.style.margin = '5px 0'; // 10px space above & below
+                            saroElement.style.padding = '5px';  
                             saroElement.addEventListener('click', function() {
                                 remainingBalance.textContent = `₱${Number(saro.current_budget).toLocaleString()}`;
                                 fetchProcurementData(saro.saro_no);
@@ -123,11 +125,42 @@
                     } else {
                         const emptyMessage = document.createElement('p');
                         emptyMessage.textContent = 'No SARO records found.';
+                        emptyMessage.style.margin = "5px 0";
+                        emptyMessage.style.padding = "5px"
                         ilcdbPanel.appendChild(emptyMessage);
                     }
                 })
                 .catch(error => console.error('Error fetching SARO data:', error));
         });
+
+        function filterSaroByYear(year) {
+        fetch(`/api/fetch-saro-ilcdb?year=${year}`)
+        .then(response => response.json())
+        .then(data => {
+            const ilcdbPanel = document.querySelector('.panel.ilcdb');
+            const remainingBalance = document.querySelector('.balance-box p');
+            ilcdbPanel.innerHTML = ''; // Clear previous records
+
+            if (data.length > 0) {
+                data.forEach(saro => {
+                    const saroElement = document.createElement('p');
+                    saroElement.textContent = saro.saro_no;
+                    saroElement.style.margin = '5px 0'; 
+                    saroElement.style.padding = '5px';
+                    saroElement.addEventListener('click', function() {
+                        remainingBalance.textContent = `₱${Number(saro.current_budget).toLocaleString()}`;
+                        fetchProcurementData(saro.saro_no);
+                    });
+                    ilcdbPanel.appendChild(saroElement);
+                });
+            } else {
+                const emptyMessage = document.createElement('p');
+                emptyMessage.textContent = 'No SARO records found.';
+                ilcdbPanel.appendChild(emptyMessage);
+            }
+        })
+        .catch(error => console.error('Error fetching SARO data:', error));
+        }
 
         function fetchProcurementData(saroNo) {
             fetch(`/api/fetch-procurement-ilcdb?saro_no=${saroNo}`)
@@ -207,7 +240,7 @@
                         const emptyMessage = document.createElement('tr');
                         const emptyCell = document.createElement('td');
                         emptyCell.setAttribute('colspan', '3');
-                        emptyCell.textContent = 'No result is found.';
+                        emptyCell.textContent = 'No procurement records found.';
                         emptyMessage.appendChild(emptyCell);
                         procurementTable.appendChild(emptyMessage);
                     }
