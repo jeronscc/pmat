@@ -36,10 +36,18 @@ class SaroController extends Controller
         }
     }
 
-        public function fetchSaroData()
+    public function fetchSaroData(Request $request)
     {
-        $data = DB::connection('ilcdb')->table('saro')->orderBy('year', 'desc')->get();
+        $query = DB::connection('ilcdb')->table('saro')->orderBy('year', 'desc');
+    
+        // Check if 'year' parameter is present and not empty
+        if ($request->has('year') && !empty($request->year)) {
+            $query->where('year', $request->year);
+        }
+    
+        $data = $query->get();
         return response()->json($data);
     }
+    
 
 }
