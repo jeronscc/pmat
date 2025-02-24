@@ -771,7 +771,10 @@ document.addEventListener('DOMContentLoaded', function() {
         const activity = document.getElementById('activity').value;
         const description = document.getElementById('description').value;
 
-        console.log({ category, prNumber, saroNumber, prYear, activity, description });
+        if (!category || !prNumber || !saroNumber || !prYear || !activity || !description) {
+            alert('All fields must be filled out.');
+            return;
+        }
 
         fetch('/api/add-procurement-ilcdb', {
             method: 'POST',
@@ -801,10 +804,18 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .then(data => {
             if (data.message === 'Procurement added successfully') {
-                alert('Procurement added successfully');
-                fetchProcurementForSaro(''); // Refresh the procurement table
+                alert('New Procurement added successfully');
                 const procurementModal = bootstrap.Modal.getInstance(document.getElementById("procurementModal"));
                 procurementModal.hide();
+
+                // Redirect based on category
+                if (category === 'SVP') {
+                    window.location.href = '/procurementform';
+                } else if (category === 'Honoraria') {
+                    window.location.href = '/honorariaform';
+                } else if (category === 'Other expense') {
+                    window.location.href = '/otherexpenseform';
+                }
             } else {
                 alert('Failed to add procurement');
             }
@@ -815,7 +826,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
-
 </script>
 </body>
 </html>
