@@ -282,6 +282,7 @@ function filterSaroByYear(year) {
                     listItem.addEventListener('click', function() {
                         displayCurrentBudget(saro); // Show balance when SARO is clicked
                         fetchProcurementForSaro(saro.saro_no, year); // Fetch and display procurement for this SARO
+                        highlightSelectedItem(this);
                     });
 
                     // Append the list item to the SARO list
@@ -371,10 +372,12 @@ function fetchSaroData(year) {
                     // Add click event to each SARO number
                     listItem.addEventListener('click', function() {
                         displayCurrentBudget(saro); // Show balance when SARO is clicked
+                        highlightSelectedItem(this);
                     });
 
                     // Append the list item to the SARO list
                     saroList.appendChild(listItem);
+                    
                 });
             } else {
                 // Show message if no SARO data is available
@@ -533,6 +536,13 @@ function fetchProcurementRequirements(saroNo) {
         })
         .catch(error => console.error('Error fetching procurement requirements:', error));
 }
+
+function highlightSelectedItem(selectedItem) {
+        const items = document.querySelectorAll('.saro-list .list-group-item');
+        items.forEach(item => item.classList.remove('active'));
+        selectedItem.classList.add('active');
+}
+
 // Custom function to format numbers with commas
 function formatNumberWithCommas(number) {
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");

@@ -149,9 +149,10 @@ section {
     background-color: #ddd;
 }
 
-.saro-list .active {
-    background-color: #007bff;
-    color: white;
+.saro-list .list-group-item.active {
+    background-color: #ddd; /* Highlight color */
+    color: black; /* Text color */
+    border: none; /* Remove border */
 }
 
 .table-container {
