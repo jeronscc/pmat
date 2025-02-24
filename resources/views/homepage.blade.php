@@ -156,6 +156,10 @@
                         <input type="text" class="form-control" id="budget" name="budget" required>
                     </div>
                     <div class="mb-3">
+                        <label for="description" class="form-label">DESCRIPTION</label>
+                        <textarea class="form-control" id="description" rows="3" placeholder="Enter Description"></textarea>
+                    </div>
+                    <div class="mb-3">
                         <label for="year" class="form-label">YEAR</label>
                         <select class="form-select" name="saro_year" id="saro_year" required>
                             <option value="" disabled selected>Select Year</option>
