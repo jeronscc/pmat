@@ -45,7 +45,7 @@
                 <p>SARO 1</p>
             </div>
 
-            <button class="accordion">PROJECT CLICK <span class="dropdown-icon">&#x25BC;</span></button>
+            <button class="accordion">PROJECT CLICK <span class="dropdown-icon">&#x25BC;"></span></button>
             <div class="panel project-click">
                 <!-- Placeholder content -->
                 <p>SARO 1</p>
@@ -77,21 +77,7 @@
                             </tr>
                         </thead>      
                         <tbody id="procurementTable"> 
-                            <tr>
-                                <td>02-05647</td>
-                                <td>ILCDB Orientation</td>
-                                <td><span class="badge bg-warning text-dark">at Supply Unit</span></td>
-                            </tr>
-                            <tr>
-                                <td>02-36421</td>
-                                <td>Cybersecurity Workshop</td>
-                                <td><span class="badge bg-success">Done</span></td>
-                            </tr>
-                            <tr>
-                                <td>02-75482</td>
-                                <td>Training Camp 2025</td>
-                                <td><span class="badge bg-warning text-dark">at Budget Unit</span></td> 
-                            </tr>  
+                            <!-- Procurement data will be populated here -->
                         </tbody> 
                     </table> 
                 </div>
@@ -114,6 +100,7 @@
                             saroElement.textContent = saro.saro_no;
                             saroElement.addEventListener('click', function() {
                                 remainingBalance.textContent = `₱${saro.current_budget}`;
+                                fetchProcurementData(saro.saro_no);
                             });
                             ilcdbPanel.appendChild(saroElement);
                         });
@@ -125,6 +112,46 @@
                 })
                 .catch(error => console.error('Error fetching SARO data:', error));
         });
+
+        function fetchProcurementData(saroNo) {
+            fetch(`/api/fetch-procurement-ilcdb?saro_no=${saroNo}`)
+                .then(response => response.json())
+                .then(data => {
+                    const procurementTable = document.getElementById('procurementTable');
+                    procurementTable.innerHTML = ''; // Clear any existing rows
+
+                    if (data.length > 0) {
+                        data.forEach(procurement => {
+                            const row = document.createElement('tr');
+
+                            const prNumberCell = document.createElement('td');
+                            prNumberCell.textContent = procurement.procurement_id;
+                            row.appendChild(prNumberCell);
+
+                            const activityCell = document.createElement('td');
+                            activityCell.textContent = procurement.activity;
+                            row.appendChild(activityCell);
+
+                            const statusCell = document.createElement('td');
+                            const badge = document.createElement('span');
+                            badge.classList.add('badge', 'bg-warning', 'text-dark');
+                            badge.textContent = 'Pending'; // Placeholder status
+                            statusCell.appendChild(badge);
+                            row.appendChild(statusCell);
+
+                            procurementTable.appendChild(row);
+                        });
+                    } else {
+                        const emptyMessage = document.createElement('tr');
+                        const emptyCell = document.createElement('td');
+                        emptyCell.setAttribute('colspan', '3');
+                        emptyCell.textContent = 'No procurement records found.';
+                        emptyMessage.appendChild(emptyCell);
+                        procurementTable.appendChild(emptyMessage);
+                    }
+                })
+                .catch(error => console.error('Error fetching procurement data:', error));
+        }
     </script>
 </body>
 </html>

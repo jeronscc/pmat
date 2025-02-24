@@ -40,4 +40,17 @@ class ProcurementController extends Controller
             ], 500);
         }
     }
+
+    public function fetchProcurementData(Request $request)
+    {
+        $saroNo = $request->query('saro_no');
+
+        $procurements = DB::connection('ilcdb')
+            ->table('procurement')
+            ->where('saro_no', $saroNo)
+            ->get();
+
+        return response()->json($procurements);
+    }
 }
+
