@@ -55,10 +55,10 @@
             <div class="header">
                 <h5><span>Currently Viewing:</span></h5>
                 <div class="search">
-                    <form action="" method="POST"> 
+                    <form id="searchForm"> 
                         <div class="search-box">
                             <input type="text" class="form-control me-2" id="searchBar" placeholder="Search...">   
-                            <button type="submit" class="search-button" onclick="searchProcurement()">
+                            <button type="submit" class="search-button">
                                 Search
                             </button>
                         </div>
@@ -151,6 +151,52 @@
                     }
                 })
                 .catch(error => console.error('Error fetching procurement data:', error));
+        }
+
+        document.getElementById('searchForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const query = document.getElementById('searchBar').value;
+            searchProcurement(query);
+        });
+
+        function searchProcurement(query) {
+            fetch(`/api/search-procurement-ilcdb?query=${query}`)
+                .then(response => response.json())
+                .then(data => {
+                    const procurementTable = document.getElementById('procurementTable');
+                    procurementTable.innerHTML = ''; // Clear any existing rows
+
+                    if (data.length > 0) {
+                        data.forEach(procurement => {
+                            const row = document.createElement('tr');
+
+                            const prNumberCell = document.createElement('td');
+                            prNumberCell.textContent = procurement.procurement_id;
+                            row.appendChild(prNumberCell);
+
+                            const activityCell = document.createElement('td');
+                            activityCell.textContent = procurement.activity;
+                            row.appendChild(activityCell);
+
+                            const statusCell = document.createElement('td');
+                            const badge = document.createElement('span');
+                            badge.classList.add('badge', 'bg-warning', 'text-dark');
+                            badge.textContent = 'Pending'; // Placeholder status
+                            statusCell.appendChild(badge);
+                            row.appendChild(statusCell);
+
+                            procurementTable.appendChild(row);
+                        });
+                    } else {
+                        const emptyMessage = document.createElement('tr');
+                        const emptyCell = document.createElement('td');
+                        emptyCell.setAttribute('colspan', '3');
+                        emptyCell.textContent = 'No procurement records found.';
+                        emptyMessage.appendChild(emptyCell);
+                        procurementTable.appendChild(emptyMessage);
+                    }
+                })
+                .catch(error => console.error('Error searching procurement data:', error));
         }
     </script>
 </body>

@@ -33,8 +33,22 @@ Route::get('/fetch-saro-ilcdb', function (Request $request) {
     // Return the data as JSON
     return response()->json($data);
 });
-// ILCDB FETCH SARO
+// ILCDB FETCH SARO AND PROCUREMENT DATA
 Route::get('/fetch-saro-ilcdb', [SaroController::class, 'fetchSaroData'])->name('fetchSaroData');
+Route::get('/fetch-procurement-ilcdb', [ProcurementController::class, 'fetchProcurementData'])->name('fetchProcurementData');
+Route::get('/search-procurement-ilcdb', function (Request $request) {
+    $query = $request->query('query');
+
+    $procurements = DB::connection('ilcdb')
+        ->table('procurement')
+        ->select('procurement_id', 'activity')
+        ->where('procurement_id', 'like', "%{$query}%")
+        ->orWhere('activity', 'like', "%{$query}%")
+        ->orderBy('procurement_id', 'desc')
+        ->get();
+
+    return response()->json($procurements);
+});
 
 // ILCDB FETCH HONORARIACHECKLIST
 Route::get('/fetch-honorariachecklist', function () {
