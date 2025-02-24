@@ -105,6 +105,16 @@ section {
     flex-direction: column;
 }
 
+.dropdown-toggle::after {
+    display: none;
+}
+
+button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+  }
+
 .header {
     display: flex;
     justify-content: space-between;
