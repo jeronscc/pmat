@@ -792,7 +792,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 document.addEventListener('DOMContentLoaded', function() {
-    const addProcurementButton = document.getElementById('addProcurement');
+    const addProcurementButton = document.getElementById('procurementModal');
     if (addProcurementButton) {
         addProcurementButton.addEventListener('click', function() {
             const category = document.getElementById('category').value;
