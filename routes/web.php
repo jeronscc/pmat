@@ -32,6 +32,8 @@ Route::get('/spark', function () {
 
 Route::get('/honoraria-form', [HonorariaController::class, 'showHonorariaForm']);
 
+Route::get('/fetch-saro-data', [SaroController::class, 'fetchSaroData'])->name('fetchSaroData');
+
 Route::get('/procurementform', function () {
     return view('procurementform');
 });
