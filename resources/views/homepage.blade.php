@@ -801,10 +801,18 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .then(data => {
             if (data.message === 'Procurement added successfully') {
-                alert('Procurement added successfully');
-                fetchProcurementForSaro(''); // Refresh the procurement table
+                alert('New Procurement added successfully');
                 const procurementModal = bootstrap.Modal.getInstance(document.getElementById("procurementModal"));
                 procurementModal.hide();
+
+                // Redirect based on category
+                if (category === 'SVP') {
+                    window.location.href = '/procurementform';
+                } else if (category === 'Honoraria') {
+                    window.location.href = '/honorariaform';
+                } else if (category === 'Other expense') {
+                    window.location.href = '/otherexpenseform';
+                }
             } else {
                 alert('Failed to add procurement');
             }
