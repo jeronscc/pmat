@@ -99,7 +99,7 @@
                             const saroElement = document.createElement('p');
                             saroElement.textContent = saro.saro_no;
                             saroElement.addEventListener('click', function() {
-                                remainingBalance.textContent = `₱${saro.current_budget}`;
+                                remainingBalance.textContent = `₱${Number(saro.current_budget).toLocaleString()}`;
                                 fetchProcurementData(saro.saro_no);
                             });
                             ilcdbPanel.appendChild(saroElement);
