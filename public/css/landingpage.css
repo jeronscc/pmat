@@ -37,6 +37,7 @@ aside {
     flex-shrink: 0;
     height: 550px;
     overflow-y: auto;
+    overflow-x: hidden;
 }
 /* Override global scrollbar settings for aside */
 aside::-webkit-scrollbar {
@@ -108,6 +109,13 @@ section {
 .dropdown-toggle::after {
     display: none;
 }
+
+/* Reduce the height of the dropdown menu */
+.dropdown-menu {
+    max-height: 350px; /* Adjust this value as needed */
+    overflow-y: auto; /* Adds a scrollbar if content overflows */
+}
+
 
 button {
     background-color: transparent;
@@ -291,6 +299,15 @@ button {
     .header {
         flex-direction: column;
         text-align: center;
+    }
+    .dropdown-menu {
+        max-height: 200px; /* Adjust this value as needed */
+        overflow-y: auto; /* Adds a scrollbar if content overflows */
+    }
+}
+@media (max-height: 660px) {
+    .dropdown-menu {
+        height: 310px; /* Set fixed height when viewport height is 660px or lower */
     }
 }
 
