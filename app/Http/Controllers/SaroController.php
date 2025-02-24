@@ -36,4 +36,10 @@ class SaroController extends Controller
         }
     }
 
+        public function fetchSaroData()
+    {
+        $saros = DB::connection('ilcdb')->table('saro')->get();
+        return response()->json($saros);
+    }
+
 }
