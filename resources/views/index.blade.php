@@ -45,7 +45,7 @@
                 <p>SARO 1</p>
             </div>
 
-            <button class="accordion">PROJECT CLICK <span class="dropdown-icon">&#x25BC;"></span></button>
+            <button class="accordion">PROJECT CLICK <span class="dropdown-icon">&#x25BC;</span></button>
             <div class="panel project-click">
                 <!-- Placeholder content -->
                 <p>SARO 1</p>
