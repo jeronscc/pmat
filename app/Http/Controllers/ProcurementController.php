@@ -52,5 +52,29 @@ class ProcurementController extends Controller
 
         return response()->json($procurements);
     }
+
+    public function fetchProcurementData(Request $request)
+    {
+        $procurements = Procurement::with('requirements')->get();
+        return response()->json($procurements);
+    }
+
+    public function updateRequirement(Request $request, $id)
+    {
+        $requirement = Requirement::findOrFail($id);
+        $requirement->update($request->all());
+
+        // Check if all requirements are checked
+        $procurement = $requirement->procurement;
+        $allChecked = $procurement->requirements->every(function ($req) {
+            return $req->is_checked;
+        });
+
+        if ($allChecked) {
+            $procurement->update(['status' => 'Done']);
+        }
+
+        return response()->json(['message' => 'Requirement updated successfully']);
+    }
 }
 
