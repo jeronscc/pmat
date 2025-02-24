@@ -792,71 +792,74 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('addProcurement').addEventListener('click', function() {
-        const category = document.getElementById('category').value;
-        const prNumber = document.getElementById('pr-number').value;
-        const saroNumber = document.getElementById('saro-number').value;
-        const prYear = document.getElementById('pr-year').value;
-        const activity = document.getElementById('activity').value;
-        const description = document.getElementById('description').value;
+    const addProcurementButton = document.getElementById('addProcurement');
+    if (addProcurementButton) {
+        addProcurementButton.addEventListener('click', function() {
+            const category = document.getElementById('category').value;
+            const prNumber = document.getElementById('pr-number').value;
+            const saroNumber = document.getElementById('saro-number').value;
+            const prYear = document.getElementById('pr-year').value;
+            const activity = document.getElementById('activity').value;
+            const description = document.getElementById('description').value;
 
-        // Log the values to the console for debugging
-        console.log({ category, prNumber, saroNumber, prYear, activity, description });
+            // Log the values to the console for debugging
+            console.log({ category, prNumber, saroNumber, prYear, activity, description });
 
-        if (!category || !prNumber || !saroNumber || !prYear || !activity || !description) {
-            alert('All fields must be filled out.');
-            return;
-        }
+            if (!category || !prNumber || !saroNumber || !prYear || !activity || !description) {
+                alert('All fields must be filled out.');
+                return;
+            }
 
-        fetch('/api/add-procurement-ilcdb', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-            },
-            body: JSON.stringify({
-                category: category,
-                pr_number: prNumber,
-                saro_number: saroNumber,
-                pr_year: prYear,
-                activity: activity,
-                description: description
+            fetch('/api/add-procurement-ilcdb', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: JSON.stringify({
+                    category: category,
+                    pr_number: prNumber,
+                    saro_number: saroNumber,
+                    pr_year: prYear,
+                    activity: activity,
+                    description: description
+                })
             })
-        })
-        .then(response => {
-            if (!response.ok) {
-                return response.json().then(errData => {
-                    console.error('Validation/Error:', errData);
-                    alert('Error: ' + JSON.stringify(errData));
-                    throw new Error('Request failed');
-                });
-            }
-            return response.json();
-        })
-        .then(data => {
-            if (data.message === 'Procurement added successfully') {
-                alert('New Procurement added successfully');
-                const procurementModal = bootstrap.Modal.getInstance(document.getElementById("procurementModal"));
-                procurementModal.hide();
-
-                // Redirect based on category
-                if (category === 'SVP') {
-                    window.location.href = '/procurementform';
-                } else if (category === 'Honoraria') {
-                    window.location.href = '/honorariaform';
-                } else if (category === 'Other expense') {
-                    window.location.href = '/otherexpenseform';
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(errData => {
+                        console.error('Validation/Error:', errData);
+                        alert('Error: ' + JSON.stringify(errData));
+                        throw new Error('Request failed');
+                    });
                 }
-            } else {
-                alert('Failed to add procurement');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('An error occurred while adding procurement');
+                return response.json();
+            })
+            .then(data => {
+                if (data.message === 'Procurement added successfully') {
+                    alert('New Procurement added successfully');
+                    const procurementModal = bootstrap.Modal.getInstance(document.getElementById("procurementModal"));
+                    procurementModal.hide();
+
+                    // Redirect based on category
+                    if (category === 'SVP') {
+                        window.location.href = '/procurementform';
+                    } else if (category === 'Honoraria') {
+                        window.location.href = '/honorariaform';
+                    } else if (category === 'Other expense') {
+                        window.location.href = '/otherexpenseform';
+                    }
+                } else {
+                    alert('Failed to add procurement');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while adding procurement');
+            });
         });
-    });
+    }
 });
 </script>
 </body>
