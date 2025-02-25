@@ -17,7 +17,8 @@ class SaroController extends Controller
             $request->validate([
                 'saro_number' => 'required',
                 'budget' => 'required',
-                'saro_year' => 'required'
+                'saro_year' => 'required',
+                'saroDesc' => 'required'
             ]);
 
             // Save the SARO data to the database
@@ -25,6 +26,7 @@ class SaroController extends Controller
                 'saro_no' => $request->input('saro_number'),
                 'budget_allocated' => $request->input('budget'),
                 'current_budget'  => $request->input('budget'),
+                'description' => $request->input('saroDesc'),
                 'year' => $request->input('saro_year'),
             ]);
 
