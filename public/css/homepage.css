@@ -79,6 +79,11 @@ section {
     cursor: pointer;
 }
 
+#procurementDetailsModal .modal-content {
+    margin: 25vh auto 0 auto;
+    max-width: 100%;
+    
+}
 #procurementTable tr:hover td:nth-child(-n+3) {
     background-color: #ddd;
 }
@@ -317,6 +322,9 @@ input, select, textarea {
     .saro-container {
         max-height: 210px;
     }
+    #procurementDetailsModal .modal-content {
+        margin: 100px 0 0 0; /* Adjust margin for smaller screens (e.g., mobile devices) */
+    }
 }
 
 @media (min-height: 784px) {
@@ -354,3 +362,4 @@ input, select, textarea {
         max-height: 510px; /* Further increase max-height for even larger screens */
     }
 }
+
