@@ -238,12 +238,12 @@
                                 <label for="pr-year" class="form-label">YEAR</label>
                                 <select class="form-select" id="pr-year" placeholder="Enter Activity">
                                     <option value="" disabled selected>Select Year</option>
-                                    <option>2026</option> 
-                                    <option>2025</option>
-                                    <option>2024</option> 
-                                    <option>2023</option> 
-                                    <option>2022</option> 
-                                    <option>2021</option>    
+                                    <?php
+                                    $startYear = max(2026, date("Y")); // Start from 2026, or the current year if it's later
+                                    for ($year = $startYear; $year >= $startYear - 10; $year--) {
+                                    echo "<option value=\"$year\">$year</option>";
+                                    }
+                                    ?> 
                                 </select>
                             </div>
                             <div class="mb-3">
