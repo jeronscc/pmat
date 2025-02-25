@@ -79,6 +79,10 @@ section {
     cursor: pointer;
 }
 
+#procurementTable tr:hover td:nth-child(-n+3) {
+    background-color: #ddd;
+}
+
 .balance-container {
     background-color: #000000;
     color: #ffffff;
