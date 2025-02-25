@@ -75,6 +75,10 @@ section {
     overflow-y: auto;
 }
 
+#procurementTable td:first-child {
+    cursor: pointer;
+}
+
 .balance-container {
     background-color: #000000;
     color: #ffffff;

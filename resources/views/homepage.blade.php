@@ -519,54 +519,62 @@ function fetchSaroDataAndRequirements(year) {
 }
 
 function fetchProcurementRequirements(saroNo) {
-            const url = saroNo === '' ? '/api/fetch-procurement-ilcdb' : `/api/fetch-procurement-ilcdb?saro_no=${saroNo}`;
+    const url = saroNo === '' ? '/api/fetch-procurement-ilcdb' : `/api/fetch-procurement-ilcdb?saro_no=${saroNo}`;
 
-            fetch(url)
-                .then(response => response.json())
-                .then(data => {
-                    const tableBody = document.getElementById('procurementTable');
-                    tableBody.innerHTML = ''; // Clear existing table rows
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            const tableBody = document.getElementById('procurementTable');
+            tableBody.innerHTML = ''; // Clear existing table rows
 
-                    if (data.length > 0) {
-                        data.forEach(item => {
-                            const row = document.createElement('tr');
+            if (data.length > 0) {
+                data.forEach(item => {
+                    const row = document.createElement('tr');
 
-                            // PR NUMBER cell (procurement_id)
-                            const prNumberCell = document.createElement('td');
-                            prNumberCell.textContent = item.procurement_id;
-                            prNumberCell.style.cursor = 'pointer'; // Add cursor pointer for visual feedback
-                            row.appendChild(prNumberCell);
+                    // PR NUMBER cell (procurement_id)
+                    const prNumberCell = document.createElement('td');
+                    prNumberCell.textContent = item.procurement_id;
+                    prNumberCell.style.cursor = 'pointer'; // Add cursor pointer for visual feedback
+                    row.appendChild(prNumberCell);
 
-                            // ACTIVITY cell
-                            const activityCell = document.createElement('td');
-                            activityCell.textContent = item.activity;
-                            row.appendChild(activityCell);
+                    // ACTIVITY cell
+                    const activityCell = document.createElement('td');
+                    activityCell.textContent = item.activity;
+                    row.appendChild(activityCell);
 
-                            // STATUS cell (this is just a placeholder as we don't have status in the data)
-                            const statusCell = document.createElement('td');
-                            const badge = document.createElement('span');
-                            badge.classList.add('badge', 'bg-warning', 'text-dark');
-                            badge.textContent = 'Pending'; 
-                            statusCell.appendChild(badge);
-                            row.appendChild(statusCell);
+                    // STATUS cell (this is just a placeholder as we don't have status in the data)
+                    const statusCell = document.createElement('td');
+                    const badge = document.createElement('span');
+                    badge.classList.add('badge', 'bg-warning', 'text-dark');
+                    badge.textContent = 'Pending'; 
+                    statusCell.appendChild(badge);
+                    row.appendChild(statusCell);
 
-                            // Add event listener to the PR Number cell to open the modal
-                            prNumberCell.addEventListener('click', () => openProcurementModal(item));
+                    // Append row to table
+                    tableBody.appendChild(row);
+                });
 
-                            // Append row to table
-                            tableBody.appendChild(row);
-                        });
-                    } else {
-                        const emptyMessage = document.createElement('tr');
-                        const emptyCell = document.createElement('td');
-                        emptyCell.setAttribute('colspan', '3');
-                        emptyCell.textContent = 'No procurement records found.';
-                        emptyMessage.appendChild(emptyCell);
-                        tableBody.appendChild(emptyMessage);
+                // Add event listener to table body for delegation
+                tableBody.addEventListener('click', function(event) {
+                    const prNumberCell = event.target.closest('td');
+                    if (prNumberCell && prNumberCell.parentElement) {
+                        const procurementId = prNumberCell.textContent;
+                        const row = prNumberCell.parentElement;
+                        openProcurementModal({ procurement_id: procurementId });
                     }
-                })
-                .catch(error => console.error('Error fetching procurement requirements:', error));
-        }
+                });
+            } else {
+                const emptyMessage = document.createElement('tr');
+                const emptyCell = document.createElement('td');
+                emptyCell.setAttribute('colspan', '3');
+                emptyCell.textContent = 'No procurement records found.';
+                emptyMessage.appendChild(emptyCell);
+                tableBody.appendChild(emptyMessage);
+            }
+        })
+        .catch(error => console.error('Error fetching procurement requirements:', error));
+}
+
 
         // Function to open modal and display procurement details
     function openProcurementModal(item) {
