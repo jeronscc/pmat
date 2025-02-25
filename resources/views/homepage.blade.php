@@ -133,6 +133,30 @@
                 </table>
             </div>
         </div>
+        <div class="modal fade" id="procurementDetailsModal" tabindex="-1" aria-labelledby="procurementDetailsModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="procurementDetailsModalLabel">Procurement Details</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p><strong>Procurement Category:</strong> <span id="modalProcurementCategory"></span></p>
+                        <p><strong>Procurement No:</strong> <span id="modalProcurementNo"></span></p>
+                        <p><strong>SARO No:</strong> <span id="modalSaroNo"></span></p>
+                        <p><strong>Year:</strong> <span id="modalYear"></span></p>
+                        <p><strong>Description:</strong> <span id="modalDescription"></span></p>
+                        <p><strong>Activity:</strong> <span id="modalActivity"></span></p>
+                    </div>
+                    <div class="modal-footer">
+                        <!-- Cancel Button -->
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <!-- Edit Button (still needs implementation) -->
+                        <button type="button" class="btn btn-primary">Edit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </section>
 </div>
     
@@ -495,50 +519,94 @@ function fetchSaroDataAndRequirements(year) {
 }
 
 function fetchProcurementRequirements(saroNo) {
-    const url = saroNo === '' ? '/api/fetch-procurement-ilcdb' : `/api/fetch-procurement-ilcdb?saro_no=${saroNo}`;
+            const url = saroNo === '' ? '/api/fetch-procurement-ilcdb' : `/api/fetch-procurement-ilcdb?saro_no=${saroNo}`;
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    const tableBody = document.getElementById('procurementTable');
+                    tableBody.innerHTML = ''; // Clear existing table rows
+
+                    if (data.length > 0) {
+                        data.forEach(item => {
+                            const row = document.createElement('tr');
+
+                            // PR NUMBER cell (procurement_id)
+                            const prNumberCell = document.createElement('td');
+                            prNumberCell.textContent = item.procurement_id;
+                            prNumberCell.style.cursor = 'pointer'; // Add cursor pointer for visual feedback
+                            row.appendChild(prNumberCell);
+
+                            // ACTIVITY cell
+                            const activityCell = document.createElement('td');
+                            activityCell.textContent = item.activity;
+                            row.appendChild(activityCell);
+
+                            // STATUS cell (this is just a placeholder as we don't have status in the data)
+                            const statusCell = document.createElement('td');
+                            const badge = document.createElement('span');
+                            badge.classList.add('badge', 'bg-warning', 'text-dark');
+                            badge.textContent = 'Pending'; 
+                            statusCell.appendChild(badge);
+                            row.appendChild(statusCell);
+
+                            // Add event listener to the PR Number cell to open the modal
+                            prNumberCell.addEventListener('click', () => openProcurementModal(item));
+
+                            // Append row to table
+                            tableBody.appendChild(row);
+                        });
+                    } else {
+                        const emptyMessage = document.createElement('tr');
+                        const emptyCell = document.createElement('td');
+                        emptyCell.setAttribute('colspan', '3');
+                        emptyCell.textContent = 'No procurement records found.';
+                        emptyMessage.appendChild(emptyCell);
+                        tableBody.appendChild(emptyMessage);
+                    }
+                })
+                .catch(error => console.error('Error fetching procurement requirements:', error));
+        }
+
+        // Function to open modal and display procurement details
+    function openProcurementModal(item) {
+    const procurementId = item.procurement_id; // Get procurement ID from clicked item
+    const modal = document.getElementById('procurementDetailsModal');
+
+    // Fetch detailed data from the API using the procurement_id
+    // Fetch detailed data from the API using the procurement_id
+    const url = `/api/fetch-procurement-details?procurement_id=${procurementId}`;
+
 
     fetch(url)
         .then(response => response.json())
         .then(data => {
-            const tableBody = document.getElementById('procurementTable');
-            tableBody.innerHTML = ''; // Clear existing table rows
-
-            if (data.length > 0) {
-                data.forEach(item => {
-                    const row = document.createElement('tr');
-
-                    // PR NUMBER cell (procurement_id)
-                    const prNumberCell = document.createElement('td');
-                    prNumberCell.textContent = item.procurement_id;
-                    row.appendChild(prNumberCell);
-
-                    // ACTIVITY cell
-                    const activityCell = document.createElement('td');
-                    activityCell.textContent = item.activity;
-                    row.appendChild(activityCell);
-
-                    // STATUS cell (this is just a placeholder as we don't have status in the data)
-                    const statusCell = document.createElement('td');
-                    const badge = document.createElement('span');
-                    badge.classList.add('badge', 'bg-warning', 'text-dark');
-                    badge.textContent = 'Pending'; 
-                    statusCell.appendChild(badge);
-                    row.appendChild(statusCell);
-
-                    // Append row to table
-                    tableBody.appendChild(row);
-                });
+            if (data.message) {
+                // If the response contains a message, that means procurement wasn't found
+                alert(data.message);
             } else {
-                const emptyMessage = document.createElement('tr');
-                const emptyCell = document.createElement('td');
-                emptyCell.setAttribute('colspan', '3');
-                emptyCell.textContent = 'No procurement records found.';
-                emptyMessage.appendChild(emptyCell);
-                tableBody.appendChild(emptyMessage);
+                // Populate modal fields with the fetched procurement data
+                document.getElementById('modalProcurementCategory').textContent = data.procurement_category || 'N/A';
+                document.getElementById('modalProcurementNo').textContent = data.procurement_id || 'N/A';
+                document.getElementById('modalSaroNo').textContent = data.saro_no || 'N/A';
+                document.getElementById('modalYear').textContent = data.year || 'N/A';
+                document.getElementById('modalDescription').textContent = data.description || 'N/A';
+                document.getElementById('modalActivity').textContent = data.activity || 'N/A';
+
+                // Show the modal (Bootstrap modal method)
+                const bootstrapModal = new bootstrap.Modal(modal);
+                bootstrapModal.show();
             }
         })
-        .catch(error => console.error('Error fetching procurement requirements:', error));
+        .catch(error => {
+            console.error('Error fetching procurement details:', error);
+            alert('Failed to load procurement details.');
+        });
 }
+
+
+        // Fetch procurement data when the page loads (optional)
+        document.addEventListener('DOMContentLoaded', () => fetchProcurementRequirements(''));
 
 function highlightSelectedItem(selectedItem) {
         const items = document.querySelectorAll('.saro-list .list-group-item');
@@ -858,6 +926,7 @@ document.addEventListener('DOMContentLoaded', function() {
         .catch(error => console.error('Error fetching SARO data:', error));
 });
 </script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
 </script>

@@ -52,6 +52,24 @@ class ProcurementController extends Controller
 
         return response()->json($procurements);
     }
+    public function fetchProcurementDetails(Request $request)
+    {
+        $procurementId = $request->query('procurement_id');
+
+        // Fetch procurement details from the database
+        $procurement = DB::connection('ilcdb')
+            ->table('procurement')
+            ->where('procurement_id', $procurementId)
+            ->first(); // Use first() to get a single record
+
+        if ($procurement) {
+            // Return procurement data as JSON response
+            return response()->json($procurement);
+        }
+
+        // If procurement not found, return an error message
+        return response()->json(['message' => 'Procurement not found.'], 404);
+    }
 }
 
 
