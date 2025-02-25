@@ -118,7 +118,7 @@
                             saroElement.style.padding = '5px';  
                             saroElement.setAttribute('data-bs-toggle', 'tooltip');
                             saroElement.setAttribute('data-bs-placement', 'right');
-                            saroElement.setAttribute('title', `SARO Number: ${saro.saro_no}\nBudget Allocated: ₱${Number(saro.budget_allocated).toLocaleString()}\nYear: ${saro.year}\nDescription: ${saro.description}`);
+                            saroElement.setAttribute('title', `Description: ${saro.description}`);
                             saroElement.addEventListener('click', function() {
                                 remainingBalance.textContent = `₱${Number(saro.current_budget).toLocaleString()}`;
                                 fetchProcurementData(saro.saro_no);
@@ -127,10 +127,7 @@
                         });
 
                         // Initialize Bootstrap tooltips
-                        const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-                        const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-                            return new bootstrap.Tooltip(tooltipTriggerEl);
-                        });
+                        initializeTooltips();
                     } else {
                         const emptyMessage = document.createElement('p');
                         emptyMessage.textContent = 'No SARO records found.';
@@ -143,41 +140,55 @@
         });
 
         function filterSaroByYear(year) {
-        fetch(`/api/fetch-saro-ilcdb?year=${year}`)
-        .then(response => response.json())
-        .then(data => {
-            const ilcdbPanel = document.querySelector('.panel.ilcdb');
-            const remainingBalance = document.querySelector('.balance-box p');
-            ilcdbPanel.innerHTML = ''; // Clear previous records
+            fetch(`/api/fetch-saro-ilcdb?year=${year}`)
+                .then(response => response.json())
+                .then(data => {
+                    const ilcdbPanel = document.querySelector('.panel.ilcdb');
+                    const remainingBalance = document.querySelector('.balance-box p');
+                    ilcdbPanel.innerHTML = ''; // Clear previous records
 
-            if (data.length > 0) {
-                data.forEach(saro => {
-                    const saroElement = document.createElement('p');
-                    saroElement.textContent = saro.saro_no;
-                    saroElement.style.margin = '5px 0'; 
-                    saroElement.style.padding = '5px';
-                    saroElement.setAttribute('data-bs-toggle', 'tooltip');
-                    saroElement.setAttribute('data-bs-placement', 'right');
-                    saroElement.setAttribute('title', `SARO Number: ${saro.saro_no}\nBudget Allocated: ₱${Number(saro.budget_allocated).toLocaleString()}\nYear: ${saro.year}\nDescription: ${saro.description}`);
-                    saroElement.addEventListener('click', function() {
-                        remainingBalance.textContent = `₱${Number(saro.current_budget).toLocaleString()}`;
-                        fetchProcurementData(saro.saro_no);
-                    });
-                    ilcdbPanel.appendChild(saroElement);
-                });
+                    if (data.length > 0) {
+                        data.forEach(saro => {
+                            const saroElement = document.createElement('p');
+                            saroElement.textContent = saro.saro_no;
+                            saroElement.style.margin = '5px 0'; 
+                            saroElement.style.padding = '5px';
+                            saroElement.setAttribute('data-bs-toggle', 'tooltip');
+                            saroElement.setAttribute('data-bs-placement', 'right');
+                            saroElement.setAttribute('title', `Description: ${saro.description}`);
+                            saroElement.addEventListener('click', function() {
+                                remainingBalance.textContent = `₱${Number(saro.current_budget).toLocaleString()}`;
+                                fetchProcurementData(saro.saro_no);
+                            });
+                            ilcdbPanel.appendChild(saroElement);
+                        });
 
-                // Initialize Bootstrap tooltips
-                const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-                const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-                    return new bootstrap.Tooltip(tooltipTriggerEl);
-                });
-            } else {
-                const emptyMessage = document.createElement('p');
-                emptyMessage.textContent = 'No SARO records found.';
-                ilcdbPanel.appendChild(emptyMessage);
-            }
-        })
-        .catch(error => console.error('Error fetching SARO data:', error));
+                        // Initialize Bootstrap tooltips
+                        initializeTooltips();
+                    } else {
+                        const emptyMessage = document.createElement('p');
+                        emptyMessage.textContent = 'No SARO records found.';
+                        ilcdbPanel.appendChild(emptyMessage);
+                    }
+                })
+                .catch(error => console.error('Error fetching SARO data:', error));
+        }
+
+        function initializeTooltips() {
+            // Dispose of existing tooltips
+            const existingTooltips = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+            existingTooltips.forEach(tooltipTriggerEl => {
+                const tooltipInstance = bootstrap.Tooltip.getInstance(tooltipTriggerEl);
+                if (tooltipInstance) {
+                    tooltipInstance.dispose();
+                }
+            });
+
+            // Initialize new tooltips
+            const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
         }
 
         function fetchProcurementData(saroNo) {
