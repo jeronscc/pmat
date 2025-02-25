@@ -78,8 +78,8 @@
             <ul class="dropdown-menu" aria-labelledby="yearDropdown">
                 <li><a class="dropdown-item" href="#" onclick="filterSaroByYear('')">Show All</a></li> <!-- Show All option -->
                 <?php
-                $currentYear = date("Y");
-                for ($year = $currentYear; $year >= $currentYear - 10; $year--) {
+                    $startYear = max(2026, date("Y")); // Start from 2026, or the current year if it's later
+                    for ($year = $startYear; $year >= $startYear - 10; $year--) {
                     echo "<li><a class='dropdown-item' href='#' onclick='filterSaroByYear(\"$year\")'>$year</a></li>";
                 }
                 ?>                
