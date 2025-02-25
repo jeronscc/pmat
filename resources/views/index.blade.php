@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Procurement Tracking and Monitoring System</title>
     <!-- Bootstrap CSS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/landingpage.css">
     <link rel="stylesheet" href="/css/landingheader.css">
@@ -28,22 +27,22 @@
                 <span>Remaining Balance:</span>
                 <p>₱0</p> <!-- Default value -->
             </div>
-    <div class="d-flex justify-content-end align-items-center mb-2">
-        <div class="dropdown me-2">
-            <button class="dropdown-toggle" type="button" id="yearDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                <img src="/assets/filter.png" alt="Select Year" style="width: 20px; height: 20px; margin-right: 10px;">
-            </button>
-            <ul class="dropdown-menu" aria-labelledby="yearDropdown">
-                <li><a class="dropdown-item" href="#" onclick="filterSaroByYear('')">Show All</a></li> <!-- Show All option -->
-                <?php
-                    $startYear = max(2026, date("Y")); // Start from 2026, or the current year if it's later
-                    for ($year = $startYear; $year >= $startYear - 10; $year--) {
-                    echo "<li><a class='dropdown-item' href='#' onclick='filterSaroByYear(\"$year\")'>$year</a></li>";
-                }
-                ?>                
-            </ul>
-        </div>
-    </div>
+            <div class="d-flex justify-content-end align-items-center mb-2">
+                <div class="dropdown me-2">
+                    <button class="dropdown-toggle" type="button" id="yearDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="/assets/filter.png" alt="Select Year" style="width: 20px; height: 20px; margin-right: 10px;">
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="yearDropdown">
+                        <li><a class="dropdown-item" href="#" onclick="filterSaroByYear('')">Show All</a></li> <!-- Show All option -->
+                        <?php
+                            $startYear = max(2026, date("Y")); // Start from 2026, or the current year if it's later
+                            for ($year = $startYear; $year >= $startYear - 10; $year--) {
+                            echo "<li><a class='dropdown-item' href='#' onclick='filterSaroByYear(\"$year\")'>$year</a></li>";
+                        }
+                        ?>                
+                    </ul>
+                </div>
+            </div>
             <button class="accordion">ILCDB <span class="dropdown-icon">&#x25BC;</span></button>
             <div class="panel ilcdb">
                 <!-- SARO data will be populated here -->
@@ -100,6 +99,7 @@
             </div>
         </section>
     </main>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="/js/landingpage.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -116,11 +116,20 @@
                             saroElement.textContent = saro.saro_no;
                             saroElement.style.margin = '5px 0'; // 10px space above & below
                             saroElement.style.padding = '5px';  
+                            saroElement.setAttribute('data-bs-toggle', 'tooltip');
+                            saroElement.setAttribute('data-bs-placement', 'right');
+                            saroElement.setAttribute('title', `SARO Number: ${saro.saro_no}\nBudget Allocated: ₱${Number(saro.budget_allocated).toLocaleString()}\nYear: ${saro.year}\nDescription: ${saro.description}`);
                             saroElement.addEventListener('click', function() {
                                 remainingBalance.textContent = `₱${Number(saro.current_budget).toLocaleString()}`;
                                 fetchProcurementData(saro.saro_no);
                             });
                             ilcdbPanel.appendChild(saroElement);
+                        });
+
+                        // Initialize Bootstrap tooltips
+                        const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+                        const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                            return new bootstrap.Tooltip(tooltipTriggerEl);
                         });
                     } else {
                         const emptyMessage = document.createElement('p');
@@ -147,11 +156,20 @@
                     saroElement.textContent = saro.saro_no;
                     saroElement.style.margin = '5px 0'; 
                     saroElement.style.padding = '5px';
+                    saroElement.setAttribute('data-bs-toggle', 'tooltip');
+                    saroElement.setAttribute('data-bs-placement', 'right');
+                    saroElement.setAttribute('title', `SARO Number: ${saro.saro_no}\nBudget Allocated: ₱${Number(saro.budget_allocated).toLocaleString()}\nYear: ${saro.year}\nDescription: ${saro.description}`);
                     saroElement.addEventListener('click', function() {
                         remainingBalance.textContent = `₱${Number(saro.current_budget).toLocaleString()}`;
                         fetchProcurementData(saro.saro_no);
                     });
                     ilcdbPanel.appendChild(saroElement);
+                });
+
+                // Initialize Bootstrap tooltips
+                const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+                const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                    return new bootstrap.Tooltip(tooltipTriggerEl);
                 });
             } else {
                 const emptyMessage = document.createElement('p');
@@ -175,6 +193,9 @@
 
                             const prNumberCell = document.createElement('td');
                             prNumberCell.textContent = procurement.procurement_id;
+                            prNumberCell.addEventListener('click', function() {
+                                window.location.href = `/procurementform/${procurement.id}`;
+                            });
                             row.appendChild(prNumberCell);
 
                             const activityCell = document.createElement('td');
@@ -221,6 +242,9 @@
 
                             const prNumberCell = document.createElement('td');
                             prNumberCell.textContent = procurement.procurement_id;
+                            prNumberCell.addEventListener('click', function() {
+                                window.location.href = `/procurementform/${procurement.id}`;
+                            });
                             row.appendChild(prNumberCell);
 
                             const activityCell = document.createElement('td');
