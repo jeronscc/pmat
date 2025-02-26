@@ -2,10 +2,10 @@ document.addEventListener('DOMContentLoaded', function() {
     fetch('/api/fetch-saro-ilcdb')
     .then(response => response.json())
     .then(data => {
-        const ilcdbPanel = document.querySelector('.saro-container');
+        const saroContainer = document.querySelector('.saro-container');
         const remainingBalance = document.querySelector('.balance-container p');
 
-        ilcdbPanel.innerHTML = ''; // Clear any existing SARO entries
+        saroContainer.innerHTML = ''; // Clear any existing SARO entries
 
         if (data.length > 0) {
             data.forEach(saro => {
@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     fetchProcurementData(saro.saro_no);
                 });
 
-                ilcdbPanel.appendChild(saroElement);
+                saroContainer.appendChild(saroElement);
             });
 
             // Initialize Bootstrap tooltips with a short delay
@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function() {
             emptyMessage.textContent = 'No SARO records found.';
             emptyMessage.style.margin = "5px 0";
             emptyMessage.style.padding = "5px";
-            ilcdbPanel.appendChild(emptyMessage);
+            saroContainer.appendChild(emptyMessage);
         }
     })
     .catch(error => console.error('Error fetching SARO data:', error));
