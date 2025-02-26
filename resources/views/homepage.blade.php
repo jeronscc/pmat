@@ -104,6 +104,17 @@
                 <div class="header">
                     <h5>Currently Viewing: <span id="currentViewingSaro"></span></h5>
                     <div class="d-flex">
+                    <div class="dropdown me-2">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="categoryDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            Filter by Category
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="categoryDropdown">
+                            <li><a class="dropdown-item" href="#" onclick="filterProcurementByCategory('')">Show All</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="filterProcurementByCategory('SVP')">SVP</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="filterProcurementByCategory('Honoraria')">Honoraria</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="filterProcurementByCategory('Other expense')">Other Expenses</a></li>
+                        </ul>
+                    </div>
                         <button type="button" class="icon-button me-2" data-bs-toggle="modal" data-bs-target="#procurementModal">
                             <img src="/assets/add.png" alt="Add Procurement" style="width: 20px; height: 20px; margin-bottom:5px;">
                         </button>
