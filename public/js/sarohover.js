@@ -2,13 +2,14 @@ document.addEventListener('DOMContentLoaded', function() {
     fetch('/api/fetch-saro-ilcdb')
         .then(response => response.json())
         .then(data => {
-            const saroContainer = document.querySelector('.saro-container');
-            const remainingBalance = document.querySelector('.balance-container p-3 mb-3');
-            saroContainer.innerHTML = ''; // Clear any existing SARO entries
+            const saroList = document.querySelector('.saro-list');
+            const remainingBalance = document.getElementById('remainingBalance');
+            saroList.innerHTML = ''; // Clear any existing SARO entries
 
             if (data.length > 0) {
                 data.forEach(saro => {
-                    const saroElement = document.createElement('p');
+                    const saroElement = document.createElement('li');
+                    saroElement.classList.add('list-group-item');
                     saroElement.textContent = saro.saro_no;
                     saroElement.style.margin = '5px 0'; // 10px space above & below
                     saroElement.style.padding = '5px';  
@@ -19,17 +20,18 @@ document.addEventListener('DOMContentLoaded', function() {
                         remainingBalance.textContent = `₱${Number(saro.current_budget).toLocaleString()}`;
                         fetchProcurementData(saro.saro_no);
                     });
-                    saroContainer.appendChild(saroElement);
+                    saroList.appendChild(saroElement);
                 });
 
                 // Initialize Bootstrap tooltips
                 initializeTooltips();
             } else {
-                const emptyMessage = document.createElement('p');
+                const emptyMessage = document.createElement('li');
+                emptyMessage.classList.add('list-group-item');
                 emptyMessage.textContent = 'No SARO records found.';
                 emptyMessage.style.margin = "5px 0";
                 emptyMessage.style.padding = "5px"
-                saroContainer.appendChild(emptyMessage);
+                saroList.appendChild(emptyMessage);
             }
         })
         .catch(error => console.error('Error fetching SARO data:', error));
@@ -39,13 +41,14 @@ function filterSaroByYear(year) {
     fetch(`/api/fetch-saro-ilcdb?year=${year}`)
         .then(response => response.json())
         .then(data => {
-            const saroContainer = document.querySelector('.saro-container');
-            const remainingBalance = document.querySelector('.balance-container p-3 mb-3');
-            saroContainer.innerHTML = ''; // Clear previous records
+            const saroList = document.querySelector('.saro-list');
+            const remainingBalance = document.getElementById('remainingBalance');
+            saroList.innerHTML = ''; // Clear previous records
 
             if (data.length > 0) {
                 data.forEach(saro => {
-                    const saroElement = document.createElement('p');
+                    const saroElement = document.createElement('li');
+                    saroElement.classList.add('list-group-item');
                     saroElement.textContent = saro.saro_no;
                     saroElement.style.margin = '5px 0'; 
                     saroElement.style.padding = '5px';
@@ -56,15 +59,16 @@ function filterSaroByYear(year) {
                         remainingBalance.textContent = `₱${Number(saro.current_budget).toLocaleString()}`;
                         fetchProcurementData(saro.saro_no);
                     });
-                    saroContainer.appendChild(saroElement);
+                    saroList.appendChild(saroElement);
                 });
 
                 // Initialize Bootstrap tooltips
                 initializeTooltips();
             } else {
-                const emptyMessage = document.createElement('p');
+                const emptyMessage = document.createElement('li');
+                emptyMessage.classList.add('list-group-item');
                 emptyMessage.textContent = 'No SARO records found.';
-                saroContainer.appendChild(emptyMessage);
+                saroList.appendChild(emptyMessage);
             }
         })
         .catch(error => console.error('Error fetching SARO data:', error));
