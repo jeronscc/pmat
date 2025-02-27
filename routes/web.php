@@ -5,6 +5,7 @@ use App\Http\Controllers\userController;
 use App\Http\Controllers\HonorariaController;
 use App\Http\Middleware\PreventBackAfterLogout;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\ProcurementFormController;
 
 Route::get('/', function () {
     return view('index');
@@ -31,8 +32,6 @@ Route::get('/spark', function () {
 })->middleware('auth');
 
 Route::get('/honoraria-form', [HonorariaController::class, 'showHonorariaForm']);
-
-Route::get('/fetch-saro-data', [SaroController::class, 'fetchSaroData'])->name('fetchSaroData');
 
 Route::get('/procurementform', function () {
     return view('procurementform');
@@ -77,3 +76,7 @@ Route::middleware(['auth', PreventBackAfterLogout::class])->group(function () {
         return view('spark');
     });
 });
+
+
+// REDIRECTS TO SVP FORM (PR ID SPECIFIED)
+Route::get('/procurementform', [ProcurementFormController::class, 'showForm'])->name('procurementform');

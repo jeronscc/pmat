@@ -29,7 +29,7 @@
     <div id="side-nav" class="side-nav">
         <ul>
             <li>
-                <form action="" method="POST">
+                <form action="/homepage-ilcdb">
                     <button type="submit">
                         <i class="fas fa-home"></i><img src="/assets/home_icon.png" alt=""> Home
                     </button>
@@ -43,7 +43,7 @@
                 </form>
             </li>
             <li>
-                <form action="" method="POST">
+                <form action="" >
                     <button type="submit">
                         <i class="fas fa-clock"></i><img src="/assets/report_icon.png" alt=""> Reports
                     </button>
@@ -59,10 +59,11 @@
             </li>
         </ul>
     </div>
+
     <div class="container mt-5">
         <div class="activity-info">
-            <h3>Activity Name: <span id="activityName">Sample Activity</span></h3>
-            <h3>PR Number: <span id="prNumber">12345</span></h3>
+            <h3>Activity Name: <span id="activityName">{{ $activityName }}</span></h3>
+            <h3>PR Number: <span id="prNumber">{{ $prNumber }}</span></h3>
         </div>
         <h2>Pre-Procurement Requirements</h2>
         <h3>Supply Unit</h3>
@@ -413,5 +414,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Custom JS -->
     <script src="/js/menu.js"></script>
+
+<script src="/js/addProcurementForm.js"></script>
 </body>
 </html>

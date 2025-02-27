@@ -30,6 +30,12 @@ class ProcurementController extends Controller
                 'description'          => $request->input('description'),
             ]);
 
+             // Insert into 'procurement_form' table
+            DB::connection('ilcdb')->table('procurement_form')->insert([
+                'procurement_id' => $request->input('pr_number'),
+                'activity'       => $request->input('activity'),
+            ]);
+
             // Return a success response
             return response()->json(['message' => 'Procurement added successfully']);
         } catch (\Exception $e) {

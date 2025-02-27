@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\SaroController;
 use App\Http\Controllers\ProcurementController;
+use App\Http\Controllers\ProcurementFormController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -105,4 +106,3 @@ Route::get('/search-procurement-ilcdb', function (Request $request) {
 Route::any('/add-saro-ilcdb', [SaroController::class, 'addSaro'])->name('add-saro-ilcdb');
 Route::any('/add-procurement-ilcdb', [ProcurementController::class, 'addProcurement'])->name('addProcurement');
 Route::get('/fetch-procurement-details', [ProcurementController::class, 'fetchProcurementDetails'])->name('fetchProcurementDetails');
-

@@ -45,13 +45,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 procurementModal.hide();
 
                 // Redirect based on category
-                if (category === 'SVP') {
-                    window.location.href = '/procurementform';
-                } else if (category === 'Honoraria') {
-                    window.location.href = '/honorariaform';
-                } else if (category === 'Other expense') {
-                    window.location.href = '/otherexpenseform';
-                }
+            // Redirect with both pr_number and activity in the query string
+            if (category === 'SVP') {
+                window.location.href = '/procurementform?pr_number=' + encodeURIComponent(prNumber) + '&activity=' + encodeURIComponent(activity);
+            } else if (category === 'Honoraria') {
+                window.location.href = '/honorariaform?pr_number=' + encodeURIComponent(prNumber) + '&activity=' + encodeURIComponent(activity);
+            } else if (category === 'Other expense') {
+                window.location.href = '/otherexpenseform?pr_number=' + encodeURIComponent(prNumber) + '&activity=' + encodeURIComponent(activity);
+            }
             } else {
                 alert('Failed to add procurement');
             }
@@ -63,6 +64,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+// OPTIONS FOR EXISTING SARO IN PROC MODAL
 document.addEventListener('DOMContentLoaded', function() {
     // Populate SARO options for the current year
     const currentYear = new Date().getFullYear();
@@ -88,3 +90,4 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .catch(error => console.error('Error fetching SARO data:', error));
 });
+
