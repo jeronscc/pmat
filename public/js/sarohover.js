@@ -1,10 +1,9 @@
-// SARO hover functionality
+// SARO hover functionality to show description
 document.addEventListener('DOMContentLoaded', function() {
     fetch('/api/fetch-saro-ilcdb')
         .then(response => response.json())
         .then(data => {
             const saroContainer = document.querySelector('.saro-container');
-            const remainingBalance = document.querySelector('.balance-container p');
 
             saroContainer.innerHTML = ''; // Clear any existing SARO entries
 
@@ -20,6 +19,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     saroElement.setAttribute('title', `Description: ${saro.description}`);
 
                     saroElement.addEventListener('click', function() {
+                        // Handle SARO click event to show balance and procurement
+                        const remainingBalance = document.querySelector('.balance-container p');
                         remainingBalance.textContent = `₱${Number(saro.current_budget).toLocaleString()}`;
                         fetchProcurementData(saro.saro_no); // Fetch and display procurement data for selected SARO
                     });
@@ -27,8 +28,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     saroContainer.appendChild(saroElement);
                 });
 
-                // Initialize Bootstrap tooltips with a short delay
-                setTimeout(reinitializeTooltips, 100);
+                // Initialize Bootstrap tooltips for the SARO elements
+                setTimeout(initializeTooltips, 100);
             } else {
                 const emptyMessage = document.createElement('p');
                 emptyMessage.textContent = 'No SARO records found.';
@@ -41,17 +42,9 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // Function to initialize Bootstrap tooltips
-function reinitializeTooltips() {
+function initializeTooltips() {
     const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
     tooltipTriggerList.forEach(function (tooltipTriggerEl) {
         new bootstrap.Tooltip(tooltipTriggerEl);
     });
 }
-
-// Reinitialize tooltips when hovering over SARO items (Delegated event)
-document.addEventListener('mouseover', function(event) {
-    if (event.target.matches('.saro-item')) {
-        const tooltip = bootstrap.Tooltip.getInstance(event.target) || new bootstrap.Tooltip(event.target);
-        tooltip.show();
-    }
-});
