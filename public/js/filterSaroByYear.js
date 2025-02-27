@@ -1,7 +1,7 @@
 // Fetch SARO data from the API when the page loads
 window.onload = function() {
     // Initially load all SAROs when the page loads (with no balance)
-    fetchSaroData('');
+    filterSaroByYear('');  // Default to all years
 };
 
 // Function to fetch and display SARO list based on the selected year or "all"
@@ -29,8 +29,8 @@ function filterSaroByYear(year) {
                     // Add click event to each SARO number
                     listItem.addEventListener('click', function() {
                         displayCurrentBudget(saro); // Show balance when SARO is clicked
-                        fetchProcurementForSaro(saro.saro_no, year); // Fetch and display procurement for this SARO
-                        highlightSelectedItem(this);
+                        fetchProcurementForSaro(saro.saro_no); // Fetch and display procurement for this SARO
+                        highlightSelectedItem(this); // Optional: Highlight the selected item
                     });
 
                     // Append the list item to the SARO list
@@ -59,7 +59,7 @@ function reinitializeTooltips() {
     });
 }
 
-// SARO hover functionality
+// SARO hover functionality to show description
 document.addEventListener('DOMContentLoaded', function() {
     fetch('/api/fetch-saro-ilcdb')
         .then(response => response.json())
@@ -80,6 +80,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     saroElement.setAttribute('data-bs-placement', 'right');
                     saroElement.setAttribute('title', `Description: ${saro.description}`);
 
+                    // Click event to fetch procurement data when SARO is clicked
                     saroElement.addEventListener('click', function() {
                         remainingBalance.textContent = `₱${Number(saro.current_budget).toLocaleString()}`;
                         fetchProcurementData(saro.saro_no); // Fetch and display procurement data for selected SARO
@@ -99,14 +100,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         })
         .catch(error => console.error('Error fetching SARO data:', error));
-});
-
-// Reinitialize tooltips when hovering over SARO items (Delegated event)
-document.addEventListener('mouseover', function(event) {
-    if (event.target.matches('.saro-item')) {
-        const tooltip = bootstrap.Tooltip.getInstance(event.target) || new bootstrap.Tooltip(event.target);
-        tooltip.show();
-    }
 });
 
 // Event delegation for SARO list in the filter functionality
