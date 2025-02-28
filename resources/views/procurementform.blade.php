@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Procurement Tracking and Monitoring System</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -60,141 +61,188 @@
         </ul>
     </div>
 
+    @if(session('success'))
+      <div class="alert alert-success">{{ session('success') }}</div>
+    @endif
+    @if(session('error'))
+      <div class="alert alert-danger">{{ session('error') }}</div>
+    @endif
+
     <div class="container mt-5">
         <div class="activity-info">
             <h3>Activity Name: <span id="activityName">{{ $activityName }}</span></h3>
             <h3>PR Number: <span id="prNumber">{{ $prNumber }}</span></h3>
         </div>
-        <h2>Pre-Procurement Requirements</h2>
-        <h3>Supply Unit</h3>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Requirements</th>
-                    <th>Date Submitted</th>
-                    <th>Date Returned</th>
-                    <th>Indicator</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>
-                        <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#requirementsModal1">
-                            View Details
-                        </button>
-                    </td>
-                    <td><input type="datetime-local" class="form-control" id="dateSubmitted1"></td>
-                    <td><input type="datetime-local" class="form-control" id="dateReturned1"></td>
-                    <td><span class="indicator" id="indicator1"></span></td>
-                </tr>
-                <tr>
-                    <td>
-                        <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#requirementsModal2">
-                            View Details
-                        </button>
-                    </td>
-                    <td><input type="datetime-local" class="form-control" id="dateSubmitted2"></td>
-                    <td><input type="datetime-local" class="form-control" id="dateReturned2"></td>
-                    <td><span class="indicator" id="indicator2"></span></td>
-                </tr>
-            </tbody>
-        </table>
-        <h3>Budget Unit</h3>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Requirements</th>
-                    <th>Date Submitted</th>
-                    <th>Date Returned</th>
-                    <th>Indicator</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>
-                        <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#requirementsModal3">
-                            View Details
-                        </button>
-                    </td>
-                    <td><input type="datetime-local" class="form-control" id="dateSubmitted3"></td>
-                    <td><input type="datetime-local" class="form-control" id="dateReturned3"></td>
-                    <td><span class="indicator" id="indicator3"></span></td>
-                </tr>
-            </tbody>
-        </table>
-        <h2>Post-Procurement Requirements</h2>
-        <h3>Supply Unit</h3>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Requirements</th>
-                    <th>Date Submitted</th>
-                    <th>Date Returned</th>
-                    <th>Indicator</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>
-                        <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#requirementsModal4">
-                            View Details
-                        </button>
-                    </td>
-                    <td><input type="datetime-local" class="form-control" id="dateSubmitted4"></td>
-                    <td><input type="datetime-local" class="form-control" id="dateReturned4"></td>
-                    <td><span class="indicator" id="indicator4"></span></td>
-                </tr>
-                <tr>
-                    <td>
-                        <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#requirementsModal5">
-                            View Details
-                        </button>
-                    </td>
-                    <td><input type="datetime-local" class="form-control" id="dateSubmitted5"></td>
-                    <td><input type="datetime-local" class="form-control" id="dateReturned5"></td>
-                    <td><span class="indicator" id="indicator5"></span></td>
-                </tr>
-            </tbody>
-        </table>
-        <h3>Accounting Unit</h3>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Requirements</th>
-                    <th>Date Submitted</th>
-                    <th>Date Returned</th>
-                    <th>Indicator</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>
-                        <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#requirementsModal6">
-                            View Details
-                        </button>
-                    </td>
-                    <td><input type="datetime-local" class="form-control" id="dateSubmitted6"></td>
-                    <td><input type="datetime-local" class="form-control" id="dateReturned6"></td>
-                    <td><span class="indicator" id="indicator6"></span></td>
-                </tr>
-            </tbody>
-        </table>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Budget Spent</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><input type="number" class="form-control" id="budgetSpent"></td>
-                </tr>
-            </tbody>
-        </table>
-        <div class="table-buttons">
-            <button type="button" class="btn btn-danger" id="cancelChanges">Cancel</button>
-            <button type="button" class="btn btn-success" id="saveChanges">Save</button>
-        </div>
+
+        <!-- Hidden fields to pass along the procurement id and activity -->
+        <input type="hidden" id="procurementId" name="procurement_id" value="{{ $prNumber }}">
+
+        <!-- The form (no <form> tag is required if we use AJAX, but wrapping it helps) -->
+        <form id="procurementForm">
+        @csrf
+        <!-- Hidden fields to pass along the procurement id and activity -->
+        <input type="hidden" id="procurementId" name="procurement_id" value="{{ $prNumber }}">
+            <h3>Supply Unit</h3> 
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Requirements</th>
+                        <th>Date Submitted</th>
+                        <th>Date Returned</th>
+                        <th>Indicator</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#requirementsModal1">
+                                View Details
+                            </button>
+                        </td>
+                        <td>
+                            <input type="datetime-local" class="form-control" id="dateSubmitted1" name="dt_submitted1" value="{{ $record->dt_submitted1 ?? '' }}">
+                        </td>
+                        <td>
+                            <input type="datetime-local" class="form-control" id="dateReturned1" name="dt_received1" value="{{ $record->dt_received1 ?? '' }}">
+                        </td>
+                        <td><span class="indicator" id="indicator1"></span></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#requirementsModal2">
+                                View Details
+                            </button>
+                        </td>
+                        <td>
+                            <input type="datetime-local" class="form-control" id="dateSubmitted2" name="dt_submitted2" value="{{ $record->dt_submitted2 ?? '' }}">
+                        </td>
+                        <td>
+                            <input type="datetime-local" class="form-control" id="dateReturned2" name="dt_received2" value="{{ $record->dt_received2 ?? '' }}">
+                        </td>
+                        <td><span class="indicator" id="indicator2"></span></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Budget Unit</h3>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Requirements</th>
+                        <th>Date Submitted</th>
+                        <th>Date Returned</th>
+                        <th>Indicator</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#requirementsModal3">
+                                View Details
+                            </button>
+                        </td>
+                        <td>
+                            <input type="datetime-local" class="form-control" id="dateSubmitted3" name="dt_submitted3" value="{{ $record->dt_submitted3 ?? '' }}">
+                        </td>
+                        <td>
+                            <input type="datetime-local" class="form-control" id="dateReturned3" name="dt_received3" value="{{ $record->dt_received3 ?? '' }}">
+                        </td>
+                        <td><span class="indicator" id="indicator3"></span></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2>Post-Procurement Requirements</h2>
+            <h3>Supply Unit</h3>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Requirements</th>
+                        <th>Date Submitted</th>
+                        <th>Date Returned</th>
+                        <th>Indicator</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#requirementsModal4">
+                                View Details
+                            </button>
+                        </td>
+                        <td>
+                            <input type="datetime-local" class="form-control" id="dateSubmitted4" name="dt_submitted4" value="{{ $record->dt_submitted4 ?? '' }}">
+                        </td>
+                        <td>
+                            <input type="datetime-local" class="form-control" id="dateReturned4" name="dt_received4" value="{{ $record->dt_received4 ?? '' }}">
+                        </td>
+                        <td><span class="indicator" id="indicator4"></span></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#requirementsModal5">
+                                View Details
+                            </button>
+                        </td>
+                        <td>
+                            <input type="datetime-local" class="form-control" id="dateSubmitted5" name="dt_submitted5" value="{{ $record->dt_submitted5 ?? '' }}">
+                        </td>
+                        <td>
+                            <input type="datetime-local" class="form-control" id="dateReturned5" name="dt_received5" value="{{ $record->dt_received5 ?? '' }}">
+                        </td>
+                        <td><span class="indicator" id="indicator5"></span></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Accounting Unit</h3>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Requirements</th>
+                        <th>Date Submitted</th>
+                        <th>Date Returned</th>
+                        <th>Indicator</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#requirementsModal6">
+                                View Details
+                            </button>
+                        </td>
+                        <td>
+                            <input type="datetime-local" class="form-control" id="dateSubmitted6" name="dt_submitted6" value="{{ $record->dt_submitted6 ?? '' }}">
+                        </td>
+                        <td>
+                            <input type="datetime-local" class="form-control" id="dateReturned6" name="dt_received6" value="{{ $record->dt_received6 ?? '' }}">
+                        </td>
+                        <td><span class="indicator" id="indicator6"></span></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Budget Spent</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <input type="number" class="form-control" id="budgetSpent" name="budget_spent" value="{{ $record->budget_spent ?? '' }}">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="table-buttons">
+                <button type="button" class="btn btn-danger" id="cancelChanges">Cancel</button>
+                <button type="button" class="btn btn-success" id="saveChanges">Save</button>
+            </div>
+        </form>
     </div>
 
     <!-- Modals -->
@@ -423,10 +471,38 @@
             </div>
         </div>
     </div>
+    <!-- Include jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Custom JS -->
     <script src="/js/menu.js"></script>
 
 <script src="/js/addProcurementForm.js"></script>
+
+<script>
+$(document).ready(function() {
+    $('#saveChanges').on('click', function(e) {
+        e.preventDefault();
+        var formData = $('#procurementForm').serialize();
+        $.ajax({
+            url: '{{ route("procurement.update") }}',
+            type: 'POST',
+            data: formData,
+            dataType: 'json',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function(response) {
+                alert(response.message);
+                location.reload();
+            },
+            error: function(xhr) {
+                console.error('Error saving data:', xhr.responseText);
+                alert('Error saving data. Check console for details.');
+            }
+        });
+    });
+});
+</script>
 </body>
 </html>
