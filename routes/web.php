@@ -84,4 +84,3 @@ Route::post('/procurementform/update', [ProcurementFormController::class, 'updat
 
 //FOR EDIT
 Route::get('/procurementform/{procurement_id}', [ProcurementFormController::class, 'edit'])->name('procurementform.edit');
-Route::post('/procurementform/{procurement_id}/update', [ProcurementFormController::class, 'update'])->name('procurementform.update');
