@@ -7,57 +7,58 @@ use Illuminate\Support\Facades\DB;
 class ProcurementFormController extends Controller
 {
     /**
-     * This is for when you directly open the form via ?pr_number=PR-2025-1234 (optional, but I included your code).
+     * Direct form access via ?pr_number=PR-XXXXXX (optional for new forms).
      */
     public function showForm(Request $request)
     {
         // Retrieve the PR number from query parameters
         $prNumber = $request->query('pr_number');
 
-        // Fetch procurement details from the 'procurement' table using ilcdb connection
+        // Fetch procurement details from 'procurement' using ilcdb connection
         $procurement = DB::connection('ilcdb')
             ->table('procurement')
             ->where('procurement_id', $prNumber)
             ->first();
 
-        // Pass activity name to the view (fallback to 'N/A' if not found)
+        // Activity name fallback
         $activityName = $procurement ? $procurement->activity : 'N/A';
 
-        // Pass the variables to the view
+        // Pass data to view
         return view('procurementform', [
             'prNumber'     => $prNumber,
             'activityName' => $activityName,
+            'procurement'  => $procurement,    // In case you want full procurement details
+            'procurementForm' => null           // No form record in this case (new form)
         ]);
     }
 
     /**
-     * This is for when you click Edit and open the procurementform/{procurement_id}.
+     * Edit existing procurement form.
      */
     public function edit($procurement_id)
     {
-        // Fetch procurement details from ilcdb
+        // Fetch procurement details
         $procurement = DB::connection('ilcdb')
             ->table('procurement')
             ->where('procurement_id', $procurement_id)
             ->first();
 
-        // If procurement not found, you may redirect or abort (optional safety)
+        // Redirect if procurement doesn't exist
         if (!$procurement) {
             return redirect('/homepage-ilcdb')->with('error', 'Procurement not found.');
         }
 
-        // Fetch procurementform details (assumes procurementform table is in default DB)
+        // Fetch or create procurementform record
         $procurementForm = DB::table('procurementform')
             ->where('procurement_id', $procurement_id)
             ->first();
 
-        // Create default procurementform entry if none exists
         if (!$procurementForm) {
             DB::table('procurementform')->insert([
                 'procurement_id' => $procurement_id,
                 'unit' => 'Supply Unit',
                 'status' => 'Pending',
-                'requirements_checked' => false,
+                'requirements_checked' => false
             ]);
 
             $procurementForm = DB::table('procurementform')
@@ -65,16 +66,17 @@ class ProcurementFormController extends Controller
                 ->first();
         }
 
-        // Pass all necessary data to the view
+        // Pass all data to the view, including prNumber and activityName
         return view('procurementform', [
+            'prNumber' => $procurement_id,
+            'activityName' => $procurement->activity,
             'procurement' => $procurement,
-            'procurementForm' => $procurementForm,
-            'activityName' => $procurement->activity,  // Pass for direct use if needed
+            'procurementForm' => $procurementForm
         ]);
     }
 
     /**
-     * This saves the changes when the form is submitted.
+     * Save form changes.
      */
     public function update(Request $request, $procurement_id)
     {
@@ -84,7 +86,7 @@ class ProcurementFormController extends Controller
             'date_returned' => 'nullable|date',
         ]);
 
-        // Determine status based on submitted/returned dates
+        // Determine status
         $status = 'Pending';
         if ($validated['date_submitted'] && !$validated['date_returned']) {
             $status = match ($validated['unit']) {
@@ -107,7 +109,7 @@ class ProcurementFormController extends Controller
                 'status' => $status,
             ]);
 
-        // Also sync the status back to procurement table in ilcdb
+        // Sync status back to procurement in ilcdb
         DB::connection('ilcdb')->table('procurement')
             ->where('procurement_id', $procurement_id)
             ->update(['status' => $status]);
