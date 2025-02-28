@@ -179,6 +179,18 @@
                 </tr>
             </tbody>
         </table>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Budget Spent</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><input type="number" class="form-control" id="budgetSpent"></td>
+                </tr>
+            </tbody>
+        </table>
         <div class="table-buttons">
             <button type="button" class="btn btn-danger" id="cancelChanges">Cancel</button>
             <button type="button" class="btn btn-success" id="saveChanges">Save</button>
