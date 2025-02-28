@@ -80,3 +80,4 @@ Route::middleware(['auth', PreventBackAfterLogout::class])->group(function () {
 
 // REDIRECTS TO SVP FORM (PR ID SPECIFIED)
 Route::get('/procurementform', [ProcurementFormController::class, 'showForm'])->name('procurementform');
+Route::post('/procurementform/update', [ProcurementFormController::class, 'update'])->name('procurement.update');
