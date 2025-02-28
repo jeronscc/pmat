@@ -177,10 +177,12 @@ const modal = document.getElementById('procurementDetailsModal');
                 document.getElementById('modalYear').textContent = data.year || 'N/A';
                 document.getElementById('modalDescription').textContent = data.description || 'N/A';
                 document.getElementById('modalActivity').textContent = data.activity || 'N/A';
+                // Set Edit button link to the procurementform page
+                const editButton = document.getElementById('editProcurementFormBtn');
+                editButton.href = `/procurementform/${procurement.procurement_id}`;
 
-                // Show the modal (Bootstrap modal method)
-                const bootstrapModal = new bootstrap.Modal(modal);
-                bootstrapModal.show();
+                const modal = new bootstrap.Modal(document.getElementById('procurementDetailsModal'));
+                modal.show();
             }
         })
         .catch(error => {
@@ -305,18 +307,3 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
 });
 
-function openProcurementModal(procurement) {
-    document.getElementById('modalProcurementCategory').textContent = procurement.procurement_category || 'N/A';
-    document.getElementById('modalProcurementNo').textContent = procurement.procurement_id || 'N/A';
-    document.getElementById('modalSaroNo').textContent = procurement.saro_no || 'N/A';
-    document.getElementById('modalYear').textContent = procurement.year || 'N/A';
-    document.getElementById('modalDescription').textContent = procurement.description || 'N/A';
-    document.getElementById('modalActivity').textContent = procurement.activity || 'N/A';
-
-    // Set Edit button link to the procurementform page
-    const editButton = document.getElementById('editProcurementFormBtn');
-    editButton.href = `/procurementform/${procurement.procurement_id}`;
-
-    const modal = new bootstrap.Modal(document.getElementById('procurementDetailsModal'));
-    modal.show();
-}
