@@ -133,30 +133,30 @@
                         </table>
                     </div>
                 </div>
-               <div class="modal fade" id="procurementDetailsModal" tabindex="-1" aria-labelledby="procurementDetailsModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="procurementDetailsModalLabel">Procurement Details</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div class="modal fade" id="procurementDetailsModal" tabindex="-1" aria-labelledby="procurementDetailsModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="procurementDetailsModalLabel">Procurement Details</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p><strong>Procurement Category:</strong> <span id="modalProcurementCategory"></span></p>
+                                <p><strong>Procurement No:</strong> <span id="modalProcurementNo"></span></p>
+                                <p><strong>SARO No:</strong> <span id="modalSaroNo"></span></p>
+                                <p><strong>Year:</strong> <span id="modalYear"></span></p>
+                                <p><strong>Description:</strong> <span id="modalDescription"></span></p>
+                                <p><strong>Activity:</strong> <span id="modalActivity"></span></p>
+                            </div>
+                            <div class="modal-footer">
+                                <!-- Cancel Button -->
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <!-- Edit Button (still needs implementation) -->
+                                <button type="button" class="btn btn-primary">Edit</button>
+                            </div>
                         </div>
-                        <div class="modal-body">
-                            <p><strong>Procurement Category:</strong> <span id="modalProcurementCategory"></span></p>
-                            <p><strong>Procurement No:</strong> <span id="modalProcurementNo"></span></p>
-                            <p><strong>SARO No:</strong> <span id="modalSaroNo"></span></p>
-                            <p><strong>Year:</strong> <span id="modalYear"></span></p>
-                            <p><strong>Description:</strong> <span id="modalDescription"></span></p>
-                            <p><strong>Activity:</strong> <span id="modalActivity"></span></p>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>       
-                <!-- Updated Edit Button -->
-                <a id="editProcurementFormBtn" class="btn btn-primary" href="#">Edit</a>
-            </div>
-        </div>
-    </div>
-</div>
-
+                    </div>
+                </div>
             </section>
         </div>
             

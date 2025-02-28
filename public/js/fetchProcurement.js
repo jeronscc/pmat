@@ -155,11 +155,13 @@ function fetchProcurementRequirements(saroNo) {
 
 // Function to open modal and display procurement details
 function openProcurementModal(item) {
-    const procurementId = item.procurement_id; // Get procurement ID from clicked item
-    const modal = document.getElementById('procurementDetailsModal');
+const procurementId = item.procurement_id; // Get procurement ID from clicked item
+const modal = document.getElementById('procurementDetailsModal');
 
     // Fetch detailed data from the API using the procurement_id
+    // Fetch detailed data from the API using the procurement_id
     const url = `/api/fetch-procurement-details?procurement_id=${procurementId}`;
+
 
     fetch(url)
         .then(response => response.json())
@@ -176,11 +178,7 @@ function openProcurementModal(item) {
                 document.getElementById('modalDescription').textContent = data.description || 'N/A';
                 document.getElementById('modalActivity').textContent = data.activity || 'N/A';
 
-                // Set Edit button link to the procurementform page (fixing the variable reference)
-                const editButton = document.getElementById('editProcurementFormBtn');
-                editButton.href = `/procurementform/${data.procurement_id}`;
-
-                // Show modal (no need to re-declare 'modal')
+                // Show the modal (Bootstrap modal method)
                 const bootstrapModal = new bootstrap.Modal(modal);
                 bootstrapModal.show();
             }
@@ -190,7 +188,6 @@ function openProcurementModal(item) {
             alert('Failed to load procurement details.');
         });
 }
-
 
 
 // Fetch procurement data when the page loads (optional)
@@ -307,4 +304,3 @@ window.addEventListener('DOMContentLoaded', (event) => {
     });
 
 });
-
