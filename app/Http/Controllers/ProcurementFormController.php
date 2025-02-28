@@ -30,7 +30,7 @@ class ProcurementFormController extends Controller
     public function edit($procurement_id)
     {
         // Fetch procurement details
-        $procurement = DB::table('procurement')->where('procurement_id', $procurement_id)->first();
+        $procurement = DB::connection('ilcdb')->table('procurement')->where('procurement_id', $procurement_id)->first();
 
         // Fetch or create procurementform details
         $procurementForm = DB::table('procurementform')
