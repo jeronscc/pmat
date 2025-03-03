@@ -32,7 +32,7 @@ Route::get('/spark', function () {
 })->middleware('auth');
 
 Route::get('/honoraria-form', [HonorariaController::class, 'showHonorariaForm']);
-Route::get('/otherexpense-form', [HonorariaController::class, 'showOtherexpenseForm']);
+Route::get('/otherexpense-form', [OtherexpenseController::class, 'showOtherexpenseForm']);
 
 Route::get('/procurementform', function () {
     return view('procurementform');
