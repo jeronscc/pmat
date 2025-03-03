@@ -32,18 +32,16 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($checklistItems as $item)
                 <tr>
                     <td>
-                        <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#requirementsModal{{ $item->id }}">
+                        <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#requirementsModal">
                             View Details
                         </button>
                     </td>
-                    <td><input type="datetime-local" class="form-control" id="dateSubmitted{{ $item->id }}"></td>
-                    <td><input type="datetime-local" class="form-control" id="dateReturned{{ $item->id }}"></td>
-                    <td><span class="indicator" id="indicator{{ $item->id }}"></span></td>
+                    <td><input type="datetime-local" class="form-control" id="dateSubmitted"></td>
+                    <td><input type="datetime-local" class="form-control" id="dateReturned"></td>
+                    <td><span class="indicator" id="indicator"></span></td>
                 </tr>
-                @endforeach
             </tbody>
         </table>
         <div class="table-buttons">
@@ -53,70 +51,68 @@
     </div>
 
     <!-- Modals -->
-    @foreach ($checklistItems as $item)
-    <div class="modal fade" id="requirementsModal{{ $item->id }}" tabindex="-1" aria-labelledby="modalTitle{{ $item->id }}" aria-hidden="true">
+    <div class="modal fade" id="requirementsModal" tabindex="-1" aria-labelledby="modalTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header bg-dark text-white">
-                    <h5 class="modal-title" id="modalTitle{{ $item->id }}">REQUIREMENTS DETAILS</h5>
+                    <h5 class="modal-title" id="modalTitle">REQUIREMENTS DETAILS</h5>
                 </div>
                 <div class="modal-body">
                     <form>
-                        <!-- Checklist for Button {{ $item->id }} -->
+                        <!-- Checklist for Button  -->
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="ors{{ $item->id }}">
-                            <label class="form-check-label" for="ors{{ $item->id }}">ORS</label>
+                            <input class="form-check-input" type="checkbox" id="ors">
+                            <label class="form-check-label" for="ors">ORS</label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="dv{{ $item->id }}">
-                            <label class="form-check-label" for="dv{{ $item->id }}">DV</label>
+                            <input class="form-check-input" type="checkbox" id="dv">
+                            <label class="form-check-label" for="dv">DV</label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="contract{{ $item->id }}">
-                            <label class="form-check-label" for="contract{{ $item->id }}">Service Contract</label>
+                            <input class="form-check-input" type="checkbox" id="contract">
+                            <label class="form-check-label" for="contract">Service Contract</label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="classification{{ $item->id }}">
-                            <label class="form-check-label" for="classification{{ $item->id }}">Certificate Honoraria Classification</label>
+                            <input class="form-check-input" type="checkbox" id="classification">
+                            <label class="form-check-label" for="classification">Certificate Honoraria Classification</label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="report{{ $item->id }}">
-                            <label class="form-check-label" for="report{{ $item->id }}">Terminal Report</label>
+                            <input class="form-check-input" type="checkbox" id="report">
+                            <label class="form-check-label" for="report">Terminal Report</label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="attendance{{ $item->id }}">
-                            <label class="form-check-label" for="attendance{{ $item->id }}">Attendance</label>
+                            <input class="form-check-input" type="checkbox" id="attendance">
+                            <label class="form-check-label" for="attendance">Attendance</label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="resume{{ $item->id }}">
-                            <label class="form-check-label" for="resume{{ $item->id }}">Resume/CV</label>
+                            <input class="form-check-input" type="checkbox" id="resume">
+                            <label class="form-check-label" for="resume">Resume/CV</label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="govid{{ $item->id }}">
-                            <label class="form-check-label" for="govid{{ $item->id }}">Government ID</label>
+                            <input class="form-check-input" type="checkbox" id="govid">
+                            <label class="form-check-label" for="govid">Government ID</label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="payslip{{ $item->id }}">
-                            <label class="form-check-label" for="payslip{{ $item->id }}">Payslip/Certificate of Gross Income</label>
+                            <input class="form-check-input" type="checkbox" id="payslip">
+                            <label class="form-check-label" for="payslip">Payslip/Certificate of Gross Income</label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="bank{{ $item->id }}">
-                            <label class="form-check-label" for="bank{{ $item->id }}">TIN and Bank Account details</label>
+                            <input class="form-check-input" type="checkbox" id="bank">
+                            <label class="form-check-label" for="bank">TIN and Bank Account details</label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="cert{{ $item->id }}">
-                            <label class="form-check-label" for="cert{{ $item->id }}">Certificate of Services Rendered</label>
+                            <input class="form-check-input" type="checkbox" id="cert">
+                            <label class="form-check-label" for="cert">Certificate of Services Rendered</label>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-success" id="saveBtn{{ $item->id }}">Save</button>
+                    <button type="button" class="btn btn-success" id="saveBtn">Save</button>
                 </div>
             </div>
         </div>
     </div>
-    @endforeach
 
     <script src="script.js"></script>
 </body>
