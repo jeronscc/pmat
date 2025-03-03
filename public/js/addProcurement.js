@@ -90,3 +90,17 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .catch(error => console.error('Error fetching SARO data:', error));
 });
+
+// edit procurement redirection
+document.addEventListener('DOMContentLoaded', function() {
+    // Attach event listener to the modal's Edit button
+    document.querySelector('#procurementDetailsModal .btn-primary').addEventListener('click', function() {
+        // Get values from the modal's spans
+        var prNumber = document.getElementById('modalProcurementNo').textContent.trim();
+        var activity = document.getElementById('modalActivity').textContent.trim();
+
+        // Redirect to the procurement form page with these values in the query string
+        window.location.href = '/procurementform?pr_number=' + encodeURIComponent(prNumber) +
+                                 '&activity=' + encodeURIComponent(activity);
+    });
+});

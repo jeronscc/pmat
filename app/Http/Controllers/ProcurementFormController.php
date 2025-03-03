@@ -25,6 +25,11 @@ class ProcurementFormController extends Controller
         return view('procurementform', [
             'prNumber'     => $prNumber,
             'activityName' => $activityName,
+            // Optionally, if you want to prefill the update form from a separate table:
+            'record'       => DB::connection('ilcdb')
+                              ->table('procurement_form')
+                              ->where('procurement_id', $prNumber)
+                              ->first()           
         ]);
     }
     
