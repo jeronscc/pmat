@@ -73,8 +73,8 @@
                 <div class="card shadow-lg p-4">
     <div class="container mt-5">
         <div class="activity-info">
+        <h3>PR Number: <span id="prNumber">{{ $prNumber }}</span></h3>
             <h3>Activity Name: <span id="activityName">{{ $activityName }}</span></h3>
-            <h3>PR Number: <span id="prNumber">{{ $prNumber }}</span></h3>
         </div>
         <hr class="my-4" style="border-top: 2px solid rgba(0, 0, 0, 0.6);">
         <!-- Hidden fields to pass along the procurement id and activity -->

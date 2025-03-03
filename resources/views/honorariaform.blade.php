@@ -14,13 +14,18 @@
     <link rel="stylesheet" href="/css/sidenav.css">
 </head>
 <body>
-    <div class="container mt-5">
+<div class="container my-5">
+        <div class="row justify-content-center">
+        <div class="container-fluid my-0"> 
+                <div class="card shadow-lg p-4">
+    <div class="container mt-0">
         <div class="activity-info">
             <h3>Project: <span id="project">Sample Activity</span></h3>
             <h3>Activity Name: <span id="activityName">Sample Activity</span></h3>
             <h3>PR/Transaction Number: <span id="prtrNumber">12345</span></h3>
         </div>
-        <h2>Honoraria for Speakers Requirements</h2>
+        <hr class="my-4" style="border-top: 2px solid rgba(0, 0, 0, 0.6);">
+        <h2 class="fw-bold">Honoraria for Speakers Requirements</h2>
         <h3>Budget Unit</h3>
         <table class="table">
             <thead>
@@ -44,6 +49,25 @@
                 </tr>
             </tbody>
         </table>
+        <div class="row">
+            <div class="col-12 col-md-6 col-lg-4">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Budget Spent</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <input type="number" class="form-control" id="budgetSpent" name="budget_spent" 
+                                value="{{ $record->budget_spent ?? '' }}">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
         <div class="table-buttons">
             <button type="button" class="btn btn-danger" id="cancelChanges">Cancel</button>
             <button type="button" class="btn btn-success" id="saveChanges">Save</button>
@@ -113,7 +137,10 @@
             </div>
         </div>
     </div>
-
+    </div>
+            </div>
+        </div>
+    </div>
     <script src="script.js"></script>
 </body>
 </html>
