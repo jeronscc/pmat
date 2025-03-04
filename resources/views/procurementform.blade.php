@@ -109,7 +109,7 @@
                         <td>
                             <input type="datetime-local" class="form-control" id="dateReturned1" name="dt_received1" value="{{ $record->dt_received1 ?? '' }}">
                         </td>
-                        <td><span class="indicator" id="indicator1"></span></td>
+                        <td><span class="indicator" id="indicator1" style="display: inline-block; width: 80px; padding: 5px; border-radius: 5px; text-align: center;"></span></td>
                     </tr>
                     <tr>
                         <td>
@@ -123,7 +123,7 @@
                         <td>
                             <input type="datetime-local" class="form-control" id="dateReturned2" name="dt_received2" value="{{ $record->dt_received2 ?? '' }}">
                         </td>
-                        <td><span class="indicator" id="indicator2"></span></td>
+                        <td><span class="indicator" id="indicator2"  style="display: inline-block; width: 80px; padding: 5px; border-radius: 5px; text-align: center;"></span></td>
                     </tr>
                 </tbody>
             </table>
@@ -151,7 +151,7 @@
                         <td>
                             <input type="datetime-local" class="form-control" id="dateReturned3" name="dt_received3" value="{{ $record->dt_received3 ?? '' }}">
                         </td>
-                        <td><span class="indicator" id="indicator3"></span></td>
+                        <td><span class="indicator" id="indicator3"  style="display: inline-block; width: 80px; padding: 5px; border-radius: 5px; text-align: center;"></span></td>
                     </tr>
                 </tbody>
             </table>
@@ -180,7 +180,7 @@
                         <td>
                             <input type="datetime-local" class="form-control" id="dateReturned4" name="dt_received4" value="{{ $record->dt_received4 ?? '' }}">
                         </td>
-                        <td><span class="indicator" id="indicator4"></span></td>
+                        <td><span class="indicator" id="indicator4" style="display: inline-block; width: 80px; padding: 5px; border-radius: 5px; text-align: center;"></span></td>
                     </tr>
                     <tr>
                         <td>
@@ -194,7 +194,7 @@
                         <td>
                             <input type="datetime-local" class="form-control" id="dateReturned5" name="dt_received5" value="{{ $record->dt_received5 ?? '' }}">
                         </td>
-                        <td><span class="indicator" id="indicator5"></span></td>
+                        <td><span class="indicator" id="indicator5" style="display: inline-block; width: 80px; padding: 5px; border-radius: 5px; text-align: center;"></span></td>
                     </tr>
                 </tbody>
             </table>
@@ -222,7 +222,7 @@
                         <td>
                             <input type="datetime-local" class="form-control" id="dateReturned6" name="dt_received6" value="{{ $record->dt_received6 ?? '' }}">
                         </td>
-                        <td><span class="indicator" id="indicator6"></span></td>
+                        <td><span class="indicator" id="indicator6" style="display: inline-block; width: 80px; padding: 5px; border-radius: 5px; text-align: center;"></span></td>
                     </tr>
                 </tbody>
             </table>
@@ -494,9 +494,29 @@
 
 <script>
 $(document).ready(function() {
+    // Initialize the status tracking system
+    initializeStatusTracking();
+    
     $('#saveChanges').on('click', function(e) {
         e.preventDefault();
+
+        // Serialize form data
         var formData = $('#procurementForm').serialize();
+        
+        // Add a flag to indicate which stage is active
+        // Get the highest stage with a date submitted
+        var activeStage = 1;
+        for (let i = 6; i >= 1; i--) {
+            if (document.getElementById(`dateSubmitted${i}`).value) {
+                activeStage = i;
+                break;
+            }
+        }
+        
+        // Add the active stage to the form data
+        formData += '&activeStage=' + activeStage;
+
+        // AJAX request to save data on the server
         $.ajax({
             url: '{{ route("procurement.update") }}',
             type: 'POST',
@@ -507,6 +527,7 @@ $(document).ready(function() {
             },
             success: function(response) {
                 alert(response.message);
+                // Reload the page to reflect updated data
                 location.reload();
             },
             error: function(xhr) {
@@ -515,7 +536,79 @@ $(document).ready(function() {
             }
         });
     });
+    
+    // Function to initialize status tracking
+    function initializeStatusTracking() {
+        function updateIndicator(dateSubmittedId, dateReturnedId, indicatorId, isActive) {
+            const dateSubmitted = document.getElementById(dateSubmittedId).value;
+            const dateReturned = document.getElementById(dateReturnedId).value;
+            const indicator = document.getElementById(indicatorId);
+            
+            if (!isActive) {
+                // If not the active stage, keep indicator clear regardless of dates
+                indicator.style.backgroundColor = "transparent";
+                indicator.textContent = "";
+                return;
+            }
+            
+            if (dateSubmitted && !dateReturned) {
+                // Pending
+                indicator.style.backgroundColor = "grey";
+                indicator.textContent = "Pending";
+            } else if (dateSubmitted && dateReturned) {
+                // Ongoing
+                indicator.style.backgroundColor = "yellow";
+                indicator.textContent = "Ongoing";
+            } else {
+                // Default (No Status)
+                indicator.style.backgroundColor = "transparent";
+                indicator.textContent = "";
+            }
+        }
+        
+        // Find the active stage (highest stage with submitted date)
+        let activeStage = 1;
+        for (let i = 6; i >= 1; i--) {
+            if (document.getElementById(`dateSubmitted${i}`).value) {
+                activeStage = i;
+                break;
+            }
+        }
+        
+        // Update all indicators, only showing the active one
+        for (let i = 1; i <= 6; i++) {
+            const dateSubmitted = document.getElementById(`dateSubmitted${i}`);
+            const dateReturned = document.getElementById(`dateReturned${i}`);
+            
+            if (dateSubmitted && dateReturned) {
+                // Only the active stage should display its indicator
+                updateIndicator(`dateSubmitted${i}`, `dateReturned${i}`, `indicator${i}`, i === activeStage);
+                
+                // Add change event listeners
+                dateSubmitted.addEventListener("change", function() {
+                    // When any dateSubmitted changes, recalculate the active stage
+                    let newActiveStage = 1;
+                    for (let j = 6; j >= 1; j--) {
+                        if (document.getElementById(`dateSubmitted${j}`).value) {
+                            newActiveStage = j;
+                            break;
+                        }
+                    }
+                    
+                    // Update all indicators with the new active stage
+                    for (let j = 1; j <= 6; j++) {
+                        updateIndicator(`dateSubmitted${j}`, `dateReturned${j}`, `indicator${j}`, j === newActiveStage);
+                    }
+                });
+                
+                dateReturned.addEventListener("change", function() {
+                    // When dateReturned changes, update just that indicator
+                    updateIndicator(`dateSubmitted${i}`, `dateReturned${i}`, `indicator${i}`, i === activeStage);
+                });
+            }
+        }
+    }
 });
-</script>
+    </script>
 </body>
 </html>
