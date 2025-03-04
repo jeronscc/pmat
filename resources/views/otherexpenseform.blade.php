@@ -13,13 +13,18 @@
     <link rel="stylesheet" href="/css/sidenav.css">
 </head>
 <body>
-    <div class="container mt-5">
+<div class="container my-5">
+        <div class="row justify-content-center">
+        <div class="container-fluid my-0"> 
+                <div class="card shadow-lg p-4">
+    <div class="container mt-0">
         <div class="activity-info">
             <h3>Project: <span id="project">Sample Activity</span></h3>
             <h3>Activity Name: <span id="activityName">Sample Activity</span></h3>
             <h3>PR/Transaction Number: <span id="prtrNumber">12345</span></h3>
         </div>
-        <h2>Daily Travel Expenses Requirements</h2>
+        <hr class="my-4" style="border-top: 2px solid rgba(0, 0, 0, 0.6);">
+        <h2 class="fw-bold">Daily Travel Expenses Requirements</h2>
         <h3>Budget Unit</h3>
         <table class="table">
             <thead>
@@ -65,6 +70,10 @@
         <div class="table-buttons">
             <button type="button" class="btn btn-danger" id="cancelChanges">Cancel</button>
             <button type="button" class="btn btn-success" id="saveChanges">Save</button>
+        </div>
+    </div>
+    </div>
+            </div>
         </div>
     </div>
 
