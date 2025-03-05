@@ -491,8 +491,5 @@
     <script src="/js/menu.js"></script>
     <script src="/js/procurementformIndicator.js"></script>
     <script src="/js/addProcurementForm.js"></script>
-
-
-
 </body>
 </html>
