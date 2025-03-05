@@ -2,8 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\userController;
-use App\Http\Controllers\HonorariaController;
-use App\Http\Controllers\OtherexpenseController;
 use App\Http\Middleware\PreventBackAfterLogout;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\ProcurementFormController;
@@ -32,12 +30,6 @@ Route::get('/spark', function () {
     return view('spark');
 })->middleware('auth');
 
-Route::get('/honoraria-form', [HonorariaController::class, 'showHonorariaForm']);
-Route::get('/otherexpense-form', [OtherexpenseController::class, 'showOtherexpenseForm']);
-
-Route::get('/procurementform', function () {
-    return view('procurementform');
-});
 Route::post('/login', [userController::class, 'login']);
 Route::post('/logout', [UserController::class, 'logout'])->name('logout');
 
