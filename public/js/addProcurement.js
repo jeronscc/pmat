@@ -102,16 +102,26 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// edit procurement redirection
 document.addEventListener('DOMContentLoaded', function() {
     // Attach event listener to the modal's Edit button
     document.querySelector('#procurementDetailsModal .btn-primary').addEventListener('click', function() {
         // Get values from the modal's spans
         var prNumber = document.getElementById('modalProcurementNo').textContent.trim();
         var activity = document.getElementById('modalActivity').textContent.trim();
+        var category = document.getElementById('modalProcurementCategory').textContent.trim();
 
-        // Redirect to the procurement form page with these values in the query string
-        window.location.href = '/procurementform?pr_number=' + encodeURIComponent(prNumber) +
-                                 '&activity=' + encodeURIComponent(activity);
+        // Determine the redirect URL based on the category
+        var redirectUrl = '/procurementform'; // default for SVP
+        if (category === 'Honoraria') {
+            redirectUrl = '/honorariaform';
+        } else if (category === 'Other expense') {
+            redirectUrl = '/otherexpenseform';
+        }
+        
+        // Append query parameters to the URL
+        redirectUrl += '?pr_number=' + encodeURIComponent(prNumber) + '&activity=' + encodeURIComponent(activity);
+        
+        // Redirect to the desired URL
+        window.location.href = redirectUrl;
     });
 });
