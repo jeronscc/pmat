@@ -228,13 +228,6 @@
                                 <input type="text" class="form-control" id="pr-number" placeholder="Enter PR Number">
                             </div>
                             <div class="mb-3">
-                                <label for="saro-number" class="form-label">SARO NUMBER</label>
-                                <select class="form-select" id="saro-number">
-                                    <option value="" disabled selected>Select SARO Number</option>
-                                    <!-- SARO options will be populated dynamically -->
-                                </select>
-                            </div>
-                            <div class="mb-3">
                                 <label for="pr-year" class="form-label">YEAR</label>
                                 <select class="form-select" id="pr-year" placeholder="Enter Activity">
                                     <option value="" disabled selected>Select Year</option>
@@ -244,6 +237,13 @@
                                     echo "<option value=\"$year\">$year</option>";
                                     }
                                     ?>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="saro-number" class="form-label">SARO NUMBER</label>
+                                <select class="form-select" id="saro-number">
+                                    <option value="" disabled selected>Select SARO Number</option>
+                                    <!-- SARO options will be populated dynamically -->
                                 </select>
                             </div>
                             <div class="mb-3">
