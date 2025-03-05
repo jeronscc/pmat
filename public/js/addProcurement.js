@@ -66,29 +66,40 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // OPTIONS FOR EXISTING SARO IN PROC MODAL
 document.addEventListener('DOMContentLoaded', function() {
-    // Populate SARO options for the current year
-    const currentYear = new Date().getFullYear();
-    fetch(`/api/fetch-saro-ilcdb?year=${currentYear}`)
-        .then(response => response.json())
-        .then(data => {
-            const saroSelect = document.getElementById('saro-number');
-            saroSelect.innerHTML = '<option value="" disabled selected>Select SARO Number</option>'; // Clear existing options
+    const yearSelect = document.getElementById('pr-year');
+    const saroSelect = document.getElementById('saro-number');
+    
+    // Function to fetch SARO data based on selected year
+    function fetchSaroByYear(year) {
+        fetch(`/api/fetch-saro-ilcdb?year=${year}`)
+            .then(response => response.json())
+            .then(data => {
+                saroSelect.innerHTML = '<option value="" disabled selected>Select SARO Number</option>'; // Clear existing options
 
-            if (data.length > 0) {
-                data.forEach(saro => {
-                    const option = document.createElement('option');
-                    option.value = saro.saro_no;
-                    option.textContent = saro.saro_no;
-                    saroSelect.appendChild(option);
-                });
-            } else {
-                const emptyOption = document.createElement('option');
-                emptyOption.value = '';
-                emptyOption.textContent = 'No SARO records found for the current year';
-                saroSelect.appendChild(emptyOption);
-            }
-        })
-        .catch(error => console.error('Error fetching SARO data:', error));
+                if (data.length > 0) {
+                    data.forEach(saro => {
+                        const option = document.createElement('option');
+                        option.value = saro.saro_no;
+                        option.textContent = saro.saro_no;
+                        saroSelect.appendChild(option);
+                    });
+                } else {
+                    const emptyOption = document.createElement('option');
+                    emptyOption.value = '';
+                    emptyOption.textContent = 'No SARO records found for the selected year';
+                    saroSelect.appendChild(emptyOption);
+                }
+            })
+            .catch(error => console.error('Error fetching SARO data:', error));
+    }
+
+    // Listen for the year selection change
+    yearSelect.addEventListener('change', function() {
+        const selectedYear = this.value;
+        if (selectedYear) {
+            fetchSaroByYear(selectedYear); // Fetch SARO numbers for the selected year
+        }
+    });
 });
 
 // edit procurement redirection
