@@ -102,6 +102,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+// edit procurement redirection
 document.addEventListener('DOMContentLoaded', function() {
     // Attach event listener to the modal's Edit button
     document.querySelector('#procurementDetailsModal .btn-primary').addEventListener('click', function() {
