@@ -106,3 +106,4 @@ Route::get('/search-procurement-ilcdb', function (Request $request) {
 Route::any('/add-saro-ilcdb', [SaroController::class, 'addSaro'])->name('add-saro-ilcdb');
 Route::any('/add-procurement-ilcdb', [ProcurementController::class, 'addProcurement'])->name('addProcurement');
 Route::get('/fetch-procurement-details', [ProcurementController::class, 'fetchProcurementDetails'])->name('fetchProcurementDetails');
+Route::post('/procurement/update', [ProcurementFormController::class, 'update']);
