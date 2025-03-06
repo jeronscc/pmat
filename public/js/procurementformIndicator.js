@@ -1,15 +1,21 @@
 document.addEventListener('DOMContentLoaded', function() {
     initializeStatusTracking();
-    toggleBudgetSpent(); // Initial check on page load
+    toggleBudgetSpent();  // Initial check on page load to lock/unlock budget spent
 
-    const procurementUpdateUrl = "/api/procurement/update"; // Your existing API route
+    const procurementUpdateUrl = "/api/procurement/update";  // Use the API route for procurement update
 
     document.getElementById('saveChanges').addEventListener('click', function(e) {
         e.preventDefault();
 
         let formData = new FormData(document.getElementById('procurementForm'));
 
-        let activeStage = getActiveStage();
+        let activeStage = 1;
+        for (let i = 6; i >= 1; i--) {
+            if (document.getElementById(`dateSubmitted${i}`).value) {
+                activeStage = i;
+                break;
+            }
+        }
         formData.append('activeStage', activeStage);
 
         fetch(procurementUpdateUrl, {
@@ -31,141 +37,137 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     function initializeStatusTracking() {
+        function updateIndicator(dateSubmittedId, dateReturnedId, indicatorId, isActive) {
+            const dateSubmitted = document.getElementById(dateSubmittedId).value;
+            const dateReturned = document.getElementById(dateReturnedId).value;
+            const indicator = document.getElementById(indicatorId);
+
+            if (!isActive) {
+                indicator.style.backgroundColor = "transparent";
+                indicator.textContent = "";
+                return;
+            }
+
+            if (dateSubmitted && !dateReturned) {
+                indicator.style.backgroundColor = "green";
+                indicator.textContent = " ";
+            } else if (dateSubmitted && dateReturned) {
+                indicator.style.backgroundColor = "green";
+                indicator.textContent = " ";
+            } else {
+                indicator.style.backgroundColor = "transparent";
+                indicator.textContent = "";
+            }
+        }
+
         let activeStage = 1;
-        let allCompleted = true;
+        for (let i = 6; i >= 1; i--) {
+            if (document.getElementById(`dateSubmitted${i}`).value) {
+                activeStage = i;
+                break;
+            }
+        }
 
         for (let i = 1; i <= 6; i++) {
             const dateSubmitted = document.getElementById(`dateSubmitted${i}`);
             const dateReturned = document.getElementById(`dateReturned${i}`);
 
-            const isSubmitted = !!dateSubmitted?.value;
-            const isReturned = !!dateReturned?.value;
-            const isCompleted = isSubmitted && isReturned;
-
-            if (isCompleted) {
-                lockRow(i);
-                hideIndicator(i);
-            } else {
-                allCompleted = false;
-                if (activeStage === 1 && !isSubmitted) {
-                    activeStage = i;
-                    unlockRow(i);
-                    showIndicator(i);
-                } else {
-                    lockRow(i);
-                    hideIndicator(i);
-                }
-            }
-
             if (dateSubmitted && dateReturned) {
-                dateSubmitted.addEventListener('change', refreshStatus);
-                dateReturned.addEventListener('change', refreshStatus);
+                updateIndicator(`dateSubmitted${i}`, `dateReturned${i}`, `indicator${i}`, i === activeStage);
+
+                dateSubmitted.addEventListener("change", function() {
+                    let newActiveStage = 1;
+                    for (let j = 6; j >= 1; j--) {
+                        if (document.getElementById(`dateSubmitted${j}`).value) {
+                            newActiveStage = j;
+                            break;
+                        }
+                    }
+
+                    for (let j = 1; j <= 6; j++) {
+                        updateIndicator(`dateSubmitted${j}`, `dateReturned${j}`, `indicator${j}`, j === newActiveStage);
+                    }
+                    toggleBudgetSpent();
+                });
+
+                dateReturned.addEventListener("change", function() {
+                    updateIndicator(`dateSubmitted${i}`, `dateReturned${i}`, `indicator${i}`, i === activeStage);
+                    toggleBudgetSpent();
+                });
             }
         }
+    }
 
-        if (allCompleted) {
-            lockEntireForm();
-            hideAllIndicators();
+    function toggleStageFields(stageNumber) {
+        const dateReturned = document.getElementById(`dateReturned${stageNumber}`);
+        const dateSubmittedNext = document.getElementById(`dateSubmitted${stageNumber + 1}`);
+        const dateReturnedNext = document.getElementById(`dateReturned${stageNumber + 1}`);
+
+        if (dateReturned.value) {
+            dateSubmittedNext.removeAttribute('readonly');
+            dateReturnedNext.removeAttribute('readonly');
+        } else {
+            dateSubmittedNext.setAttribute('readonly', 'true');
+            dateReturnedNext.setAttribute('readonly', 'true');
         }
     }
 
-    function refreshStatus() {
-        let activeStage = getActiveStage();
+    for (let i = 1; i <= 5; i++) {
+        const dateReturnedField = document.getElementById(`dateReturned${i}`);
+        dateReturnedField.addEventListener('change', function() {
+            toggleStageFields(i);
+        });
 
-        for (let i = 1; i <= 6; i++) {
-            const isSubmitted = !!document.getElementById(`dateSubmitted${i}`).value;
-            const isReturned = !!document.getElementById(`dateReturned${i}`).value;
-            const isCompleted = isSubmitted && isReturned;
-
-            if (isCompleted) {
-                lockRow(i);
-                hideIndicator(i);
-            } else if (i === activeStage) {
-                unlockRow(i);
-                showIndicator(i);
-            } else {
-                lockRow(i);
-                hideIndicator(i);
-            }
-        }
-
-        toggleBudgetSpent();
-    }
-
-    function getActiveStage() {
-        for (let i = 1; i <= 6; i++) {
-            if (!document.getElementById(`dateSubmitted${i}`).value) {
-                return i;
-            }
-        }
-        return 7;  // If all are filled, we treat stage 7 as "done".
-    }
-
-    function lockRow(row) {
-        document.getElementById(`dateSubmitted${row}`).setAttribute('readonly', 'true');
-        document.getElementById(`dateReturned${row}`).setAttribute('readonly', 'true');
-    }
-
-    function unlockRow(row) {
-        document.getElementById(`dateSubmitted${row}`).removeAttribute('readonly');
-        document.getElementById(`dateReturned${row}`).removeAttribute('readonly');
-    }
-
-    function showIndicator(row) {
-        const indicator = document.getElementById(`indicator${row}`);
-        if (indicator) {
-            indicator.style.backgroundColor = "green";
-            indicator.textContent = " ";
+        if (!document.getElementById(`dateReturned${i}`).value) {
+            document.getElementById(`dateSubmitted${i + 1}`).setAttribute('readonly', 'true');
+            document.getElementById(`dateReturned${i + 1}`).setAttribute('readonly', 'true');
         }
     }
 
-    function hideIndicator(row) {
-        const indicator = document.getElementById(`indicator${row}`);
-        if (indicator) {
-            indicator.style.backgroundColor = "transparent";
-            indicator.textContent = "";
-        }
+    if (!document.getElementById('dateReturned1').value) {
+        document.getElementById('dateSubmitted2').setAttribute('readonly', 'true');
+        document.getElementById('dateReturned2').setAttribute('readonly', 'true');
     }
 
-    function hideAllIndicators() {
-        for (let i = 1; i <= 6; i++) {
-            hideIndicator(i);
-        }
+    if (!document.getElementById('dateReturned2').value) {
+        document.getElementById('dateSubmitted3').setAttribute('readonly', 'true');
+        document.getElementById('dateReturned3').setAttribute('readonly', 'true');
     }
 
-    function lockEntireForm() {
-        for (let i = 1; i <= 6; i++) {
-            lockRow(i);
-        }
-
-        const budgetSpentField = document.getElementById('budgetSpent');
-        if (budgetSpentField) {
-            budgetSpentField.setAttribute('readonly', 'true');
-        }
+    if (!document.getElementById('dateReturned3').value) {
+        document.getElementById('dateSubmitted4').setAttribute('readonly', 'true');
+        document.getElementById('dateReturned4').setAttribute('readonly', 'true');
     }
 
+    if (!document.getElementById('dateReturned4').value) {
+        document.getElementById('dateSubmitted5').setAttribute('readonly', 'true');
+        document.getElementById('dateReturned5').setAttribute('readonly', 'true');
+    }
+
+    if (!document.getElementById('dateReturned5').value) {
+        document.getElementById('dateSubmitted6').setAttribute('readonly', 'true');
+        document.getElementById('dateReturned6').setAttribute('readonly', 'true');
+    }
+
+    // Restrict Budget Spent Field until all rows are complete
     function toggleBudgetSpent() {
         let allCompleted = true;
 
         for (let i = 1; i <= 6; i++) {
             const submitted = document.getElementById(`dateSubmitted${i}`).value;
-            const returned = document.getElementById(`dateReturned${i}`).value;
+            const received = document.getElementById(`dateReturned${i}`).value;
 
-            if (!(submitted && returned)) {
+            if (!(submitted && received)) {
                 allCompleted = false;
                 break;
             }
         }
 
         const budgetSpentField = document.getElementById('budgetSpent');
-        if (budgetSpentField) {
-            if (budgetSpentField.value.trim() !== '') {
-                budgetSpentField.setAttribute('readonly', 'true');
-            } else if (allCompleted) {
-                budgetSpentField.removeAttribute('readonly');
-            } else {
-                budgetSpentField.setAttribute('readonly', 'true');
-            }
+        if (allCompleted) {
+            budgetSpentField.removeAttribute('readonly');
+        } else {
+            budgetSpentField.setAttribute('readonly', 'true');
         }
     }
 });
