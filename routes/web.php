@@ -5,6 +5,7 @@ use App\Http\Controllers\userController;
 use App\Http\Middleware\PreventBackAfterLogout;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\ProcurementFormController;
+use App\Http\Controllers\HonorariaFormController;
 
 Route::get('/', function () {
     return view('index');
@@ -75,3 +76,5 @@ Route::middleware(['auth', PreventBackAfterLogout::class])->group(function () {
 // REDIRECTS TO SVP FORM (PR ID SPECIFIED)
 Route::get('/procurementform', [ProcurementFormController::class, 'showForm'])->name('procurementform');
 Route::post('/procurementform/update', [ProcurementFormController::class, 'update'])->name('procurement.update');
+
+Route::get('/honorariaform', [HonorariaFormController::class, 'showHonorariaForm'])->name('honoraria.form');
