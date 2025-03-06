@@ -76,6 +76,41 @@ class ProcurementController extends Controller
         // If procurement not found, return an error message
         return response()->json(['message' => 'Procurement not found.'], 404);
     }
+    public function fetchCombinedProcurementData()
+    {
+        try {
+            // Fetch procurement data from the procurement table (empty status field)
+            $procurements = DB::connection('ilcdb')->table('procurement')->get();
+    
+            // Fetch procurement form data (with status)
+            $procurementForms = DB::connection('ilcdb')->table('procurement_form')->get();
+    
+            // Merge the data based on procurement_id
+            $mergedData = $procurements->map(function($procurement) use ($procurementForms) {
+                // Debug: Check what data you are receiving from procurement and procurement_form
+                \Log::info("Procurement: " . json_encode($procurement));
+                $form = $procurementForms->firstWhere('procurement_id', $procurement->procurement_id);
+            
+                \Log::info("Matching form: " . json_encode($form)); // Debug if the form data is found
+            
+                return [
+                    'procurement_id' => $procurement->procurement_id,
+                    'activity' => $procurement->activity,
+                    // If there's no matching form, status will be null, which we can check here
+                    'status' => $form ? $form->status : 'No Status', // Returning 'No Status' if no match
+                    'unit' => $form ? $form->unit : 'No Unit', // Returning 'No Unit' if no match
+                ];
+            });
+            
+    
+            // Return the merged data as a JSON response
+            return response()->json($mergedData);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error fetching procurement data: ' . $e->getMessage()], 500);
+        }
+    }
+    
+    
 }
 
 

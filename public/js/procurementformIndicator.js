@@ -19,10 +19,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 break;
             }
         }
-
         // Append the active stage to formData
         formData.append('activeStage', activeStage);
-
         // Send form data using Fetch API
         fetch(procurementUpdateUrl, {
             method: 'POST',
@@ -42,7 +40,6 @@ document.addEventListener('DOMContentLoaded', function() {
             alert('Error saving data. Check console for details.');
         });
     });
-
     // Function to initialize status tracking
     function initializeStatusTracking() {
         function updateIndicator(dateSubmittedId, dateReturnedId, indicatorId, isActive) {
@@ -57,11 +54,11 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             if (dateSubmitted && !dateReturned) {
-                indicator.style.backgroundColor = "grey";
-                indicator.textContent = "Pending";
+                indicator.style.backgroundColor = "green"; // Assuming green indicates in-progress
+                indicator.textContent = " ";
             } else if (dateSubmitted && dateReturned) {
-                indicator.style.backgroundColor = "yellow";
-                indicator.textContent = "Ongoing";
+                indicator.style.backgroundColor = "green"; // Assuming green indicates completed
+                indicator.textContent = " ";
             } else {
                 indicator.style.backgroundColor = "transparent";
                 indicator.textContent = "";
@@ -75,7 +72,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 break;
             }
         }
-
+        // Loop through all stages to add event listeners for updating indicators
         for (let i = 1; i <= 6; i++) {
             const dateSubmitted = document.getElementById(`dateSubmitted${i}`);
             const dateReturned = document.getElementById(`dateReturned${i}`);
@@ -83,6 +80,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (dateSubmitted && dateReturned) {
                 updateIndicator(`dateSubmitted${i}`, `dateReturned${i}`, `indicator${i}`, i === activeStage);
 
+                // Event listener for changes on dateSubmitted
                 dateSubmitted.addEventListener("change", function() {
                     let newActiveStage = 1;
                     for (let j = 6; j >= 1; j--) {
@@ -92,15 +90,75 @@ document.addEventListener('DOMContentLoaded', function() {
                         }
                     }
 
+                    // Update the indicator for all stages based on the active stage
                     for (let j = 1; j <= 6; j++) {
                         updateIndicator(`dateSubmitted${j}`, `dateReturned${j}`, `indicator${j}`, j === newActiveStage);
                     }
                 });
 
+                // Event listener for changes on dateReturned
                 dateReturned.addEventListener("change", function() {
                     updateIndicator(`dateSubmitted${i}`, `dateReturned${i}`, `indicator${i}`, i === activeStage);
                 });
             }
         }
+    }
+
+    // Event listeners to enable/disable future stages based on the current stage's returned date
+    function toggleStageFields(stageNumber) {
+        const dateReturned = document.getElementById(`dateReturned${stageNumber}`);
+        const dateSubmittedNext = document.getElementById(`dateSubmitted${stageNumber + 1}`);
+        const dateReturnedNext = document.getElementById(`dateReturned${stageNumber + 1}`);
+        
+        if (dateReturned.value) {
+            // Enable next stage if the current stage's dateReturned is filled
+            dateSubmittedNext.removeAttribute('readonly');
+            dateReturnedNext.removeAttribute('readonly');
+        } else {
+            // Make the next stage readonly if the current stage's dateReturned is empty
+            dateSubmittedNext.setAttribute('readonly', 'true');
+            dateReturnedNext.setAttribute('readonly', 'true');
+        }
+    }
+    // Event listeners for each dateReturned field
+    for (let i = 1; i <= 5; i++) {
+        const dateReturnedField = document.getElementById(`dateReturned${i}`);
+        dateReturnedField.addEventListener('change', function() {
+            toggleStageFields(i);
+        });
+
+        // Initially disable dateSubmitted and dateReturned fields after stage 1
+        if (!document.getElementById(`dateReturned${i}`).value) {
+            document.getElementById(`dateSubmitted${i + 1}`).setAttribute('readonly', 'true');
+            document.getElementById(`dateReturned${i + 1}`).setAttribute('readonly', 'true');
+        }
+    }
+
+    // Ensure correct readonly status on page load
+    if (!document.getElementById('dateReturned1').value) {
+        document.getElementById('dateSubmitted2').setAttribute('readonly', 'true');
+        document.getElementById('dateReturned2').setAttribute('readonly', 'true');
+    }
+
+    // Add any other initial readonly states
+    // Example: Initially disable the last form fields until previous stages are completed
+    if (!document.getElementById('dateReturned2').value) {
+        document.getElementById('dateSubmitted3').setAttribute('readonly', 'true');
+        document.getElementById('dateReturned3').setAttribute('readonly', 'true');
+    }
+
+    if (!document.getElementById('dateReturned3').value) {
+        document.getElementById('dateSubmitted4').setAttribute('readonly', 'true');
+        document.getElementById('dateReturned4').setAttribute('readonly', 'true');
+    }
+
+    if (!document.getElementById('dateReturned4').value) {
+        document.getElementById('dateSubmitted5').setAttribute('readonly', 'true');
+        document.getElementById('dateReturned5').setAttribute('readonly', 'true');
+    }
+
+    if (!document.getElementById('dateReturned5').value) {
+        document.getElementById('dateSubmitted6').setAttribute('readonly', 'true');
+        document.getElementById('dateReturned6').setAttribute('readonly', 'true');
     }
 });

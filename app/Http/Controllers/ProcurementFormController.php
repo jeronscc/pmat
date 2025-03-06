@@ -115,7 +115,7 @@ class ProcurementFormController extends Controller
                     $status = 'Pending';
                 } elseif ($validatedData['dt_received6']) {
                     // If dt_received6 is filled, set status to "Ongoing"
-                    $status = 'Ongoing';
+                    $status = 'Done';
                 }
             }
     

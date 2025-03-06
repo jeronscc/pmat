@@ -7,11 +7,11 @@ window.onload = function() {
 
 // Function to fetch and display SARO list based on the selected year or "all"
 function filterSaroByYear(year) {
-    // Reset the balance display to "₱0" when the year filter changes
+    // Reset the balance and SARO info
     document.getElementById('remainingBalance').textContent = '₱0';
     document.getElementById('currentViewingSaro').textContent = '';
 
-    // Update SARO list based on year
+    // URL for fetching SARO data (by year or all)
     const url = year === '' ? '/api/fetch-saro-ilcdb' : `/api/fetch-saro-ilcdb?year=${year}`;
 
     fetch(url)
@@ -22,23 +22,19 @@ function filterSaroByYear(year) {
 
             if (data.length > 0) {
                 data.forEach(saro => {
-                    // Create list item for each SARO number
                     const listItem = document.createElement('li');
                     listItem.classList.add('list-group-item');
                     listItem.textContent = `${saro.saro_no}`;
 
-                    // Add click event to each SARO number
                     listItem.addEventListener('click', function() {
-                        displayCurrentBudget(saro); // Show balance when SARO is clicked
-                        fetchProcurementForSaro(saro.saro_no, year); // Fetch and display procurement for this SARO
+                        displayCurrentBudget(saro);
+                        fetchProcurementForSaro(saro.saro_no, year);
                         highlightSelectedItem(this);
                     });
 
-                    // Append the list item to the SARO list
                     saroList.appendChild(listItem);
                 });
             } else {
-                // Show message if no SARO data is available
                 const emptyMessage = document.createElement('li');
                 emptyMessage.classList.add('list-group-item');
                 emptyMessage.textContent = 'No SARO records found for the selected year.';
@@ -47,6 +43,6 @@ function filterSaroByYear(year) {
         })
         .catch(error => console.error('Error fetching SARO data:', error));
 
-    // Also fetch and display procurement data for the selected year
+    // Fetch procurement data for the selected year
     fetchProcurementForYear(year);
 }

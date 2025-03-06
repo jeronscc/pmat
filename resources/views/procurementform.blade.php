@@ -491,5 +491,107 @@
     <script src="/js/menu.js"></script>
     <script src="/js/procurementformIndicator.js"></script>
     <script src="/js/addProcurementForm.js"></script>
+
+    <script>
+// Get references to the date fields
+const dateReturned1 = document.getElementById('dateReturned1');
+const dateSubmitted2 = document.getElementById('dateSubmitted2');
+const dateReturned2 = document.getElementById('dateReturned2');
+const dateSubmitted3 = document.getElementById('dateSubmitted3');
+const dateReturned3 = document.getElementById('dateReturned3');
+const dateSubmitted4 = document.getElementById('dateSubmitted4');
+const dateReturned4 = document.getElementById('dateReturned4');
+const dateSubmitted5 = document.getElementById('dateSubmitted5');
+const dateReturned5 = document.getElementById('dateReturned5');
+const dateSubmitted6 = document.getElementById('dateSubmitted6');
+
+// Add event listener to dateReturned1 to check if it has a value
+dateReturned1.addEventListener('change', function() {
+    if (dateReturned1.value) {
+        // Enable dateSubmitted2 if dateReturned1 has a value
+        dateSubmitted2.removeAttribute('readonly');
+        dateReturned2.removeAttribute('readonly');
+    } else {
+        // Make dateSubmitted2 readonly if dateReturned1 is empty
+        dateSubmitted2.setAttribute('readonly', 'true');
+        dateReturned2.setAttribute('readonly', 'true');
+    }
+});
+
+dateReturned2.addEventListener('change', function() {
+    if (dateReturned2.value) {
+        // Enable dateSubmitted3 if dateReturned2 has a value
+        dateSubmitted3.removeAttribute('readonly');
+        dateReturned3.removeAttribute('readonly');
+    } else {
+        // Make dateSubmitted3 readonly if dateReturned2 is empty
+        dateSubmitted3.setAttribute('readonly', 'true');
+        dateReturned3.setAttribute('readonly', 'true');
+    }
+});
+
+dateReturned3.addEventListener('change', function() {
+    if (dateReturned3.value) {
+        // Enable dateSubmitted4 if dateReturned3 has a value
+        dateSubmitted4.removeAttribute('readonly');
+        dateReturned4.removeAttribute('readonly');
+    } else {
+        // Make dateSubmitted4 readonly if dateReturned3 is empty
+        dateSubmitted4.setAttribute('readonly', 'true');
+        dateReturned4.setAttribute('readonly', 'true');
+    }
+});
+
+dateReturned4.addEventListener('change', function() {
+    if (dateReturned4.value) {
+        // Enable dateSubmitted5 if dateReturned4 has a value
+        dateSubmitted5.removeAttribute('readonly');
+        dateReturned5.removeAttribute('readonly');
+    } else {
+        // Make dateSubmitted5 readonly if dateReturned4 is empty
+        dateSubmitted5.setAttribute('readonly', 'true');
+        dateReturned5.setAttribute('readonly', 'true');
+    }
+});
+
+dateReturned5.addEventListener('change', function() {
+    if (dateReturned5.value) {
+        // Enable dateSubmitted6 if dateReturned5 has a value
+        dateSubmitted6.removeAttribute('readonly');
+        dateReturned6.removeAttribute('readonly');
+    } else {
+        // Make dateSubmitted6 readonly if dateReturned5 is empty
+        dateSubmitted6.setAttribute('readonly', 'true');
+        dateReturned6.setAttribute('readonly', 'true');
+    }
+});
+
+// Initially set dateSubmitted2 to readonly if dateReturned1 is empty
+if (!dateReturned1.value) {
+    dateSubmitted2.setAttribute('readonly', 'true');
+    dateReturned2.setAttribute('readonly', 'true');
+}
+
+if (!dateReturned2.value) {
+    dateSubmitted3.setAttribute('readonly', 'true');
+    dateReturned3.setAttribute('readonly', 'true');
+}
+
+if (!dateReturned3.value) {
+    dateSubmitted4.setAttribute('readonly', 'true');
+    dateReturned4.setAttribute('readonly', 'true');
+}
+
+if (!dateReturned4.value) {
+    dateSubmitted5.setAttribute('readonly', 'true');
+    dateReturned5.setAttribute('readonly', 'true');
+}
+
+if (!dateReturned5.value) {
+    dateSubmitted6.setAttribute('readonly', 'true');
+    dateReturned6.setAttribute('readonly', 'true');
+}
+
+    </script>
 </body>
 </html>
