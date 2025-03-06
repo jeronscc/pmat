@@ -76,31 +76,39 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function refreshStatus() {
         let activeStage = 1;
-
-        for (let i = 6; i >= 1; i--) {
-            if (document.getElementById(`dateSubmitted${i}`).value) {
-                activeStage = i;
+        let allCompleted = true;
+    
+        for (let i = 1; i <= 6; i++) {
+            const dateSubmitted = document.getElementById(`dateSubmitted${i}`);
+            const dateReturned = document.getElementById(`dateReturned${i}`);
+    
+            const isCompleted = dateSubmitted?.value && dateReturned?.value;
+    
+            if (isCompleted) {
+                activeStage = i + 1;
+            } else {
+                allCompleted = false;
                 break;
             }
         }
-
+    
         for (let i = 1; i <= 6; i++) {
             const isCompleted = document.getElementById(`dateSubmitted${i}`).value && document.getElementById(`dateReturned${i}`).value;
-
+    
             if (isCompleted) {
                 lockRow(i);
-                hideIndicator(i); // Hide indicator for completed rows
+                hideIndicator(i);
             } else if (i === activeStage) {
                 unlockRow(i);
-                showIndicator(i); // Show indicator for current row
+                showIndicator(i);
             } else {
                 lockRow(i);
-                hideIndicator(i); // Future rows also hide indicator
+                hideIndicator(i);
             }
         }
-
+    
         toggleBudgetSpent();
-    }
+    }    
 
     function lockRow(row) {
         document.getElementById(`dateSubmitted${row}`).setAttribute('readonly', 'true');
