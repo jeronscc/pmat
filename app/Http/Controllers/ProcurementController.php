@@ -105,10 +105,10 @@ class ProcurementController extends Controller
             // Merge the data based on procurement_id
             $mergedData = $procurements->map(function($procurement) use ($procurementForms) {
                 // Debug: Check what data you are receiving from procurement and procurement_form
-                \Log::info("Procurement: " . json_encode($procurement));
+                Log::info("Procurement: " . json_encode($procurement));
                 $form = $procurementForms->firstWhere('procurement_id', $procurement->procurement_id);
             
-                \Log::info("Matching form: " . json_encode($form)); // Debug if the form data is found
+                Log::info("Matching form: " . json_encode($form)); // Debug if the form data is found
             
                 return [
                     'procurement_id' => $procurement->procurement_id,

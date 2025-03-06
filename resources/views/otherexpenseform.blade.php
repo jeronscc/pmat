@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Procurement Tracking and Monitoring System</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -13,15 +15,61 @@
     <link rel="stylesheet" href="/css/sidenav.css">
 </head>
 <body>
+    <header class="d-flex align-items-center justify-content-between bg-black text-white p-3 shadow" id="stickyHeader">
+        <div class="logo d-flex align-items-center">
+            <img src="/assets/dict-logo.png" alt="DICT Logo" class="img-fluid" id="dictLogo">
+            <img src="/assets/ilcdb-logo-2.png" alt="DTC Logo" class="img-fluid ms-2"> 
+        </div>
+        <h1 class="text-center flex-grow-1 fs-4 m-0">Procurement Tracking and Monitoring System</h1> 
+        <button class="btn custom-btn" id="menu-icon">
+            <i class="bi bi-list"></i> <!-- Hamburger icon -->
+        </button>
+    </header>
+
+    <!-- Side Nav (Initially hidden) -->
+    <div id="side-nav" class="side-nav">
+        <ul>
+            <li>
+                <form action="/homepage-ilcdb">
+                    <button type="submit">
+                        <i class="fas fa-home"></i><img src="/assets/home_icon.png" alt=""> Home
+                    </button>
+                </form>
+            </li>
+            <li>
+                <form action="">
+                    <button type="submit">
+                        <i class="fas fa-users"></i><img src="/assets/account_icon.png" alt=""> Accounts
+                    </button>
+                </form>
+            </li>
+            <li>
+                <form action="" >
+                    <button type="submit">
+                        <i class="fas fa-clock"></i><img src="/assets/report_icon.png" alt=""> Reports
+                    </button>
+                </form>
+            </li>
+            <li>
+                <form action="{{ route('logout') }}" method="POST">
+                    @csrf
+                    <button type="submit">
+                        <i class="fas fa-sign-out-alt"></i><img src="/assets/logout_icon.png" alt=""> Logout
+                    </button>
+                </form>
+            </li>
+        </ul>
+    </div>
+
 <div class="container my-5">
         <div class="row justify-content-center">
         <div class="container-fluid my-0"> 
                 <div class="card shadow-lg p-4">
     <div class="container mt-0">
-        <div class="activity-info">
-            <h3>PR/Transaction Number: <span id="prtrNumber">12345</span></h3>
-            <h3>Activity Name: <span id="activityName">Sample Activity</span></h3>
-        </div>
+    <div class="activity-info">
+                <h3>PR Number: <span id="prtrNumber">{{ $prNumber }}</span></h3>
+                <h3>Activity Name: <span id="activityName">{{ $activity }}</span></h3>
+            </div>
         <hr class="my-4" style="border-top: 2px solid rgba(0, 0, 0, 0.6);">
         <h2 class="fw-bold">Daily Travel Expenses Requirements</h2>
         <h3>Budget Unit</h3>
@@ -60,8 +108,7 @@
                     <tbody>
                         <tr>
                             <td>
-                                <input type="number" class="form-control" id="budgetSpent" name="budget_spent" 
-                                value="{{ $record->budget_spent ?? '' }}">
+                                <input type="number" class="form-control" id="budgetSpent" name="budget_spent">
                             </td>
                         </tr>
                     </tbody>
@@ -126,6 +173,7 @@
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <!-- Custom JS -->
+    <script src="/js/menu.js"></script>
 </body>
 </html>

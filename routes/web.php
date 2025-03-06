@@ -6,6 +6,7 @@ use App\Http\Middleware\PreventBackAfterLogout;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\ProcurementFormController;
 use App\Http\Controllers\HonorariaFormController;
+use App\Http\Controllers\OtherExpenseFormController;
 
 Route::get('/', function () {
     return view('index');
@@ -78,3 +79,5 @@ Route::get('/procurementform', [ProcurementFormController::class, 'showForm'])->
 Route::post('/procurementform/update', [ProcurementFormController::class, 'update'])->name('procurement.update');
 
 Route::get('/honorariaform', [HonorariaFormController::class, 'showHonorariaForm'])->name('honoraria.form');
+
+Route::get('/otherexpenseform', [OtherExpenseFormController::class, 'showOtherExpenseForm'])->name('otherexpense.form');

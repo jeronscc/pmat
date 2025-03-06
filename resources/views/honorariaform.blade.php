@@ -190,7 +190,7 @@
             </div>
         </div>
 
-    
+    <!-- Custom JS -->
     <script src="/js/menu.js"></script>
 </body>
 </html>
