@@ -73,7 +73,7 @@
                 <div class="card shadow-lg p-4">
     <div class="container mt-5">
         <div class="activity-info">
-        <h3>PR Number: <span id="prNumber">{{ $prNumber }}</span></h3>
+            <h3>PR Number: <span id="prNumber">{{ $prNumber }}</span></h3>
             <h3>Activity Name: <span id="activityName">{{ $activityName }}</span></h3>
         </div>
         <hr class="my-4" style="border-top: 2px solid rgba(0, 0, 0, 0.6);">
@@ -87,6 +87,7 @@
         <input type="hidden" id="procurementId" name="procurement_id" value="{{ $prNumber }}">
         <h2 class="fw-bold">Pre-Procurement Requirements</h2>
             <h3>Supply Unit</h3> 
+            <div class="table-responsive">
             <table class="table">
                 <thead>
                     <tr>
@@ -127,8 +128,10 @@
                     </tr>
                 </tbody>
             </table>
+</div>
 
             <h3>Budget Unit</h3>
+            <div class="table-responsive">
             <table class="table">
                 <thead>
                     <tr>
@@ -155,9 +158,11 @@
                     </tr>
                 </tbody>
             </table>
+</div>
 
             <h2 class="fw-bold">Post-Procurement Requirements</h2>
             <h3>Supply Unit</h3>
+            <div class="table-responsive">
             <table class="table">
                 <thead>
                     <tr>
@@ -198,8 +203,10 @@
                     </tr>
                 </tbody>
             </table>
+</div>
 
             <h3>Accounting Unit</h3>
+            <div class="table-responsive">
             <table class="table">
                 <thead>
                     <tr>
@@ -226,9 +233,11 @@
                     </tr>
                 </tbody>
             </table>
+</div>
 
             <div class="row">
             <div class="col-12 col-md-6 col-lg-4">
+            <div class="table-responsive">
                 <table class="table">
                     <thead>
                         <tr>
@@ -244,6 +253,7 @@
                         </tr>
                     </tbody>
                 </table>
+                </div>
             </div>
         </div>
 

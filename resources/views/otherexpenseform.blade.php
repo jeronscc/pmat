@@ -19,13 +19,13 @@
                 <div class="card shadow-lg p-4">
     <div class="container mt-0">
         <div class="activity-info">
-            <h3>Project: <span id="project">Sample Activity</span></h3>
-            <h3>Activity Name: <span id="activityName">Sample Activity</span></h3>
             <h3>PR/Transaction Number: <span id="prtrNumber">12345</span></h3>
+            <h3>Activity Name: <span id="activityName">Sample Activity</span></h3>
         </div>
         <hr class="my-4" style="border-top: 2px solid rgba(0, 0, 0, 0.6);">
         <h2 class="fw-bold">Daily Travel Expenses Requirements</h2>
         <h3>Budget Unit</h3>
+        <div class="table-responsive">
         <table class="table">
             <thead>
                 <tr>
@@ -48,6 +48,7 @@
                 </tr>
             </tbody>
         </table>
+</div>
         <div class="row">
             <div class="col-12 col-md-6 col-lg-4">
                 <table class="table">
