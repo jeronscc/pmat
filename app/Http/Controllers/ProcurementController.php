@@ -30,11 +30,28 @@ class ProcurementController extends Controller
                 'description'          => $request->input('description'),
             ]);
 
-             // Insert into 'procurement_form' table
-            DB::connection('ilcdb')->table('procurement_form')->insert([
-                'procurement_id' => $request->input('pr_number'),
-                'activity'       => $request->input('activity'),
-            ]);
+            // Determine which table to insert into based on the category
+            $category = strtolower(trim($request->input('category')));
+            
+            if ($category === 'svp') {
+                // Insert into 'procurement_form' table
+                DB::connection('ilcdb')->table('procurement_form')->insert([
+                    'procurement_id' => $request->input('pr_number'),
+                    'activity'       => $request->input('activity'),
+                ]);
+            } elseif ($category === 'honoraria') {
+                // Insert into 'honoraria_form' table
+                DB::connection('ilcdb')->table('honoraria_form')->insert([
+                    'procurement_id' => $request->input('pr_number'),
+                    'activity'       => $request->input('activity'),
+                ]);
+            } elseif ($category === 'other expense' || $category === 'other expenses') {
+                // Insert into 'otherexpense_form' table
+                DB::connection('ilcdb')->table('otherexpense_form')->insert([
+                    'procurement_id' => $request->input('pr_number'),
+                    'activity'       => $request->input('activity'),
+                ]);
+            }
 
             // Return a success response
             return response()->json(['message' => 'Procurement added successfully']);
