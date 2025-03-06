@@ -67,9 +67,10 @@ Route::get('/fetch-procurement-ilcdb', function (Request $request) {
     $saroNo = $request->query('saro_no'); // Get the saro_no from the request
     $year = $request->query('year'); // Get the year from the request
 
+    // Fetch procurement data from the 'procurement' table
     $procurements = DB::connection('ilcdb')
         ->table('procurement')
-        ->select('procurement_id', 'activity', 'saro_no', 'year') // Select necessary fields from procurement table
+        ->select('procurement_id', 'activity', 'saro_no', 'year', 'procurement_category') // Include procurement_category
         ->orderBy('procurement_id', 'desc');
 
     // If a specific saro_no is provided, filter by it
@@ -82,72 +83,44 @@ Route::get('/fetch-procurement-ilcdb', function (Request $request) {
         $procurements->where('year', '=', $year); // Adjust this based on your actual year field
     }
 
-    // Execute the query for procurement data
+    // Execute the query to get procurement data
     $procurements = $procurements->get();
 
-    // Now, we need to fetch the status from the 'procurement_form' table
+    // Fetch procurement form data (status, unit) for regular procurement
     $procurementForms = DB::connection('ilcdb')->table('procurement_form')->get();
 
-    // Combine procurement data with procurement form status
-    $mergedData = $procurements->map(function ($procurement) use ($procurementForms) {
-        // Find the matching procurement form by procurement_id
-        $form = $procurementForms->firstWhere('procurement_id', $procurement->procurement_id);
+    // Fetch honoraria form data (status, unit) for honoraria category procurements
+    $honorariaForms = DB::connection('ilcdb')->table('honoraria_form')->get();
 
-        // Return combined data
+    // Merge procurement data with form data
+    $mergedData = $procurements->map(function ($procurement) use ($procurementForms, $honorariaForms) {
+
+        // Debug: Check procurement data
+        Log::info("Procurement Data: " . json_encode($procurement));
+    
+        // Try fetching the corresponding form for honoraria or procurement
+        $form = $honorariaForms->firstWhere(function($item) use ($procurement) {
+            return (string)$item->procurement_id === (string)$procurement->procurement_id;
+        }) ?? $procurementForms->firstWhere(function($item) use ($procurement) {
+            return (string)$item->procurement_id === (string)$procurement->procurement_id;
+        });
+    
+        // Log form data to debug
+        Log::info("Form Data: " . json_encode($form));
+    
+        // Return the merged data (procurement info + form info)
         return [
             'procurement_id' => $procurement->procurement_id,
             'activity' => $procurement->activity,
-            'status' => $form ? $form->status : 'No Status', // Default to 'No Status' if no matching form
-            'unit' => $form ? $form->unit : 'No Unit', // Default to 'No Unit' if no matching form
+            'status' => $form ? $form->status : 'No Status', // If no form, return 'No Status'
+            'unit' => $form ? $form->unit : 'No Unit', // If no form, return 'No Unit'
         ];
     });
-
     // Return the merged data as a JSON response
     return response()->json($mergedData);
 });
 
-Route::get('/fetch-honoraria-ilcdb', function (Request $request) {
-    $saroNo = $request->query('saro_no'); // Get the saro_no from the request
-    $year = $request->query('year'); // Get the year from the request
 
-    $procurements = DB::connection('ilcdb')
-        ->table('procurement')
-        ->select('procurement_id', 'activity', 'saro_no', 'year') // Select necessary fields from procurement table
-        ->orderBy('procurement_id', 'desc');
-
-    // If a specific saro_no is provided, filter by it
-    if ($saroNo) {
-        $procurements->where('saro_no', $saroNo);
-    }
-
-    // If a year is provided, filter by the 'year' field
-    if ($year) {
-        $procurements->where('year', '=', $year); // Adjust this based on your actual year field
-    }
-
-    // Execute the query for procurement data
-    $procurements = $procurements->get();
-
-    // Now, we need to fetch the status from the 'procurement_form' table
-    $honorariaForm = DB::connection('ilcdb')->table('honoraria_form')->get();
-
-    // Combine procurement data with procurement form status
-    $mergedData = $procurements->map(function ($procurement) use ($honorariaForm) {
-        // Find the matching procurement form by procurement_id
-        $form = $honorariaForm->firstWhere('procurement_id', $procurement->procurement_id);
-
-        // Return combined data
-        return [
-            'procurement_id' => $procurement->procurement_id,
-            'activity' => $procurement->activity,
-            'status' => $form ? $form->status : 'No Status', // Default to 'No Status' if no matching form
-            'unit' => $form ? $form->unit : 'No Unit', // Default to 'No Unit' if no matching form
-        ];
-    });
-
-    // Return the merged data as a JSON response
-    return response()->json($mergedData);
-});
 
 //SEARCH PROCUREMENTS
 Route::get('/search-procurement-ilcdb', function (Request $request) {
@@ -175,7 +148,6 @@ Route::get('/search-procurement-ilcdb', function (Request $request) {
 Route::any('/add-saro-ilcdb', [SaroController::class, 'addSaro'])->name('add-saro-ilcdb');
 Route::any('/add-procurement-ilcdb', [ProcurementController::class, 'addProcurement'])->name('addProcurement');
 Route::get('/fetch-procurement-details', [ProcurementController::class, 'fetchProcurementDetails'])->name('fetchProcurementDetails');
-Route::get('/fetch-honoraria-details', [ProcurementController::class, 'fetchProcurementDetails'])->name('fetchProcurementDetails');
 Route::post('/procurement/update', [ProcurementFormController::class, 'update']);
 Route::get('/fetch-combined-procurement', [ProcurementController::class, 'fetchCombinedProcurementData']);
 Route::post('/honoraria/update', [HonorariaFormController::class, 'updateHonoraria']);

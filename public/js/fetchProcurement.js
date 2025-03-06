@@ -13,7 +13,6 @@ function getStatusClass(status) {
 }
 
 // FETCH PROCUREMENT DATA BY SARO FILTER
-// Fetch procurement data by SARO filter
 function fetchProcurementForSaro(saroNo) {
     const url = saroNo === '' ? '/api/fetch-procurement-ilcdb' : `/api/fetch-procurement-ilcdb?saro_no=${saroNo}`;
 
@@ -41,19 +40,26 @@ function fetchProcurementForSaro(saroNo) {
                     const statusCell = document.createElement('td');
                     const badge = document.createElement('span');
 
-                    let statusMessage = item.status || ''; // Default to empty if no status
-                    let unitMessage = item.unit ? ` at ${item.unit}` : ''; // Default to empty if no unit
+                    let statusMessage = item.status || ''; 
+                    let unitMessage = item.unit ? ` at ${item.unit}` : ''; 
 
+                    // Check if honoraria form status is available and use it if it's not 'No Status'
+                    if (item.honoraria_status && item.honoraria_status.toLowerCase() !== 'no status') {
+                        statusMessage = item.honoraria_status;  // Update status to honoraria form status if available
+                    }
+
+                    // If status is "done", don't append the unit
                     if (statusMessage.toLowerCase() === 'done') {
                         unitMessage = ''; // Don't append the unit when status is "done"
                     }
 
-                    badge.className = getStatusClass(item.status || ''); // Apply appropriate badge class
+                    badge.className = getStatusClass(statusMessage || ''); // Apply appropriate badge class
                     badge.textContent = statusMessage + unitMessage; // Combine status and unit for display
 
                     statusCell.appendChild(badge);
                     row.appendChild(statusCell);
 
+                    // Append row to table
                     tableBody.appendChild(row);
                 });
             } else {
@@ -96,15 +102,21 @@ function fetchProcurementForYear(year) {
                     const statusCell = document.createElement('td');
                     const badge = document.createElement('span');
 
-                    let statusMessage = item.status || ''; // If no status, it will be empty
-                    let unitMessage = item.unit ? ` at ${item.unit}` : ''; // If unit exists, append it
+                    let statusMessage = item.status || ''; // Default to empty if no status
+                    let unitMessage = item.unit ? ` at ${item.unit}` : ''; // Default to empty if no unit
 
+                    // Check if honoraria form status is available
+                    if (item.honoraria_status && item.honoraria_status.toLowerCase() !== 'no status') {
+                        statusMessage = item.honoraria_status; // Use honoraria form status if available
+                    }
+
+                    // If status is "done", don't append the unit
                     if (statusMessage.toLowerCase() === 'done') {
                         unitMessage = ''; // Don't append the unit when status is "done"
                     }
 
-                    badge.className = getStatusClass(item.status || ''); // Apply appropriate badge class
-                    badge.textContent = statusMessage + unitMessage; // Status and Unit
+                    badge.className = getStatusClass(statusMessage || ''); // Apply appropriate badge class
+                    badge.textContent = statusMessage + unitMessage; // Combine status and unit for display
 
                     statusCell.appendChild(badge);
                     row.appendChild(statusCell);
@@ -155,13 +167,18 @@ function fetchProcurementRequirements(saroNo) {
                     let statusMessage = item.status || ''; // Default to empty if no status
                     let unitMessage = item.unit ? ` at ${item.unit}` : ''; // Default to empty if no unit
 
+                    // Check if honoraria status is available
+                    if (item.honoraria_status && item.honoraria_status.toLowerCase() !== 'no status') {
+                        statusMessage = item.honoraria_status; // Use honoraria status if it's not 'no status'
+                    }
+
                     // If status is "done", remove the unit part
                     if (statusMessage.toLowerCase() === 'done') {
                         unitMessage = ''; // Don't append the unit when status is "done"
                     }
 
                     // Combine status and unit for display
-                    badge.className = getStatusClass(item.status || ''); // Apply appropriate badge class
+                    badge.className = getStatusClass(statusMessage || ''); // Apply appropriate badge class
                     badge.textContent = statusMessage + unitMessage; // Combine status and unit for display
 
                     statusCell.appendChild(badge);
@@ -191,7 +208,6 @@ function fetchProcurementRequirements(saroNo) {
         })
         .catch(error => console.error('Error fetching procurement requirements:', error));
 }
-
 
 // Function to open modal and display procurement details
 function openProcurementModal(item) {
@@ -298,7 +314,6 @@ function fetchProcurementData(year) {
         .catch(error => console.error('Error fetching procurement data:', error));
 }
 
-
 // Event listener for the year filter
 document.getElementById('year')?.addEventListener('change', function() {
     // When the year changes, fetch the procurement data based on selected year
@@ -327,4 +342,3 @@ function formatNumberWithCommas(number) {
 function filterProcurementByYear(year) {
     fetchProcurementData(year);
 }
-

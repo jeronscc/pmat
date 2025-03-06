@@ -95,39 +95,50 @@ class ProcurementController extends Controller
     }
     public function fetchCombinedProcurementData()
     {
-        try {
-            // Fetch procurement data from the procurement table (empty status field)
-            $procurements = DB::connection('ilcdb')->table('procurement')->get();
-    
-            // Fetch procurement form data (with status)
-            $procurementForms = DB::connection('ilcdb')->table('procurement_form')->get();
-    
-            // Merge the data based on procurement_id
-            $mergedData = $procurements->map(function($procurement) use ($procurementForms) {
-                // Debug: Check what data you are receiving from procurement and procurement_form
-                Log::info("Procurement: " . json_encode($procurement));
-                $form = $procurementForms->firstWhere('procurement_id', $procurement->procurement_id);
-            
-                Log::info("Matching form: " . json_encode($form)); // Debug if the form data is found
-            
-                return [
-                    'procurement_id' => $procurement->procurement_id,
-                    'activity' => $procurement->activity,
-                    // If there's no matching form, status will be null, which we can check here
-                    'status' => $form ? $form->status : 'No Status', // Returning 'No Status' if no match
-                    'unit' => $form ? $form->unit : 'No Unit', // Returning 'No Unit' if no match
-                ];
+    try {
+        // Fetch procurement data from the 'procurement' table (without status field)
+        $procurements = DB::connection('ilcdb')->table('procurement')->get();
+
+        // Fetch procurement form data (status, unit) for regular procurement
+        $procurementForms = DB::connection('ilcdb')->table('procurement_form')->get();
+
+        // Fetch honoraria form data (status, unit) for honoraria category procurements
+        $honorariaForms = DB::connection('ilcdb')->table('honoraria_form')->get();
+
+        // Merge procurement data with form data
+        $mergedData = $procurements->map(function ($procurement) use ($procurementForms, $honorariaForms) {
+
+            // Debug: Check procurement data
+            Log::info("Procurement Data: " . json_encode($procurement));
+        
+            // Try fetching the corresponding form for honoraria or procurement
+            $form = $honorariaForms->firstWhere(function($item) use ($procurement) {
+                return (string)$item->procurement_id === (string)$procurement->procurement_id;
+            }) ?? $procurementForms->firstWhere(function($item) use ($procurement) {
+                return (string)$item->procurement_id === (string)$procurement->procurement_id;
             });
-            
-    
-            // Return the merged data as a JSON response
-            return response()->json($mergedData);
-        } catch (\Exception $e) {
-            return response()->json(['error' => 'Error fetching procurement data: ' . $e->getMessage()], 500);
-        }
+        
+            // Log form data to debug
+            Log::info("Form Data: " . json_encode($form));
+        
+            // Return the merged data (procurement info + form info)
+            return [
+                'procurement_id' => $procurement->procurement_id,
+                'activity' => $procurement->activity,
+                'status' => $form ? $form->status : 'No Status', // If no form, return 'No Status'
+                'unit' => $form ? $form->unit : 'No Unit', // If no form, return 'No Unit'
+            ];
+        });
+        
+        // Return the merged data as a JSON response
+        return response()->json($mergedData);
+
+    } catch (\Exception $e) {
+        // If an error occurs, return a response with error details
+        return response()->json(['error' => 'Error fetching procurement data: ' . $e->getMessage()], 500);
     }
-    
-    
+}
+
 }
 
 

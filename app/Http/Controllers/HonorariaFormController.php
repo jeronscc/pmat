@@ -51,6 +51,9 @@ class HonorariaFormController extends Controller
         ]);
     
         try {
+            // Log the incoming data
+            Log::info("Received Data: ", $validatedData);
+            
             // Initializing unit and status variables
             $unit = null;
             if ($validatedData['dt_submitted']) {
@@ -65,6 +68,9 @@ class HonorariaFormController extends Controller
                     $status = 'Done';
                 }
             }
+            // Log unit and status for debugging
+            Log::info("Calculated Unit: " . $unit);
+            Log::info("Calculated Status: " . $status);
     
             // Update the record
             $updated = DB::connection('ilcdb')->table('honoraria_form')
@@ -81,10 +87,15 @@ class HonorariaFormController extends Controller
                     'status'       => $status,
                 ]);
     
+            // Log the update result
+            Log::info("Update result: " . $updated);
+    
             // Return a success response
             return response()->json([
                 'message' => 'Honoraria form updated successfully!',
                 'updated' => $updated,
+                'unit' => $unit,
+                'status' => $status,
             ], 200);
     
         } catch (\Exception $e) {
