@@ -26,6 +26,7 @@
         <hr class="my-4" style="border-top: 2px solid rgba(0, 0, 0, 0.6);">
         <h2 class="fw-bold">Daily Travel Expenses Requirements</h2>
         <h3>Budget Unit</h3>
+        <div class="table-responsive">
         <table class="table">
             <thead>
                 <tr>
@@ -48,6 +49,7 @@
                 </tr>
             </tbody>
         </table>
+</div>
         <div class="row">
             <div class="col-12 col-md-6 col-lg-4">
                 <table class="table">

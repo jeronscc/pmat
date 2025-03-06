@@ -27,28 +27,31 @@
         <hr class="my-4" style="border-top: 2px solid rgba(0, 0, 0, 0.6);">
         <h2 class="fw-bold">Honoraria for Speakers Requirements</h2>
         <h3>Budget Unit</h3>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Requirements</th>
-                    <th>Date Submitted</th>
-                    <th>Date Returned</th>
-                    <th>Indicator</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>
-                        <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#requirementsModal">
-                            View Details
-                        </button>
-                    </td>
-                    <td><input type="datetime-local" class="form-control" id="dateSubmitted"></td>
-                    <td><input type="datetime-local" class="form-control" id="dateReturned"></td>
-                    <td><span class="indicator" id="indicator"></span></td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="table-responsive">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Requirements</th>
+                <th>Date Submitted</th>
+                <th>Date Returned</th>
+                <th>Indicator</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#requirementsModal">
+                        View Details
+                    </button>
+                </td>
+                <td><input type="datetime-local" class="form-control" id="dateSubmitted"></td>
+                <td><input type="datetime-local" class="form-control" id="dateReturned"></td>
+                <td><span class="indicator" id="indicator"></span></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
         <div class="row">
             <div class="col-12 col-md-6 col-lg-4">
                 <table class="table">
