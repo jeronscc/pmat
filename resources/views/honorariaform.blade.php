@@ -20,9 +20,8 @@
                 <div class="card shadow-lg p-4">
     <div class="container mt-0">
         <div class="activity-info">
-            <h3>Project: <span id="project">Sample Activity</span></h3>
-            <h3>Activity Name: <span id="activityName">Sample Activity</span></h3>
             <h3>PR/Transaction Number: <span id="prtrNumber">12345</span></h3>
+            <h3>Activity Name: <span id="activityName">Sample Activity</span></h3>
         </div>
         <hr class="my-4" style="border-top: 2px solid rgba(0, 0, 0, 0.6);">
         <h2 class="fw-bold">Honoraria for Speakers Requirements</h2>
@@ -63,8 +62,7 @@
                     <tbody>
                         <tr>
                             <td>
-                                <input type="number" class="form-control" id="budgetSpent" name="budget_spent" 
-                                value="{{ $record->budget_spent ?? '' }}">
+                                <input type="number" class="form-control" id="budgetSpent" name="budget_spent">
                             </td>
                         </tr>
                     </tbody>
