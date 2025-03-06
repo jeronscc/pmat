@@ -51,8 +51,22 @@ class HonorariaFormController extends Controller
         ]);
     
         try {
-            // Use updateOrInsert to handle cases where no changes occur.
-            // Alternatively, use update() and always return a JSON response.
+            // Initializing unit and status variables
+            $unit = null;
+            if ($validatedData['dt_submitted']) {
+                $unit = 'Budget Unit';
+            }
+    
+            $status = null;
+            if ($unit === 'Budget Unit') {
+                if ($validatedData['dt_submitted'] && !$validatedData['dt_received']) {
+                    $status = 'Pending';
+                } else {
+                    $status = 'Done';
+                }
+            }
+    
+            // Update the record
             $updated = DB::connection('ilcdb')->table('honoraria_form')
                 ->where('procurement_id', $validatedData['procurement_id'])
                 ->update([
@@ -63,15 +77,18 @@ class HonorariaFormController extends Controller
                                         ? \Carbon\Carbon::parse($validatedData['dt_received'])->format('Y-m-d H:i:s')
                                         : null,
                     'budget_spent' => $validatedData['budget_spent'] ?? null,
+                    'unit'         => $unit,
+                    'status'       => $status,
                 ]);
     
-            // Always return a JSON response.
-            // Note: if $updated returns 0 because no data was changed, we still return a success message.
+            // Return a success response
             return response()->json([
                 'message' => 'Honoraria form updated successfully!',
                 'updated' => $updated,
             ], 200);
+    
         } catch (\Exception $e) {
+            // Log the error and return a failure response
             Log::error('Honoraria update error: ' . $e->getMessage());
             return response()->json([
                 'message' => 'An error occurred while updating the honoraria form.',
@@ -79,4 +96,6 @@ class HonorariaFormController extends Controller
             ], 500);
         }
     }
+    
+    
 }

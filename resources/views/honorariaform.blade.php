@@ -84,7 +84,7 @@
                         </div>
 
                         <!-- Update Honoraria Form -->
-                        <form id="honorariaForm" action="{{ route('honoraria.update') }}" method="POST">
+                        <form id="honorariaForm">
                             @csrf
                             <!-- Hidden field for procurement_id (using pr_number from URL) -->
                             <input type="hidden" name="procurement_id" value="{{ $prNumber }}">
@@ -119,7 +119,7 @@
                                                 <input type="datetime-local" class="form-control" id="dateReturned" name="dt_received"
                                                     value="{{ isset($record->dt_received) ? \Carbon\Carbon::parse($record->dt_received)->format('Y-m-d\TH:i') : '' }}">
                                             </td>
-                                            <td><span class="indicator" id="indicator"></span></td>
+                                            <td><span class="indicator" id="indicator" style="display: inline-block; width: 80px; padding: 5px; border-radius: 5px; text-align: center;"></span></td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -228,35 +228,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Custom JS -->
     <script src="/js/menu.js"></script>
-    <!-- AJAX Script for Saving the Form -->
+    <script src="/js/honorariaformIndicator.js"></script>
 </body>
-<script>
-    $(document).ready(function() {
-        $('#saveChanges').on('click', function(e) {
-            e.preventDefault(); // Prevent the default form submission
-
-            // Debug: Log serialized form data to verify hidden input is included
-            console.log($('#honorariaForm').serialize());
-
-            $.ajax({
-                url: '{{ route("honoraria.update") }}',
-                type: 'POST',
-                data: $('#honorariaForm').serialize(),
-                dataType: 'json',
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                success: function(response) {
-                    alert(response.message);
-                    location.reload(); // Reload the page to reflect changes
-                },
-                error: function(xhr) {
-                    console.error('Error saving data:', xhr.responseText);
-                    alert('Error saving data. Check console for details.');
-                }
-            });
-        });
-    });
-    </script>
-
 </html>
