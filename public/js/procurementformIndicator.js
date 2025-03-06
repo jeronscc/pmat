@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeStatusTracking();
     toggleBudgetSpent(); // Initial check on page load
 
-    const procurementUpdateUrl = "/api/procurement/update"; // Your existing API route
+    const procurementUpdateUrl = "/api/procurement/update";
 
     document.getElementById('saveChanges').addEventListener('click', function(e) {
         e.preventDefault();
@@ -54,10 +54,10 @@ document.addEventListener('DOMContentLoaded', function() {
             if (dateSubmitted && dateReturned) {
                 if (isCompleted) {
                     lockRow(i);
-                    hideIndicator(i); // Hide indicator for completed rows
+                    hideIndicator(i);
                 } else if (i === activeStage) {
                     unlockRow(i);
-                    showIndicator(i); // Show indicator for current row
+                    showIndicator(i);
                 } else {
                     lockRow(i);
                     hideIndicator(i);
@@ -70,7 +70,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
         if (allCompleted) {
             lockEntireForm();
-            hideAllIndicators(); // Hide all indicators when form is fully done
+            hideAllIndicators();
+        }
+
+        // Check if budget is already locked and fully disable if so
+        const budgetSpentField = document.getElementById('budgetSpent');
+        if (budgetSpentField && budgetSpentField.dataset.locked === 'true') {
+            budgetSpentField.setAttribute('readonly', 'true');
         }
     }
 
@@ -89,13 +95,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
             if (isCompleted) {
                 lockRow(i);
-                hideIndicator(i); // Hide indicator for completed rows
+                hideIndicator(i);
             } else if (i === activeStage) {
                 unlockRow(i);
-                showIndicator(i); // Show indicator for current row
+                showIndicator(i);
             } else {
                 lockRow(i);
-                hideIndicator(i); // Future rows also hide indicator
+                hideIndicator(i);
             }
         }
 
@@ -116,7 +122,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const indicator = document.getElementById(`indicator${row}`);
         if (indicator) {
             indicator.style.backgroundColor = "green";
-            indicator.textContent = "🟢";
+            indicator.textContent = " ";
         }
     }
 
@@ -140,7 +146,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         const budgetSpentField = document.getElementById('budgetSpent');
-        budgetSpentField.setAttribute('readonly', 'true'); // Fully lock budget spent if all completed
+        budgetSpentField.setAttribute('readonly', 'true');
     }
 
     function toggleBudgetSpent() {
@@ -157,7 +163,10 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         const budgetSpentField = document.getElementById('budgetSpent');
-        if (allCompleted) {
+
+        if (budgetSpentField.dataset.locked === 'true') {
+            budgetSpentField.setAttribute('readonly', 'true');
+        } else if (allCompleted) {
             budgetSpentField.removeAttribute('readonly');
         } else {
             budgetSpentField.setAttribute('readonly', 'true');
