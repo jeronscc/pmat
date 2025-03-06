@@ -247,8 +247,8 @@
                     <tbody>
                         <tr>
                             <td>
-                                <input type="number" class="form-control" id="budgetSpent" name="budget_spent" 
-                                value="{{ $record->budget_spent ?? '' }}">
+                                <input type="number" step="0.01" class="form-control" id="budgetSpent" name="budget_spent" 
+                                value="{{ $record->budget_spent ?? '' }}" readonly>
                             </td>
                         </tr>
                     </tbody>

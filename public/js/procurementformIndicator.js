@@ -1,17 +1,14 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Initialize the status tracking system
     initializeStatusTracking();
+    toggleBudgetSpent();  // Initial check on page load to lock/unlock budget spent
 
-    // Get the API endpoint URL
     const procurementUpdateUrl = "/api/procurement/update";  // Use the API route for procurement update
 
     document.getElementById('saveChanges').addEventListener('click', function(e) {
         e.preventDefault();
 
-        // Serialize form data into an array of name/value pairs
         let formData = new FormData(document.getElementById('procurementForm'));
 
-        // Add a flag to indicate which stage is active
         let activeStage = 1;
         for (let i = 6; i >= 1; i--) {
             if (document.getElementById(`dateSubmitted${i}`).value) {
@@ -19,9 +16,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 break;
             }
         }
-        // Append the active stage to formData
         formData.append('activeStage', activeStage);
-        // Send form data using Fetch API
+
         fetch(procurementUpdateUrl, {
             method: 'POST',
             headers: {
@@ -31,8 +27,7 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .then(response => response.json())
         .then(data => {
-            alert(data.message);  // Show success message
-            // Reload the page to reflect updated data
+            alert(data.message);
             location.reload();
         })
         .catch(error => {
@@ -40,7 +35,7 @@ document.addEventListener('DOMContentLoaded', function() {
             alert('Error saving data. Check console for details.');
         });
     });
-    // Function to initialize status tracking
+
     function initializeStatusTracking() {
         function updateIndicator(dateSubmittedId, dateReturnedId, indicatorId, isActive) {
             const dateSubmitted = document.getElementById(dateSubmittedId).value;
@@ -54,10 +49,10 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             if (dateSubmitted && !dateReturned) {
-                indicator.style.backgroundColor = "green"; // Assuming green indicates in-progress
+                indicator.style.backgroundColor = "green";
                 indicator.textContent = " ";
             } else if (dateSubmitted && dateReturned) {
-                indicator.style.backgroundColor = "green"; // Assuming green indicates completed
+                indicator.style.backgroundColor = "green";
                 indicator.textContent = " ";
             } else {
                 indicator.style.backgroundColor = "transparent";
@@ -72,15 +67,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 break;
             }
         }
-        // Loop through all stages to add event listeners for updating indicators
+
         for (let i = 1; i <= 6; i++) {
             const dateSubmitted = document.getElementById(`dateSubmitted${i}`);
             const dateReturned = document.getElementById(`dateReturned${i}`);
-            
+
             if (dateSubmitted && dateReturned) {
                 updateIndicator(`dateSubmitted${i}`, `dateReturned${i}`, `indicator${i}`, i === activeStage);
 
-                // Event listener for changes on dateSubmitted
                 dateSubmitted.addEventListener("change", function() {
                     let newActiveStage = 1;
                     for (let j = 6; j >= 1; j--) {
@@ -90,58 +84,51 @@ document.addEventListener('DOMContentLoaded', function() {
                         }
                     }
 
-                    // Update the indicator for all stages based on the active stage
                     for (let j = 1; j <= 6; j++) {
                         updateIndicator(`dateSubmitted${j}`, `dateReturned${j}`, `indicator${j}`, j === newActiveStage);
                     }
+                    toggleBudgetSpent();
                 });
 
-                // Event listener for changes on dateReturned
                 dateReturned.addEventListener("change", function() {
                     updateIndicator(`dateSubmitted${i}`, `dateReturned${i}`, `indicator${i}`, i === activeStage);
+                    toggleBudgetSpent();
                 });
             }
         }
     }
 
-    // Event listeners to enable/disable future stages based on the current stage's returned date
     function toggleStageFields(stageNumber) {
         const dateReturned = document.getElementById(`dateReturned${stageNumber}`);
         const dateSubmittedNext = document.getElementById(`dateSubmitted${stageNumber + 1}`);
         const dateReturnedNext = document.getElementById(`dateReturned${stageNumber + 1}`);
-        
+
         if (dateReturned.value) {
-            // Enable next stage if the current stage's dateReturned is filled
             dateSubmittedNext.removeAttribute('readonly');
             dateReturnedNext.removeAttribute('readonly');
         } else {
-            // Make the next stage readonly if the current stage's dateReturned is empty
             dateSubmittedNext.setAttribute('readonly', 'true');
             dateReturnedNext.setAttribute('readonly', 'true');
         }
     }
-    // Event listeners for each dateReturned field
+
     for (let i = 1; i <= 5; i++) {
         const dateReturnedField = document.getElementById(`dateReturned${i}`);
         dateReturnedField.addEventListener('change', function() {
             toggleStageFields(i);
         });
 
-        // Initially disable dateSubmitted and dateReturned fields after stage 1
         if (!document.getElementById(`dateReturned${i}`).value) {
             document.getElementById(`dateSubmitted${i + 1}`).setAttribute('readonly', 'true');
             document.getElementById(`dateReturned${i + 1}`).setAttribute('readonly', 'true');
         }
     }
 
-    // Ensure correct readonly status on page load
     if (!document.getElementById('dateReturned1').value) {
         document.getElementById('dateSubmitted2').setAttribute('readonly', 'true');
         document.getElementById('dateReturned2').setAttribute('readonly', 'true');
     }
 
-    // Add any other initial readonly states
-    // Example: Initially disable the last form fields until previous stages are completed
     if (!document.getElementById('dateReturned2').value) {
         document.getElementById('dateSubmitted3').setAttribute('readonly', 'true');
         document.getElementById('dateReturned3').setAttribute('readonly', 'true');
@@ -160,5 +147,27 @@ document.addEventListener('DOMContentLoaded', function() {
     if (!document.getElementById('dateReturned5').value) {
         document.getElementById('dateSubmitted6').setAttribute('readonly', 'true');
         document.getElementById('dateReturned6').setAttribute('readonly', 'true');
+    }
+
+    // Restrict Budget Spent Field until all rows are complete
+    function toggleBudgetSpent() {
+        let allCompleted = true;
+
+        for (let i = 1; i <= 6; i++) {
+            const submitted = document.getElementById(`dateSubmitted${i}`).value;
+            const received = document.getElementById(`dateReturned${i}`).value;
+
+            if (!(submitted && received)) {
+                allCompleted = false;
+                break;
+            }
+        }
+
+        const budgetSpentField = document.getElementById('budgetSpent');
+        if (allCompleted) {
+            budgetSpentField.removeAttribute('readonly');
+        } else {
+            budgetSpentField.setAttribute('readonly', 'true');
+        }
     }
 });
