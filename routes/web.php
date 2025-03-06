@@ -78,6 +78,7 @@ Route::middleware(['auth', PreventBackAfterLogout::class])->group(function () {
 Route::get('/procurementform', [ProcurementFormController::class, 'showForm'])->name('procurementform');
 Route::post('/procurementform/update', [ProcurementFormController::class, 'update'])->name('procurement.update');
 
-Route::get('/honorariaform', [HonorariaFormController::class, 'showHonorariaForm'])->name('honoraria.form');
+Route::get('/honorariaform', [HonorariaFormController::class, 'showForm'])->name('honoraria.form');
+Route::post('/honorariaform/update', [HonorariaFormController::class, 'updateHonoraria'])->name('honoraria.update');
 
 Route::get('/otherexpenseform', [OtherExpenseFormController::class, 'showOtherExpenseForm'])->name('otherexpense.form');
