@@ -247,9 +247,8 @@
                     <tbody>
                         <tr>
                             <td>
-                            <input type="number" id="budgetSpent" name="budget_spent" value="{{ $record->budget_spent ?? '' }}"
-                            @if($record->budget_locked) readonly @endif
-                            data-locked="{{ $record->budget_locked ? 'true' : 'false' }}">
+                                <input type="number" step="0.01" class="form-control" id="budgetSpent" name="budget_spent" 
+                                value="{{ $record->budget_spent ?? '' }}" readonly>
                             </td>
                         </tr>
                     </tbody>
