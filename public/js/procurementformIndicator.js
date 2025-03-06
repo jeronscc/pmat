@@ -9,13 +9,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         let formData = new FormData(document.getElementById('procurementForm'));
 
-        let activeStage = 1;
-        for (let i = 6; i >= 1; i--) {
-            if (document.getElementById(`dateSubmitted${i}`).value) {
-                activeStage = i;
-                break;
-            }
-        }
+        let activeStage = getActiveStage();
         formData.append('activeStage', activeStage);
 
         fetch(procurementUpdateUrl, {
@@ -44,25 +38,26 @@ document.addEventListener('DOMContentLoaded', function() {
             const dateSubmitted = document.getElementById(`dateSubmitted${i}`);
             const dateReturned = document.getElementById(`dateReturned${i}`);
 
-            const isCompleted = dateSubmitted?.value && dateReturned?.value;
-            if (!isCompleted && activeStage === 1) activeStage = i;
+            const isSubmitted = !!dateSubmitted?.value;
+            const isReturned = !!dateReturned?.value;
+            const isCompleted = isSubmitted && isReturned;
 
-            if (!isCompleted) {
+            if (isCompleted) {
+                lockRow(i);
+                hideIndicator(i);
+            } else {
                 allCompleted = false;
-            }
-
-            if (dateSubmitted && dateReturned) {
-                if (isCompleted) {
-                    lockRow(i);
-                    hideIndicator(i); // Hide indicator for completed rows
-                } else if (i === activeStage) {
+                if (activeStage === 1 && !isSubmitted) {
+                    activeStage = i;
                     unlockRow(i);
-                    showIndicator(i); // Show indicator for current row
+                    showIndicator(i);
                 } else {
                     lockRow(i);
                     hideIndicator(i);
                 }
+            }
 
+            if (dateSubmitted && dateReturned) {
                 dateSubmitted.addEventListener('change', refreshStatus);
                 dateReturned.addEventListener('change', refreshStatus);
             }
@@ -70,31 +65,18 @@ document.addEventListener('DOMContentLoaded', function() {
 
         if (allCompleted) {
             lockEntireForm();
-            hideAllIndicators(); // Hide all indicators when form is fully done
+            hideAllIndicators();
         }
     }
 
     function refreshStatus() {
-        let activeStage = 1;
-        let allCompleted = true;
-    
+        let activeStage = getActiveStage();
+
         for (let i = 1; i <= 6; i++) {
-            const dateSubmitted = document.getElementById(`dateSubmitted${i}`);
-            const dateReturned = document.getElementById(`dateReturned${i}`);
-    
-            const isCompleted = dateSubmitted?.value && dateReturned?.value;
-    
-            if (isCompleted) {
-                activeStage = i + 1;
-            } else {
-                allCompleted = false;
-                break;
-            }
-        }
-    
-        for (let i = 1; i <= 6; i++) {
-            const isCompleted = document.getElementById(`dateSubmitted${i}`).value && document.getElementById(`dateReturned${i}`).value;
-    
+            const isSubmitted = !!document.getElementById(`dateSubmitted${i}`).value;
+            const isReturned = !!document.getElementById(`dateReturned${i}`).value;
+            const isCompleted = isSubmitted && isReturned;
+
             if (isCompleted) {
                 lockRow(i);
                 hideIndicator(i);
@@ -106,9 +88,18 @@ document.addEventListener('DOMContentLoaded', function() {
                 hideIndicator(i);
             }
         }
-    
+
         toggleBudgetSpent();
-    }    
+    }
+
+    function getActiveStage() {
+        for (let i = 1; i <= 6; i++) {
+            if (!document.getElementById(`dateSubmitted${i}`).value) {
+                return i;
+            }
+        }
+        return 7;  // If all are filled, we treat stage 7 as "done".
+    }
 
     function lockRow(row) {
         document.getElementById(`dateSubmitted${row}`).setAttribute('readonly', 'true');
@@ -148,32 +139,33 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         const budgetSpentField = document.getElementById('budgetSpent');
-        budgetSpentField.setAttribute('readonly', 'true'); // Fully lock budget spent if all completed
+        if (budgetSpentField) {
+            budgetSpentField.setAttribute('readonly', 'true');
+        }
     }
 
     function toggleBudgetSpent() {
         let allCompleted = true;
-    
+
         for (let i = 1; i <= 6; i++) {
             const submitted = document.getElementById(`dateSubmitted${i}`).value;
-            const received = document.getElementById(`dateReturned${i}`).value;
-    
-            if (!(submitted && received)) {
+            const returned = document.getElementById(`dateReturned${i}`).value;
+
+            if (!(submitted && returned)) {
                 allCompleted = false;
                 break;
             }
         }
-    
+
         const budgetSpentField = document.getElementById('budgetSpent');
-    
-        if (budgetSpentField && budgetSpentField.value.trim() !== '') {
-            // If budget already saved, lock permanently
-            budgetSpentField.setAttribute('readonly', 'true');
-        } else if (allCompleted) {
-            budgetSpentField.removeAttribute('readonly');
-        } else {
-            budgetSpentField.setAttribute('readonly', 'true');
+        if (budgetSpentField) {
+            if (budgetSpentField.value.trim() !== '') {
+                budgetSpentField.setAttribute('readonly', 'true');
+            } else if (allCompleted) {
+                budgetSpentField.removeAttribute('readonly');
+            } else {
+                budgetSpentField.setAttribute('readonly', 'true');
+            }
         }
     }
-    
 });
