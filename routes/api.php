@@ -1,12 +1,13 @@
 <?php
 
-use App\Http\Controllers\HonorariaFormController;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SaroController;
 use App\Http\Controllers\ProcurementController;
+use App\Http\Controllers\HonorariaFormController;
 use App\Http\Controllers\ProcurementFormController;
+use App\Http\Controllers\OtherExpenseFormController;
 
 
 Route::get('/user', function (Request $request) {
@@ -92,8 +93,10 @@ Route::get('/fetch-procurement-ilcdb', function (Request $request) {
     // Fetch honoraria form data (status, unit) for honoraria category procurements
     $honorariaForms = DB::connection('ilcdb')->table('honoraria_form')->get();
 
+    $otherexpenseForms = DB::connection('ilcdb')->table('otherexpense_form')->get();
+
     // Merge procurement data with form data
-    $mergedData = $procurements->map(function ($procurement) use ($procurementForms, $honorariaForms) {
+    $mergedData = $procurements->map(function ($procurement) use ($procurementForms, $honorariaForms, $otherexpenseForms) {
 
         // Debug: Check procurement data
         Log::info("Procurement Data: " . json_encode($procurement));
@@ -102,6 +105,8 @@ Route::get('/fetch-procurement-ilcdb', function (Request $request) {
         $form = $honorariaForms->firstWhere(function($item) use ($procurement) {
             return (string)$item->procurement_id === (string)$procurement->procurement_id;
         }) ?? $procurementForms->firstWhere(function($item) use ($procurement) {
+            return (string)$item->procurement_id === (string)$procurement->procurement_id;
+        }) ?? $otherexpenseForms->firstWhere(function($item) use ($procurement) {
             return (string)$item->procurement_id === (string)$procurement->procurement_id;
         });
     
@@ -151,3 +156,4 @@ Route::get('/fetch-procurement-details', [ProcurementController::class, 'fetchPr
 Route::post('/procurement/update', [ProcurementFormController::class, 'update']);
 Route::get('/fetch-combined-procurement', [ProcurementController::class, 'fetchCombinedProcurementData']);
 Route::post('/honoraria/update', [HonorariaFormController::class, 'updateHonoraria']);
+Route::post('/otherexpense/update', [OtherExpenseFormController::class, 'updateOtherExpense']);

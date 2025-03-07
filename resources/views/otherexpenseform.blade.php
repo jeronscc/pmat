@@ -61,66 +61,89 @@
         </ul>
     </div>
 
-<div class="container my-5">
-        <div class="row justify-content-center">
-        <div class="container-fluid my-0"> 
-                <div class="card shadow-lg p-4">
-    <div class="container mt-0">
-    <div class="activity-info">
+    @if(session('success'))
+    <div class="alert alert-success">{{ session('success') }}</div>
+@elseif(session('error'))
+    <div class="alert alert-danger">{{ session('error') }}</div>
+@elseif(session('warning'))
+    <div class="alert alert-warning">{{ session('warning') }}</div>
+@endif
+
+    <div class="container my-5">
+    <div class="row justify-content-center">
+    <div class="container-fluid my-0"> 
+        <div class="card shadow-lg p-4">
+            <div class="container mt-0">
+        
+            <div class="activity-info">
                 <h3>PR Number: <span id="prtrNumber">{{ $prNumber }}</span></h3>
                 <h3>Activity Name: <span id="activityName">{{ $activity }}</span></h3>
             </div>
-        <hr class="my-4" style="border-top: 2px solid rgba(0, 0, 0, 0.6);">
-        <h2 class="fw-bold">Daily Travel Expenses Requirements</h2>
-        <h3>Budget Unit</h3>
-        <div class="table-responsive">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Requirements</th>
-                    <th>Date Submitted</th>
-                    <th>Date Returned</th>
-                    <th>Indicator</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>
-                        <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#requirementsModal1">
-                            View Details
-                        </button>
-                    </td>
-                    <td><input type="datetime-local" class="form-control" id="dateSubmitted1"></td>
-                    <td><input type="datetime-local" class="form-control" id="dateReturned1"></td>
-                    <td><span class="indicator" id="indicator1"></span></td>
-                </tr>
-            </tbody>
-        </table>
-</div>
-        <div class="row">
-            <div class="col-12 col-md-6 col-lg-4">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Budget Spent</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>
-                                <input type="number" class="form-control" id="budgetSpent" name="budget_spent">
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <div class="table-buttons">
-            <button type="button" class="btn btn-danger" id="cancelChanges">Cancel</button>
-            <button type="button" class="btn btn-success" id="saveChanges">Save</button>
-        </div>
-    </div>
-    </div>
+        
+            <form id="otherexpenseForm">
+                @csrf
+                <!-- Hidden field for procurement_id (using pr_number from URL) -->
+                <input type="hidden" name="procurement_id" value="{{ $prNumber }}">
+                <hr class="my-4" style="border-top: 2px solid rgba(0, 0, 0, 0.6);">
+                <h2 class="fw-bold">Daily Travel Expenses Requirements</h2>
+                <h3>Budget Unit</h3>
+
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Requirements</th>
+                                <th>Date Submitted</th>
+                                <th>Date Returned</th>
+                                <th>Indicator</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <button type="button" class="btn btn-dark" data-bs-toggle="modal"
+                                        data-bs-target="#requirementsModal">
+                                        View Details
+                                    </button>
+                                </td>
+                                <td>
+                                    <input type="datetime-local" class="form-control" id="dateSubmitted" name="dt_submitted"
+                                        value="{{ isset($record->dt_submitted) ? \Carbon\Carbon::parse($record->dt_submitted)->format('Y-m-d\TH:i') : '' }}">
+                                </td>
+                                <td>
+                                    <input type="datetime-local" class="form-control" id="dateReturned" name="dt_received"
+                                        value="{{ isset($record->dt_received) ? \Carbon\Carbon::parse($record->dt_received)->format('Y-m-d\TH:i') : '' }}">
+                                </td>
+                                <td><span class="indicator" id="indicator" style="display: inline-block; width: 80px; padding: 5px; border-radius: 5px; text-align: center;"></span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="row">
+                    <div class="col-12 col-md-6 col-lg-4">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Budget Spent</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <input type="number" class="form-control" id="budgetSpent" name="budget_spent"
+                                            value="{{ old('budget_spent', $record->budget_spent ?? '') }}">
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="table-buttons">
+                    <button type="button" class="btn btn-danger" id="cancelChanges">Cancel</button>
+                    <button type="button" class="btn btn-success" id="saveChanges">Save</button>
+                </div>
+            </form>
             </div>
         </div>
     </div>
@@ -175,5 +198,6 @@
 
     <!-- Custom JS -->
     <script src="/js/menu.js"></script>
+    <script src="/js/otherexpenseformIndicator.js"></script>
 </body>
 </html>

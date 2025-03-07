@@ -105,8 +105,10 @@ class ProcurementController extends Controller
         // Fetch honoraria form data (status, unit) for honoraria category procurements
         $honorariaForms = DB::connection('ilcdb')->table('honoraria_form')->get();
 
+        $otherexpenseForms = DB::connection('ilcdb')->table('otherexpense_form')->get();
+
         // Merge procurement data with form data
-        $mergedData = $procurements->map(function ($procurement) use ($procurementForms, $honorariaForms) {
+        $mergedData = $procurements->map(function ($procurement) use ($procurementForms, $honorariaForms, $otherexpenseForms) {
 
             // Debug: Check procurement data
             Log::info("Procurement Data: " . json_encode($procurement));
@@ -115,6 +117,8 @@ class ProcurementController extends Controller
             $form = $honorariaForms->firstWhere(function($item) use ($procurement) {
                 return (string)$item->procurement_id === (string)$procurement->procurement_id;
             }) ?? $procurementForms->firstWhere(function($item) use ($procurement) {
+                return (string)$item->procurement_id === (string)$procurement->procurement_id;
+            }) ?? $otherexpenseForms->firstWhere(function($item) use ($procurement) {
                 return (string)$item->procurement_id === (string)$procurement->procurement_id;
             });
         
