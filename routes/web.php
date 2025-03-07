@@ -48,6 +48,10 @@ Route::get('/otherexpenseform', function () {
     return view('otherexpenseform');
 });
 
+Route::get('/selection', function () {
+    return view('selection');
+});
+
 //PREVENT BACK AFTER LOGOUT
 Route::middleware(['auth', PreventBackAfterLogout::class])->group(function () {
     Route::get('/homepage-ilcdb', function () {
