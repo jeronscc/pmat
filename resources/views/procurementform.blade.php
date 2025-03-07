@@ -270,55 +270,55 @@
 
     <!-- Modals -->
     <div class="modal fade" id="requirementsModal1" tabindex="-1" aria-labelledby="modalTitle1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header bg-dark text-white">
-                    <h5 class="modal-title" id="modalTitle1">REQUIREMENTS DETAILS</h5>
-                </div>
-                <div class="modal-body">
-                    <form>
-                        <!-- Checklist for Button 1 -->
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="app1">
-                            <label class="form-check-label" for="app1">APP / PPMP</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="saro1">
-                            <label class="form-check-label" for="saro1">SARO</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="budget1">
-                            <label class="form-check-label" for="budget1">Budget Breakdown</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="distribution1">
-                            <label class="form-check-label" for="distribution1">Distribution List (for items/goods)</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="poi1">
-                            <label class="form-check-label" for="poi1">POI / Activity Design</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="research1">
-                            <label class="form-check-label" for="research1">Market Research</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="purchase1">
-                            <label class="form-check-label" for="purchase1">Purchase Request</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="quotations1">
-                            <label class="form-check-label" for="quotations1">Quotations</label>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-success" id="saveBtn1">Save</button>
-                </div>
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-dark text-white">
+                <h5 class="modal-title" id="modalTitle1">REQUIREMENTS DETAILS</h5>
+            </div>
+            <div class="modal-body">
+                <form id="requirementsForm1" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label for="appFile1" class="form-label">APP / PPMP</label>
+                        <input class="form-control" type="file" id="appFile1" name="appFile">
+                    </div>
+                    <div class="mb-3">
+                        <label for="saroFile1" class="form-label">SARO</label>
+                        <input class="form-control" type="file" id="saroFile1" name="saroFile">
+                    </div>
+                    <div class="mb-3">
+                        <label for="budgetFile1" class="form-label">Budget Breakdown</label>
+                        <input class="form-control" type="file" id="budgetFile1" name="budgetFile">
+                    </div>
+                    <div class="mb-3">
+                        <label for="distributionFile1" class="form-label">Distribution List (for items/goods)</label>
+                        <input class="form-control" type="file" id="distributionFile1" name="distributionFile">
+                    </div>
+                    <div class="mb-3">
+                        <label for="poiFile1" class="form-label">POI / Activity Design</label>
+                        <input class="form-control" type="file" id="poiFile1" name="poiFile">
+                    </div>
+                    <div class="mb-3">
+                        <label for="researchFile1" class="form-label">Market Research</label>
+                        <input class="form-control" type="file" id="researchFile1" name="researchFile">
+                    </div>
+                    <div class="mb-3">
+                        <label for="purchaseFile1" class="form-label">Purchase Request</label>
+                        <input class="form-control" type="file" id="purchaseFile1" name="purchaseFile">
+                    </div>
+                    <div class="mb-3">
+                        <label for="quotationsFile1" class="form-label">Quotations</label>
+                        <input class="form-control" type="file" id="quotationsFile1" name="quotationsFile">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-success" id="saveBtn1">Save</button>
             </div>
         </div>
     </div>
+</div>
+
 
     <div class="modal fade" id="requirementsModal2" tabindex="-1" aria-labelledby="modalTitle2" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
