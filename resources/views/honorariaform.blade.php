@@ -108,7 +108,7 @@
                                             <td>
                                                 <button type="button" class="btn btn-dark" data-bs-toggle="modal"
                                                     data-bs-target="#requirementsModal">
-                                                    View Details
+                                                    Upload Requirements
                                                 </button>
                                             </td>
                                             <td>
@@ -152,73 +152,90 @@
                     </div>
 
                     <!-- Modals -->
-                    <div class="modal fade" id="requirementsModal" tabindex="-1" aria-labelledby="modalTitle"
-                        aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content">
-                                <div class="modal-header bg-dark text-white">
-                                    <h5 class="modal-title" id="modalTitle">REQUIREMENTS DETAILS</h5>
-                                </div>
-                                <div class="modal-body">
-                                    <form>
-                                        <!-- Checklist for Button  -->
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="ors">
-                                            <label class="form-check-label" for="ors">ORS</label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="dv">
-                                            <label class="form-check-label" for="dv">DV</label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="contract">
-                                            <label class="form-check-label" for="contract">Service Contract</label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="classification">
-                                            <label class="form-check-label" for="classification">Certificate Honoraria
-                                                Classification</label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="report">
-                                            <label class="form-check-label" for="report">Terminal Report</label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="attendance">
-                                            <label class="form-check-label" for="attendance">Attendance</label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="resume">
-                                            <label class="form-check-label" for="resume">Resume/CV</label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="govid">
-                                            <label class="form-check-label" for="govid">Government ID</label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="payslip">
-                                            <label class="form-check-label" for="payslip">Payslip/Certificate of Gross
-                                                Income</label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="bank">
-                                            <label class="form-check-label" for="bank">TIN and Bank Account
-                                                details</label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="cert">
-                                            <label class="form-check-label" for="cert">Certificate of Services
-                                                Rendered</label>
-                                        </div>
-                                    </form>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
-                                    <button type="button" class="btn btn-success" id="saveBtn">Save</button>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="modal fade" id="requirementsModal" tabindex="-1" aria-labelledby="modalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-dark text-white">
+                <h5 class="modal-title" id="modalTitle">UPLOAD REQUIREMENTS</h5>
+            </div>
+            <div class="modal-body">
+                <form id="requirementsForm" enctype="multipart/form-data">
+
+                    <!-- ORS File Upload -->
+                    <div class="mb-3">
+                        <label for="orsFile" class="form-label">Upload ORS</label>
+                        <input class="form-control" type="file" id="orsFile" name="orsFile">
                     </div>
+
+                    <!-- DV File Upload -->
+                    <div class="mb-3">
+                        <label for="dvFile" class="form-label">Upload DV</label>
+                        <input class="form-control" type="file" id="dvFile" name="dvFile">
+                    </div>
+
+                    <!-- Service Contract Upload -->
+                    <div class="mb-3">
+                        <label for="contractFile" class="form-label">Upload Service Contract</label>
+                        <input class="form-control" type="file" id="contractFile" name="contractFile">
+                    </div>
+
+                    <!-- Certificate Honoraria Classification Upload -->
+                    <div class="mb-3">
+                        <label for="classificationFile" class="form-label">Upload Certificate Honoraria Classification</label>
+                        <input class="form-control" type="file" id="classificationFile" name="classificationFile">
+                    </div>
+
+                    <!-- Terminal Report Upload -->
+                    <div class="mb-3">
+                        <label for="reportFile" class="form-label">Upload Terminal Report</label>
+                        <input class="form-control" type="file" id="reportFile" name="reportFile">
+                    </div>
+
+                    <!-- Attendance Upload -->
+                    <div class="mb-3">
+                        <label for="attendanceFile" class="form-label">Upload Attendance</label>
+                        <input class="form-control" type="file" id="attendanceFile" name="attendanceFile">
+                    </div>
+
+                    <!-- Resume/CV Upload -->
+                    <div class="mb-3">
+                        <label for="resumeFile" class="form-label">Upload Resume/CV</label>
+                        <input class="form-control" type="file" id="resumeFile" name="resumeFile">
+                    </div>
+
+                    <!-- Government ID Upload -->
+                    <div class="mb-3">
+                        <label for="govidFile" class="form-label">Upload Government ID</label>
+                        <input class="form-control" type="file" id="govidFile" name="govidFile">
+                    </div>
+
+                    <!-- Payslip/Certificate of Gross Income Upload -->
+                    <div class="mb-3">
+                        <label for="payslipFile" class="form-label">Upload Payslip/Certificate of Gross Income</label>
+                        <input class="form-control" type="file" id="payslipFile" name="payslipFile">
+                    </div>
+
+                    <!-- TIN and Bank Account Details Upload -->
+                    <div class="mb-3">
+                        <label for="bankFile" class="form-label">Upload TIN and Bank Account Details</label>
+                        <input class="form-control" type="file" id="bankFile" name="bankFile">
+                    </div>
+
+                    <!-- Certificate of Services Rendered Upload -->
+                    <div class="mb-3">
+                        <label for="certFile" class="form-label">Upload Certificate of Services Rendered</label>
+                        <input class="form-control" type="file" id="certFile" name="certFile">
+                    </div>
+
+                </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-success" id="saveBtn">Save</button>
+                </div>
+                </div>
+            </div>
+        </div>
                 </div>
             </div>
         </div>

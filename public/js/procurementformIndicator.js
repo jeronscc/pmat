@@ -36,6 +36,10 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
+    document.getElementById('cancelChanges').addEventListener('click', function(e) {
+        e.preventDefault();
+        window.location.href = '/homepage-ilcdb';
+    });
     function initializeStatusTracking() {
         function updateIndicator(dateSubmittedId, dateReturnedId, indicatorId, isActive) {
             const dateSubmitted = document.getElementById(dateSubmittedId).value;

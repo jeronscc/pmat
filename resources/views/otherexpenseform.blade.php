@@ -103,7 +103,7 @@
                                 <td>
                                     <button type="button" class="btn btn-dark" data-bs-toggle="modal"
                                         data-bs-target="#requirementsModal">
-                                        View Details
+                                        Upload Requirements
                                     </button>
                                 </td>
                                 <td>
@@ -150,51 +150,65 @@
 
     <!-- Modals -->
     <div class="modal fade" id="requirementsModal1" tabindex="-1" aria-labelledby="modalTitle1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header bg-dark text-white">
-                    <h5 class="modal-title" id="modalTitle1">REQUIREMENTS DETAILS</h5>
-                </div>
-                <div class="modal-body">
-                    <form>
-                        <!-- Checklist for Button 1 -->
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="ors">
-                            <label class="form-check-label" for="ors">ORS</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="dv">
-                            <label class="form-check-label" for="dv">DV</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="travelorder">
-                            <label class="form-check-label" for="travelorder">Travel Order</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="appearance">
-                            <label class="form-check-label" for="appearance">Certificate of Appearance</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="report">
-                            <label class="form-check-label" for="report">Official Travel Report</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="itinerary">
-                            <label class="form-check-label" for="itenerary">Itinerary of Travel</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="cert">
-                            <label class="form-check-label" for="cert">Certificate of Travel Completion</label>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-success" id="saveBtn1">Save</button>
-                </div>
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-dark text-white">
+                <h5 class="modal-title" id="modalTitle1">UPLOAD REQUIREMENTS</h5>
+            </div>
+            <div class="modal-body">
+                <form id="requirementsForm1" enctype="multipart/form-data">
+
+                    <!-- ORS File Upload -->
+                    <div class="mb-3">
+                        <label for="orsFile" class="form-label">Upload ORS</label>
+                        <input class="form-control" type="file" id="orsFile" name="orsFile">
+                    </div>
+
+                    <!-- DV File Upload -->
+                    <div class="mb-3">
+                        <label for="dvFile" class="form-label">Upload DV</label>
+                        <input class="form-control" type="file" id="dvFile" name="dvFile">
+                    </div>
+
+                    <!-- Travel Order Upload -->
+                    <div class="mb-3">
+                        <label for="travelOrderFile" class="form-label">Upload Travel Order</label>
+                        <input class="form-control" type="file" id="travelOrderFile" name="travelOrderFile">
+                    </div>
+
+                    <!-- Certificate of Appearance Upload -->
+                    <div class="mb-3">
+                        <label for="appearanceFile" class="form-label">Upload Certificate of Appearance</label>
+                        <input class="form-control" type="file" id="appearanceFile" name="appearanceFile">
+                    </div>
+
+                    <!-- Official Travel Report Upload -->
+                    <div class="mb-3">
+                        <label for="reportFile" class="form-label">Upload Official Travel Report</label>
+                        <input class="form-control" type="file" id="reportFile" name="reportFile">
+                    </div>
+
+                    <!-- Itinerary of Travel Upload -->
+                    <div class="mb-3">
+                        <label for="itineraryFile" class="form-label">Upload Itinerary of Travel</label>
+                        <input class="form-control" type="file" id="itineraryFile" name="itineraryFile">
+                    </div>
+
+                    <!-- Certificate of Travel Completion Upload -->
+                    <div class="mb-3">
+                        <label for="certFile" class="form-label">Upload Certificate of Travel Completion</label>
+                        <input class="form-control" type="file" id="certFile" name="certFile">
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-success" id="saveBtn1">Save</button>
             </div>
         </div>
     </div>
+</div>
 
     <!-- Custom JS -->
     <script src="/js/menu.js"></script>
