@@ -477,35 +477,48 @@
             <div class="modal-body">
                 <form id="requirementsForm5" enctype="multipart/form-data">
 
-                    <!-- Section 1: Budget Files -->
+                    <!-- Section 1: Upload Combined Document (ORS, PO, Abstract, Philgeps Posting, IAR, ICS/PAR, Request for Inspection) -->
                     <div class="mb-3">
-                        <label class="form-label">Uploaded Documents (ORS, PO, Abstract, Philgeps Posting, IAR, ICS/PAR, Request for Inspection)</label>
-                        <div id="budgetAllFilePreview">
-                            <!-- Dynamically filled with existing files via JS -->
-                        </div>
-                        <label for="budgetAllFile" class="form-label mt-2">Upload to Overwrite (Optional)</label>
-                        <input class="form-control" type="file" id="budgetAllFile" name="budgetAllFile[]" multiple>
+                        <label for="budgetAllFile5" class="form-label">Upload Combined Document (ORS, PO, Abstract, Philgeps Posting, IAR, ICS/PAR, Request for Inspection)</label>
+                        <input class="form-control" type="file" id="budgetAllFile5" name="budgetAllFile5[]" multiple>
                     </div>
 
-                    <!-- Section 2: Supply Files -->
+                    <!-- Display Existing Files (Optional if you want to load previously uploaded files here) -->
                     <div class="mb-3">
-                        <label class="form-label">Uploaded Documents (Attendance, Certificate, Photos, SOA, DR, Distribution List)</label>
-                        <div id="supplyAllFilePreview">
-                            <!-- Dynamically filled with existing files via JS -->
+                        <label class="form-label">Previously Uploaded Documents (ORS, PO, etc.)</label>
+                        <div id="budgetAllFilePreview5">
+                            <p class="text-muted">Loading files...</p>
                         </div>
-                        <label for="supplyAllFile" class="form-label mt-2">Upload to Overwrite (Optional)</label>
-                        <input class="form-control" type="file" id="supplyAllFile" name="supplyAllFile[]" multiple>
                     </div>
 
-                    <!-- Section 3: All Requirements Files -->
+                    <!-- Section 2: Upload Combined Document (Attendance, Certificate, Photos, SOA, DR, Distribution List) -->
                     <div class="mb-3">
-                        <label class="form-label">Uploaded Documents (PR, Quotations, APP/PPMP, SARO, Budget Breakdown, etc.)</label>
-                        <div id="allReqsFilePreview">
-                            <!-- Dynamically filled with existing files via JS -->
-                        </div>
-                        <label for="allReqsFile" class="form-label mt-2">Upload to Overwrite (Optional)</label>
-                        <input class="form-control" type="file" id="allReqsFile" name="allReqsFile[]" multiple>
+                        <label for="supplyAllFile5" class="form-label">Upload Combined Document (Attendance, Certificate, Photos, SOA, DR, Distribution List)</label>
+                        <input class="form-control" type="file" id="supplyAllFile5" name="supplyAllFile5[]" multiple>
                     </div>
+
+                    <!-- Display Existing Files (Optional) -->
+                    <div class="mb-3">
+                        <label class="form-label">Previously Uploaded Documents (Attendance, Certificate, etc.)</label>
+                        <div id="supplyAllFilePreview5">
+                            <p class="text-muted">Loading files...</p>
+                        </div>
+                    </div>
+
+                    <!-- Section 3: Upload Combined Document (PR, Quotations, APP/PPMP, SARO, Budget Breakdown, etc.) -->
+                    <div class="mb-3">
+                        <label for="allReqsFile5" class="form-label">Upload Combined Document (PR, Quotations, APP/PPMP, SARO, Budget Breakdown, Distribution List, POI, Market Research)</label>
+                        <input class="form-control" type="file" id="allReqsFile5" name="allReqsFile5[]" multiple>
+                    </div>
+
+                    <!-- Display Existing Files (Optional) -->
+                    <div class="mb-3">
+                        <label class="form-label">Previously Uploaded Documents (PR, Quotations, etc.)</label>
+                        <div id="allReqsFilePreview5">
+                            <p class="text-muted">Loading files...</p>
+                        </div>
+                    </div>
+
                 </form>
             </div>
             <div class="modal-footer">
