@@ -6,7 +6,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: black;
+    background-color: #E5E4E2;
     border: 2px solid #ccc;
     padding: 10px;
     height: min(35vh, 300px); /* Default height */
