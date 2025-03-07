@@ -75,59 +75,6 @@ section {
     overflow-y: auto;
 }
 
-.filter-tabs {
-    display: flex;
-    position: relative;
-    margin: 10px 0;
-    padding: 5px;
-    background-color: #f0f0f0;
-    border-radius: 15px;
-    gap: 0; /* Remove spacing between buttons */
-    overflow: hidden;
-    width: fit-content;
-}
-
-.filter-btn {
-    flex: 1;
-    padding: 8px 15px;
-    border: none;
-    background-color: transparent;
-    cursor: pointer;
-    transition: color 0.3s ease;
-    position: relative;
-    z-index: 2;
-    font-size: 14px;
-    font-weight: bold;
-    color: #555;
-    border-radius: 15px;
-}
-
-.filter-btn.active {
-    color: white;
-}
-
-.filter-tabs .tab-indicator {
-    position: absolute;
-    bottom: 0;
-    top: 0;
-    width: 25%;
-    background-color: #4CAF50;
-    border-radius: 15px;
-    transition: transform 0.3s ease;
-    z-index: 1;
-}
-
-/* Adjust button positioning */
-.filter-btn:first-child {
-    border-top-left-radius: 15px;
-    border-bottom-left-radius: 15px;
-}
-
-.filter-btn:last-child {
-    border-top-right-radius: 15px;
-    border-bottom-right-radius: 15px;
-}
-
 #procurementTable td:first-child {
     cursor: pointer;
 }
