@@ -12,3 +12,11 @@
     max-width: 80%; /* Ensures the image is responsive */
     max-height: 80%; /* Keeps image within the box */
 }
+
+.box {
+    transition: transform 0.3s ease-in-out; /* Smooth transition */
+}
+
+.box:hover {
+    transform: scale(1.1); /* Slightly enlarges the container */
+}
