@@ -38,18 +38,21 @@ class ProcurementController extends Controller
                 DB::connection('ilcdb')->table('procurement_form')->insert([
                     'procurement_id' => $request->input('pr_number'),
                     'activity'       => $request->input('activity'),
+                    'saro_no'       => $request->input('saro_number'),
                 ]);
             } elseif ($category === 'honoraria') {
                 // Insert into 'honoraria_form' table
                 DB::connection('ilcdb')->table('honoraria_form')->insert([
                     'procurement_id' => $request->input('pr_number'),
                     'activity'       => $request->input('activity'),
+                    'saro_no'       => $request->input('saro_number'),
                 ]);
             } elseif ($category === 'other expense' || $category === 'other expenses') {
                 // Insert into 'otherexpense_form' table
                 DB::connection('ilcdb')->table('otherexpense_form')->insert([
                     'procurement_id' => $request->input('pr_number'),
                     'activity'       => $request->input('activity'),
+                    'saro_no'       => $request->input('saro_number'),
                 ]);
             }
 
