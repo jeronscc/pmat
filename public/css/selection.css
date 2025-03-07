@@ -1,3 +1,7 @@
+* {
+    box-sizing: border-box; /* Ensures padding and borders are included in width/height calculations */
+}
+
 .box {
     display: flex;
     align-items: center;
@@ -5,21 +9,46 @@
     background-color: black;
     border: 2px solid #ccc;
     padding: 10px;
-    height: 300px; /* Adjust as needed */
+    height: min(35vh, 300px); /* Default height */
+    max-width: 100%; /* Ensure it never exceeds its container's width */
     border-radius: 50px;
     margin: 10px;
     position: relative;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    overflow: hidden; /* Prevent overflow */
 }
 
+/* Ensures images scale properly without overflowing */
 .box img {
-    max-width: 80%; /* Ensures the image is responsive */
-    max-height: 80%; /* Keeps image within the box */
+    max-width: 80%;
+    max-height: 80%;
+    object-fit: contain;
 }
 
-.box {
-    transition: transform 0.3s ease-in-out; /* Smooth transition */
-}
-
+/* Hover effect for better UI feedback */
 .box:hover {
-    transform: scale(1.1); /* Slightly enlarges the container */
+    transform: scale(1.1);
+    box-shadow: 0 10px 20px rgba(255, 255, 255, 0.3);
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+    .box {
+        height: min(20vh, 250px); /* Slightly taller for medium screens */
+        aspect-ratio: 16 / 7;
+    }
+}
+
+@media (max-width: 768px) {
+    .box {
+        height: min(25vh, 220px); /* Adjusts height for tablets */
+        aspect-ratio: 16 / 8;
+    }
+}
+
+@media (max-width: 576px) {
+    .box {
+        height: min(30vh, 180px); /* Taller for better visibility on mobile */
+        aspect-ratio: 16 / 9;
+    }
 }
