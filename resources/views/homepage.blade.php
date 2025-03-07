@@ -98,26 +98,42 @@
 
         
             <!-- Right Panel (PR Table) -->
-            <div class="col-md-9 right-panel">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                <section class="records">
-                <div class="header">
-                    <h5>Currently Viewing: <span id="currentViewingSaro"></span></h5>
-                    <div class="d-flex">
-                        <button type="button" class="icon-button me-2" data-bs-toggle="modal" data-bs-target="#procurementModal">
-                            <img src="/assets/add.png" alt="Add Procurement" style="width: 20px; height: 20px; margin-bottom:5px;">
-                        </button>
-                        <div class="search-box">
+<div class="col-md-9 right-panel">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <section class="records">
+            <div class="header">
+                <h5>Currently Viewing: <span id="currentViewingSaro"></span></h5>
+                <div class="d-flex">
+                    <button type="button" class="icon-button me-2" data-bs-toggle="modal" data-bs-target="#procurementModal">
+                        <img src="/assets/add.png" alt="Add Procurement" style="width: 20px; height: 20px; margin-bottom:5px;">
+                    </button>
+                    <div class="search-box">
                         <input type="text" class="form-control me-2" id="searchBar" placeholder="Search...">
-                        <button type="submit" class="search-button" onclick="">
-                            Search
-                        </button>
-                        <div>
-                    </div>
+                        <button type="submit" class="search-button">Search</button>
                     </div>
                 </div>
-                
-                <div class="table-container">
+            </div>
+
+            <!-- Tabs Above Table -->
+            <ul class="nav nav-tabs" id="procurementTabs">
+                <li class="nav-item">
+                    <a class="nav-link active" id="tabAll-tab" data-bs-toggle="tab" href="#tabAll">All</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="tabOngoing-tab" data-bs-toggle="tab" href="#tabOngoing">Ongoing</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="tabOverdue-tab" data-bs-toggle="tab" href="#tabOverdue">Overdue</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="tabDone-tab" data-bs-toggle="tab" href="#tabDone">Done</a>
+                </li>
+            </ul>
+
+            <!-- Table Container -->
+            <div class="table-container tab-content">
+                <!-- All Tab (Default) -->
+                <div class="tab-pane fade show active" id="tabAll">
                     <div class="record-box">
                         <table>
                             <thead>
@@ -128,37 +144,71 @@
                                 </tr>
                             </thead>
                             <tbody id="procurementTable">
-                                <!-- Rows will be inserted dynamically by JavaScript -->
+                                <!-- Default content (All) -->
                             </tbody>
                         </table>
                     </div>
                 </div>
-                <div class="modal fade" id="procurementDetailsModal" tabindex="-1" aria-labelledby="procurementDetailsModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="procurementDetailsModalLabel">Procurement Details</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <p><strong>Procurement Category:</strong> <span id="modalProcurementCategory"></span></p>
-                                <p><strong>Procurement No:</strong> <span id="modalProcurementNo"></span></p>
-                                <p><strong>SARO No:</strong> <span id="modalSaroNo"></span></p>
-                                <p><strong>Year:</strong> <span id="modalYear"></span></p>
-                                <p><strong>Description:</strong> <span id="modalDescription"></span></p>
-                                <p><strong>Activity:</strong> <span id="modalActivity"></span></p>
-                            </div>
-                            <div class="modal-footer">
-                                <!-- Cancel Button -->
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                <!-- Edit Button (still needs implementation) -->
-                                <button type="button" class="btn btn-primary">Edit</button>
-                            </div>
-                        </div>
+
+                <!-- Ongoing Tab -->
+                <div class="tab-pane fade" id="tabOngoing">
+                    <div class="record-box">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>PR NUMBER</th>
+                                    <th>ACTIVITY</th>
+                                    <th>STATUS</th>
+                                </tr>
+                            </thead>
+                            <tbody id="procurementTableOngoing">
+                                <!-- Ongoing data will be inserted here -->
+                            </tbody>
+                        </table>
                     </div>
                 </div>
-            </section>
-        </div>
+
+                <!-- Overdue Tab -->
+                <div class="tab-pane fade" id="tabOverdue">
+                    <div class="record-box">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>PR NUMBER</th>
+                                    <th>ACTIVITY</th>
+                                    <th>STATUS</th>
+                                </tr>
+                            </thead>
+                            <tbody id="procurementTableOverdue">
+                                <!-- Overdue data will be inserted here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Done Tab -->
+                <div class="tab-pane fade" id="tabDone">
+                    <div class="record-box">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>PR NUMBER</th>
+                                    <th>ACTIVITY</th>
+                                    <th>STATUS</th>
+                                </tr>
+                            </thead>
+                            <tbody id="procurementTableDone">
+                                <!-- Done data will be inserted here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </div>
+</div>
+
             
         <!-- SARO Modal -->
         <div class="modal fade" id="addSaroModal" tabindex="-1" aria-labelledby="saroTitle" aria-hidden="true">
