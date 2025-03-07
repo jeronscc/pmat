@@ -25,7 +25,7 @@
     <div class="row">
         <div class="col-md-6 p-3">
             <div class="box">
-            <form action="" method="POST">
+            <form action="/homepage-ilcdb">
                 @csrf
                 <button type="submit" class="btn"><img src="/assets/ilcdb-logo-2.png" alt="ILCDB" class="img-fluid"></button>
             </form>
@@ -33,7 +33,7 @@
         </div>
         <div class="col-md-6 p-3">
             <div class="box">
-            <form action="" method="POST">
+            <form action="/dtc">
                 @csrf
                 <button type="submit" class="btn"><img src="/assets/dtc-logo.png" alt="DTC" class="img-fluid"></button>
             </form>
@@ -43,7 +43,7 @@
     <div class="row">
         <div class="col-md-6 p-3">
             <div class="box">
-            <form action="" method="POST">
+            <form action="/spark">
                 @csrf
                 <button type="submit" class="btn"><img src="/assets/spark-logo.png" alt="SPARK" class="img-fluid"></button> 
             </form>
@@ -51,7 +51,7 @@
         </div>
         <div class="col-md-6 p-3">
             <div class="box">
-            <form action="" method="POST">
+            <form action="/projectClick">
                 @csrf
                 <button type="submit" class="btn"><img src="/assets/project_click_logo.png" alt="PROJECT CLICK" class="img-fluid"></button>
             </form>
