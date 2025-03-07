@@ -27,7 +27,7 @@
             <div class="box">
             <form action="/homepage-ilcdb">
                 @csrf
-                <button type="submit" class="btn"><img src="/assets/ilcdb-logo-2.png" alt="ILCDB" class="img-fluid"></button>
+                <button type="submit" class="btn" style="outline: none; border: none;"><img src="/assets/ilcdb-logo-2.png" alt="ILCDB" class="img-fluid"></button>
             </form>
             </div>
         </div>
@@ -35,7 +35,7 @@
             <div class="box">
             <form action="/dtc">
                 @csrf
-                <button type="submit" class="btn"><img src="/assets/dtc-logo.png" alt="DTC" class="img-fluid"></button>
+                <button type="submit" class="btn" style="outline: none; border: none;"><img src="/assets/dtc-logo.png" alt="DTC" class="img-fluid"></button>
             </form>
             </div>
         </div>
@@ -45,7 +45,7 @@
             <div class="box">
             <form action="/spark">
                 @csrf
-                <button type="submit" class="btn"><img src="/assets/spark-logo.png" alt="SPARK" class="img-fluid"></button> 
+                <button type="submit" class="btn" style="outline: none; border: none;"><img src="/assets/spark-logo.png" alt="SPARK" class="img-fluid"></button> 
             </form>
             </div>
         </div>
@@ -53,7 +53,7 @@
             <div class="box">
             <form action="/projectClick">
                 @csrf
-                <button type="submit" class="btn"><img src="/assets/project_click_logo.png" alt="PROJECT CLICK" class="img-fluid"></button>
+                <button type="submit" class="btn" style="outline: none; border: none;"><img src="/assets/project_click_logo.png" alt="PROJECT CLICK" class="img-fluid"></button>
             </form>
             </div>
         </div>
