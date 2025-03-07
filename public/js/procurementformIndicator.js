@@ -48,10 +48,20 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
 
-            if (dateSubmitted && !dateReturned) {
-                indicator.style.backgroundColor = "green";
-                indicator.textContent = " ";
-            } else if (dateSubmitted && dateReturned) {
+            if (dateSubmitted && dateReturned) {
+                const submittedDate = new Date(dateSubmitted);
+                const returnedDate = new Date(dateReturned);
+                const diffTime = Math.abs(returnedDate - submittedDate);
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+                if (diffDays <= 2) {
+                    indicator.style.backgroundColor = "green";
+                    indicator.textContent = " ";
+                } else {
+                    indicator.style.backgroundColor = "red";
+                    indicator.textContent = "Overdue";
+                }
+            } else if (dateSubmitted && !dateReturned) {
                 indicator.style.backgroundColor = "green";
                 indicator.textContent = " ";
             } else {
