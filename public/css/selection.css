@@ -31,24 +31,3 @@
     box-shadow: 0 10px 20px rgba(255, 255, 255, 0.3);
 }
 
-/* Responsive adjustments */
-@media (max-width: 1024px) {
-    .box {
-        height: min(20vh, 250px); /* Slightly taller for medium screens */
-        aspect-ratio: 16 / 7;
-    }
-}
-
-@media (max-width: 768px) {
-    .box {
-        height: min(25vh, 220px); /* Adjusts height for tablets */
-        aspect-ratio: 16 / 8;
-    }
-}
-
-@media (max-width: 576px) {
-    .box {
-        height: min(30vh, 180px); /* Taller for better visibility on mobile */
-        aspect-ratio: 16 / 9;
-    }
-}
