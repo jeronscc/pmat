@@ -115,7 +115,7 @@
                     <tr>
                         <td>
                             <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#requirementsModal2">
-                                View Details
+                                Upload Requirements
                             </button>
                         </td>
                         <td>
@@ -145,7 +145,7 @@
                     <tr>
                         <td>
                             <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#requirementsModal3">
-                                View Details
+                                Upload Requirements
                             </button>
                         </td>
                         <td>
@@ -176,7 +176,7 @@
                     <tr>
                         <td>
                             <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#requirementsModal4">
-                                View Details
+                                Upload Requirements
                             </button>
                         </td>
                         <td>
@@ -190,7 +190,7 @@
                     <tr>
                         <td>
                             <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#requirementsModal5">
-                                View Details
+                                Upload Requirements
                             </button>
                         </td>
                         <td>
@@ -220,7 +220,7 @@
                     <tr>
                         <td>
                             <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#requirementsModal6">
-                                View Details
+                                Upload Requirements
                             </button>
                         </td>
                         <td>
@@ -269,45 +269,18 @@
     </div>
 
     <!-- Modals -->
-    <div class="modal fade" id="requirementsModal1" tabindex="-1" aria-labelledby="modalTitle1" aria-hidden="true">
+   <!-- Modal 1: Initial Procurement Requirements -->
+<div class="modal fade" id="requirementsModal1" tabindex="-1" aria-labelledby="modalTitle1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header bg-dark text-white">
-                <h5 class="modal-title" id="modalTitle1">UPLOAD REQUIREMENTS</h5>
+                <h5 class="modal-title" id="modalTitle1">Upload Initial Procurement Requirements</h5>
             </div>
             <div class="modal-body">
                 <form id="requirementsForm1" enctype="multipart/form-data">
                     <div class="mb-3">
-                        <label for="appFile1" class="form-label">APP / PPMP</label>
-                        <input class="form-control" type="file" id="appFile1" name="appFile">
-                    </div>
-                    <div class="mb-3">
-                        <label for="saroFile1" class="form-label">SARO</label>
-                        <input class="form-control" type="file" id="saroFile1" name="saroFile">
-                    </div>
-                    <div class="mb-3">
-                        <label for="budgetFile1" class="form-label">Budget Breakdown</label>
-                        <input class="form-control" type="file" id="budgetFile1" name="budgetFile">
-                    </div>
-                    <div class="mb-3">
-                        <label for="distributionFile1" class="form-label">Distribution List</label>
-                        <input class="form-control" type="file" id="distributionFile1" name="distributionFile">
-                    </div>
-                    <div class="mb-3">
-                        <label for="poiFile1" class="form-label">POI / Activity Design</label>
-                        <input class="form-control" type="file" id="poiFile1" name="poiFile">
-                    </div>
-                    <div class="mb-3">
-                        <label for="researchFile1" class="form-label">Market Research</label>
-                        <input class="form-control" type="file" id="researchFile1" name="researchFile">
-                    </div>
-                    <div class="mb-3">
-                        <label for="purchaseFile1" class="form-label">Purchase Request</label>
-                        <input class="form-control" type="file" id="purchaseFile1" name="purchaseFile">
-                    </div>
-                    <div class="mb-3">
-                        <label for="quotationsFile1" class="form-label">Quotations</label>
-                        <input class="form-control" type="file" id="quotationsFile1" name="quotationsFile">
+                        <label class="form-label">Upload Files (APP/PPMP, SARO, Budget Breakdown, etc.)</label>
+                        <input class="form-control" type="file" id="initialRequirementsFiles" name="initialRequirementsFiles[]" multiple>
                     </div>
                 </form>
             </div>
@@ -319,181 +292,123 @@
     </div>
 </div>
 
-
-    <div class="modal fade" id="requirementsModal2" tabindex="-1" aria-labelledby="modalTitle2" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header bg-dark text-white">
-                    <h5 class="modal-title" id="modalTitle2">REQUIREMENTS DETAILS</h5>
-                </div>
-                <div class="modal-body">
-                    <form>
-                        <!-- Checklist for Button 2 -->
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="po1">
-                            <label class="form-check-label" for="po1">Purchase Order</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="abs1">
-                            <label class="form-check-label" for="abs1">Abstract/Philgeps posting*</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="other1">
-                            <label class="form-check-label" for="other1">Purchase Request, Quotations, APP / PPMP, SARO, Budget Breakdown, Distribution List, POI/Activity Design, Market Research</label>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-success" id="saveBtn2">Save</button>
-                </div>
+<!-- Modal 2: Post-Procurement - Supply Unit -->
+<div class="modal fade" id="requirementsModal2" tabindex="-1" aria-labelledby="modalTitle2" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-dark text-white">
+                <h5 class="modal-title" id="modalTitle2">Upload Supply Unit Documents</h5>
+            </div>
+            <div class="modal-body">
+                <form id="requirementsForm2" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label class="form-label">Upload Files (Purchase Order, Philgeps Posting, etc.)</label>
+                        <input class="form-control" type="file" id="supplyRequirementsFiles" name="supplyRequirementsFiles[]" multiple>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-success" id="saveBtn2">Save</button>
             </div>
         </div>
     </div>
+</div>
 
-    <div class="modal fade" id="requirementsModal3" tabindex="-1" aria-labelledby="modalTitle3" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header bg-dark text-white">
-                    <h5 class="modal-title" id="modalTitle3">REQUIREMENTS DETAILS</h5>
-                </div>
-                <div class="modal-body">
-                    <form>
-                        <!-- Checklist for Button 3 -->
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="ors1">
-                            <label class="form-check-label" for="ors1">ORS</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="po2">
-                            <label class="form-check-label" for="po2">Purchase Order</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="abs2">
-                            <label class="form-check-label" for="abs2">Abstract/Philgeps posting*</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="budget3">
-                            <label class="form-check-label" for="budget3">Purchase Request, Quotations, APP / PPMP, SARO, Budget Breakdown, Distribution List, POI/Activity Design, Market Research</label>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-success" id="saveBtn3">Save</button>
-                </div>
+<!-- Modal 3: Budget Unit -->
+<div class="modal fade" id="requirementsModal3" tabindex="-1" aria-labelledby="modalTitle3" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-dark text-white">
+                <h5 class="modal-title" id="modalTitle3">Upload Budget Unit Documents</h5>
+            </div>
+            <div class="modal-body">
+                <form id="requirementsForm3" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label class="form-label">Upload Files (ORS, PO, Abstract, etc.)</label>
+                        <input class="form-control" type="file" id="budgetRequirementsFiles" name="budgetRequirementsFiles[]" multiple>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-success" id="saveBtn3">Save</button>
             </div>
         </div>
     </div>
+</div>
 
-    <div class="modal fade" id="requirementsModal4" tabindex="-1" aria-labelledby="modalTitle4" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header bg-dark text-white">
-                    <h5 class="modal-title" id="modalTitle4">REQUIREMENTS DETAILS</h5>
-                </div>
-                <div class="modal-body">
-                    <form>
-                        <!-- Checklist for Button 3 -->
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="attendance1">
-                            <label class="form-check-label" for="attendance1">Attendance</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="coc1">
-                            <label class="form-check-label" for="coc1">Certificate of Completion/Satisfaction for Supplier</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="pic1">
-                            <label class="form-check-label" for="pic1">Photo</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="soa1">
-                            <label class="form-check-label" for="soa1">SOA/ Billing Statement</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="dr1">
-                            <label class="form-check-label" for="dr1">Delivery Receipt</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="dl1">
-                            <label class="form-check-label" for="dl1">Distribution List(Receiving Copy)</label>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-success" id="saveBtn4">Save</button>
-                </div>
+<!-- Modal 4: Post-Procurement - Supply Unit (Attendance, Certificates) -->
+<div class="modal fade" id="requirementsModal4" tabindex="-1" aria-labelledby="modalTitle4" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-dark text-white">
+                <h5 class="modal-title" id="modalTitle4">Upload Post-Procurement Documents (Supply Unit)</h5>
+            </div>
+            <div class="modal-body">
+                <form id="requirementsForm4" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label class="form-label">Upload Files (Attendance, Certificates, Photos, etc.)</label>
+                        <input class="form-control" type="file" id="postSupplyRequirementsFiles" name="postSupplyRequirementsFiles[]" multiple>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-success" id="saveBtn4">Save</button>
             </div>
         </div>
     </div>
+</div>
 
-    <div class="modal fade" id="requirementsModal5" tabindex="-1" aria-labelledby="modalTitle5" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header bg-dark text-white">
-                    <h5 class="modal-title" id="modalTitle5">REQUIREMENTS DETAILS</h5>
-                </div>
-                <div class="modal-body">
-                    <form>
-                        <!-- Checklist for Button 3 -->
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="budgetall1">
-                            <label class="form-check-label" for="budgetall1">ORS, Purchase Order, Abstract, Philgeps posting*, IAR, ICS/PAR, Request for Inspection(COA)</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="supplyall1">
-                            <label class="form-check-label" for="supplyall1">Attendance, Certificate of Completion/Satisfaction for Supplier, Photos, SOA/Billing Statement, Delivery Receipt, Distribution List(Receiving Copy)</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="allreqs1">
-                            <label class="form-check-label" for="allreqs1">Purchase Request, Quotations, APP / PPMP, SARO, Budget Breakdown, Distribution List, POI/Activity Design, Market Research</label>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-success" id="saveBtn5">Save</button>
-                </div>
+<!-- Modal 5: Combined Final Package -->
+<div class="modal fade" id="requirementsModal5" tabindex="-1" aria-labelledby="modalTitle5" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-dark text-white">
+                <h5 class="modal-title" id="modalTitle5">Upload Complete Package (Budget & Supply)</h5>
+            </div>
+            <div class="modal-body">
+                <form id="requirementsForm5" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label class="form-label">Upload Final Package (Budget & Supply)</label>
+                        <input class="form-control" type="file" id="finalPackageFiles" name="finalPackageFiles[]" multiple>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-success" id="saveBtn5">Save</button>
             </div>
         </div>
     </div>
+</div>
 
-    <div class="modal fade" id="requirementsModal6" tabindex="-1" aria-labelledby="modalTitle6" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header bg-dark text-white">
-                    <h5 class="modal-title" id="modalTitle6">REQUIREMENTS DETAILS</h5>
-                </div>
-                <div class="modal-body">
-                    <form>
-                        <!-- Checklist for Button 3 -->
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="dv1">
-                            <label class="form-check-label" for="dv1">DV</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="budgetall2">
-                            <label class="form-check-label" for="budgetall2">ORS, Purchase Order, Abstract, Philgeps posting*, IAR, ICS/PAR, Request for Inspection(COA)</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="supplyall2">
-                            <label class="form-check-label" for="supplyall2">Attendance, Certificate of Completion/Satisfaction for Supplier, Photos, SOA/Billing Statement, Delivery Receipt, Distribution List(Receiving Copy)</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="allreqs2">
-                            <label class="form-check-label" for="allreqs2">Purchase Request, Quotations, APP / PPMP, SARO, Budget Breakdown, Distribution List, POI/Activity Design, Market Research</label>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-success" id="saveBtn6">Save</button>
-                </div>
+<!-- Modal 6: Accounting Unit - Final DV Upload -->
+<div class="modal fade" id="requirementsModal6" tabindex="-1" aria-labelledby="modalTitle6" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-dark text-white">
+                <h5 class="modal-title" id="modalTitle6">Upload Disbursement Voucher (DV)</h5>
+            </div>
+            <div class="modal-body">
+                <form id="requirementsForm6" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label class="form-label">Upload DV File</label>
+                        <input class="form-control" type="file" id="dvFile" name="dvFile">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-success" id="saveBtn6">Save</button>
             </div>
         </div>
     </div>
+</div>
+
+
+
     <!-- Include jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
