@@ -101,7 +101,7 @@
                     <tr>
                         <td>
                             <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#requirementsModal1">
-                                View Details
+                                Upload Requirements
                             </button>
                         </td>
                         <td>
@@ -273,7 +273,7 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header bg-dark text-white">
-                <h5 class="modal-title" id="modalTitle1">REQUIREMENTS DETAILS</h5>
+                <h5 class="modal-title" id="modalTitle1">UPLOAD REQUIREMENTS</h5>
             </div>
             <div class="modal-body">
                 <form id="requirementsForm1" enctype="multipart/form-data">
@@ -290,7 +290,7 @@
                         <input class="form-control" type="file" id="budgetFile1" name="budgetFile">
                     </div>
                     <div class="mb-3">
-                        <label for="distributionFile1" class="form-label">Distribution List (for items/goods)</label>
+                        <label for="distributionFile1" class="form-label">Distribution List</label>
                         <input class="form-control" type="file" id="distributionFile1" name="distributionFile">
                     </div>
                     <div class="mb-3">
