@@ -85,4 +85,5 @@ Route::post('/procurementform/update', [ProcurementFormController::class, 'updat
 Route::get('/honorariaform', [HonorariaFormController::class, 'showForm'])->name('honoraria.form');
 Route::post('/honorariaform/update', [HonorariaFormController::class, 'updateHonoraria'])->name('honoraria.update');
 
-Route::get('/otherexpenseform', [OtherExpenseFormController::class, 'showOtherExpenseForm'])->name('otherexpense.form');  
+Route::get('/otherexpenseform', [OtherExpenseFormController::class, 'showForm'])->name('otherexpense.form');  
+Route::post('/otherexpenseform/update', [OtherExpenseFormController::class, 'updateOtherExpense'])->name('otherexpense.update');
