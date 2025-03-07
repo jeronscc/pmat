@@ -102,7 +102,7 @@ class OtherExpenseFormController extends Controller
             // Log the error and return a failure response
             Log::error('Other expense update error: ' . $e->getMessage());
             return response()->json([
-                'message' => 'An error occurred while updating the honoraria form.',
+                'message' => 'An error occurred while updating the other expense form.',
                 'error'   => $e->getMessage(),
             ], 500);
         }
