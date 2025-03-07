@@ -25,24 +25,36 @@
     <div class="row">
         <div class="col-md-6 p-3">
             <div class="box">
-                <img src="/assets/ilcdb-logo-2.png" alt="ILCDB" class="img-fluid">
+            <form action="" method="POST">
+                @csrf
+                <button type="submit" class="btn"><img src="/assets/ilcdb-logo-2.png" alt="ILCDB" class="img-fluid"></button>
+            </form>
             </div>
         </div>
         <div class="col-md-6 p-3">
             <div class="box">
-                <img src="/assets/dtc-logo.png" alt="DTC" class="img-fluid">
+            <form action="" method="POST">
+                @csrf
+                <button type="submit" class="btn"><img src="/assets/dtc-logo.png" alt="DTC" class="img-fluid"></button>
+            </form>
             </div>
         </div>
     </div>
     <div class="row">
         <div class="col-md-6 p-3">
             <div class="box">
-                <img src="/assets/spark-logo.png" alt="SPARK" class="img-fluid">
+            <form action="" method="POST">
+                @csrf
+                <button type="submit" class="btn"><img src="/assets/spark-logo.png" alt="SPARK" class="img-fluid"></button> 
+            </form>
             </div>
         </div>
         <div class="col-md-6 p-3">
             <div class="box">
-                <img src="/assets/project_click_logo.png" alt="PROJECT CLICK" class="img-fluid">
+            <form action="" method="POST">
+                @csrf
+                <button type="submit" class="btn"><img src="/assets/project_click_logo.png" alt="PROJECT CLICK" class="img-fluid"></button>
+            </form>
             </div>
         </div>
     </div>
