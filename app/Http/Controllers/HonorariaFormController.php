@@ -108,5 +108,44 @@ class HonorariaFormController extends Controller
         }
     }
     
+    public function upload(Request $request)
+    {
+        $validated = $request->validate([
+            'procurement_id' => 'required|string',
+            'orsFile' => 'nullable|file|max:5120',
+            'dvFile' => 'nullable|file|max:5120',
+            'contractFile' => 'nullable|file|max:5120',
+            'classificationFile' => 'nullable|file|max:5120',
+            'reportFile' => 'nullable|file|max:5120',
+            'attendanceFile' => 'nullable|file|max:5120',
+            'resumeFile' => 'nullable|file|max:5120',
+            'govidFile' => 'nullable|file|max:5120',
+            'payslipFile' => 'nullable|file|max:5120',
+            'bankFile' => 'nullable|file|max:5120',
+            'certFile' => 'nullable|file|max:5120',
+        ]);
     
-}
+        $uploads = [];
+    
+        foreach ($validated as $field => $file) {
+            if ($request->hasFile($field)) {
+                $path = $request->file($field)->store("requirements/{$validated['procurement_id']}", 'local');
+    
+                // Use ilcdb connection here
+                DB::connection('ilcdb')->table('requirements')->insert([
+                    'procurement_id' => $validated['procurement_id'],
+                    'requirement_name' => $field,
+                    'file_path' => $path,
+                    'created_at' => now(),
+                    'updated_at' => now()
+                ]);
+                $uploads[] = $field;
+            }
+        }
+    
+        return response()->json([
+            'success' => true,
+            'message' => 'Uploaded: ' . implode(', ', $uploads)
+        ]);
+    }
+    
