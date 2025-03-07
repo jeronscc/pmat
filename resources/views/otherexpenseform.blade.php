@@ -103,7 +103,7 @@
                                 <td>
                                     <button type="button" class="btn btn-dark" data-bs-toggle="modal"
                                         data-bs-target="#requirementsModal">
-                                        View Details
+                                        Upload Requirements
                                     </button>
                                 </td>
                                 <td>
