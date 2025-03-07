@@ -75,6 +75,44 @@ section {
     overflow-y: auto;
 }
 
+.filter-tabs {
+    margin-bottom: 15px;
+}
+
+.filter-btn {
+    padding: 8px 15px;
+    margin-right: 5px;
+    border: 1px solid #ccc;
+    background-color: #f0f0f0;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.filter-btn.active {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.filter-btn:hover {
+    background-color: #ddd;
+}
+
+.table-container {
+    overflow-x: auto;
+}
+
+.record-box table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.record-box th, .record-box td {
+    padding: 10px;
+    border: 1px solid #ccc;
+    text-align: left;
+}
+
 #procurementTable td:first-child {
     cursor: pointer;
 }

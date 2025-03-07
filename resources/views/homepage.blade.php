@@ -116,7 +116,14 @@
                     </div>
                     </div>
                 </div>
-
+                
+                <div class="filter-tabs">
+                    <button class="filter-btn" data-filter="all">All</button>
+                    <button class="filter-btn" data-filter="ongoing">Ongoing</button>
+                    <button class="filter-btn" data-filter="overdue">Overdue</button>
+                    <button class="filter-btn" data-filter="done">Done</button>
+                </div>
+                
                 <div class="table-container">
                     <div class="record-box">
                         <table>
