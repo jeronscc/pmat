@@ -21,7 +21,7 @@
         </form>
     </header>
     
-    <div class="container mt-4">
+    <div class="container mt-0">
     <div class="row">
         <div class="col-md-6 p-3">
             <div class="box">
@@ -42,7 +42,7 @@
         </div>
         <div class="col-md-6 p-3">
             <div class="box">
-                <img src="/assets/click-logo.png" alt="PROJECT CLICK" class="img-fluid">
+                <img src="/assets/project_click_logo.png" alt="PROJECT CLICK" class="img-fluid">
             </div>
         </div>
     </div>
