@@ -16,6 +16,10 @@ Route::get('/login', function () {
     return view('login');
 })->name('login');
 
+Route::get('/select-project', function () {
+    return view('selection');
+})->name('select-project');
+
 Route::get('/homepage-ilcdb', function () {
     return view('homepage'); 
 })->middleware('auth');
