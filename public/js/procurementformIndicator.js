@@ -68,6 +68,9 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
 
+        lockPreviousStages(activeStage);
+        checkIfFormCompleted();
+
         for (let i = 1; i <= 6; i++) {
             const dateSubmitted = document.getElementById(`dateSubmitted${i}`);
             const dateReturned = document.getElementById(`dateReturned${i}`);
@@ -83,6 +86,9 @@ document.addEventListener('DOMContentLoaded', function() {
                             break;
                         }
                     }
+
+                    lockPreviousStages(newActiveStage); // Added
+                    checkIfFormCompleted(); // Added
 
                     for (let j = 1; j <= 6; j++) {
                         updateIndicator(`dateSubmitted${j}`, `dateReturned${j}`, `indicator${j}`, j === newActiveStage);
@@ -149,7 +155,6 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('dateReturned6').setAttribute('readonly', 'true');
     }
 
-    // Restrict Budget Spent Field until all rows are complete
     function toggleBudgetSpent() {
         let allCompleted = true;
 
@@ -168,6 +173,38 @@ document.addEventListener('DOMContentLoaded', function() {
             budgetSpentField.removeAttribute('readonly');
         } else {
             budgetSpentField.setAttribute('readonly', 'true');
+        }
+    }
+
+    function lockPreviousStages(activeStage) {
+        for (let i = 1; i < activeStage; i++) {
+            document.getElementById(`dateSubmitted${i}`).setAttribute('readonly', 'true');
+            document.getElementById(`dateReturned${i}`).setAttribute('readonly', 'true');
+        }
+    }
+
+    function checkIfFormCompleted() {
+        let allCompleted = true;
+        for (let i = 1; i <= 6; i++) {
+            const submitted = document.getElementById(`dateSubmitted${i}`).value;
+            const returned = document.getElementById(`dateReturned${i}`).value;
+
+            if (!(submitted && returned)) {
+                allCompleted = false;
+                break;
+            }
+        }
+
+        if (allCompleted) {
+            lockAllRows();
+            document.getElementById('budgetSpent').setAttribute('readonly', 'true');
+        }
+    }
+
+    function lockAllRows() {
+        for (let i = 1; i <= 6; i++) {
+            document.getElementById(`dateSubmitted${i}`).setAttribute('readonly', 'true');
+            document.getElementById(`dateReturned${i}`).setAttribute('readonly', 'true');
         }
     }
 });
