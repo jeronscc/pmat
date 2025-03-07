@@ -2,10 +2,13 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #f0f0f0;
+    background-color: black;
     border: 2px solid #ccc;
-    padding: 20px;
-    height: 200px; /* Adjust as needed */
+    padding: 10px;
+    height: 300px; /* Adjust as needed */
+    border-radius: 50px;
+    margin: 10px;
+    position: relative;
 }
 
 .box img {
