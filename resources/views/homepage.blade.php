@@ -117,16 +117,16 @@
             <!-- Tabs Above Table -->
             <ul class="nav nav-tabs" id="procurementTabs">
                 <li class="nav-item">
-                    <a class="nav-link active" id="tabAll-tab" data-bs-toggle="tab" href="#tabAll">All</a>
+                    <a class="nav-link active" style="color: black;" id="tabAll-tab" data-bs-toggle="tab" href="#tabAll">All</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="tabOngoing-tab" data-bs-toggle="tab" href="#tabOngoing">Ongoing</a>
+                    <a class="nav-link" style="color: black;" id="tabOngoing-tab" data-bs-toggle="tab" href="#tabOngoing">Ongoing</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="tabOverdue-tab" data-bs-toggle="tab" href="#tabOverdue">Overdue</a>
+                    <a class="nav-link" style="color: black;" id="tabOverdue-tab" data-bs-toggle="tab" href="#tabOverdue">Overdue</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="tabDone-tab" data-bs-toggle="tab" href="#tabDone">Done</a>
+                    <a class="nav-link" style="color: black;" id="tabDone-tab" data-bs-toggle="tab" href="#tabDone">Done</a>
                 </li>
             </ul>
 
