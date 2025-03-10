@@ -155,33 +155,6 @@ class ProcurementController extends Controller
         return response()->json(['error' => 'Error fetching procurement data: ' . $e->getMessage()], 500);
     }
 }
-public function index(Request $request)
-{
-    $statusFilter = $request->input('status', 'all');
-
-    $procurements = DB::table('procurements')
-        ->select('*')
-        ->when($statusFilter === 'ongoing', function ($query) {
-            return $query->where('status', 'Ongoing');
-        })
-        ->when($statusFilter === 'overdue', function ($query) {
-            return $query->where('status', 'Overdue');
-        })
-        ->when($statusFilter === 'done', function ($query) {
-            return $query->where('status', 'Done');
-        })
-        ->orderByRaw("
-            CASE 
-                WHEN status = 'Overdue' THEN 1
-                WHEN status = 'Ongoing' THEN 2
-                WHEN status = 'Done' THEN 3
-                ELSE 4
-            END
-        ")
-        ->get();
-
-    return response()->json($procurements);
-}
 
 }
 
