@@ -8,6 +8,10 @@ use Illuminate\Support\Facades\DB; // ✅ Make sure this is imported
 class OverdueStatusServiceProvider extends ServiceProvider
 {
 
+    public function register(): void
+    {
+        //
+    }
     
     public function boot()
     {
