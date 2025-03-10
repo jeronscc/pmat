@@ -74,6 +74,7 @@ class ProcurementController extends Controller
         $procurements = DB::connection('ilcdb')
             ->table('procurement')
             ->where('saro_no', $saroNo)
+            ->orderBy('created_at', 'desc')
             ->get();
 
         return response()->json($procurements);
