@@ -133,32 +133,49 @@ class ProcurementFormController extends Controller
                 $status = 'Done'; // All fields are completed
             }
     
-            // Update the database with the appropriate unit and status
-            $updated = DB::connection('ilcdb')->table('procurement_form')
-                ->where('procurement_id', $validatedData['procurement_id'])
-                ->update([
-                    'dt_submitted1' => $validatedData['dt_submitted1'] ?? null,
-                    'dt_received1'  => $validatedData['dt_received1'] ?? null,
-                    'dt_submitted2' => $validatedData['dt_submitted2'] ?? null,
-                    'dt_received2'  => $validatedData['dt_received2'] ?? null,
-                    'dt_submitted3' => $validatedData['dt_submitted3'] ?? null,
-                    'dt_received3'  => $validatedData['dt_received3'] ?? null,
-                    'dt_submitted4' => $validatedData['dt_submitted4'] ?? null,
-                    'dt_received4'  => $validatedData['dt_received4'] ?? null,
-                    'dt_submitted5' => $validatedData['dt_submitted5'] ?? null,
-                    'dt_received5'  => $validatedData['dt_received5'] ?? null,
-                    'dt_submitted6' => $validatedData['dt_submitted6'] ?? null,
-                    'dt_received6'  => $validatedData['dt_received6'] ?? null,
-                    'budget_spent'  => $validatedData['budget_spent'] ?? null,
-                    'unit'          => $unit,
-                    'status'        => $status,
-                ]);
-    
-            if ($updated) {
-                return response()->json(['message' => 'Procurement form updated successfully!', 'unit' => $unit, 'status' => $status]);
-            } else {
-                return response()->json(['message' => 'No changes made.', 'unit' => $unit, 'status' => $status], 200);
-            }
+            // Wrap the update and budget deduction in a transaction.
+            DB::connection('ilcdb')->transaction(function () use ($validatedData, $unit, $status) {
+                // Update the procurement_form record.
+                DB::connection('ilcdb')->table('procurement_form')
+                    ->where('procurement_id', $validatedData['procurement_id'])
+                    ->update([
+                        'dt_submitted1' => $validatedData['dt_submitted1'] ?? null,
+                        'dt_received1'  => $validatedData['dt_received1'] ?? null,
+                        'dt_submitted2' => $validatedData['dt_submitted2'] ?? null,
+                        'dt_received2'  => $validatedData['dt_received2'] ?? null,
+                        'dt_submitted3' => $validatedData['dt_submitted3'] ?? null,
+                        'dt_received3'  => $validatedData['dt_received3'] ?? null,
+                        'dt_submitted4' => $validatedData['dt_submitted4'] ?? null,
+                        'dt_received4'  => $validatedData['dt_received4'] ?? null,
+                        'dt_submitted5' => $validatedData['dt_submitted5'] ?? null,
+                        'dt_received5'  => $validatedData['dt_received5'] ?? null,
+                        'dt_submitted6' => $validatedData['dt_submitted6'] ?? null,
+                        'dt_received6'  => $validatedData['dt_received6'] ?? null,
+                        'budget_spent'  => $validatedData['budget_spent'] ?? null,
+                        'unit'          => $unit,
+                        'status'        => $status,
+                    ]);
+
+                // Retrieve the updated procurement_form record.
+                $record = DB::connection('ilcdb')->table('procurement_form')
+                            ->where('procurement_id', $validatedData['procurement_id'])
+                            ->first();
+
+                // If a matching saro_no is found and budget_spent is provided, perform the deduction.
+                if ($record && isset($record->saro_no) && $validatedData['budget_spent']) {
+                    DB::connection('ilcdb')->table('saro')
+                        ->where('saro_no', $record->saro_no)
+                        ->update([
+                            'current_budget' => DB::raw("current_budget - " . floatval($validatedData['budget_spent']))
+                        ]);
+                }
+            });
+
+            return response()->json([
+                'message' => 'Procurement form updated successfully!',
+                'unit'    => $unit,
+                'status'  => $status
+            ]);
         } catch (\Exception $e) {
             Log::error('Update Error: ' . $e->getMessage());
             return response()->json(['message' => 'An error occurred while updating the form.'], 500);
