@@ -7,6 +7,8 @@ function getStatusClass(status) {
             return 'badge bg-warning text-dark';  // Orangeish yellow for ongoing
         case 'done':
             return 'badge bg-success text-white';  // Green for done
+        case'overdue':
+            return 'badge bg-danger text-white';
         default:
             return 'badge bg-light text-dark';  // Default for no status or unknown status
     }
