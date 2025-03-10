@@ -101,7 +101,7 @@ class OtherExpenseFormController extends Controller
     
             // Return a success response.
             return response()->json([
-                'message' => 'Other expense form updated and budget deducted successfully!',
+                'message' => 'Other expense form updated successfully!',
                 'unit'    => $unit,
                 'status'  => $status,
             ], 200);
