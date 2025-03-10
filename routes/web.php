@@ -24,15 +24,15 @@ Route::get('/homepage-ilcdb', function () {
     return view('homepage'); 
 })->middleware('auth');
 
-Route::get('/projectClick', function () {
+Route::get('/homepage-projectClick', function () {
     return view('projectClick'); 
 })->middleware('auth');
 
-Route::get('/dtc', function () {
+Route::get('/homepage-dtc', function () {
     return view('dtc');
 })->middleware('auth');
 
-Route::get('/spark', function () {
+Route::get('/homepage-spark', function () {
     return view('spark');
 })->middleware('auth');
 
@@ -50,10 +50,6 @@ Route::get('/honorariaform', function () {
 
 Route::get('/otherexpenseform', function () {
     return view('otherexpenseform');
-});
-
-Route::get('/selection', function () {
-    return view('selection');
 });
 
 //PREVENT BACK AFTER LOGOUT

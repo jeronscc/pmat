@@ -33,7 +33,7 @@
         </div>
         <div class="col-md-6 p-3">
             <div class="box">
-            <form action="/dtc">
+            <form action="/homepage-dtc">
                 @csrf
                 <button type="submit" class="btn" style="outline: none; border: none;"><img src="/assets/dtc-logo.png" alt="DTC" class="img-fluid"></button>
             </form>
@@ -43,7 +43,7 @@
     <div class="row">
         <div class="col-md-6 p-3">
             <div class="box">
-            <form action="/spark">
+            <form action="/homepage-spark">
                 @csrf
                 <button type="submit" class="btn" style="outline: none; border: none;"><img src="/assets/spark-logo.png" alt="SPARK" class="img-fluid"></button> 
             </form>
@@ -51,7 +51,7 @@
         </div>
         <div class="col-md-6 p-3">
             <div class="box">
-            <form action="/projectClick">
+            <form action="/homepage-projectClick">
                 @csrf
                 <button type="submit" class="btn" style="outline: none; border: none;"><img src="/assets/project_click_logo.png" alt="PROJECT CLICK" class="img-fluid"></button>
             </form>
