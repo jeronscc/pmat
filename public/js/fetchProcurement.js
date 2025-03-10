@@ -262,16 +262,11 @@ function fetchProcurementData(year) {
         .then(response => response.json())
         .then(data => {
             const tableBody = document.getElementById('procurementTable');
-            tableBody.innerHTML = ''; // Clear existing rows
+            tableBody.innerHTML = ''; // Clear any existing rows in the table
 
             if (data.length > 0) {
-                // Sorting logic: Ongoing & Pending first, Overdue in middle, Done at bottom
-                const sortedData = data.sort((a, b) => {
-                    const order = { 'ongoing': 1, 'pending': 2, 'overdue': 3, 'done': 4 };
-                    return (order[a.status] || 5) - (order[b.status] || 5);
-                });
-
-                sortedData.forEach(item => {
+                // Loop through the fetched data and create table rows
+                data.forEach(item => {
                     const row = document.createElement('tr');
 
                     // PR NUMBER cell (procurement_id)
@@ -284,24 +279,26 @@ function fetchProcurementData(year) {
                     activityCell.textContent = item.activity;
                     row.appendChild(activityCell);
 
-                    // STATUS & UNIT cell
+                    // STATUS & UNIT cell (dynamically set from the API response)
                     const statusCell = document.createElement('td');
                     const badge = document.createElement('span');
 
-                    let statusMessage = item.status || ''; // Default empty if no status
-                    let unitMessage = item.unit ? ` at ${item.unit}` : ''; // Append unit if available
+                    let statusMessage = item.status || ''; // Default to empty if no status
+                    let unitMessage = item.unit ? ` at ${item.unit}` : ''; // Default to empty if no unit
 
+                    // If status is "done", remove the unit part
                     if (statusMessage.toLowerCase() === 'done') {
-                        unitMessage = ''; // Remove unit when status is "done"
+                        unitMessage = ''; // Don't append the unit when status is "done"
                     }
 
+                    // Combine status and unit for display
                     badge.className = getStatusClass(item.status || ''); // Apply appropriate badge class
-                    badge.textContent = statusMessage + unitMessage; 
+                    badge.textContent = statusMessage + unitMessage; // Combine status and unit for display
 
                     statusCell.appendChild(badge);
                     row.appendChild(statusCell);
 
-                    // Append row to table
+                    // Append the row to the table body
                     tableBody.appendChild(row);
                 });
             } else {
@@ -319,11 +316,13 @@ function fetchProcurementData(year) {
 
 // Event listener for the year filter
 document.getElementById('year')?.addEventListener('change', function() {
+    // When the year changes, fetch the procurement data based on selected year
     fetchProcurementData(this.value);
 });
 
 // Fetch procurement data when the page loads
 document.addEventListener('DOMContentLoaded', () => {
+    // Check if procurementTable exists before trying to populate it
     if (document.getElementById('procurementTable')) {
         fetchProcurementData('');
     }
@@ -331,8 +330,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Utility functions
 function highlightSelectedItem(selectedItem) {
-    document.querySelectorAll('.saro-list .list-group-item')
-        .forEach(item => item.classList.remove('active'));
+    const items = document.querySelectorAll('.saro-list .list-group-item');
+    items.forEach(item => item.classList.remove('active'));
     selectedItem.classList.add('active');
 }
 
