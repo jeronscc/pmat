@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Requirement;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
@@ -107,7 +108,7 @@ class HonorariaFormController extends Controller
             ], 500);
         }
     }
-    
+    //Sample
     public function upload(Request $request)
     {
         $validated = $request->validate([
@@ -124,13 +125,13 @@ class HonorariaFormController extends Controller
             'bankFile' => 'nullable|file|max:5120',
             'certFile' => 'nullable|file|max:5120',
         ]);
-    
+
         $uploads = [];
-    
+
         foreach ($validated as $field => $file) {
             if ($request->hasFile($field)) {
                 $path = $request->file($field)->store("requirements/{$validated['procurement_id']}", 'local');
-    
+
                 // Use ilcdb connection here
                 DB::connection('ilcdb')->table('requirements')->insert([
                     'procurement_id' => $validated['procurement_id'],
@@ -142,10 +143,11 @@ class HonorariaFormController extends Controller
                 $uploads[] = $field;
             }
         }
-    
+
         return response()->json([
             'success' => true,
             'message' => 'Uploaded: ' . implode(', ', $uploads)
         ]);
     }
+        }
     
