@@ -79,7 +79,6 @@ class ProcurementController extends Controller
 
         return response()->json($procurements);
     }
-
     public function fetchProcurementDetails(Request $request)
     {
         $procurementId = $request->query('procurement_id');
