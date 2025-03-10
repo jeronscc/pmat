@@ -1,11 +1,10 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const tableBody = document.getElementById('procurementTable');
     const tabs = document.querySelectorAll('.nav-link');
 
     // Fetch procurement data from backend
     async function fetchData() {
         try {
-            const response = await fetch('fetchProcurementData.php'); // Update with your actual API route
+            const response = await fetch('/api/fetch-procurement-ilcdb'); // Update with your actual API route
             const data = await response.json();
             return data;
         } catch (error) {
@@ -16,22 +15,35 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Render table based on filter
     async function renderTable(filter = 'all') {
-        tableBody.innerHTML = ''; // Clear table
+        const tableBodies = {
+            all: document.getElementById('procurementTableAll'),
+            ongoing: document.getElementById('procurementTableOngoing'),
+            overdue: document.getElementById('procurementTableOverdue'),
+            done: document.getElementById('procurementTableDone')
+        };
+
+        // Clear all table bodies
+        Object.values(tableBodies).forEach(tableBody => tableBody.innerHTML = '');
+
         const data = await fetchData();
 
         data.forEach(item => {
             const statusClass = getStatusClass(item.status);
+            const row = `
+                <tr class="${statusClass}">
+                    <td>${item.prNumber}</td>
+                    <td>${item.activity}</td>
+                    <td><span class="status-label ${statusClass}">${item.status}</span></td>
+                    <td>
+                        <button class="btn ${item.status.toLowerCase() === 'done' ? 'btn-secondary' : 'btn-success'}" ${item.status.toLowerCase() === 'done' ? 'disabled' : ''} onclick="editProcurement('${item.procurement_id}')">
+                            ${item.status.toLowerCase() === 'done' ? 'Completed' : 'Edit'}
+                        </button>
+                    </td>
+                </tr>
+            `;
 
-            // Only insert rows that match the selected filter
             if (filter === 'all' || statusClass === filter) {
-                const row = `
-                    <tr class="${statusClass}">
-                        <td>${item.prNumber}</td>
-                        <td>${item.activity}</td>
-                        <td><span class="status-label ${statusClass}">${item.status}</span></td>
-                    </tr>
-                `;
-                tableBody.insertAdjacentHTML('beforeend', row);
+                tableBodies[filter].insertAdjacentHTML('beforeend', row);
             }
         });
     }
@@ -66,3 +78,8 @@ document.addEventListener('DOMContentLoaded', function () {
     // Load all data on initial page load
     renderTable();
 });
+
+// Function to handle editing procurement
+function editProcurement(procurementId) {
+    window.location.href = `/procurementform/${procurementId}`;
+}

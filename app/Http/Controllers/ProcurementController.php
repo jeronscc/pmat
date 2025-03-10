@@ -68,17 +68,26 @@ class ProcurementController extends Controller
     }
 
     public function fetchProcurementData(Request $request)
-    {
-        $saroNo = $request->query('saro_no');
+{
+    $saroNo = $request->query('saro_no');
 
-        $procurements = DB::connection('ilcdb')
-            ->table('procurement')
-            ->where('saro_no', $saroNo)
-            ->orderBy('created_at', 'desc')
-            ->get();
+    $procurements = DB::connection('ilcdb')
+        ->table('procurement')
+        ->leftJoin('procurement_form', 'procurement.procurement_id', '=', 'procurement_form.procurement_id')
+        ->leftJoin('honoraria_form', 'procurement.procurement_id', '=', 'honoraria_form.procurement_id')
+        ->leftJoin('otherexpense_form', 'procurement.procurement_id', '=', 'otherexpense_form.procurement_id')
+        ->where('procurement.saro_no', $saroNo)
+        ->select(
+            'procurement.*',
+            DB::raw("COALESCE(procurement_form.status, honoraria_form.status, otherexpense_form.status, 'No Status') as status")
+        )
+        ->orderBy('procurement.created_at', 'desc')
+        ->get();
 
-        return response()->json($procurements);
-    }
+    return response()->json($procurements);
+}
+
+
     public function fetchProcurementDetails(Request $request)
     {
         $procurementId = $request->query('procurement_id');
