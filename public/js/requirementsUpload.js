@@ -17,9 +17,15 @@ document.addEventListener('DOMContentLoaded', function() {
             if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
             }
-            return response.json();
+            return response.text(); // Read response as text
         })
-        .then(data => {
+        .then(text => {
+            let data;
+            try {
+                data = JSON.parse(text); // Try to parse as JSON
+            } catch (error) {
+                throw new Error('Failed to parse JSON response');
+            }
             if (data.success) {
                 alert(data.message);
                 location.reload();
