@@ -373,9 +373,9 @@ function fetchProcurementData(year = '', status = 'all') {
                     tableBodies.ongoing.appendChild(row);
                 } else if (statusMessage.toLowerCase() === 'overdue') {
                     tableBodies.overdue.appendChild(row);
-                } else {
-                    tableBodies.all.appendChild(row);
                 }
+                // Append to "all" table body regardless of status
+                tableBodies.all.appendChild(row);
             });
 
             // Add event listener to each table body for delegation
