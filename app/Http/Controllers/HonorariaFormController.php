@@ -112,43 +112,43 @@ public function updateHonoraria(Request $request)
         ], 500);
     }
 }
-    //Sample
-    public function upload(Request $request)
-    {
-        $validated = $request->validate([
-            'procurement_id' => 'required|string',
-            'orsFile' => 'nullable|file|max:5120',
-            'dvFile' => 'nullable|file|max:5120',
-            'contractFile' => 'nullable|file|max:5120',
-            'classificationFile' => 'nullable|file|max:5120',
-            'reportFile' => 'nullable|file|max:5120',
-            'attendanceFile' => 'nullable|file|max:5120',
-            'resumeFile' => 'nullable|file|max:5120',
-            'govidFile' => 'nullable|file|max:5120',
-            'payslipFile' => 'nullable|file|max:5120',
-            'bankFile' => 'nullable|file|max:5120',
-            'certFile' => 'nullable|file|max:5120',
-        ]);
 
-        $uploads = [];
+public function upload(Request $request)
+{
+    $validated = $request->validate([
+        'procurement_id' => 'required|string',
+        'orsFile' => 'nullable|file|max:5120',
+        'dvFile' => 'nullable|file|max:5120',
+        'contractFile' => 'nullable|file|max:5120',
+        'classificationFile' => 'nullable|file|max:5120',
+        'reportFile' => 'nullable|file|max:5120',
+        'attendanceFile' => 'nullable|file|max:5120',
+        'resumeFile' => 'nullable|file|max:5120',
+        'govidFile' => 'nullable|file|max:5120',
+        'payslipFile' => 'nullable|file|max:5120',
+        'bankFile' => 'nullable|file|max:5120',
+        'certFile' => 'nullable|file|max:5120',
+    ]);
 
-        foreach ($validated as $field => $file) {
-            if ($request->hasFile($field)) {
-                $path = $request->file($field)->store("requirements/{$validated['procurement_id']}", 'local');
+    $uploads = [];
 
-                Requirement::create([
-                    'procurement_id' => $validated['procurement_id'],
-                    'requirement_name' => $field,
-                    'file_path' => $path,
-                ]);
+    foreach ($validated as $field => $file) {
+        if ($request->hasFile($field)) {
+            $path = $request->file($field)->store("requirements/{$validated['procurement_id']}", 'local');
 
-                $uploads[] = $field;
-            }
+            Requirement::create([
+                'procurement_id' => $validated['procurement_id'],
+                'requirement_name' => $field,
+                'file_path' => $path,
+            ]);
+
+            $uploads[] = $field;
         }
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Uploaded: ' . implode(', ', $uploads)
-        ]);
     }
+
+    return response()->json([
+        'success' => true,
+        'message' => 'Uploaded: ' . implode(', ', $uploads)
+    ]);
+}
 }
