@@ -316,6 +316,33 @@ function fetchProcurementData(year) {
         .catch(error => console.error('Error fetching procurement data:', error));
 }
 
+function checkOverdue() {
+    fetch('/check-overdue')
+        .then(response => response.json())
+        .then(data => {
+            if (data.updated) {
+                console.log('Overdue status updated.');
+                updateOverdueUI(data.overdue_items); // Update table without refreshing
+            }
+        })
+        .catch(error => console.error('Error:', error));
+}
+
+function updateOverdueUI(overdueItems) {
+    overdueItems.forEach(item => {
+        const row = document.querySelector(`[data-procurement-id="${item.procurement_id}"]`);
+        if (row) {
+            const statusBadge = row.querySelector('.status-badge');
+            if (statusBadge) {
+                statusBadge.className = 'badge bg-danger text-white'; // Set to red
+                statusBadge.textContent = 'Overdue';
+            }
+        }
+    });
+}
+
+setInterval(checkOverdue, 5000); // Check every 5 seconds
+
 // Event listener for the year filter
 document.getElementById('year')?.addEventListener('change', function() {
     // When the year changes, fetch the procurement data based on selected year

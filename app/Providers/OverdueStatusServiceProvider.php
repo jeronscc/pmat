@@ -28,6 +28,22 @@ class OverdueStatusServiceProvider extends ServiceProvider
                 ")
                 ->update(['status' => 'Overdue']);
         }
+
+        if (app()->bound('db')) {
+            DB::connection('ilcdb')->table('honoraria_form')
+                ->whereRaw("
+                    (dt_received IS NULL AND dt_submitted IS NOT NULL AND NOW() > DATE_ADD(dt_submitted, INTERVAL 1 MINUTE))
+                ")
+                ->update(['status' => 'Overdue']);
+        }
+
+        if (app()->bound('db')) {
+            DB::connection('ilcdb')->table('otherexpense_form')
+                ->whereRaw("
+                    (dt_received IS NULL AND dt_submitted IS NOT NULL AND NOW() > DATE_ADD(dt_submitted, INTERVAL 1 MINUTE))
+                ")
+                ->update(['status' => 'Overdue']);
+        }
     }
 }
 

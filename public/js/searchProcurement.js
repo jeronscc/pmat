@@ -1,3 +1,10 @@
+// Add event listener for the search input to reset when empty
+document.getElementById('searchBar').addEventListener('input', function(event) {
+    if (!event.target.value.trim()) {
+        console.log("Search bar cleared, resetting table...");
+        fetchProcurementData(''); // Call your function to reload default data
+    }
+});
 //Add eventlistener for the search button
 document.getElementById('searchBar').addEventListener('keypress', function(event) {
     if (event.key === 'Enter') {
@@ -97,3 +104,77 @@ function searchProcurement() {
         });
 }
 
+// Function to update the procurement table
+function updateProcurementTable(data) {
+    const tableBody = document.getElementById('procurementTable');
+    tableBody.innerHTML = ''; // Clear any existing rows
+
+    if (data.length > 0) {
+        data.forEach(item => {
+            const row = document.createElement('tr');
+
+            // PR NUMBER cell
+            const prNumberCell = document.createElement('td');
+            prNumberCell.textContent = item.procurement_id;
+            row.appendChild(prNumberCell);
+
+            // ACTIVITY cell
+            const activityCell = document.createElement('td');
+            activityCell.textContent = item.activity;
+            row.appendChild(activityCell);
+
+            // STATUS & UNIT cell
+            const statusCell = document.createElement('td');
+            const badge = document.createElement('span');
+
+            let statusMessage = item.status || '';
+            let unitMessage = item.unit ? ` at ${item.unit}` : '';
+
+            if (statusMessage.toLowerCase() === 'done') {
+                unitMessage = ''; // Don't append unit when status is "done"
+            }
+
+            badge.className = getStatusClass(item.status || '');
+            badge.textContent = statusMessage + unitMessage;
+
+            statusCell.appendChild(badge);
+            row.appendChild(statusCell);
+
+            tableBody.appendChild(row);
+        });
+    } else {
+        const emptyMessage = document.createElement('tr');
+        const emptyCell = document.createElement('td');
+        emptyCell.setAttribute('colspan', '3');
+        emptyCell.textContent = 'No procurement records found.';
+        emptyMessage.appendChild(emptyCell);
+        tableBody.appendChild(emptyMessage);
+    }
+}
+
+function checkOverdue() {
+    fetch('/check-overdue')
+        .then(response => response.json())
+        .then(data => {
+            if (data.updated) {
+                console.log('Overdue status updated.');
+                updateOverdueUI(data.overdue_items); // Update table without refreshing
+            }
+        })
+        .catch(error => console.error('Error:', error));
+}
+
+function updateOverdueUI(overdueItems) {
+    overdueItems.forEach(item => {
+        const row = document.querySelector(`[data-procurement-id="${item.procurement_id}"]`);
+        if (row) {
+            const statusBadge = row.querySelector('.status-badge');
+            if (statusBadge) {
+                statusBadge.className = 'badge bg-danger text-white'; // Set to red
+                statusBadge.textContent = 'Overdue';
+            }
+        }
+    });
+}
+
+setInterval(checkOverdue, 5000); // Check overdue status every 5 seconds
