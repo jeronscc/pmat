@@ -258,7 +258,7 @@ tableBody.addEventListener('click', function(event) {
 
 // Function to fetch combined procurement data
 function fetchProcurementData(year = '', status = 'all') {
-    let url = '/api/fetch-combined-procurement-data';
+    let url = '/api/fetch-procurement-ilcdb';
 
     // Append year filter if provided
     if (year !== '') {
@@ -273,76 +273,59 @@ function fetchProcurementData(year = '', status = 'all') {
     fetch(url)
         .then(response => response.json())
         .then(data => {
-            const tableBodies = {
-                all: document.getElementById('procurementTable'),
-                ongoing: document.getElementById('procurementTableOngoing'),
-                overdue: document.getElementById('procurementTableOverdue'),
-                done: document.getElementById('procurementTableDone')
-            };
+            const tableBody = document.getElementById('procurementTable');
+            tableBody.innerHTML = ''; // Clear any existing rows in the table
 
-            // Clear all table bodies
-            Object.values(tableBodies).forEach(tableBody => tableBody.innerHTML = '');
+            if (data.length > 0) {
+                // Loop through the fetched data and create table rows
+                data.forEach(item => {
+                    const row = document.createElement('tr');
 
-            data.forEach(item => {
-                const row = document.createElement('tr');
+                    // PR NUMBER cell (procurement_id)
+                    const prNumberCell = document.createElement('td');
+                    prNumberCell.textContent = item.procurement_id;
+                    row.appendChild(prNumberCell);
 
-                // PR NUMBER cell (procurement_id)
-                const prNumberCell = document.createElement('td');
-                prNumberCell.textContent = item.procurement_id;
-                row.appendChild(prNumberCell);
+                    // ACTIVITY cell
+                    const activityCell = document.createElement('td');
+                    activityCell.textContent = item.activity;
+                    row.appendChild(activityCell);
 
-                // ACTIVITY cell
-                const activityCell = document.createElement('td');
-                activityCell.textContent = item.activity;
-                row.appendChild(activityCell);
+                    // STATUS & UNIT cell (dynamically set from the API response)
+                    const statusCell = document.createElement('td');
+                    const badge = document.createElement('span');
 
-                // STATUS & UNIT cell
-                const statusCell = document.createElement('td');
-                const badge = document.createElement('span');
+                    let statusMessage = item.status || ''; // Default to empty if no status
+                    let unitMessage = item.unit ? ` at ${item.unit}` : ''; // Default to empty if no unit
 
-                let statusMessage = item.status || ''; 
-                let unitMessage = item.unit ? ` at ${item.unit}` : ''; 
+                    // If status is "done", remove the unit part
+                    if (statusMessage.toLowerCase() === 'done') {
+                        unitMessage = ''; // Don't append the unit when status is "done"
+                    }
 
-                if (statusMessage.toLowerCase() === 'done') {
-                    unitMessage = ''; 
-                }
+                    // Combine status and unit for display
+                    badge.className = getStatusClass(item.status || ''); // Apply appropriate badge class
+                    badge.textContent = statusMessage + unitMessage; // Combine status and unit for display
 
-                badge.className = getStatusClass(statusMessage || ''); 
-                badge.textContent = statusMessage + unitMessage; 
+                    statusCell.appendChild(badge);
+                    row.appendChild(statusCell);
 
-                statusCell.appendChild(badge);
-                row.appendChild(statusCell);
-
-                // Append row to the appropriate table body
-                if (statusMessage.toLowerCase() === 'done') {
-                    tableBodies.done.appendChild(row);
-                } else if (statusMessage.toLowerCase() === 'ongoing') {
-                    tableBodies.ongoing.appendChild(row);
-                } else if (statusMessage.toLowerCase() === 'overdue') {
-                    tableBodies.overdue.appendChild(row);
-                } else {
-                    tableBodies.all.appendChild(row);
-                }
-            });
+                    // Append the row to the table body
+                    tableBody.appendChild(row);
+                });
+            } else {
+                // Show message if no procurement data is available
+                const emptyMessage = document.createElement('tr');
+                const emptyCell = document.createElement('td');
+                emptyCell.setAttribute('colspan', '3');
+                emptyCell.textContent = 'No procurement records found.';
+                emptyMessage.appendChild(emptyCell);
+                tableBody.appendChild(emptyMessage);
+            }
         })
         .catch(error => console.error('Error fetching procurement data:', error));
 }
 
-// Event listener for the year filter
-document.getElementById('year')?.addEventListener('change', function () {
-    const yearFilter = this.value;
-    const activeTab = document.querySelector('.nav-link.active');
-    const status = activeTab ? activeTab.getAttribute('id').replace('-tab', '').replace('tab', '').toLowerCase() : 'all';
-
-    fetchProcurementData(yearFilter, status);
-});
-
-// Fetch procurement data when the page loads
-document.addEventListener('DOMContentLoaded', () => {
-    if (document.getElementById('procurementTable')) {
-        fetchProcurementData('');
-    }
-});
 
 function checkOverdue() {
     fetch('/check-overdue')
@@ -447,89 +430,3 @@ function formatNumberWithCommas(number) {
 function filterProcurementByYear(year) {
     fetchProcurementData(year);
 }
-
-document.addEventListener('DOMContentLoaded', function () {
-    const tabs = document.querySelectorAll('.nav-link');
-
-    // Fetch procurement data from backend
-    async function fetchData(year = '', status = 'all') {
-        let url = '/api/fetch-combined-procurement-data';
-
-        // Append year filter if provided
-        if (year !== '') {
-            url += `?year=${year}`;
-        }
-
-        // Append status filter if it's not 'all'
-        if (status !== 'all') {
-            url += year !== '' ? `&status=${status}` : `?status=${status}`;
-        }
-
-        try {
-            const response = await fetch(url);
-            const data = await response.json();
-            return data;
-        } catch (error) {
-            console.error('Error fetching procurement data:', error);
-            return [];
-        }
-    }
-
-    // Render table based on filter
-    async function renderTable(filter = 'all') {
-        const yearFilter = document.getElementById('year')?.value || '';
-        const data = await fetchData(yearFilter, filter);
-
-        const tableBodies = {
-            all: document.getElementById('procurementTable'),
-            ongoing: document.getElementById('procurementTableOngoing'),
-            overdue: document.getElementById('procurementTableOverdue'),
-            done: document.getElementById('procurementTableDone')
-        };
-
-        // Clear all table bodies
-        Object.values(tableBodies).forEach(tableBody => tableBody.innerHTML = '');
-
-        data.forEach(item => {
-            const statusClass = getStatusClass(item.status);
-            const row = `
-                <tr class="${statusClass}">
-                    <td>${item.procurement_id}</td>
-                    <td>${item.activity}</td>
-                    <td><span class="status-label ${statusClass}">${item.status}</span></td>
-                </tr>
-            `;
-
-            if (filter === 'all' || statusClass === filter) {
-                tableBodies[filter].insertAdjacentHTML('beforeend', row);
-            }
-        });
-    }
-
-    // Listen for tab clicks to trigger filtering
-    tabs.forEach(tab => {
-        tab.addEventListener('click', function (event) {
-            event.preventDefault(); // Prevent default Bootstrap behavior
-            const filter = tab.getAttribute('id').replace('-tab', '').replace('tab', '').toLowerCase();
-
-            // Remove active class from all tabs and add to clicked tab
-            tabs.forEach(t => t.classList.remove('active'));
-            tab.classList.add('active');
-
-            // Render table with new filter
-            renderTable(filter);
-        });
-    });
-
-    // Handle Year Dropdown Change
-    document.getElementById('year')?.addEventListener('change', function () {
-        const yearFilter = this.value;
-        const activeTab = document.querySelector('.nav-link.active');
-        const status = activeTab ? activeTab.getAttribute('id').replace('-tab', '').replace('tab', '').toLowerCase() : 'all';
-
-        renderTable(status);
-    });
-
-    // Load all data on initial page load
-    renderTable();
-});
