@@ -95,74 +95,74 @@ class HonorariaFormController extends Controller
     }
 
     public function upload(Request $request)
-    {
-        try {
-            // ✅ Validate procurement_id first
-            if (!$request->filled('procurement_id')) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'The procurement ID is missing. Please select a procurement before uploading.',
-                ], 400);
-            }
-    
-            // ✅ Define required files
-            $requiredFiles = [
-                'orsFile', 'dvFile', 'contractFile', 'classificationFile', 'reportFile',
-                'attendanceFile', 'resumeFile', 'govidFile', 'payslipFile', 'bankFile', 'certFile'
-            ];
-    
-            $uploads = [];
-            $missingFiles = [];
-    
-            // ✅ Check if files are uploaded
-            foreach ($requiredFiles as $file) {
-                if ($request->hasFile($file)) {
-                    $validated = $request->validate([
-                        $file => 'file|max:5120|mimes:pdf,doc,docx,jpg,png'
-                    ]);
-    
-                    $uploadDir = public_path("uploads/requirements/{$request->procurement_id}");
-                    if (!file_exists($uploadDir)) {
-                        mkdir($uploadDir, 0777, true);
-                    }
-    
-                    $fileName = time() . '_' . $request->file($file)->getClientOriginalName();
-                    $filePath = "uploads/requirements/{$request->procurement_id}/" . $fileName;
-                    $request->file($file)->move($uploadDir, $fileName);
-    
-                    Requirement::create([
-                        'procurement_id'    => $request->procurement_id,
-                        'requirement_name'  => $file,
-                        'file_path'         => $filePath,
-                    ]);
-    
-                    $uploads[] = $file;
-                } else {
-                    $missingFiles[] = $file;
-                }
-            }
-    
-            // ✅ If no files were uploaded, return an error
-            if (empty($uploads)) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'No files uploaded. Missing: ' . implode(', ', $missingFiles),
-                ], 400);
-            }
-    
-            return response()->json([
-                'success' => true,
-                'message' => 'Files uploaded successfully: ' . implode(', ', $uploads),
-            ]);
-    
-        } catch (\Exception $e) {
-            Log::error('File upload failed: ' . $e->getMessage());
-    
+{
+    try {
+        // ✅ Validate procurement_id first
+        if (!$request->filled('procurement_id')) {
             return response()->json([
                 'success' => false,
-                'message' => 'Server error: ' . $e->getMessage(),
-            ], 500);
+                'message' => 'Error: Procurement ID is missing.',
+            ], 400);
         }
+
+        // ✅ Define required files
+        $requiredFiles = [
+            'orsFile', 'dvFile', 'contractFile', 'classificationFile', 'reportFile',
+            'attendanceFile', 'resumeFile', 'govidFile', 'payslipFile', 'bankFile', 'certFile'
+        ];
+
+        $uploads = [];
+        $missingFiles = [];
+
+        // ✅ Check if files are uploaded
+        foreach ($requiredFiles as $file) {
+            if ($request->hasFile($file)) {
+                $validated = $request->validate([
+                    $file => 'file|max:5120|mimes:pdf,doc,docx,jpg,png'
+                ]);
+
+                $uploadDir = public_path("uploads/requirements/{$request->procurement_id}");
+                if (!file_exists($uploadDir)) {
+                    mkdir($uploadDir, 0777, true);
+                }
+
+                $fileName = time() . '_' . $request->file($file)->getClientOriginalName();
+                $filePath = "uploads/requirements/{$request->procurement_id}/" . $fileName;
+                $request->file($file)->move($uploadDir, $fileName);
+
+                Requirement::create([
+                    'procurement_id'    => $request->procurement_id,
+                    'requirement_name'  => $file,
+                    'file_path'         => $filePath,
+                ]);
+
+                $uploads[] = $file;
+            } else {
+                $missingFiles[] = $file;
+            }
+        }
+
+        // ✅ If no files were uploaded, return an error
+        if (empty($uploads)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'No files uploaded. Missing: ' . implode(', ', $missingFiles),
+            ], 400);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Files uploaded successfully: ' . implode(', ', $uploads),
+        ]);
+
+    } catch (\Exception $e) {
+        Log::error('File upload failed: ' . $e->getMessage());
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Server error: ' . $e->getMessage(),
+        ], 500);
     }
-    
+}
+
 }

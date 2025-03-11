@@ -1,33 +1,26 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const uploadBtn = document.getElementById('saveBtn'); // ✅ Ensure button exists
-
-    if (!uploadBtn) {
-        console.error("Error: #saveBtn not found in DOM.");
-        return; // ✅ Prevent script from running if button is missing
-    }
-
-    uploadBtn.addEventListener('click', function () {
+    document.getElementById('saveBtn').addEventListener('click', function () {
         const form = document.getElementById('requirementsForm');
         const formData = new FormData(form);
 
         const procurementId = document.getElementById('procurement_id')?.value;
-        if (procurementId) {
-            formData.append('procurement_id', procurementId);
-        } else {
-            alert('Procurement ID is missing. Please check the form.');
+        if (!procurementId) {
+            alert('Error: Procurement ID is missing.');
+            return;
+        }
+        formData.append('procurement_id', procurementId);
+
+        console.log("Sending form data:", [...formData.entries()]); // ✅ Debugging log
+
+        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+        if (!csrfToken) {
+            console.error("Error: CSRF token not found.");
             return;
         }
 
-        console.log("Sending form data:", [...formData.entries()]); // ✅ Log form data before sending
-
-        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-        const uploadUrl = window.location.origin + "/requirements/upload";
-
-        fetch(uploadUrl, {
+        fetch('/requirements/upload', {
             method: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': csrfToken
-            },
+            headers: { 'X-CSRF-TOKEN': csrfToken },
             body: formData
         })
         .then(response => response.text()) // ✅ Read as text first
@@ -35,15 +28,15 @@ document.addEventListener('DOMContentLoaded', function () {
             console.log("Server response:", text); // ✅ Log raw response
 
             try {
-                const data = JSON.parse(text); // ✅ Try parsing JSON
+                const data = JSON.parse(text);
                 if (data.success) {
                     alert(data.message);
                     location.reload();
                 } else {
-                    alert("Failed to upload: " + (data.message || "Unknown error."));
+                    alert("Upload failed: " + (data.message || "Unknown error."));
                 }
             } catch (error) {
-                console.error("Response is not valid JSON:", text); // ✅ Log invalid response
+                console.error("Response is not valid JSON:", text);
                 alert("Upload failed. Server returned an unexpected response.");
             }
         })
