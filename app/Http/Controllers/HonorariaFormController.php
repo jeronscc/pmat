@@ -97,7 +97,6 @@ class HonorariaFormController extends Controller
     public function upload(Request $request)
 {
     try {
-        // ✅ Validate procurement_id
         if (!$request->filled('procurement_id')) {
             return response()->json([
                 'success' => false,
@@ -105,19 +104,38 @@ class HonorariaFormController extends Controller
             ], 400);
         }
 
+        $requiredFiles = [
+            'orsFile', 'dvFile', 'contractFile', 'classificationFile', 'reportFile',
+            'attendanceFile', 'resumeFile', 'govidFile', 'payslipFile', 'bankFile', 'certFile'
+        ];
+
+        $missingFiles = [];
+        foreach ($requiredFiles as $file) {
+            if (!$request->hasFile($file)) {
+                $missingFiles[] = $file;
+            }
+        }
+
+        if (!empty($missingFiles)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Missing required files: ' . implode(', ', $missingFiles),
+            ], 400);
+        }
+
         $validated = $request->validate([
             'procurement_id' => 'required|string',
-            'orsFile' => 'nullable|file|max:5120|mimes:pdf,doc,docx,jpg,png',
-            'dvFile' => 'nullable|file|max:5120|mimes:pdf,doc,docx,jpg,png',
-            'contractFile' => 'nullable|file|max:5120|mimes:pdf,doc,docx,jpg,png',
-            'classificationFile' => 'nullable|file|max:5120|mimes:pdf,doc,docx,jpg,png',
-            'reportFile' => 'nullable|file|max:5120|mimes:pdf,doc,docx,jpg,png',
-            'attendanceFile' => 'nullable|file|max:5120|mimes:pdf,doc,docx,jpg,png',
-            'resumeFile' => 'nullable|file|max:5120|mimes:pdf,doc,docx,jpg,png',
-            'govidFile' => 'nullable|file|max:5120|mimes:pdf,doc,docx,jpg,png',
-            'payslipFile' => 'nullable|file|max:5120|mimes:pdf,doc,docx,jpg,png',
-            'bankFile' => 'nullable|file|max:5120|mimes:pdf,doc,docx,jpg,png',
-            'certFile' => 'nullable|file|max:5120|mimes:pdf,doc,docx,jpg,png',
+            'orsFile' => 'file|max:5120|mimes:pdf,doc,docx,jpg,png',
+            'dvFile' => 'file|max:5120|mimes:pdf,doc,docx,jpg,png',
+            'contractFile' => 'file|max:5120|mimes:pdf,doc,docx,jpg,png',
+            'classificationFile' => 'file|max:5120|mimes:pdf,doc,docx,jpg,png',
+            'reportFile' => 'file|max:5120|mimes:pdf,doc,docx,jpg,png',
+            'attendanceFile' => 'file|max:5120|mimes:pdf,doc,docx,jpg,png',
+            'resumeFile' => 'file|max:5120|mimes:pdf,doc,docx,jpg,png',
+            'govidFile' => 'file|max:5120|mimes:pdf,doc,docx,jpg,png',
+            'payslipFile' => 'file|max:5120|mimes:pdf,doc,docx,jpg,png',
+            'bankFile' => 'file|max:5120|mimes:pdf,doc,docx,jpg,png',
+            'certFile' => 'file|max:5120|mimes:pdf,doc,docx,jpg,png',
         ]);
 
         $uploads = [];
@@ -143,20 +161,12 @@ class HonorariaFormController extends Controller
             }
         }
 
-        if (empty($uploads)) {
-            return response()->json([
-                'success' => false,
-                'message' => 'No files were uploaded.',
-            ], 400);
-        }
-
         return response()->json([
             'success' => true,
-            'message' => 'Files uploaded successfully: ' . implode(', ', $uploads),
+            'message' => 'All files uploaded successfully!',
         ]);
 
     } catch (\Exception $e) {
-        Log::error('File upload failed: ' . $e->getMessage());
         return response()->json([
             'success' => false,
             'message' => 'Server error: ' . $e->getMessage(),

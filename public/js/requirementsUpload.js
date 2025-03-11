@@ -1,9 +1,15 @@
 document.addEventListener('DOMContentLoaded', function () {
-    document.getElementById('saveBtn').addEventListener('click', function () {
+    const uploadBtn = document.getElementById('saveBtn');
+    const saveChangesBtn = document.getElementById('saveChanges'); // ✅ Save button to be enabled only when all files are uploaded
+    const requiredFiles = [
+        'orsFile', 'dvFile', 'contractFile', 'classificationFile', 'reportFile',
+        'attendanceFile', 'resumeFile', 'govidFile', 'payslipFile', 'bankFile', 'certFile'
+    ];
+
+    uploadBtn.addEventListener('click', function () {
         const form = document.getElementById('requirementsForm');
         const formData = new FormData(form);
 
-        // ✅ Manually append procurement_id if it's missing
         const procurementId = document.getElementById('procurement_id')?.value;
         if (procurementId) {
             formData.append('procurement_id', procurementId);
@@ -12,10 +18,20 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
-        // Log form data to check if procurement_id is included
-        for (let [key, value] of formData.entries()) {
-            console.log(`${key}:`, value);
+        // ✅ Check if all required files are provided
+        let missingFiles = [];
+        requiredFiles.forEach(file => {
+            if (!formData.get(file) || formData.get(file).size === 0) {
+                missingFiles.push(file);
+            }
+        });
+
+        if (missingFiles.length > 0) {
+            alert("Please upload all required files before saving:\n" + missingFiles.join(', '));
+            return;
         }
+
+        console.log("Sending form data:", [...formData.entries()]); // ✅ Log form data
 
         const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
         const uploadUrl = window.location.origin + "/requirements/upload";
@@ -31,7 +47,9 @@ document.addEventListener('DOMContentLoaded', function () {
         .then(data => {
             if (data.success) {
                 alert(data.message);
-                location.reload();
+
+                // ✅ Enable Save button once all files are uploaded successfully
+                saveChangesBtn.removeAttribute('disabled');
             } else {
                 alert("Failed to upload: " + (data.message || "Unknown error."));
             }
