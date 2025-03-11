@@ -151,4 +151,4 @@ public function updateHonoraria(Request $request)
             'message' => 'Uploaded: ' . implode(', ', $uploads)
         ]);
     }
-}  
+}
