@@ -14,64 +14,17 @@ function getStatusClass(status) {
     }
 }
 
+let currentSaroNo = ''; // Variable to store the current SARO number
+
 // FETCH PROCUREMENT DATA BY SARO FILTER
 function fetchProcurementForSaro(saroNo) {
+    currentSaroNo = saroNo; // Update the current SARO number
     const url = saroNo === '' ? '/api/fetch-procurement-ilcdb' : `/api/fetch-procurement-ilcdb?saro_no=${saroNo}`;
 
     fetch(url)
         .then(response => response.json())
         .then(data => {
-            const tableBody = document.getElementById('procurementTable');
-            tableBody.innerHTML = ''; // Clear existing rows
-
-            if (data.length > 0) {
-                data.forEach(item => {
-                    const row = document.createElement('tr');
-
-                    // PR NUMBER cell (procurement_id)
-                    const prNumberCell = document.createElement('td');
-                    prNumberCell.textContent = item.procurement_id;
-                    row.appendChild(prNumberCell);
-
-                    // ACTIVITY cell
-                    const activityCell = document.createElement('td');
-                    activityCell.textContent = item.activity;
-                    row.appendChild(activityCell);
-
-                    // STATUS & UNIT cell
-                    const statusCell = document.createElement('td');
-                    const badge = document.createElement('span');
-
-                    let statusMessage = item.status || ''; 
-                    let unitMessage = item.unit ? ` at ${item.unit}` : ''; 
-
-                    // Check if honoraria form status is available and use it if it's not 'No Status'
-                    if (item.honoraria_status && item.honoraria_status.toLowerCase() !== 'no status') {
-                        statusMessage = item.honoraria_status;  // Update status to honoraria form status if available
-                    }
-
-                    // If status is "done", don't append the unit
-                    if (statusMessage.toLowerCase() === 'done') {
-                        unitMessage = ''; // Don't append the unit when status is "done"
-                    }
-
-                    badge.className = getStatusClass(statusMessage || ''); // Apply appropriate badge class
-                    badge.textContent = statusMessage + unitMessage; // Combine status and unit for display
-
-                    statusCell.appendChild(badge);
-                    row.appendChild(statusCell);
-
-                    // Append row to table
-                    tableBody.appendChild(row);
-                });
-            } else {
-                const emptyMessage = document.createElement('tr');
-                const emptyCell = document.createElement('td');
-                emptyCell.setAttribute('colspan', '3');
-                emptyCell.textContent = 'No procurement records found for the selected SARO.';
-                emptyMessage.appendChild(emptyCell);
-                tableBody.appendChild(emptyMessage);
-            }
+            updateProcurementTable(data);
         })
         .catch(error => console.error('Error fetching procurement requirements:', error));
 }
@@ -268,6 +221,11 @@ function fetchProcurementData(year = '', status = 'all') {
     // Append status filter if it's not 'all'
     if (status !== 'all') {
         url += year !== '' ? `&status=${status}` : `?status=${status}`;
+    }
+
+    // Append SARO filter if currentSaroNo is set
+    if (currentSaroNo !== '') {
+        url += (year !== '' || status !== 'all') ? `&saro_no=${currentSaroNo}` : `?saro_no=${currentSaroNo}`;
     }
 
     fetch(url)
