@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
-        fetch('/requirements/upload', {
+        fetch('/api/requirements/upload', {
             method: 'POST',
             headers: { 'X-CSRF-TOKEN': csrfToken },
             body: formData
