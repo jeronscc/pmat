@@ -159,3 +159,4 @@ Route::get('/fetch-combined-procurement', [ProcurementController::class, 'fetchC
 Route::post('/honoraria/update', [HonorariaFormController::class, 'updateHonoraria']);
 Route::post('/otherexpense/update', [OtherExpenseFormController::class, 'updateOtherExpense']);
 Route::get('/fetch-combined-procurement-data', [ProcurementController::class, 'fetchCombinedProcurementData']);
+Route::post('/requirements/upload', [HonorariaFormController::class, 'upload'])->name('requirements.upload');
