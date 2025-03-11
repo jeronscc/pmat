@@ -3,10 +3,12 @@ document.addEventListener('DOMContentLoaded', function () {
         const form = document.getElementById('requirementsForm');
         const formData = new FormData(form);
 
-        // Get CSRF token from meta tag
-        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        // Log form data to check if file is included
+        for (let [key, value] of formData.entries()) {
+            console.log(`${key}:`, value);
+        }
 
-        // Ensure the correct upload URL
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
         const uploadUrl = window.location.origin + "/requirements/upload";
 
         fetch(uploadUrl, {
@@ -16,20 +18,21 @@ document.addEventListener('DOMContentLoaded', function () {
             },
             body: formData
         })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            return response.json().catch(() => {
-                throw new Error("Server response is not valid JSON.");
-            });
-        })
-        .then(data => {
-            if (data.success) {
-                alert(data.message);
-                location.reload();
-            } else {
-                alert("Failed to upload requirements: " + (data.message || "Unknown error."));
+        .then(response => response.text()) // ✅ Read as text first
+        .then(text => {
+            console.log("Server response:", text); // ✅ Log raw response
+            
+            try {
+                const data = JSON.parse(text); // ✅ Try parsing JSON
+                if (data.success) {
+                    alert(data.message);
+                    location.reload();
+                } else {
+                    alert("Failed to upload: " + (data.message || "Unknown error."));
+                }
+            } catch (error) {
+                console.error("Response is not valid JSON:", text); // ✅ Log invalid response
+                alert("Upload failed. Server returned an unexpected response.");
             }
         })
         .catch(error => {
