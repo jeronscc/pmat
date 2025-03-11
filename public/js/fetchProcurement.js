@@ -257,17 +257,16 @@ tableBody.addEventListener('click', function(event) {
 });
 
 // Function to fetch combined procurement data
-function fetchProcurementData(year = '', status = 'all') {
-    let url = '/api/fetch-combined-procurement-data';
+function fetchProcurementData(year = '', status = 'all', saroNo = '') {
+    let url = '/api/fetch-procurement-data';
 
-    // Append year filter if provided
-    if (year !== '') {
-        url += `?year=${year}`;
-    }
+    const params = new URLSearchParams();
+    if (year !== '') params.append('year', year);
+    if (status !== 'all') params.append('status', status);
+    if (saroNo !== '') params.append('saro_no', saroNo);
 
-    // Append status filter if it's not 'all'
-    if (status !== 'all') {
-        url += year !== '' ? `&status=${status}` : `?status=${status}`;
+    if (params.toString() !== '') {
+        url += `?${params.toString()}`;
     }
 
     fetch(url)
@@ -413,7 +412,7 @@ document.getElementById('year')?.addEventListener('change', function () {
 document.addEventListener('DOMContentLoaded', () => {
     // Check if procurementTable exists before trying to populate it
     if (document.getElementById('procurementTable')) {
-        fetchProcurementData('');
+        renderTable('all');
     }
 });
 

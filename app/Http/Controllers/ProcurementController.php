@@ -69,16 +69,44 @@ class ProcurementController extends Controller
 
     public function fetchProcurementData(Request $request)
     {
+        $saroNo = $request->query('saro_no');
+
+        $procurements = DB::connection('ilcdb')
+            ->table('procurement')
+            ->where('saro_no', $saroNo)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return response()->json($procurements);
+    }
+
+    public function fetchProcurementDetails(Request $request)
+    {
+        $procurementId = $request->query('procurement_id');
+
+        // Fetch procurement details from the database
+        $procurement = DB::connection('ilcdb')
+            ->table('procurement')
+            ->where('procurement_id', $procurementId)
+            ->first(); // Use first() to get a single record
+
+        if ($procurement) {
+            // Return procurement data as JSON response
+            return response()->json($procurement);
+        }
+
+        // If procurement not found, return an error message
+        return response()->json(['message' => 'Procurement not found.'], 404);
+    }
+
+    public function fetchCombinedProcurementData(Request $request)
+    {
         try {
-            $saroNo = $request->query('saro_no');
             $year = $request->query('year');
             $statusFilter = $request->query('status');
 
             // Fetch procurement data from the 'procurement' table (without status field)
             $procurements = DB::connection('ilcdb')->table('procurement')
-                ->when($saroNo, function ($query, $saroNo) {
-                    return $query->where('saro_no', $saroNo);
-                })
                 ->when($year, function ($query, $year) {
                     return $query->whereYear('created_at', $year);
                 })
@@ -123,25 +151,6 @@ class ProcurementController extends Controller
             // If an error occurs, return a response with error details
             return response()->json(['error' => 'Error fetching procurement data: ' . $e->getMessage()], 500);
         }
-    }
-
-    public function fetchProcurementDetails(Request $request)
-    {
-        $procurementId = $request->query('procurement_id');
-
-        // Fetch procurement details from the database
-        $procurement = DB::connection('ilcdb')
-            ->table('procurement')
-            ->where('procurement_id', $procurementId)
-            ->first(); // Use first() to get a single record
-
-        if ($procurement) {
-            // Return procurement data as JSON response
-            return response()->json($procurement);
-        }
-
-        // If procurement not found, return an error message
-        return response()->json(['message' => 'Procurement not found.'], 404);
     }
 }
 
