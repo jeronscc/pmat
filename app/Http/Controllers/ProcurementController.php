@@ -108,7 +108,7 @@ class ProcurementController extends Controller
                 ->when($year, function ($query, $year) {
                     return $query->whereYear('created_at', $year);
                 })
-               ->get();
+                ->get();
 
             // Fetch procurement form data (status, unit) for regular procurement
             $procurementForms = DB::connection('ilcdb')->table('procurement_form')->get();
