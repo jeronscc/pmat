@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Fetch procurement data from backend
     async function fetchData(year = '', status = 'all') {
-        let url = '/api//fetch-combined-procurement';
+        let url = '/api/fetch-combined-procurement-data';
 
         // Append year filter if provided
         if (year !== '') {
@@ -17,6 +17,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
         try {
             const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
             const data = await response.json();
             return data;
         } catch (error) {
