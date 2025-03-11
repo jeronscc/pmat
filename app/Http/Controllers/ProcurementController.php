@@ -79,6 +79,7 @@ class ProcurementController extends Controller
 
         return response()->json($procurements);
     }
+
     public function fetchProcurementDetails(Request $request)
     {
         $procurementId = $request->query('procurement_id');
@@ -97,6 +98,7 @@ class ProcurementController extends Controller
         // If procurement not found, return an error message
         return response()->json(['message' => 'Procurement not found.'], 404);
     }
+
     public function fetchCombinedProcurementData(Request $request)
     {
         try {
