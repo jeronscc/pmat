@@ -3,7 +3,16 @@ document.addEventListener('DOMContentLoaded', function () {
         const form = document.getElementById('requirementsForm');
         const formData = new FormData(form);
 
-        // Log form data to check if file is included
+        // ✅ Manually append procurement_id if it's missing
+        const procurementId = document.getElementById('procurement_id')?.value;
+        if (procurementId) {
+            formData.append('procurement_id', procurementId);
+        } else {
+            alert('Procurement ID is missing. Please check the form.');
+            return;
+        }
+
+        // Log form data to check if procurement_id is included
         for (let [key, value] of formData.entries()) {
             console.log(`${key}:`, value);
         }
@@ -18,21 +27,13 @@ document.addEventListener('DOMContentLoaded', function () {
             },
             body: formData
         })
-        .then(response => response.text()) // ✅ Read as text first
-        .then(text => {
-            console.log("Server response:", text); // ✅ Log raw response
-            
-            try {
-                const data = JSON.parse(text); // ✅ Try parsing JSON
-                if (data.success) {
-                    alert(data.message);
-                    location.reload();
-                } else {
-                    alert("Failed to upload: " + (data.message || "Unknown error."));
-                }
-            } catch (error) {
-                console.error("Response is not valid JSON:", text); // ✅ Log invalid response
-                alert("Upload failed. Server returned an unexpected response.");
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert(data.message);
+                location.reload();
+            } else {
+                alert("Failed to upload: " + (data.message || "Unknown error."));
             }
         })
         .catch(error => {

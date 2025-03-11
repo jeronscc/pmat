@@ -95,64 +95,73 @@ class HonorariaFormController extends Controller
     }
 
     public function upload(Request $request)
-    {
-        try {
-            $validated = $request->validate([
-                'procurement_id' => 'required|string',
-                'orsFile' => 'nullable|file|max:5120|mimes:pdf,doc,docx,jpg,png',
-                'dvFile' => 'nullable|file|max:5120|mimes:pdf,doc,docx,jpg,png',
-                'contractFile' => 'nullable|file|max:5120|mimes:pdf,doc,docx,jpg,png',
-                'classificationFile' => 'nullable|file|max:5120|mimes:pdf,doc,docx,jpg,png',
-                'reportFile' => 'nullable|file|max:5120|mimes:pdf,doc,docx,jpg,png',
-                'attendanceFile' => 'nullable|file|max:5120|mimes:pdf,doc,docx,jpg,png',
-                'resumeFile' => 'nullable|file|max:5120|mimes:pdf,doc,docx,jpg,png',
-                'govidFile' => 'nullable|file|max:5120|mimes:pdf,doc,docx,jpg,png',
-                'payslipFile' => 'nullable|file|max:5120|mimes:pdf,doc,docx,jpg,png',
-                'bankFile' => 'nullable|file|max:5120|mimes:pdf,doc,docx,jpg,png',
-                'certFile' => 'nullable|file|max:5120|mimes:pdf,doc,docx,jpg,png',
-            ]);
-
-            $uploads = [];
-            $uploadDir = public_path("uploads/requirements/{$validated['procurement_id']}");
-
-            if (!file_exists($uploadDir)) {
-                mkdir($uploadDir, 0777, true);
-            }
-
-            foreach ($validated as $field => $file) {
-                if ($request->hasFile($field)) {
-                    $fileName = time() . '_' . $file->getClientOriginalName();
-                    $filePath = "uploads/requirements/{$validated['procurement_id']}/" . $fileName;
-                    $file->move($uploadDir, $fileName);
-
-                    Requirement::create([
-                        'procurement_id'    => $validated['procurement_id'],
-                        'requirement_name'  => $field,
-                        'file_path'         => $filePath,
-                    ]);
-
-                    $uploads[] = $field;
-                }
-            }
-
-            if (empty($uploads)) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'No files were uploaded.',
-                ], 400);
-            }
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Files uploaded successfully: ' . implode(', ', $uploads),
-            ]);
-
-        } catch (\Exception $e) {
-            Log::error('File upload failed: ' . $e->getMessage());
+{
+    try {
+        // ✅ Validate procurement_id
+        if (!$request->filled('procurement_id')) {
             return response()->json([
                 'success' => false,
-                'message' => 'Server error: ' . $e->getMessage(),
-            ], 500);
+                'message' => 'The procurement ID is missing. Please select a procurement before uploading.',
+            ], 400);
         }
+
+        $validated = $request->validate([
+            'procurement_id' => 'required|string',
+            'orsFile' => 'nullable|file|max:5120|mimes:pdf,doc,docx,jpg,png',
+            'dvFile' => 'nullable|file|max:5120|mimes:pdf,doc,docx,jpg,png',
+            'contractFile' => 'nullable|file|max:5120|mimes:pdf,doc,docx,jpg,png',
+            'classificationFile' => 'nullable|file|max:5120|mimes:pdf,doc,docx,jpg,png',
+            'reportFile' => 'nullable|file|max:5120|mimes:pdf,doc,docx,jpg,png',
+            'attendanceFile' => 'nullable|file|max:5120|mimes:pdf,doc,docx,jpg,png',
+            'resumeFile' => 'nullable|file|max:5120|mimes:pdf,doc,docx,jpg,png',
+            'govidFile' => 'nullable|file|max:5120|mimes:pdf,doc,docx,jpg,png',
+            'payslipFile' => 'nullable|file|max:5120|mimes:pdf,doc,docx,jpg,png',
+            'bankFile' => 'nullable|file|max:5120|mimes:pdf,doc,docx,jpg,png',
+            'certFile' => 'nullable|file|max:5120|mimes:pdf,doc,docx,jpg,png',
+        ]);
+
+        $uploads = [];
+        $uploadDir = public_path("uploads/requirements/{$validated['procurement_id']}");
+
+        if (!file_exists($uploadDir)) {
+            mkdir($uploadDir, 0777, true);
+        }
+
+        foreach ($validated as $field => $file) {
+            if ($request->hasFile($field)) {
+                $fileName = time() . '_' . $file->getClientOriginalName();
+                $filePath = "uploads/requirements/{$validated['procurement_id']}/" . $fileName;
+                $file->move($uploadDir, $fileName);
+
+                Requirement::create([
+                    'procurement_id'    => $validated['procurement_id'],
+                    'requirement_name'  => $field,
+                    'file_path'         => $filePath,
+                ]);
+
+                $uploads[] = $field;
+            }
+        }
+
+        if (empty($uploads)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'No files were uploaded.',
+            ], 400);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Files uploaded successfully: ' . implode(', ', $uploads),
+        ]);
+
+    } catch (\Exception $e) {
+        Log::error('File upload failed: ' . $e->getMessage());
+        return response()->json([
+            'success' => false,
+            'message' => 'Server error: ' . $e->getMessage(),
+        ], 500);
     }
+}
+
 }

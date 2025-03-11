@@ -161,6 +161,7 @@
             <div class="modal-body">
                 <form id="requirementsForm" enctype="multipart/form-data">
                 @csrf
+                <input type="hidden" id="procurement_id" name="procurement_id" value="{{ $prNumber }}">
                     <!-- ORS File Upload -->
                     <div class="mb-3">
                         <label for="orsFile" class="form-label">Upload ORS</label>
