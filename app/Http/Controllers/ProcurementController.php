@@ -108,8 +108,7 @@ class ProcurementController extends Controller
                 ->when($year, function ($query, $year) {
                     return $query->whereYear('created_at', $year);
                 })
-                ->orderBy('created_at', 'asc') // Ensure newly created or added procurements appear at the last
-                ->get();
+               ->get();
 
             // Fetch procurement form data (status, unit) for regular procurement
             $procurementForms = DB::connection('ilcdb')->table('procurement_form')->get();
