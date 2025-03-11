@@ -21,15 +21,8 @@ function fetchProcurementForSaro(saroNo) {
     fetch(url)
         .then(response => response.json())
         .then(data => {
-            const tableBodies = {
-                all: document.getElementById('procurementTable'),
-                ongoing: document.getElementById('procurementTableOngoing'),
-                overdue: document.getElementById('procurementTableOverdue'),
-                done: document.getElementById('procurementTableDone')
-            };
-
-            // Clear all table bodies
-            Object.values(tableBodies).forEach(tableBody => tableBody.innerHTML = '');
+            const tableBody = document.getElementById('procurementTable');
+            tableBody.innerHTML = ''; // Clear existing rows
 
             if (data.length > 0) {
                 data.forEach(item => {
@@ -68,16 +61,8 @@ function fetchProcurementForSaro(saroNo) {
                     statusCell.appendChild(badge);
                     row.appendChild(statusCell);
 
-                    // Append row to the appropriate table body
-                    if (statusMessage.toLowerCase() === 'done') {
-                        tableBodies.done.appendChild(row);
-                    } else if (statusMessage.toLowerCase() === 'ongoing') {
-                        tableBodies.ongoing.appendChild(row);
-                    } else if (statusMessage.toLowerCase() === 'overdue') {
-                        tableBodies.overdue.appendChild(row);
-                    } else {
-                        tableBodies.all.appendChild(row);
-                    }
+                    // Append row to table
+                    tableBody.appendChild(row);
                 });
             } else {
                 const emptyMessage = document.createElement('tr');
@@ -85,7 +70,7 @@ function fetchProcurementForSaro(saroNo) {
                 emptyCell.setAttribute('colspan', '3');
                 emptyCell.textContent = 'No procurement records found for the selected SARO.';
                 emptyMessage.appendChild(emptyCell);
-                tableBodies.all.appendChild(emptyMessage);
+                tableBody.appendChild(emptyMessage);
             }
         })
         .catch(error => console.error('Error fetching procurement requirements:', error));
@@ -98,15 +83,8 @@ function fetchProcurementForYear(year) {
     fetch(url)
         .then(response => response.json())
         .then(data => {
-            const tableBodies = {
-                all: document.getElementById('procurementTable'),
-                ongoing: document.getElementById('procurementTableOngoing'),
-                overdue: document.getElementById('procurementTableOverdue'),
-                done: document.getElementById('procurementTableDone')
-            };
-
-            // Clear all table bodies
-            Object.values(tableBodies).forEach(tableBody => tableBody.innerHTML = '');
+            const tableBody = document.getElementById('procurementTable');
+            tableBody.innerHTML = ''; // Clear existing rows
 
             if (data.length > 0) {
                 data.forEach(item => {
@@ -145,16 +123,7 @@ function fetchProcurementForYear(year) {
                     statusCell.appendChild(badge);
                     row.appendChild(statusCell);
 
-                    // Append row to the appropriate table body
-                    if (statusMessage.toLowerCase() === 'done') {
-                        tableBodies.done.appendChild(row);
-                    } else if (statusMessage.toLowerCase() === 'ongoing') {
-                        tableBodies.ongoing.appendChild(row);
-                    } else if (statusMessage.toLowerCase() === 'overdue') {
-                        tableBodies.overdue.appendChild(row);
-                    } else {
-                        tableBodies.all.appendChild(row);
-                    }
+                    tableBody.appendChild(row);
                 });
             } else {
                 const emptyMessage = document.createElement('tr');
@@ -162,7 +131,7 @@ function fetchProcurementForYear(year) {
                 emptyCell.setAttribute('colspan', '3');
                 emptyCell.textContent = 'No procurement records found for the selected year.';
                 emptyMessage.appendChild(emptyCell);
-                tableBodies.all.appendChild(emptyMessage);
+                tableBody.appendChild(emptyMessage);
             }
         })
         .catch(error => console.error('Error fetching procurement data:', error));
@@ -294,14 +263,22 @@ function openProcurementModal(item) {
 }
 
 // Event listener for table row click
-const tableBody = document.getElementById('procurementTable');
-tableBody.addEventListener('click', function(event) {
-    const prNumberCell = event.target.closest('td');
-    if (prNumberCell && prNumberCell.parentElement) {
-        const procurementId = prNumberCell.textContent;
-        const row = prNumberCell.parentElement;
-        openProcurementModal({ procurement_id: procurementId });
-    }
+const tableBodies = {
+    all: document.getElementById('procurementTable'),
+    ongoing: document.getElementById('procurementTableOngoing'),
+    overdue: document.getElementById('procurementTableOverdue'),
+    done: document.getElementById('procurementTableDone')
+};
+
+Object.values(tableBodies).forEach(tableBody => {
+    tableBody.addEventListener('click', function(event) {
+        const prNumberCell = event.target.closest('td');
+        if (prNumberCell && prNumberCell.parentElement) {
+            const procurementId = prNumberCell.textContent;
+            const row = prNumberCell.parentElement;
+            openProcurementModal({ procurement_id: procurementId });
+        }
+    });
 });
 
 // Function to fetch combined procurement data
@@ -373,9 +350,9 @@ function fetchProcurementData(year = '', status = 'all') {
                     tableBodies.ongoing.appendChild(row);
                 } else if (statusMessage.toLowerCase() === 'overdue') {
                     tableBodies.overdue.appendChild(row);
+                } else {
+                    tableBodies.all.appendChild(row);
                 }
-                // Append to "all" table body regardless of status
-                tableBodies.all.appendChild(row);
             });
 
             // Add event listener to each table body for delegation
