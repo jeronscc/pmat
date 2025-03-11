@@ -413,7 +413,7 @@ document.getElementById('year')?.addEventListener('change', function () {
 document.addEventListener('DOMContentLoaded', () => {
     // Check if procurementTable exists before trying to populate it
     if (document.getElementById('procurementTable')) {
-        renderTable('all');
+        fetchProcurementData('');
     }
 });
 
@@ -464,63 +464,30 @@ document.addEventListener('DOMContentLoaded', function () {
         const yearFilter = document.getElementById('year')?.value || '';
         const data = await fetchData(yearFilter, filter);
 
-        const tableBody = document.getElementById('procurementTable');
-        tableBody.innerHTML = ''; // Clear existing rows
+        const tableBodies = {
+            all: document.getElementById('procurementTable'),
+            ongoing: document.getElementById('procurementTableOngoing'),
+            overdue: document.getElementById('procurementTableOverdue'),
+            done: document.getElementById('procurementTableDone')
+        };
+
+        // Clear all table bodies
+        Object.values(tableBodies).forEach(tableBody => tableBody.innerHTML = '');
 
         data.forEach(item => {
-            const row = document.createElement('tr');
+            const statusClass = getStatusClass(item.status);
+            const row = `
+                <tr class="${statusClass}">
+                    <td>${item.procurement_id}</td>
+                    <td>${item.activity}</td>
+                    <td><span class="status-label ${statusClass}">${item.status}</span></td>
+                </tr>
+            `;
 
-            // PR NUMBER cell (procurement_id)
-            const prNumberCell = document.createElement('td');
-            prNumberCell.textContent = item.procurement_id;
-            row.appendChild(prNumberCell);
-
-            // ACTIVITY cell
-            const activityCell = document.createElement('td');
-            activityCell.textContent = item.activity;
-            row.appendChild(activityCell);
-
-            // STATUS & UNIT cell
-            const statusCell = document.createElement('td');
-            const badge = document.createElement('span');
-
-            let statusMessage = item.status || ''; 
-            let unitMessage = item.unit ? ` at ${item.unit}` : ''; 
-
-            if (statusMessage.toLowerCase() === 'done') {
-                unitMessage = ''; // Don't append the unit when status is "done"
+            if (filter === 'all' || statusClass === filter) {
+                tableBodies[filter].insertAdjacentHTML('beforeend', row);
             }
-
-            badge.className = getStatusClass(statusMessage || ''); // Apply appropriate badge class
-            badge.textContent = statusMessage + unitMessage; // Combine status and unit for display
-
-            statusCell.appendChild(badge);
-            row.appendChild(statusCell);
-
-            // Append row to table
-            tableBody.appendChild(row);
         });
-
-        if (data.length === 0) {
-            const emptyMessage = document.createElement('tr');
-            const emptyCell = document.createElement('td');
-            emptyCell.setAttribute('colspan', '3');
-            emptyCell.textContent = 'No procurement records found.';
-            emptyMessage.appendChild(emptyCell);
-            tableBody.appendChild(emptyMessage);
-        }
-    }
-
-    // Function to classify statuses into categories
-    function getStatusClass(status) {
-        if (status.toLowerCase().includes('ongoing')) {
-            return 'ongoing';
-        } else if (status.toLowerCase().includes('overdue')) {
-            return 'overdue';
-        } else if (status.toLowerCase() === 'done') {
-            return 'done';
-        }
-        return 'ongoing'; // Default for unclassified statuses
     }
 
     // Listen for tab clicks to trigger filtering
