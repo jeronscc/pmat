@@ -97,77 +97,81 @@ class ProcurementController extends Controller
         // If procurement not found, return an error message
         return response()->json(['message' => 'Procurement not found.'], 404);
     }
-    public function fetchCombinedProcurementData()
+    public function fetchCombinedProcurementData(Request $request)
     {
-    try {
-        // Fetch procurement data from the 'procurement' table (without status field)
-        $procurements = DB::connection('ilcdb')->table('procurement')->get();
+        try {
+            $year = $request->query('year');
+            $statusFilter = $request->query('status');
 
-        // Fetch procurement form data (status, unit) for regular procurement
-        $procurementForms = DB::connection('ilcdb')->table('procurement_form')->get();
+            // Fetch procurement data from the 'procurement' table (without status field)
+            $procurements = DB::connection('ilcdb')->table('procurement')
+                ->when($year, function ($query, $year) {
+                    return $query->where('year', $year);
+                })
+                ->get();
 
-        // Fetch honoraria form data (status, unit) for honoraria category procurements
-        $honorariaForms = DB::connection('ilcdb')->table('honoraria_form')->get();
+            // Fetch procurement form data (status, unit) for regular procurement
+            $procurementForms = DB::connection('ilcdb')->table('procurement_form')->get();
 
-        $otherexpenseForms = DB::connection('ilcdb')->table('otherexpense_form')->get();
+            // Fetch honoraria form data (status, unit) for honoraria category procurements
+            $honorariaForms = DB::connection('ilcdb')->table('honoraria_form')->get();
 
-        // Merge procurement data with form data
-        $mergedData = $procurements->map(function ($procurement) use ($procurementForms, $honorariaForms, $otherexpenseForms) {
+            // Fetch other expense form data (status, unit) for other expense category procurements
+            $otherexpenseForms = DB::connection('ilcdb')->table('otherexpense_form')->get();
 
-            // Debug: Check procurement data
-            Log::info("Procurement Data: " . json_encode($procurement));
-        
-            // Try fetching the corresponding form for honoraria or procurement
-            $form = $honorariaForms->firstWhere(function($item) use ($procurement) {
-                return (string)$item->procurement_id === (string)$procurement->procurement_id;
-            }) ?? $procurementForms->firstWhere(function($item) use ($procurement) {
-                return (string)$item->procurement_id === (string)$procurement->procurement_id;
-            }) ?? $otherexpenseForms->firstWhere(function($item) use ($procurement) {
-                return (string)$item->procurement_id === (string)$procurement->procurement_id;
+            // Merge procurement data with form data
+            $mergedData = $procurements->map(function ($procurement) use ($procurementForms, $honorariaForms, $otherexpenseForms) {
+                // Try fetching the corresponding form for honoraria, procurement, or other expense
+                $form = $honorariaForms->firstWhere('procurement_id', $procurement->procurement_id) ??
+                        $procurementForms->firstWhere('procurement_id', $procurement->procurement_id) ??
+                        $otherexpenseForms->firstWhere('procurement_id', $procurement->procurement_id);
+
+                // Return the merged data (procurement info + form info)
+                return [
+                    'procurement_id' => $procurement->procurement_id,
+                    'activity' => $procurement->activity,
+                    'status' => $form ? $form->status : 'No Status', // If no form, return 'No Status'
+                    'unit' => $form ? $form->unit : 'No Unit', // If no form, return 'No Unit'
+                ];
             });
-        
-            // Log form data to debug
-            Log::info("Form Data: " . json_encode($form));
-        
-            // Return the merged data (procurement info + form info)
-            return [
-                'procurement_id' => $procurement->procurement_id,
-                'activity' => $procurement->activity,
-                'status' => $form ? $form->status : 'No Status', // If no form, return 'No Status'
-                'unit' => $form ? $form->unit : 'No Unit', // If no form, return 'No Unit'
-            ];
-        });
-        
-        // Return the merged data as a JSON response
-        return response()->json($mergedData);
 
-    } catch (\Exception $e) {
-        // If an error occurs, return a response with error details
-        return response()->json(['error' => 'Error fetching procurement data: ' . $e->getMessage()], 500);
-    }
-}
-//TESTING
-public function fetchProcurementByStatus(Request $request)
-{
-    $statusFilter = $request->query('status');
+            // Apply status filter if provided and not 'all'
+            if (!empty($statusFilter) && $statusFilter !== 'all') {
+                $mergedData = $mergedData->filter(function ($item) use ($statusFilter) {
+                    return strtolower($item['status']) === strtolower($statusFilter);
+                });
+            }
 
-    $procurements = DB::connection('ilcdb')
-        ->table('procurement')
-        ->leftJoin('procurement_form', 'procurement.procurement_id', '=', 'procurement_form.procurement_id')
-        ->leftJoin('honoraria_form', 'procurement.procurement_id', '=', 'honoraria_form.procurement_id')
-        ->leftJoin('otherexpense_form', 'procurement.procurement_id', '=', 'otherexpense_form.procurement_id')
-        ->select(
-            'procurement.*',
-            DB::raw("COALESCE(procurement_form.status, honoraria_form.status, otherexpense_form.status, 'No Status') as status")
-        );
+            // Return the merged data as a JSON response
+            return response()->json($mergedData);
 
-    // Apply status filter if provided and not 'all'
-    if (!empty($statusFilter) && $statusFilter !== 'all') {
-        $procurements->whereRaw("COALESCE(procurement_form.status, honoraria_form.status, otherexpense_form.status, 'No Status') = ?", [$statusFilter]);
+        } catch (\Exception $e) {
+            // If an error occurs, return a response with error details
+            return response()->json(['error' => 'Error fetching procurement data: ' . $e->getMessage()], 500);
+        }
     }
 
-    return response()->json($procurements->get());
-}
+    public function fetchProcurementByStatus(Request $request)
+    {
+        $statusFilter = $request->query('status');
+
+        $procurements = DB::connection('ilcdb')
+            ->table('procurement')
+            ->leftJoin('procurement_form', 'procurement.procurement_id', '=', 'procurement_form.procurement_id')
+            ->leftJoin('honoraria_form', 'procurement.procurement_id', '=', 'honoraria_form.procurement_id')
+            ->leftJoin('otherexpense_form', 'procurement.procurement_id', '=', 'otherexpense_form.procurement_id')
+            ->select(
+                'procurement.*',
+                DB::raw("COALESCE(procurement_form.status, honoraria_form.status, otherexpense_form.status, 'No Status') as status")
+            );
+
+        // Apply status filter if provided and not 'all'
+        if (!empty($statusFilter) && $statusFilter !== 'all') {
+            $procurements->whereRaw("COALESCE(procurement_form.status, honoraria_form.status, otherexpense_form.status, 'No Status') = ?", [$statusFilter]);
+        }
+
+        return response()->json($procurements->get());
+    }
 
 }
 
