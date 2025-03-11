@@ -136,14 +136,12 @@ public function updateHonoraria(Request $request)
             if ($request->hasFile($field)) {
                 $path = $request->file($field)->store("requirements/{$validated['procurement_id']}", 'local');
 
-                // Use ilcdb connection here
-                DB::connection('ilcdb')->table('requirements')->insert([
+                Requirement::create([
                     'procurement_id' => $validated['procurement_id'],
                     'requirement_name' => $field,
                     'file_path' => $path,
-                    'created_at' => now(),
-                    'updated_at' => now()
                 ]);
+
                 $uploads[] = $field;
             }
         }
@@ -153,5 +151,4 @@ public function updateHonoraria(Request $request)
             'message' => 'Uploaded: ' . implode(', ', $uploads)
         ]);
     }
-        }
     

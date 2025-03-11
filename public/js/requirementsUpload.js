@@ -11,8 +11,12 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .then(response => response.json())
         .then(data => {
-            alert(data.message);
-            location.reload();
+            if (data.success) {
+                alert(data.message);
+                location.reload();
+            } else {
+                alert('Failed to upload requirements.');
+            }
         })
         .catch(error => {
             console.error('Error:', error);
