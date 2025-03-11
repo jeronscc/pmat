@@ -257,8 +257,18 @@ tableBody.addEventListener('click', function(event) {
 });
 
 // Function to fetch combined procurement data
-function fetchProcurementData(year) {
-    const url = year === '' ? '/api/fetch-procurement-ilcdb' : `/api/fetch-procurement-ilcdb?year=${year}`;
+function fetchProcurementData(year = '', status = 'all') {
+    let url = '/api/fetch-procurement-ilcdb';
+
+    // Append year filter if provided
+    if (year !== '') {
+        url += `?year=${year}`;
+    }
+
+    // Append status filter if it's not 'all'
+    if (status !== 'all') {
+        url += year !== '' ? `&status=${status}` : `?status=${status}`;
+    }
 
     fetch(url)
         .then(response => response.json())
@@ -316,6 +326,7 @@ function fetchProcurementData(year) {
         .catch(error => console.error('Error fetching procurement data:', error));
 }
 
+
 function checkOverdue() {
     fetch('/check-overdue')
         .then(response => response.json())
@@ -343,10 +354,58 @@ function updateOverdueUI(overdueItems) {
 
 setInterval(checkOverdue, 5000); // Check every 5 seconds
 
+// Function to update procurement table dynamically
+function updateProcurementTable(data) {
+    const tableBody = document.getElementById('procurementTable');
+    tableBody.innerHTML = ''; // Clear existing table rows
+
+    if (data.length > 0) {
+        data.forEach(item => {
+            const row = document.createElement('tr');
+
+            const prNumberCell = document.createElement('td');
+            prNumberCell.textContent = item.procurement_id;
+            row.appendChild(prNumberCell);
+
+            const activityCell = document.createElement('td');
+            activityCell.textContent = item.activity;
+            row.appendChild(activityCell);
+
+            const statusCell = document.createElement('td');
+            const badge = document.createElement('span');
+
+            let statusMessage = item.status || '';
+            let unitMessage = item.unit ? ` at ${item.unit}` : '';
+
+            if (statusMessage.toLowerCase() === 'done') {
+                unitMessage = '';
+            }
+
+            badge.className = getStatusClass(item.status || '');
+            badge.textContent = statusMessage + unitMessage;
+
+            statusCell.appendChild(badge);
+            row.appendChild(statusCell);
+
+            tableBody.appendChild(row);
+        });
+    } else {
+        const emptyMessage = document.createElement('tr');
+        const emptyCell = document.createElement('td');
+        emptyCell.setAttribute('colspan', '3');
+        emptyCell.textContent = 'No procurement records found.';
+        emptyMessage.appendChild(emptyCell);
+        tableBody.appendChild(emptyMessage);
+    }
+}
+
 // Event listener for the year filter
-document.getElementById('year')?.addEventListener('change', function() {
-    // When the year changes, fetch the procurement data based on selected year
-    fetchProcurementData(this.value);
+document.getElementById('year')?.addEventListener('change', function () {
+    const yearFilter = this.value;
+    const activeTab = document.querySelector('.nav-link.active');
+    const status = activeTab ? activeTab.getAttribute('id').replace('-tab', '').replace('tab', '').toLowerCase() : 'all';
+
+    fetchProcurementData(yearFilter, status);
 });
 
 // Fetch procurement data when the page loads
