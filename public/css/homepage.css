@@ -75,7 +75,10 @@ section {
     overflow-y: auto;
 }
 
-#procurementTable td:first-child {
+#procurementTable td:first-child,
+#procurementTableOngoing td:first-child,
+#procurementTableDone td:first-child,
+#procurementTableOverdue td:first-child {
     cursor: pointer;
 }
 
@@ -84,7 +87,10 @@ section {
     max-width: 100%;
     
 }
-#procurementTable tr:hover td:nth-child(-n+3) {
+#procurementTable tr:hover td:nth-child(-n+3),
+#procurementTableOngoing tr:hover td:nth-child(-n+3),
+#procurementTableDone tr:hover td:nth-child(-n+3),
+#procurementTableOverdue tr:hover td:nth-child(-n+3) {
     background-color: #ddd;
 }
 
@@ -368,4 +374,3 @@ input, select, textarea {
       font-size: clamp(1.4rem, 2vw, 1.5rem);
     }
   }
-  
