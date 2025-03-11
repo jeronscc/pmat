@@ -91,4 +91,3 @@ Route::post('/otherexpenseform/update', [OtherExpenseFormController::class, 'upd
 
 //UPLOADING REQUIREMENTS
 Route::post('/requirements/upload', [HonorariaFormController::class, 'upload'])->name('requirements.upload');
-Route::get('/api/fetch-combined-procurement-data', [ProcurementController::class, 'fetchCombinedProcurementData']);

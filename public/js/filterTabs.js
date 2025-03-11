@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Fetch procurement data from backend
     async function fetchData(year = '', status = 'all') {
-        let url = '/api/fetch-combined-procurement-data';
+        let url = '/api//fetch-combined-procurement';
 
         // Append year filter if provided
         if (year !== '') {
@@ -38,7 +38,11 @@ document.addEventListener('DOMContentLoaded', function () {
         };
 
         // Clear all table bodies
-        Object.values(tableBodies).forEach(tableBody => tableBody.innerHTML = '');
+        Object.values(tableBodies).forEach(tableBody => {
+            if (tableBody) {
+                tableBody.innerHTML = '';
+            }
+        });
 
         data.forEach(item => {
             const statusClass = getStatusClass(item.status);
@@ -51,7 +55,9 @@ document.addEventListener('DOMContentLoaded', function () {
             `;
 
             if (filter === 'all' || statusClass === filter) {
-                tableBodies[filter].insertAdjacentHTML('beforeend', row);
+                if (tableBodies[filter]) {
+                    tableBodies[filter].insertAdjacentHTML('beforeend', row);
+                }
             }
         });
     }
