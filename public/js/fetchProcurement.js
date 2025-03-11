@@ -144,8 +144,15 @@ function fetchProcurementRequirements(saroNo) {
     fetch(url)
         .then(response => response.json())
         .then(data => {
-            const tableBody = document.getElementById('procurementTable');
-            tableBody.innerHTML = ''; // Clear existing table rows
+            const tableBodies = {
+                all: document.getElementById('procurementTable'),
+                ongoing: document.getElementById('procurementTableOngoing'),
+                overdue: document.getElementById('procurementTableOverdue'),
+                done: document.getElementById('procurementTableDone')
+            };
+
+            // Clear all table bodies
+            Object.values(tableBodies).forEach(tableBody => tableBody.innerHTML = '');
 
             if (data.length > 0) {
                 data.forEach(item => {
@@ -186,18 +193,28 @@ function fetchProcurementRequirements(saroNo) {
                     statusCell.appendChild(badge);
                     row.appendChild(statusCell);
 
-                    // Append row to table
-                    tableBody.appendChild(row);
+                    // Append row to the appropriate table body
+                    if (statusMessage.toLowerCase() === 'done') {
+                        tableBodies.done.appendChild(row);
+                    } else if (statusMessage.toLowerCase() === 'ongoing') {
+                        tableBodies.ongoing.appendChild(row);
+                    } else if (statusMessage.toLowerCase() === 'overdue') {
+                        tableBodies.overdue.appendChild(row);
+                    } else {
+                        tableBodies.all.appendChild(row);
+                    }
                 });
 
-                // Add event listener to table body for delegation
-                tableBody.addEventListener('click', function(event) {
-                    const prNumberCell = event.target.closest('td');
-                    if (prNumberCell && prNumberCell.parentElement) {
-                        const procurementId = prNumberCell.textContent;
-                        const row = prNumberCell.parentElement;
-                        openProcurementModal({ procurement_id: procurementId });
-                    }
+                // Add event listener to each table body for delegation
+                Object.values(tableBodies).forEach(tableBody => {
+                    tableBody.addEventListener('click', function(event) {
+                        const prNumberCell = event.target.closest('td');
+                        if (prNumberCell && prNumberCell.parentElement) {
+                            const procurementId = prNumberCell.textContent;
+                            const row = prNumberCell.parentElement;
+                            openProcurementModal({ procurement_id: procurementId });
+                        }
+                    });
                 });
             } else {
                 const emptyMessage = document.createElement('tr');
@@ -205,7 +222,7 @@ function fetchProcurementRequirements(saroNo) {
                 emptyCell.setAttribute('colspan', '3');
                 emptyCell.textContent = 'No procurement records found.';
                 emptyMessage.appendChild(emptyCell);
-                tableBody.appendChild(emptyMessage);
+                tableBodies.all.appendChild(emptyMessage);
             }
         })
         .catch(error => console.error('Error fetching procurement requirements:', error));
@@ -270,6 +287,11 @@ function fetchProcurementData(year = '', status = 'all') {
         url += year !== '' ? `&status=${status}` : `?status=${status}`;
     }
 
+    // Append SARO filter if currentSaroNo is set
+    if (currentSaroNo !== '') {
+        url += (year !== '' || status !== 'all') ? `&saro_no=${currentSaroNo}` : `?saro_no=${currentSaroNo}`;
+    }
+    
     fetch(url)
         .then(response => response.json())
         .then(data => {
@@ -323,6 +345,18 @@ function fetchProcurementData(year = '', status = 'all') {
                 } else {
                     tableBodies.all.appendChild(row);
                 }
+            });
+
+            // Add event listener to each table body for delegation
+            Object.values(tableBodies).forEach(tableBody => {
+                tableBody.addEventListener('click', function(event) {
+                    const prNumberCell = event.target.closest('td');
+                    if (prNumberCell && prNumberCell.parentElement) {
+                        const procurementId = prNumberCell.textContent;
+                        const row = prNumberCell.parentElement;
+                        openProcurementModal({ procurement_id: procurementId });
+                    }
+                });
             });
         })
         .catch(error => console.error('Error fetching procurement data:', error));
