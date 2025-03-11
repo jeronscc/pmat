@@ -144,7 +144,7 @@ class ProcurementController extends Controller
             }
 
             // Return the merged data as a JSON response
-            return response()->json($mergedData);
+            return response()->json($mergedData->values()->all());
 
         } catch (\Exception $e) {
             // If an error occurs, return a response with error details

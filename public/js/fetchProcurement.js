@@ -258,7 +258,7 @@ tableBody.addEventListener('click', function(event) {
 
 // Function to fetch combined procurement data
 function fetchProcurementData(year = '', status = 'all') {
-    let url = '/api/fetch-procurement-ilcdb';
+    let url = '/api/fetch-combined-procurement-data';
 
     // Append year filter if provided
     if (year !== '') {
@@ -274,58 +274,59 @@ function fetchProcurementData(year = '', status = 'all') {
         .then(response => response.json())
         .then(data => {
             const tableBody = document.getElementById('procurementTable');
-            tableBody.innerHTML = ''; // Clear any existing rows in the table
+            if (tableBody) {
+                tableBody.innerHTML = ''; // Clear any existing rows in the table
 
-            if (data.length > 0) {
-                // Loop through the fetched data and create table rows
-                data.forEach(item => {
-                    const row = document.createElement('tr');
+                if (Array.isArray(data) && data.length > 0) {
+                    // Loop through the fetched data and create table rows
+                    data.forEach(item => {
+                        const row = document.createElement('tr');
 
-                    // PR NUMBER cell (procurement_id)
-                    const prNumberCell = document.createElement('td');
-                    prNumberCell.textContent = item.procurement_id;
-                    row.appendChild(prNumberCell);
+                        // PR NUMBER cell (procurement_id)
+                        const prNumberCell = document.createElement('td');
+                        prNumberCell.textContent = item.procurement_id;
+                        row.appendChild(prNumberCell);
 
-                    // ACTIVITY cell
-                    const activityCell = document.createElement('td');
-                    activityCell.textContent = item.activity;
-                    row.appendChild(activityCell);
+                        // ACTIVITY cell
+                        const activityCell = document.createElement('td');
+                        activityCell.textContent = item.activity;
+                        row.appendChild(activityCell);
 
-                    // STATUS & UNIT cell (dynamically set from the API response)
-                    const statusCell = document.createElement('td');
-                    const badge = document.createElement('span');
+                        // STATUS & UNIT cell (dynamically set from the API response)
+                        const statusCell = document.createElement('td');
+                        const badge = document.createElement('span');
 
-                    let statusMessage = item.status || ''; // Default to empty if no status
-                    let unitMessage = item.unit ? ` at ${item.unit}` : ''; // Default to empty if no unit
+                        let statusMessage = item.status || ''; // Default to empty if no status
+                        let unitMessage = item.unit ? ` at ${item.unit}` : ''; // Default to empty if no unit
 
-                    // If status is "done", remove the unit part
-                    if (statusMessage.toLowerCase() === 'done') {
-                        unitMessage = ''; // Don't append the unit when status is "done"
-                    }
+                        // If status is "done", remove the unit part
+                        if (statusMessage.toLowerCase() === 'done') {
+                            unitMessage = ''; // Don't append the unit when status is "done"
+                        }
 
-                    // Combine status and unit for display
-                    badge.className = getStatusClass(item.status || ''); // Apply appropriate badge class
-                    badge.textContent = statusMessage + unitMessage; // Combine status and unit for display
+                        // Combine status and unit for display
+                        badge.className = getStatusClass(item.status || ''); // Apply appropriate badge class
+                        badge.textContent = statusMessage + unitMessage; // Combine status and unit for display
 
-                    statusCell.appendChild(badge);
-                    row.appendChild(statusCell);
+                        statusCell.appendChild(badge);
+                        row.appendChild(statusCell);
 
-                    // Append the row to the table body
-                    tableBody.appendChild(row);
-                });
-            } else {
-                // Show message if no procurement data is available
-                const emptyMessage = document.createElement('tr');
-                const emptyCell = document.createElement('td');
-                emptyCell.setAttribute('colspan', '3');
-                emptyCell.textContent = 'No procurement records found.';
-                emptyMessage.appendChild(emptyCell);
-                tableBody.appendChild(emptyMessage);
+                        // Append the row to the table body
+                        tableBody.appendChild(row);
+                    });
+                } else {
+                    // Show message if no procurement data is available
+                    const emptyMessage = document.createElement('tr');
+                    const emptyCell = document.createElement('td');
+                    emptyCell.setAttribute('colspan', '3');
+                    emptyCell.textContent = 'No procurement records found.';
+                    emptyMessage.appendChild(emptyCell);
+                    tableBody.appendChild(emptyMessage);
+                }
             }
         })
         .catch(error => console.error('Error fetching procurement data:', error));
 }
-
 
 function checkOverdue() {
     fetch('/check-overdue')
