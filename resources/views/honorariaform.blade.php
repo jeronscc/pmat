@@ -246,5 +246,6 @@
     <!-- Custom JS -->
     <script src="/js/menu.js"></script>
     <script src="/js/honorariaformIndicator.js"></script>
+    <script src="/js/requirementsUpload.js"></script>
 </body>
 </html>
