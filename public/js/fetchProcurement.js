@@ -413,7 +413,7 @@ document.getElementById('year')?.addEventListener('change', function () {
 document.addEventListener('DOMContentLoaded', () => {
     // Check if procurementTable exists before trying to populate it
     if (document.getElementById('procurementTable')) {
-        fetchProcurementData('');
+        renderTable('all');
     }
 });
 
