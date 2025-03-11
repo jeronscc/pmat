@@ -106,7 +106,7 @@ class ProcurementController extends Controller
             // Fetch procurement data from the 'procurement' table (without status field)
             $procurements = DB::connection('ilcdb')->table('procurement')
                 ->when($year, function ($query, $year) {
-                    return $query->where('year', $year);
+                    return $query->whereYear('created_at', $year);
                 })
                 ->get();
 

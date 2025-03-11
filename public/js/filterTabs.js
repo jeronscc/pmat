@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const data = await fetchData(yearFilter, filter);
 
         const tableBodies = {
-            all: document.getElementById('procurementTable'),
+            all: document.getElementById('procurementTableAll'),
             ongoing: document.getElementById('procurementTableOngoing'),
             overdue: document.getElementById('procurementTableOverdue'),
             done: document.getElementById('procurementTableDone')
