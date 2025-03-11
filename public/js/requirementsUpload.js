@@ -1,12 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const uploadBtn = document.getElementById('saveBtn');
-    const saveChangesBtn = document.getElementById('saveChanges'); // ✅ Save button to be enabled only when all files are uploaded
-    const requiredFiles = [
-        'orsFile', 'dvFile', 'contractFile', 'classificationFile', 'reportFile',
-        'attendanceFile', 'resumeFile', 'govidFile', 'payslipFile', 'bankFile', 'certFile'
-    ];
-
-    uploadBtn.addEventListener('click', function () {
+    document.getElementById('saveBtn').addEventListener('click', function () {
         const form = document.getElementById('requirementsForm');
         const formData = new FormData(form);
 
@@ -18,20 +11,7 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
-        // ✅ Check if all required files are provided
-        let missingFiles = [];
-        requiredFiles.forEach(file => {
-            if (!formData.get(file) || formData.get(file).size === 0) {
-                missingFiles.push(file);
-            }
-        });
-
-        if (missingFiles.length > 0) {
-            alert("Please upload all required files before saving:\n" + missingFiles.join(', '));
-            return;
-        }
-
-        console.log("Sending form data:", [...formData.entries()]); // ✅ Log form data
+        console.log("Sending form data:", [...formData.entries()]); // ✅ Log form data before sending
 
         const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
         const uploadUrl = window.location.origin + "/requirements/upload";
@@ -43,15 +23,21 @@ document.addEventListener('DOMContentLoaded', function () {
             },
             body: formData
         })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert(data.message);
+        .then(response => response.text()) // ✅ Read as text first
+        .then(text => {
+            console.log("Server response:", text); // ✅ Log raw response
 
-                // ✅ Enable Save button once all files are uploaded successfully
-                saveChangesBtn.removeAttribute('disabled');
-            } else {
-                alert("Failed to upload: " + (data.message || "Unknown error."));
+            try {
+                const data = JSON.parse(text); // ✅ Try parsing JSON
+                if (data.success) {
+                    alert(data.message);
+                    location.reload();
+                } else {
+                    alert("Failed to upload: " + (data.message || "Unknown error."));
+                }
+            } catch (error) {
+                console.error("Response is not valid JSON:", text); // ✅ Log invalid response
+                alert("Upload failed. Server returned an unexpected response.");
             }
         })
         .catch(error => {
