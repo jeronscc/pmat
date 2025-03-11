@@ -146,6 +146,28 @@ class ProcurementController extends Controller
         return response()->json(['error' => 'Error fetching procurement data: ' . $e->getMessage()], 500);
     }
 }
+//TESTING
+public function fetchProcurementByStatus(Request $request)
+{
+    $statusFilter = $request->query('status');
+
+    $procurements = DB::connection('ilcdb')
+        ->table('procurement')
+        ->leftJoin('procurement_form', 'procurement.procurement_id', '=', 'procurement_form.procurement_id')
+        ->leftJoin('honoraria_form', 'procurement.procurement_id', '=', 'honoraria_form.procurement_id')
+        ->leftJoin('otherexpense_form', 'procurement.procurement_id', '=', 'otherexpense_form.procurement_id')
+        ->select(
+            'procurement.*',
+            DB::raw("COALESCE(procurement_form.status, honoraria_form.status, otherexpense_form.status, 'No Status') as status")
+        );
+
+    // Apply status filter if provided and not 'all'
+    if (!empty($statusFilter) && $statusFilter !== 'all') {
+        $procurements->whereRaw("COALESCE(procurement_form.status, honoraria_form.status, otherexpense_form.status, 'No Status') = ?", [$statusFilter]);
+    }
+
+    return response()->json($procurements->get());
+}
 
 }
 

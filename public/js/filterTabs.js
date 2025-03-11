@@ -2,16 +2,16 @@ document.addEventListener('DOMContentLoaded', function () {
     const tabs = document.querySelectorAll('.nav-link');
 
     // Fetch procurement data from backend
-    async function fetchData() {
+    async function fetchData(filter = 'all') {
         try {
-            const response = await fetch('/api/fetch-procurement-ilcdb'); // Update with your actual API route
+            const response = await fetch(`/api/fetch-procurement-by-status?status=${filter}`);
             const data = await response.json();
             return data;
         } catch (error) {
             console.error('Error fetching procurement data:', error);
             return [];
         }
-    }
+    }    
 
     // Render table based on filter
     async function renderTable(filter = 'all') {
@@ -21,36 +21,41 @@ document.addEventListener('DOMContentLoaded', function () {
             overdue: document.getElementById('procurementTableOverdue'),
             done: document.getElementById('procurementTableDone')
         };
-
+    
         // Clear all table bodies
-        Object.values(tableBodies).forEach(tableBody => tableBody.innerHTML = '');
-
-        const data = await fetchData();
-
+        Object.values(tableBodies).forEach(body => (body.innerHTML = ''));
+    
+        const data = await fetchData(filter); // Fetch filtered data
+    
         data.forEach(item => {
             const statusClass = getStatusClass(item.status);
             const row = `
                 <tr class="${statusClass}">
-                    <td>${item.prNumber}</td>
+                    <td>${item.procurement_id}</td>
                     <td>${item.activity}</td>
                     <td><span class="status-label ${statusClass}">${item.status}</span></td>
                     <td>
-                        <button class="btn ${item.status.toLowerCase() === 'done' ? 'btn-secondary' : 'btn-success'}" ${item.status.toLowerCase() === 'done' ? 'disabled' : ''} onclick="editProcurement('${item.procurement_id}')">
+                        <button class="btn ${item.status.toLowerCase() === 'done' ? 'btn-secondary' : 'btn-success'}" 
+                            ${item.status.toLowerCase() === 'done' ? 'disabled' : ''} 
+                            onclick="editProcurement('${item.procurement_id}')">
                             ${item.status.toLowerCase() === 'done' ? 'Completed' : 'Edit'}
                         </button>
                     </td>
                 </tr>
             `;
-
-            if (filter === 'all' || statusClass === filter) {
-                tableBodies[filter].insertAdjacentHTML('beforeend', row);
+    
+            // Insert row into the "All" tab and respective status tab
+            tableBodies.all.insertAdjacentHTML('beforeend', row);
+            if (tableBodies[statusClass]) {
+                tableBodies[statusClass].insertAdjacentHTML('beforeend', row);
             }
         });
     }
+    
 
     // Function to classify statuses into categories
     function getStatusClass(status) {
-        if (status.toLowerCase().includes('supply') || status.toLowerCase().includes('budget')) {
+        if (status.toLowerCase().includes('ongoing')) {
             return 'ongoing';
         } else if (status.toLowerCase().includes('overdue')) {
             return 'overdue';
