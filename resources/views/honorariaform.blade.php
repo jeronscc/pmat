@@ -232,8 +232,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
-                    <!-- Save Button (Initially Disabled) -->
-                    <button type="button" class="btn btn-success" id="saveChanges">Save</button>
+                    <button type="button" class="btn btn-success" id="saveBtn">Save</button>
 
                 </div>
                 </div>

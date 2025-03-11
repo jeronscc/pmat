@@ -1,5 +1,12 @@
 document.addEventListener('DOMContentLoaded', function () {
-    document.getElementById('saveBtn').addEventListener('click', function () {
+    const uploadBtn = document.getElementById('saveBtn'); // ✅ Ensure button exists
+
+    if (!uploadBtn) {
+        console.error("Error: #saveBtn not found in DOM.");
+        return; // ✅ Prevent script from running if button is missing
+    }
+
+    uploadBtn.addEventListener('click', function () {
         const form = document.getElementById('requirementsForm');
         const formData = new FormData(form);
 
