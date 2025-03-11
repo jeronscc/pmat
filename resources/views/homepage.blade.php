@@ -143,7 +143,7 @@
                                     <th>STATUS</th>
                                 </tr>
                             </thead>
-                            <tbody id="procurementTableAll">
+                            <tbody id="procurementTable">
                                 <!-- Default content (All) -->
                             </tbody>
                         </table>
