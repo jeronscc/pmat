@@ -68,6 +68,8 @@ function fetchProcurementForSaro(saroNo) {
                     statusCell.appendChild(badge);
                     row.appendChild(statusCell);
 
+                    tableBodies.all.appendChild(row);
+
                     // Append row to the appropriate table body
                     if (statusMessage.toLowerCase() === 'done') {
                         tableBodies.done.appendChild(row);
@@ -75,8 +77,6 @@ function fetchProcurementForSaro(saroNo) {
                         tableBodies.ongoing.appendChild(row);
                     } else if (statusMessage.toLowerCase() === 'overdue') {
                         tableBodies.overdue.appendChild(row);
-                    } else {
-                        tableBodies.all.appendChild(row);
                     }
                 });
 
@@ -157,6 +157,8 @@ function fetchProcurementForYear(year) {
                     statusCell.appendChild(badge);
                     row.appendChild(statusCell);
 
+                    tableBodies.all.appendChild(row);
+
                     // Append row to the appropriate table body
                     if (statusMessage.toLowerCase() === 'done') {
                         tableBodies.done.appendChild(row);
@@ -164,8 +166,6 @@ function fetchProcurementForYear(year) {
                         tableBodies.ongoing.appendChild(row);
                     } else if (statusMessage.toLowerCase() === 'overdue') {
                         tableBodies.overdue.appendChild(row);
-                    } else {
-                        tableBodies.all.appendChild(row);
                     }
                 });
 
@@ -248,6 +248,8 @@ function fetchProcurementRequirements(saroNo) {
                     statusCell.appendChild(badge);
                     row.appendChild(statusCell);
 
+                    tableBodies.all.appendChild(row);
+
                     // Append row to the appropriate table body
                     if (statusMessage.toLowerCase() === 'done') {
                         tableBodies.done.appendChild(row);
@@ -255,8 +257,6 @@ function fetchProcurementRequirements(saroNo) {
                         tableBodies.ongoing.appendChild(row);
                     } else if (statusMessage.toLowerCase() === 'overdue') {
                         tableBodies.overdue.appendChild(row);
-                    } else {
-                        tableBodies.all.appendChild(row);
                     }
                 });
 
@@ -398,6 +398,8 @@ function fetchProcurementData(year = '', status = 'all') {
                 statusCell.appendChild(badge);
                 row.appendChild(statusCell);
 
+                tableBodies.all.appendChild(row);
+
                 // Append row to the appropriate table body
                 if (statusMessage.toLowerCase() === 'done') {
                     tableBodies.done.appendChild(row);
@@ -405,9 +407,7 @@ function fetchProcurementData(year = '', status = 'all') {
                     tableBodies.ongoing.appendChild(row);
                 } else if (statusMessage.toLowerCase() === 'overdue') {
                     tableBodies.overdue.appendChild(row);
-                } else {
-                    tableBodies.all.appendChild(row);
-                }
+                }      
             });
 
             // Add event listener to each table body for delegation
@@ -524,6 +524,8 @@ function updateProcurementTable(data) {
             statusCell.appendChild(badge);
             row.appendChild(statusCell);
 
+            tableBodies.all.appendChild(row);
+            
             // Append row to the appropriate table body
             if (statusMessage.toLowerCase() === 'done') {
                 tableBodies.done.appendChild(row);
@@ -531,8 +533,6 @@ function updateProcurementTable(data) {
                 tableBodies.ongoing.appendChild(row);
             } else if (statusMessage.toLowerCase() === 'overdue') {
                 tableBodies.overdue.appendChild(row);
-            } else {
-                tableBodies.all.appendChild(row);
             }
         });
 
