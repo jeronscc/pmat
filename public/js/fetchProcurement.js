@@ -14,7 +14,13 @@ function getStatusClass(status) {
     }
 }
 
-// FETCH PROCUREMENT DATA BY SARO FILTER
+document.addEventListener('click', function (event) {
+    const row = event.target.closest('tr'); // Get the clicked row
+    if (row && row.dataset.procurementId) {
+        openProcurementModal({ procurement_id: row.dataset.procurementId });
+    }
+});
+
 function fetchProcurementForSaro(saroNo) {
     const url = saroNo === '' ? '/api/fetch-procurement-ilcdb' : `/api/fetch-procurement-ilcdb?saro_no=${saroNo}`;
 
@@ -28,14 +34,14 @@ function fetchProcurementForSaro(saroNo) {
                 done: document.getElementById('procurementTableDone')
             };
 
-            // Clear all table bodies
-            Object.values(tableBodies).forEach(tableBody => tableBody.innerHTML = '');
+            Object.values(tableBodies).forEach(tableBody => tableBody.innerHTML = ''); // ✅ Clear old rows
 
             if (data.length > 0) {
                 data.forEach(item => {
                     const row = document.createElement('tr');
+                    row.setAttribute('data-procurement-id', item.procurement_id); // ✅ Trackable row ID
 
-                    // PR NUMBER cell (procurement_id)
+                    // PR NUMBER cell
                     const prNumberCell = document.createElement('td');
                     prNumberCell.textContent = item.procurement_id;
                     row.appendChild(prNumberCell);
@@ -52,18 +58,18 @@ function fetchProcurementForSaro(saroNo) {
                     let statusMessage = item.status || ''; 
                     let unitMessage = item.unit ? ` at ${item.unit}` : ''; 
 
-                    // Check if honoraria form status is available and use it if it's not 'No Status'
+                    // Use honoraria status if available
                     if (item.honoraria_status && item.honoraria_status.toLowerCase() !== 'no status') {
-                        statusMessage = item.honoraria_status;  // Update status to honoraria form status if available
+                        statusMessage = item.honoraria_status;
                     }
 
-                    // If status is "done", don't append the unit
+                    // If status is "done", remove the unit part
                     if (statusMessage.toLowerCase() === 'done') {
-                        unitMessage = ''; // Don't append the unit when status is "done"
+                        unitMessage = '';
                     }
 
-                    badge.className = getStatusClass(statusMessage || ''); // Apply appropriate badge class
-                    badge.textContent = statusMessage + unitMessage; // Combine status and unit for display
+                    badge.className = getStatusClass(statusMessage || '');
+                    badge.textContent = statusMessage + unitMessage; 
 
                     statusCell.appendChild(badge);
                     row.appendChild(statusCell);
@@ -78,18 +84,6 @@ function fetchProcurementForSaro(saroNo) {
                     } else if (statusMessage.toLowerCase() === 'overdue') {
                         tableBodies.overdue.appendChild(row);
                     }
-                });
-
-                // Add event listener to each table body for delegation
-                Object.values(tableBodies).forEach(tableBody => {
-                    tableBody.addEventListener('click', function(event) {
-                        const prNumberCell = event.target.closest('td');
-                        if (prNumberCell && prNumberCell.parentElement) {
-                            const procurementId = prNumberCell.textContent;
-                            const row = prNumberCell.parentElement;
-                            openProcurementModal({ procurement_id: procurementId });
-                        }
-                    });
                 });
             } else {
                 const emptyMessage = document.createElement('tr');
@@ -191,7 +185,6 @@ function fetchProcurementForYear(year) {
         })
         .catch(error => console.error('Error fetching procurement data:', error));
 }
-
 // FETCH PROCUREMENT DATA FOR MODAL
 function fetchProcurementRequirements(saroNo) {
     const url = saroNo === '' ? '/api/fetch-procurement-ilcdb' : `/api/fetch-procurement-ilcdb?saro_no=${saroNo}`;
@@ -282,7 +275,6 @@ function fetchProcurementRequirements(saroNo) {
         })
         .catch(error => console.error('Error fetching procurement requirements:', error));
 }
-
 // Function to open modal and display procurement details
 function openProcurementModal(item) {
     const procurementId = item.procurement_id; // Get procurement ID from clicked item
@@ -316,7 +308,6 @@ function openProcurementModal(item) {
             alert('Failed to load procurement details.');
         });
 }
-
 // Event listener for table row click
 const tableBodies = {
     all: document.getElementById('procurementTable'),
@@ -384,11 +375,6 @@ function fetchProcurementData(year = '', status = 'all') {
         })
         .catch(error => console.error('Error fetching procurement data:', error));
 }
-
-
-
-
-
 // Event listener for the year filter
 document.getElementById('year')?.addEventListener('change', function () {
     const yearFilter = this.value;
