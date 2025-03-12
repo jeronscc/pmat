@@ -325,36 +325,20 @@ const tableBodies = {
     done: document.getElementById('procurementTableDone')
 };
 
-Object.values(tableBodies).forEach(tableBody => {
-    tableBody.addEventListener('click', function(event) {
-        const prNumberCell = event.target.closest('td');
-        if (prNumberCell && prNumberCell.parentElement) {
-            const procurementId = prNumberCell.textContent;
-            const row = prNumberCell.parentElement;
-            openProcurementModal({ procurement_id: procurementId });
-        }
-    });
+document.addEventListener('click', function (event) {
+    const row = event.target.closest('tr'); // Find closest row
+    if (row && row.dataset.procurementId) {
+        openProcurementModal({ procurement_id: row.dataset.procurementId });
+    }
 });
 
-// Function to fetch combined procurement data
 function fetchProcurementData(year = '', status = 'all') {
     let url = '/api/fetch-combined-procurement-data';
 
-    // Append year filter if provided
-    if (year !== '') {
-        url += `?year=${year}`;
-    }
+    if (year !== '') url += `?year=${year}`;
+    if (status !== 'all') url += year !== '' ? `&status=${status}` : `?status=${status}`;
+    if (currentSaroNo !== '') url += (year !== '' || status !== 'all') ? `&saro_no=${currentSaroNo}` : `?saro_no=${currentSaroNo}`;
 
-    // Append status filter if it's not 'all'
-    if (status !== 'all') {
-        url += year !== '' ? `&status=${status}` : `?status=${status}`;
-    }
-
-    // Append SARO filter if currentSaroNo is set
-    if (currentSaroNo !== '') {
-        url += (year !== '' || status !== 'all') ? `&saro_no=${currentSaroNo}` : `?saro_no=${currentSaroNo}`;
-    }
-    
     fetch(url)
         .then(response => response.json())
         .then(data => {
@@ -365,65 +349,45 @@ function fetchProcurementData(year = '', status = 'all') {
                 done: document.getElementById('procurementTableDone')
             };
 
-            // Clear all table bodies
-            Object.values(tableBodies).forEach(tableBody => tableBody.innerHTML = '');
+            Object.values(tableBodies).forEach(tableBody => tableBody.innerHTML = ''); // ✅ Clear old rows
 
             data.forEach(item => {
                 const row = document.createElement('tr');
-
-                // PR NUMBER cell (procurement_id)
+                row.setAttribute('data-procurement-id', item.procurement_id); // ✅ Ensure each row has a unique identifier
+            
                 const prNumberCell = document.createElement('td');
                 prNumberCell.textContent = item.procurement_id;
                 row.appendChild(prNumberCell);
-
-                // ACTIVITY cell
+            
                 const activityCell = document.createElement('td');
                 activityCell.textContent = item.activity;
                 row.appendChild(activityCell);
-
-                // STATUS & UNIT cell
+            
                 const statusCell = document.createElement('td');
                 const badge = document.createElement('span');
+            
+                let statusMessage = item.status || '';
+                let unitMessage = item.unit ? ` at ${item.unit}` : '';
+                if (statusMessage.toLowerCase() === 'done') unitMessage = '';
 
-                let statusMessage = item.status || ''; 
-                let unitMessage = item.unit ? ` at ${item.unit}` : ''; 
-
-                if (statusMessage.toLowerCase() === 'done') {
-                    unitMessage = ''; 
-                }
-
-                badge.className = getStatusClass(statusMessage || ''); 
-                badge.textContent = statusMessage + unitMessage; 
+                badge.className = getStatusClass(item.status || '');
+                badge.textContent = statusMessage + unitMessage;
 
                 statusCell.appendChild(badge);
                 row.appendChild(statusCell);
-
+            
                 tableBodies.all.appendChild(row);
-
-                // Append row to the appropriate table body
-                if (statusMessage.toLowerCase() === 'done') {
-                    tableBodies.done.appendChild(row);
-                } else if (statusMessage.toLowerCase() === 'ongoing') {
-                    tableBodies.ongoing.appendChild(row);
-                } else if (statusMessage.toLowerCase() === 'overdue') {
-                    tableBodies.overdue.appendChild(row);
-                }      
-            });
-
-            // Add event listener to each table body for delegation
-            Object.values(tableBodies).forEach(tableBody => {
-                tableBody.addEventListener('click', function(event) {
-                    const prNumberCell = event.target.closest('td');
-                    if (prNumberCell && prNumberCell.parentElement) {
-                        const procurementId = prNumberCell.textContent;
-                        const row = prNumberCell.parentElement;
-                        openProcurementModal({ procurement_id: procurementId });
-                    }
-                });
+                if (statusMessage.toLowerCase() === 'done') tableBodies.done.appendChild(row);
+                else if (statusMessage.toLowerCase() === 'ongoing') tableBodies.ongoing.appendChild(row);
+                else if (statusMessage.toLowerCase() === 'overdue') tableBodies.overdue.appendChild(row);
             });
         })
         .catch(error => console.error('Error fetching procurement data:', error));
 }
+
+
+
+
 
 // Event listener for the year filter
 document.getElementById('year')?.addEventListener('change', function () {
