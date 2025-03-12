@@ -347,25 +347,31 @@ input, select, textarea {
 
 @media (min-height: 784px) {
     .record-box {
-        max-height: 520px; /* Further increase max-height for even larger screens */
+        max-height: 490px; /* Further increase max-height for even larger screens */
     }
 }
 
 @media (min-height: 834px) {
     .record-box {
-        max-height: 575px; /* Further increase max-height for even larger screens */
+        max-height: 545px; /* Further increase max-height for even larger screens */
+    }
+}
+
+@media (max-height: 783px) {
+    .record-box tbody {
+        max-height: 390px; /* Further increase max-height for even larger screens */
     }
 }
 
 @media (min-height: 784px) {
     .record-box tbody {
-        max-height: 460px; /* Further increase max-height for even larger screens */
+        max-height: 430px; /* Further increase max-height for even larger screens */
     }
 }
 
 @media (min-height: 834px) {
     .record-box tbody {
-        max-height: 510px; /* Further increase max-height for even larger screens */
+        max-height: 480px; /* Further increase max-height for even larger screens */
     }
 }
 
