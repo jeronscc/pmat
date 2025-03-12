@@ -21,17 +21,14 @@ document.addEventListener("DOMContentLoaded", function () {
                             </thead>
                             <tbody>
                             ${data.map(procurement => {
-                                let submittedDates = [
-                                    procurement.dt_submitted1,
-                                    procurement.dt_submitted2,
-                                    procurement.dt_submitted3,
-                                    procurement.dt_submitted4,
-                                    procurement.dt_submitted5,
-                                    procurement.dt_submitted6
-                                ].filter(date => date) // Remove null values
-                                  .map(date => new Date(date).toISOString().split('T')[0]); // Format to YYYY-MM-DD
+                                let displayDate = "N/A";
 
-                                let displayDate = submittedDates.length > 0 ? submittedDates[0] : 'N/A';
+                                if (procurement.dt_submitted) {
+                                    let dateObj = new Date(procurement.dt_submitted);
+                                    if (!isNaN(dateObj.getTime())) {
+                                        displayDate = dateObj.toISOString().split('T')[0];
+                                    }
+                                }
 
                                 return `
                                     <tr>

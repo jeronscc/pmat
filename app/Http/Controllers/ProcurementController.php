@@ -154,20 +154,32 @@ class ProcurementController extends Controller
     }
     public function getOverdueProcurements()
     {
-        $overdueProcurements = DB::connection('ilcdb')
-            ->table('procurement_form')
-            ->where('status', 'Overdue')
-            ->select([
-                'procurement_id',
-                'activity',
-                'dt_submitted1',
-                'dt_submitted2',
-                'dt_submitted3',
-                'dt_submitted4',
-                'dt_submitted5',
-                'dt_submitted6'
-            ])
-            ->get();
+        $overdueProcurements = DB::connection('ilcdb')->select("
+            SELECT 
+                procurement_id, 
+                activity, 
+                COALESCE(dt_submitted1, dt_submitted2, dt_submitted3, dt_submitted4, dt_submitted5, dt_submitted6) AS dt_submitted
+            FROM procurement_form 
+            WHERE status = 'Overdue'
+            
+            UNION ALL
+    
+            SELECT 
+                procurement_id, 
+                activity, 
+                dt_submitted
+            FROM honoraria_form 
+            WHERE status = 'Overdue'
+    
+            UNION ALL
+    
+            SELECT 
+                procurement_id, 
+                activity, 
+                dt_submitted
+            FROM otherexpense_form 
+            WHERE status = 'Overdue'
+        ");
     
         return response()->json($overdueProcurements);
     }
