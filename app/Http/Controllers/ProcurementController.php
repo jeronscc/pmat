@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-
+use Carbon\Carbon;
 class ProcurementController extends Controller
 {
     public function addProcurement(Request $request)
@@ -152,6 +152,27 @@ class ProcurementController extends Controller
             return response()->json(['error' => 'Error fetching procurement data: ' . $e->getMessage()], 500);
         }
     }
+    public function getOverdueProcurements()
+    {
+        $overdueProcurements = DB::connection('ilcdb')
+            ->table('procurement_form')
+            ->where('status', 'Overdue')
+            ->select([
+                'procurement_id',
+                'activity',
+                'dt_submitted1',
+                'dt_submitted2',
+                'dt_submitted3',
+                'dt_submitted4',
+                'dt_submitted5',
+                'dt_submitted6'
+            ])
+            ->get();
+    
+        return response()->json($overdueProcurements);
+    }
+    
+    
 }
 
 
