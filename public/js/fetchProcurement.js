@@ -275,10 +275,18 @@ function fetchProcurementRequirements(saroNo) {
         })
         .catch(error => console.error('Error fetching procurement requirements:', error));
 }
+// Store Bootstrap modal instance globally
+let bootstrapModalInstance = null;
+
 // Function to open modal and display procurement details
 function openProcurementModal(item) {
     const procurementId = item.procurement_id; // Get procurement ID from clicked item
     const modal = document.getElementById('procurementDetailsModal');
+
+    if (!modal) {
+        console.error("Modal element not found.");
+        return;
+    }
 
     // Fetch detailed data from the API using the procurement_id
     const url = `/api/fetch-procurement-details?procurement_id=${procurementId}`;
@@ -287,10 +295,9 @@ function openProcurementModal(item) {
         .then(response => response.json())
         .then(data => {
             if (data.message) {
-                // If the response contains a message, that means procurement wasn't found
-                alert(data.message);
+                alert(data.message); // Show error if procurement is not found
             } else {
-                // Populate modal fields with the fetched procurement data
+                // Populate modal fields
                 document.getElementById('modalProcurementCategory').textContent = data.procurement_category || 'N/A';
                 document.getElementById('modalProcurementNo').textContent = data.procurement_id || 'N/A';
                 document.getElementById('modalSaroNo').textContent = data.saro_no || 'N/A';
@@ -298,9 +305,13 @@ function openProcurementModal(item) {
                 document.getElementById('modalDescription').textContent = data.description || 'N/A';
                 document.getElementById('modalActivity').textContent = data.activity || 'N/A';
 
-                // Show the modal using Bootstrap Modal API
-                const bootstrapModal = new bootstrap.Modal(modal);
-                bootstrapModal.show();
+                // Initialize Bootstrap modal only once
+                if (!bootstrapModalInstance) {
+                    bootstrapModalInstance = new bootstrap.Modal(modal);
+                }
+
+                // Show the modal
+                bootstrapModalInstance.show();
             }
         })
         .catch(error => {
@@ -308,6 +319,14 @@ function openProcurementModal(item) {
             alert('Failed to load procurement details.');
         });
 }
+
+// Ensure modal closes when the close button is clicked
+document.getElementById('closeModalBtn').addEventListener('click', function () {
+    if (bootstrapModalInstance) {
+        bootstrapModalInstance.hide();
+    }
+});
+
 // Event listener for table row click
 const tableBodies = {
     all: document.getElementById('procurementTable'),
