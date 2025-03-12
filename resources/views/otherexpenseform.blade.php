@@ -37,6 +37,13 @@
                 </form>
             </li>
             <li>
+                <form action="/select-project">
+                    <button type="submit">
+                        <i class="fas fa-project"></i><img src="/assets/project-icon.png" alt=""> Project
+                    </button>
+                </form>
+            </li>
+            <li>
                 <form action="">
                     <button type="submit">
                         <i class="fas fa-users"></i><img src="/assets/account_icon.png" alt=""> Accounts
