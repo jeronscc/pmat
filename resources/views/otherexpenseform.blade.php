@@ -210,11 +210,7 @@
                     </div>
 
                     <!-- Container to display uploaded files -->
-                    <div class="mb-3">                    <!-- Button to trigger the modal -->
-                    <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#requirementsModal1">
-                        Upload Requirements
-                    </button>
-                    </div>
+
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
                 <button type="button" class="btn btn-success" id="saveBtn1">Save</button>
