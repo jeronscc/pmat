@@ -336,62 +336,63 @@
         </div>
         <!-- Procurement Modal -->
         <div class="modal fade" id="procurementModal" tabindex="-1" aria-labelledby="procurementTitle" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header bg-dark text-white">
-                        <h5 class="modal-title" id="procurementTitle">ADD PROCUREMENT</h5>
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-dark text-white">
+                <h5 class="modal-title" id="procurementTitle">ADD PROCUREMENT</h5>
+            </div>
+            <div class="modal-body">
+                <form id="procurementForm">
+                    <div class="mb-3">
+                        <label for="category" class="form-label">Select Procurement Category</label>
+                        <select class="form-select" id="category">
+                            <option value="" disabled selected>Select Category</option>
+                            <option value="SVP">SVP</option>
+                            <option value="Honoraria">Honoraria</option>
+                            <option value="Other expense">Other Expenses</option>
+                        </select>
                     </div>
-                    <div class="modal-body">
-                        <form>
-                            <div class="mb-3">
-                                <label for="category" class="form-label">Select Procurement Category</label>
-                                <select class="form-select" id="category">
-                                    <option value="" disabled selected>Select Category</option>
-                                    <option value="SVP">SVP</option>
-                                    <option value="Honoraria">Honoraria</option>
-                                    <option value="Other expense">Other Expenses</option>
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label for="pr-number" class="form-label">PR/TRANSACTION NUMBER</label>
-                                <input type="text" class="form-control" id="pr-number" placeholder="Enter PR Number">
-                            </div>
-                            <div class="mb-3">
-                                <label for="pr-year" class="form-label">YEAR</label>
-                                <select class="form-select" id="pr-year" placeholder="Enter Activity">
-                                    <option value="" disabled selected>Select Year</option>
-                                    <?php
-                                    $startYear = max(2026, date("Y")); // Start from 2026, or the current year if it's later
-                                    for ($year = $startYear; $year >= $startYear - 5; $year--) {
-                                    echo "<option value=\"$year\">$year</option>";
-                                    }
-                                    ?>
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label for="saro-number" class="form-label">SARO NUMBER</label>
-                                <select class="form-select" id="saro-number">
-                                    <option value="" disabled selected>Select SARO Number</option>
-                                    <!-- SARO options will be populated dynamically -->
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label for="activity" class="form-label">ACTIVITY</label>
-                                <input type="text" class="form-control" id="activity" placeholder="Enter Activity">
-                            </div>
-                            <div class="mb-3">
-                                <label for="description" class="form-label">DESCRIPTION</label>
-                                <textarea class="form-control" id="description" rows="3" placeholder="Enter Description"></textarea>
-                            </div>
-                        </form>
+                    <div class="mb-3">
+                        <label for="pr-number" class="form-label">PR/TRANSACTION NUMBER</label>
+                        <input type="text" class="form-control" id="pr-number" placeholder="Enter PR Number">
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn btn-success" id="addProcurement">Add</button>
+                    <div class="mb-3">
+                        <label for="pr-year" class="form-label">YEAR</label>
+                        <select class="form-select" id="pr-year" placeholder="Enter Activity">
+                            <option value="" disabled selected>Select Year</option>
+                            <?php
+                            $startYear = max(2026, date("Y")); // Start from 2026, or the current year if it's later
+                            for ($year = $startYear; $year >= $startYear - 5; $year--) {
+                                echo "<option value=\"$year\">$year</option>";
+                            }
+                            ?>
+                        </select>
                     </div>
-                </div>
+                    <div class="mb-3">
+                        <label for="saro-number" class="form-label">SARO NUMBER</label>
+                        <select class="form-select" id="saro-number">
+                            <option value="" disabled selected>Select SARO Number</option>
+                            <!-- SARO options will be populated dynamically -->
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="activity" class="form-label" id="activityLabel">ACTIVITY</label>
+                        <input type="text" class="form-control" id="activity" placeholder="Enter Activity">
+                    </div>
+                    <div class="mb-3">
+                        <label for="description" class="form-label">DESCRIPTION</label>
+                        <textarea class="form-control" id="description" rows="3" placeholder="Enter Description"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-success" id="addProcurement">Add</button>
             </div>
         </div>
+    </div>
+</div>
+
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
         <!-- Custom JS -->
@@ -407,5 +408,37 @@
         <!-- Bootstrap JS (Optional, only needed for dropdowns, modals, etc.) -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+        <script>
+    // Listen for category selection change
+    document.getElementById('category').addEventListener('change', function() {
+        const category = this.value;
+        
+        // Reset form fields before changing
+        resetForm();
+
+        if (category === 'SVP') {
+            // Retain original form for SVP
+            document.getElementById('activityLabel').innerText = 'ACTIVITY';
+            document.getElementById('pr-number').setAttribute('placeholder', 'Enter PR Number');
+        } else if (category === 'Honoraria') {
+            // Modify form for Honoraria
+            document.getElementById('activityLabel').innerText = 'NAME OF SPEAKER';
+            document.getElementById('pr-number').setAttribute('placeholder', 'Auto-generated (e.g., PROC-{current year}-xxxxx)');
+        } else if (category === 'Other expense') {
+            // Modify form for Other expense
+            document.getElementById('activityLabel').innerText = 'NAME OF TRAVELLER';
+            document.getElementById('pr-number').setAttribute('placeholder', 'Auto-generated (e.g., PROC-{current year}-xxxxx)');
+        }
+    });
+
+    // Reset the form fields
+    function resetForm() {
+        document.getElementById('activity').value = '';
+        document.getElementById('description').value = '';
+        document.getElementById('pr-number').value = '';
+        document.getElementById('pr-year').value = '';
+        document.getElementById('saro-number').value = '';
+    }
+</script>
     </body>
 </html>
