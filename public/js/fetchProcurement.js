@@ -78,11 +78,11 @@ function fetchProcurementForSaro(saroNo) {
 
                     // Append row to the appropriate table body
                     if (statusMessage.toLowerCase() === 'done') {
-                        tableBodies.done.appendChild(row);
+                        tableBodies.done.appendChild(row.cloneNode(true));
                     } else if (statusMessage.toLowerCase() === 'ongoing') {
-                        tableBodies.ongoing.appendChild(row);
+                        tableBodies.ongoing.appendChild(row.cloneNode(true));
                     } else if (statusMessage.toLowerCase() === 'overdue') {
-                        tableBodies.overdue.appendChild(row);
+                        tableBodies.overdue.appendChild(row.cloneNodde(true));
                     }
                 });
             } else {
@@ -155,11 +155,11 @@ function fetchProcurementForYear(year) {
 
                     // Append row to the appropriate table body
                     if (statusMessage.toLowerCase() === 'done') {
-                        tableBodies.done.appendChild(row);
+                        tableBodies.done.appendChild(row.cloneNode(true));
                     } else if (statusMessage.toLowerCase() === 'ongoing') {
-                        tableBodies.ongoing.appendChild(row);
+                        tableBodies.ongoing.appendChild(row.cloneNodde(true));
                     } else if (statusMessage.toLowerCase() === 'overdue') {
-                        tableBodies.overdue.appendChild(row);
+                        tableBodies.overdue.appendChild(row.cloneNode(true));
                     }
                 });
 
@@ -245,11 +245,11 @@ function fetchProcurementRequirements(saroNo) {
 
                     // Append row to the appropriate table body
                     if (statusMessage.toLowerCase() === 'done') {
-                        tableBodies.done.appendChild(row);
+                        tableBodies.done.appendChild(row.cloneNode(true));
                     } else if (statusMessage.toLowerCase() === 'ongoing') {
-                        tableBodies.ongoing.appendChild(row);
+                        tableBodies.ongoing.appendChild(row.cloneNode(true));
                     } else if (statusMessage.toLowerCase() === 'overdue') {
-                        tableBodies.overdue.appendChild(row);
+                        tableBodies.overdue.appendChild(row.cloneNode(true));
                     }
                 });
 
@@ -387,9 +387,9 @@ function fetchProcurementData(year = '', status = 'all') {
                 row.appendChild(statusCell);
             
                 tableBodies.all.appendChild(row);
-                if (statusMessage.toLowerCase() === 'done') tableBodies.done.appendChild(row);
-                else if (statusMessage.toLowerCase() === 'ongoing') tableBodies.ongoing.appendChild(row);
-                else if (statusMessage.toLowerCase() === 'overdue') tableBodies.overdue.appendChild(row);
+                if (statusMessage.toLowerCase() === 'done') tableBodies.done.appendChild(row.cloneNode(true));
+                else if (statusMessage.toLowerCase() === 'ongoing') tableBodies.ongoing.appendChild(row.cloneNode(true));
+                else if (statusMessage.toLowerCase() === 'overdue') tableBodies.overdue.appendChild(row.cloneNode(true));
             });
         })
         .catch(error => console.error('Error fetching procurement data:', error));
@@ -497,11 +497,11 @@ function updateProcurementTable(data) {
             
             // Append row to the appropriate table body
             if (statusMessage.toLowerCase() === 'done') {
-                tableBodies.done.appendChild(row);
+                tableBodies.done.appendChild(row.cloneNode(true));
             } else if (statusMessage.toLowerCase() === 'ongoing') {
-                tableBodies.ongoing.appendChild(row);
+                tableBodies.ongoing.appendChild(row.cloneNode(true));
             } else if (statusMessage.toLowerCase() === 'overdue') {
-                tableBodies.overdue.appendChild(row);
+                tableBodies.overdue.appendChild(row.cloneNode(true));
             }
         });
 
