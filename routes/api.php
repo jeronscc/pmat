@@ -161,3 +161,4 @@ Route::post('/otherexpense/update', [OtherExpenseFormController::class, 'updateO
 Route::get('/fetch-combined-procurement-data', [ProcurementController::class, 'fetchCombinedProcurementData']);
 Route::post('/requirements/upload', [HonorariaFormController::class, 'upload'])->name('requirements.upload');
 Route::get('/overdue-procurements', [ProcurementController::class, 'getOverdueProcurements']);
+Route::get('/requirements/{procurement_id}', [HonorariaFormController::class, 'getUploadedFiles']);
