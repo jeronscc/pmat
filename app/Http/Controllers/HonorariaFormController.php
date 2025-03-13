@@ -11,45 +11,41 @@ use App\Models\Requirement;
 class HonorariaFormController extends Controller
 {
     public function showForm(Request $request)
-{
-    $prNumber = $request->query('pr_number');
-    $activity = $request->query('activity');
+    {
+        $prNumber = $request->query('pr_number');
+        $activity = $request->query('activity');
 
-    // Fetch existing data from the honoraria_form table
-    $record = DB::connection('ilcdb')
-                ->table('honoraria_form')
-                ->where('procurement_id', $prNumber)
-                ->first();
-
-    // If no record exists, insert a new one
-    if (!$record) {
-        DB::connection('ilcdb')->table('honoraria_form')->insert([
-            'procurement_id' => $prNumber,
-            'activity'       => $activity,
-        ]);
-
-        // Re-fetch the record
+        // Fetch or create record in honoraria_form
         $record = DB::connection('ilcdb')
                     ->table('honoraria_form')
                     ->where('procurement_id', $prNumber)
                     ->first();
+
+        if (!$record) {
+            DB::connection('ilcdb')->table('honoraria_form')->insert([
+                'procurement_id' => $prNumber,
+                'activity'       => $activity,
+            ]);
+            $record = DB::connection('ilcdb')
+                        ->table('honoraria_form')
+                        ->where('procurement_id', $prNumber)
+                        ->first();
+        }
+
+        // Fetch procurement details
+        $procurement = DB::connection('ilcdb')
+            ->table('procurement')
+            ->where('procurement_id', $prNumber)
+            ->first();
+
+        return view('honorariaform', [
+            'prNumber'    => $prNumber,
+            'activity'    => $activity,
+            'description' => $procurement->description ?? 'No description available',
+            'record'      => $record,
+            'procurement' => $procurement
+        ]);
     }
-
-    // Fetch the description from the procurement table
-    $procurement = DB::connection('ilcdb')
-        ->table('procurement')
-        ->where('procurement_id', $prNumber)
-        ->first();
-
-    return view('honorariaform', [
-        'prNumber'    => $prNumber,
-        'activity'    => $activity,
-        'description' => $procurement->description ?? 'No description available', // Get description from procurement
-        'record'      => $record,
-        'procurement' => $procurement
-    ]);
-}
-
 
     public function updateHonoraria(Request $request)
     {
@@ -63,43 +59,46 @@ class HonorariaFormController extends Controller
         try {
             Log::info("Received Data: ", $validatedData);
 
-            $status = 'null'; // Default status
+            // Fetch existing record
+            $record = DB::connection('ilcdb')->table('honoraria_form')
+                        ->where('procurement_id', $validatedData['procurement_id'])
+                        ->first();
 
-            if ($validatedData['dt_submitted'] && !$validatedData['dt_received']) {
-                $status = 'Ongoing';
-            } elseif ($validatedData['dt_received'] && !$validatedData['budget_spent']) {
-                $status = 'Pending';
-            } elseif ($validatedData['budget_spent']) {
-                $status = 'Done';
+            $unit = $record->unit ?? '';
+            if ($validatedData['dt_submitted']) {
+                $unit = 'Budget Unit';
             }
 
-            DB::connection('ilcdb')->transaction(function () use ($validatedData, $status) {
+            // Determine status
+            $status = match (true) {
+                ($validatedData['dt_submitted'] && !$validatedData['dt_received']) => 'Ongoing',
+                ($validatedData['dt_received'] && !$validatedData['budget_spent']) => 'Pending',
+                ($validatedData['budget_spent']) => 'Done',
+                default => 'Pending',
+            };
+
+            Log::info("Calculated Status: " . $status);
+
+            DB::connection('ilcdb')->transaction(function () use ($validatedData, $status, $unit) {
                 DB::connection('ilcdb')->table('honoraria_form')
                     ->where('procurement_id', $validatedData['procurement_id'])
                     ->update([
-                        'dt_submitted' => $validatedData['dt_submitted'] ? Carbon::parse($validatedData['dt_submitted'])->format('Y-m-d H:i:s') : null,
-                        'dt_received'  => $validatedData['dt_received'] ? Carbon::parse($validatedData['dt_received'])->format('Y-m-d H:i:s') : null,
+                        'dt_submitted' => $validatedData['dt_submitted']
+                            ? Carbon::parse($validatedData['dt_submitted'])->format('Y-m-d H:i:s')
+                            : null,
+                        'dt_received'  => $validatedData['dt_received']
+                            ? Carbon::parse($validatedData['dt_received'])->format('Y-m-d H:i:s')
+                            : null,
                         'budget_spent' => $validatedData['budget_spent'] ?? null,
                         'status'       => $status,
+                        'unit'         => $unit,
                     ]);
-
-                $record = DB::connection('ilcdb')->table('honoraria_form')
-                            ->where('procurement_id', $validatedData['procurement_id'])
-                            ->first();
-
-                if ($record && isset($record->saro_no) && $validatedData['budget_spent']) {
-                    DB::connection('ilcdb')->table('saro')
-                        ->where('saro_no', $record->saro_no)
-                        ->update([
-                            'current_budget' => DB::raw("current_budget - " . floatval($validatedData['budget_spent']))
-                        ]);
-                }
             });
 
             return response()->json([
                 'success' => true,
                 'message' => 'Honoraria form updated successfully!',
-                'status'  => $status,
+                'status'  => $status . (($status === 'Ongoing' || $status === 'Pending') ? " at $unit" : ''),
             ]);
 
         } catch (\Exception $e) {
@@ -115,30 +114,17 @@ class HonorariaFormController extends Controller
     public function upload(Request $request)
     {
         try {
-            // Validate procurement_id first
             if (!$request->filled('procurement_id')) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Error: Procurement ID is missing.',
-                ], 400);
+                return response()->json(['success' => false, 'message' => 'Procurement ID is missing.'], 400);
             }
 
-            // Define required files
-            $requiredFiles = [
-                'orsFile', 'dvFile', 'contractFile', 'classificationFile', 'reportFile',
-                'attendanceFile', 'resumeFile', 'govidFile', 'payslipFile', 'bankFile', 'certFile'
-            ];
-
+            $requiredFiles = ['orsFile', 'dvFile', 'contractFile', 'classificationFile', 'reportFile', 'attendanceFile', 'resumeFile', 'govidFile', 'payslipFile', 'bankFile', 'certFile'];
             $uploads = [];
-            $missingFiles = [];
 
-            // Check if files are uploaded
             foreach ($requiredFiles as $file) {
                 if ($request->hasFile($file)) {
-                    $validated = $request->validate([
-                        $file => 'file|max:5120|mimes:pdf,doc,docx,jpg,png'
-                    ]);
-
+                    $request->validate([$file => 'file|max:5120|mimes:pdf,doc,docx,jpg,png']);
+                    
                     $uploadDir = public_path("uploads/requirements/{$request->procurement_id}");
                     if (!file_exists($uploadDir)) {
                         mkdir($uploadDir, 0777, true);
@@ -148,48 +134,24 @@ class HonorariaFormController extends Controller
                     $filePath = "uploads/requirements/{$request->procurement_id}/" . $fileName;
                     $request->file($file)->move($uploadDir, $fileName);
 
-                    // Delete existing file entry if it exists
-                    DB::connection('ilcdb')->table('requirements')
-                        ->where('procurement_id', $request->procurement_id)
-                        ->where('requirement_name', $file)
-                        ->delete();
-
-                    // Store file path in the ilcdb database requirements table
-                    DB::connection('ilcdb')->table('requirements')->insert([
-                        'procurement_id'    => $request->procurement_id,
-                        'requirement_name'  => $file,
-                        'file_path'         => $filePath,
-                    ]);
+                    DB::connection('ilcdb')->table('requirements')->updateOrInsert(
+                        ['procurement_id' => $request->procurement_id, 'requirement_name' => $file],
+                        ['file_path' => $filePath]
+                    );
 
                     $uploads[] = $file;
-                } else {
-                    $missingFiles[] = $file;
                 }
             }
 
-            // If no files were uploaded, return an error
             if (empty($uploads)) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'No files uploaded. Missing: ' . implode(', ', $missingFiles),
-                ], 400);
+                return response()->json(['success' => false, 'message' => 'No files uploaded.'], 400);
             }
 
-            // Update the honoraria form with the uploaded files
-            $this->updateHonoraria($request);
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Files uploaded successfully: ' . implode(', ', $uploads),
-            ]);
+            return response()->json(['success' => true, 'message' => 'Files uploaded successfully: ' . implode(', ', $uploads)]);
 
         } catch (\Exception $e) {
             Log::error('File upload failed: ' . $e->getMessage());
-
-            return response()->json([
-                'success' => false,
-                'message' => 'Server error: ' . $e->getMessage(),
-            ], 500);
+            return response()->json(['success' => false, 'message' => 'Server error: ' . $e->getMessage()], 500);
         }
     }
 
@@ -198,25 +160,12 @@ class HonorariaFormController extends Controller
         try {
             $files = DB::connection('ilcdb')->table('requirements')
                 ->where('procurement_id', $procurement_id)
-                ->get(['requirement_name', 'file_path']);
+                ->pluck('file_path', 'requirement_name');
 
-            $fileData = [];
-            foreach ($files as $file) {
-                $fileData[$file->requirement_name] = $file->file_path;
-            }
-
-            return response()->json([
-                'success' => true,
-                'files' => $fileData,
-            ]);
-
+            return response()->json(['success' => true, 'files' => $files]);
         } catch (\Exception $e) {
             Log::error('Failed to fetch uploaded files: ' . $e->getMessage());
-
-            return response()->json([
-                'success' => false,
-                'message' => 'Server error: ' . $e->getMessage(),
-            ], 500);
+            return response()->json(['success' => false, 'message' => 'Server error: ' . $e->getMessage()], 500);
         }
     }
 }

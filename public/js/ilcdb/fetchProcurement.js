@@ -71,7 +71,7 @@ function fetchProcurementForSaro(saroNo) {
                     const badge = document.createElement('span');
 
                     let statusMessage = item.status || ''; 
-                    let unitMessage = item.unit ? ` at ${item.unit}` : ''; 
+                    let unitMessage = item.unit? ` at ${item.unit}` : ''; 
 
                     // Use honoraria status if available
                     if (item.honoraria_status && item.honoraria_status.toLowerCase() !== 'no status') {

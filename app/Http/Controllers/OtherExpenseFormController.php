@@ -11,109 +11,104 @@ class OtherExpenseFormController extends Controller
 {
     public function showForm(Request $request)
     {
-        // Retrieve PR number and activity from the URL query parameters
         $prNumber = $request->query('pr_number');
-        $activity  = $request->query('activity');
+        $activity = $request->query('activity');
 
-        // Fetch existing data from the otherexpense_form table using procurement_id
+        // Fetch or create record in otherexpense_form
         $record = DB::connection('ilcdb')
                     ->table('otherexpense_form')
                     ->where('procurement_id', $prNumber)
                     ->first();
-    // If no record exists, you might want to create an empty record:
-    if (!$record) {
-        DB::connection('ilcdb')->table('otherexpense_form')->insert([
-            'procurement_id' => $prNumber,
-            'activity'       => $activity,
-            // Other fields can be left null
-        ]);
-        // Re-fetch the record after insertion
-        $record = DB::connection('ilcdb')
-                    ->table('otherexpense_form')
-                    ->where('procurement_id', $prNumber)
-                    ->first();
-    }
+
+        if (!$record) {
+            DB::connection('ilcdb')->table('otherexpense_form')->insert([
+                'procurement_id' => $prNumber,
+                'activity'       => $activity,
+            ]);
+            $record = DB::connection('ilcdb')
+                        ->table('otherexpense_form')
+                        ->where('procurement_id', $prNumber)
+                        ->first();
+        }
+
+        // Fetch procurement details
+        $procurement = DB::connection('ilcdb')
+            ->table('procurement')
+            ->where('procurement_id', $prNumber)
+            ->first();
+
         return view('otherexpenseform', [
-            'prNumber'   => $prNumber,
-            'activity'   => $activity,
-            'record'     => $record  // May be null if no record exists yet.
+            'prNumber'    => $prNumber,
+            'activity'    => $activity,
+            'description' => $procurement->description ?? 'No description available',
+            'record'      => $record,
+            'procurement' => $procurement
         ]);
     }
 
     public function updateOtherExpense(Request $request)
     {
-        // Validate the incoming data.
         $validatedData = $request->validate([
             'procurement_id' => 'required|exists:ilcdb.otherexpense_form,procurement_id',
             'dt_submitted'   => 'nullable|date',
             'dt_received'    => 'nullable|date',
             'budget_spent'   => 'nullable|numeric',
         ]);
-    
-        try {
-            // Log the incoming data
-            Log::info("Received Data: ", $validatedData);
-            
-            // Initialize status variable
-            $status = 'null'; // Default status
 
-            if ($validatedData['dt_submitted'] && !$validatedData['dt_received']) {
-                $status = 'Ongoing';
-            } elseif ($validatedData['dt_received'] && !$validatedData['budget_spent']) {
-                $status = 'Pending';
-            } elseif ($validatedData['budget_spent']) {
-                $status = 'Done';
+        try {
+            Log::info("Received Data: ", $validatedData);
+
+            // Fetch existing record
+            $record = DB::connection('ilcdb')->table('otherexpense_form')
+                        ->where('procurement_id', $validatedData['procurement_id'])
+                        ->first();
+
+            $unit = $record->unit ?? '';
+            if ($validatedData['dt_submitted']) {
+                $unit = 'Budget Unit';
             }
 
+            // Determine status
+            $status = match (true) {
+                ($validatedData['dt_submitted'] && !$validatedData['dt_received']) => 'Ongoing',
+                ($validatedData['dt_received'] && !$validatedData['budget_spent']) => 'Pending',
+                ($validatedData['budget_spent']) => 'Done',
+                default => 'Pending',
+            };
+
             Log::info("Calculated Status: " . $status);
-    
-            // Wrap the update in a transaction to ensure both operations succeed together.
-            DB::connection('ilcdb')->transaction(function () use ($validatedData, $status) {
-                // Update the otherexpense_form record.
+
+            DB::connection('ilcdb')->transaction(function () use ($validatedData, $status, $unit) {
                 DB::connection('ilcdb')->table('otherexpense_form')
                     ->where('procurement_id', $validatedData['procurement_id'])
                     ->update([
                         'dt_submitted' => $validatedData['dt_submitted']
-                            ? \Carbon\Carbon::parse($validatedData['dt_submitted'])->format('Y-m-d H:i:s')
+                            ? Carbon::parse($validatedData['dt_submitted'])->format('Y-m-d H:i:s')
                             : null,
                         'dt_received'  => $validatedData['dt_received']
-                            ? \Carbon\Carbon::parse($validatedData['dt_received'])->format('Y-m-d H:i:s')
+                            ? Carbon::parse($validatedData['dt_received'])->format('Y-m-d H:i:s')
                             : null,
                         'budget_spent' => $validatedData['budget_spent'] ?? null,
                         'status'       => $status,
+                        'unit'         => $unit,
                     ]);
-    
-                // Retrieve the updated record to get the saro_no.
-                $record = DB::connection('ilcdb')->table('otherexpense_form')
-                            ->where('procurement_id', $validatedData['procurement_id'])
-                            ->first();
-    
-                // If a matching saro_no is found and budget_spent is provided, perform the deduction.
-                if ($record && isset($record->saro_no) && $validatedData['budget_spent']) {
-                    DB::connection('ilcdb')->table('saro')
-                        ->where('saro_no', $record->saro_no)
-                        ->update([
-                            'current_budget' => DB::raw("current_budget - " . floatval($validatedData['budget_spent']))
-                        ]);
-                }
             });
-    
-            // Return a success response.
+
             return response()->json([
-                'message' => 'Other expense form updated successfully!',
-                'status'  => $status,
-            ], 200);
-    
+                'success' => true,
+                'message' => 'otherexpense form updated successfully!',
+                'status'  => $status . (($status === 'Ongoing' || $status === 'Pending') ? " at $unit" : ''),
+            ]);
+
         } catch (\Exception $e) {
-            // Log the error and return a failure response.
-            Log::error('Other expense update error: ' . $e->getMessage());
+            Log::error('otherexpense update error: ' . $e->getMessage());
             return response()->json([
-                'message' => 'An error occurred while updating the other expense form.',
+                'success' => false,
+                'message' => 'An error occurred while updating the otherexpense form.',
                 'error'   => $e->getMessage(),
             ], 500);
         }
     }
-
     public function upload(Request $request)
     {
         try {
