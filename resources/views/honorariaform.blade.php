@@ -112,7 +112,7 @@
                                         <tr>
                                             <td>
                                                 <button type="button" class="btn btn-dark" data-bs-toggle="modal"
-                                                    data-bs-target="#requirementsModal">
+                                                    data-bs-target="#requirementsModalHonoraria">
                                                     Upload Requirements
                                                 </button>
                                             </td>
