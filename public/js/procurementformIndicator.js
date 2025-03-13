@@ -9,6 +9,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
         let formData = new FormData(document.getElementById('procurementForm'));
 
+        const dateSubmitted1 = document.getElementById('dateSubmitted1').value;
+        if (!dateSubmitted1) {
+            alert('No data inputted');
+            return;
+        }
+
         let activeStage = 1;
         for (let i = 6; i >= 1; i--) {
             if (document.getElementById(`dateSubmitted${i}`).value) {
@@ -40,6 +46,7 @@ document.addEventListener('DOMContentLoaded', function() {
         e.preventDefault();
         window.location.href = '/homepage-ilcdb';
     });
+
     function initializeStatusTracking() {
         function updateIndicator(dateSubmittedId, dateReturnedId, indicatorId, isActive) {
             const dateSubmitted = document.getElementById(dateSubmittedId).value;
