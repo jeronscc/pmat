@@ -180,11 +180,16 @@ class HonorariaFormController extends Controller
         try {
             $files = DB::connection('ilcdb')->table('requirements')
                 ->where('procurement_id', $procurement_id)
-                ->get();
+                ->get(['requirement_name', 'file_path']);
+
+            $fileData = [];
+            foreach ($files as $file) {
+                $fileData[$file->requirement_name] = $file->file_path;
+            }
 
             return response()->json([
                 'success' => true,
-                'files' => $files,
+                'files' => $fileData,
             ]);
 
         } catch (\Exception $e) {

@@ -1,13 +1,17 @@
 document.addEventListener('DOMContentLoaded', function () {
+    const procurementId = document.getElementById('procurement_id')?.value;
+    if (!procurementId) {
+        alert('Error: Procurement ID is missing.');
+        return;
+    }
+
+    // Fetch uploaded files when the page loads
+    fetchUploadedFiles(procurementId);
+
     document.getElementById('saveBtn').addEventListener('click', function () {
         const form = document.getElementById('requirementsForm');
         const formData = new FormData(form);
 
-        const procurementId = document.getElementById('procurement_id')?.value;
-        if (!procurementId) {
-            alert('Error: Procurement ID is missing.');
-            return;
-        }
         formData.append('procurement_id', procurementId);
 
         console.log("Sending form data:", [...formData.entries()]); // ✅ Debugging log
@@ -23,21 +27,15 @@ document.addEventListener('DOMContentLoaded', function () {
             headers: { 'X-CSRF-TOKEN': csrfToken },
             body: formData
         })
-        .then(response => response.text()) // ✅ Read as text first
-        .then(text => {
-            console.log("Server response:", text); // ✅ Log raw response
+        .then(response => response.json()) // Read as JSON
+        .then(data => {
+            console.log("Server response:", data); // Log response
 
-            try {
-                const data = JSON.parse(text);
-                if (data.success) {
-                    alert(data.message);
-                    fetchUploadedFiles(procurementId); // Fetch and display uploaded files after saving
-                } else {
-                    alert("Upload failed: " + (data.message || "Unknown error."));
-                }
-            } catch (error) {
-                console.error("Response is not valid JSON:", text);
-                alert("Upload failed. Server returned an unexpected response.");
+            if (data.success) {
+                alert(data.message);
+                fetchUploadedFiles(procurementId); // Fetch and display uploaded files after saving
+            } else {
+                alert("Upload failed: " + (data.message || "Unknown error."));
             }
         })
         .catch(error => {
@@ -48,7 +46,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Function to fetch and display uploaded files
     function fetchUploadedFiles(procurementId) {
-        fetch(`/api/requirements/${procurementId}`)
+        fetch(`/api/requirements/${procurementId}/files`)
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
@@ -67,37 +65,30 @@ document.addEventListener('DOMContentLoaded', function () {
         const fileListContainer = document.getElementById('uploadedFilesList');
         fileListContainer.innerHTML = ''; // Clear existing files
 
-        files.forEach(file => {
+        for (const [requirementName, filePath] of Object.entries(files)) {
             const fileLink = document.createElement('a');
-            fileLink.href = `/${file.file_path}`;
-            fileLink.textContent = file.requirement_name;
+            fileLink.href = `/${filePath}`;
+            fileLink.textContent = requirementName;
             fileLink.target = '_blank';
 
             const listItem = document.createElement('li');
             listItem.appendChild(fileLink);
 
             // Disable the corresponding file input field
-            const inputField = document.getElementById(file.requirement_name);
+            const inputField = document.getElementById(requirementName);
             if (inputField) {
                 inputField.disabled = true;
                 inputField.style.display = 'none';
             }
 
             fileListContainer.appendChild(listItem);
-        });
+        }
     }
 
     // Event listener to open the modal and fetch uploaded files
     document.getElementById('openModalBtn').addEventListener('click', function () {
-        const procurementId = document.getElementById('procurement_id')?.value;
         if (procurementId) {
             fetchUploadedFiles(procurementId);
         }
     });
-
-    // Fetch uploaded files when the page loads
-    const procurementId = document.getElementById('procurement_id')?.value;
-    if (procurementId) {
-        fetchUploadedFiles(procurementId);
-    }
 });
