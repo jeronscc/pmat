@@ -391,14 +391,14 @@
 
         <!-- Custom JS -->
         <script src="/js/menu.js"></script>
-        <script src="/js/fetchSaro.js"></script>
-        <script src="/js/fetchProcurement.js"></script>
-        <script src="/js/searchProcurement.js"></script>
-        <script src="/js/addProcurement.js"></script>
-        <script src="/js/addSaro.js"></script>
-        <script src="/js/filterSaroByYear.js"></script>
+        <script src="/js/ilcdb/fetchSaro.js"></script>
+        <script src="/js/ilcdb/fetchProcurement.js"></script>
+        <script src="/js/ilcdb/searchProcurement.js"></script>
+        <script src="/js/ilcdb/addProcurement.js"></script>
+        <script src="/js/ilcdb/addSaro.js"></script>
+        <script src="/js/ilcdb/filterSaroByYear.js"></script>
         <script src="/sarohover.js"></script>
-        <script src="/js/overdueNotification.js"></script>
+        <script src="/js/ilcdb/overdueNotification.js"></script>
         <!-- Bootstrap JS (Optional, only needed for dropdowns, modals, etc.) -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>

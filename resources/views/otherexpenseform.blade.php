@@ -225,6 +225,6 @@
 
     <!-- Custom JS -->
     <script src="/js/menu.js"></script>
-    <script src="/js/otherexpenseformIndicator.js"></script>
+    <script src="/js/ilcdb/otherexpenseformIndicator.js"></script>
 </body>
 </html>

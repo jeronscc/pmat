@@ -593,8 +593,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Custom JS -->
     <script src="/js/menu.js"></script>
-    <script src="/js/procurementformIndicator.js"></script>
-    <script src="/js/addProcurementForm.js"></script>
+    <script src="/js/ilcdb/procurementformIndicator.js"></script>
+    <script src="/js/ilcdb/addProcurementForm.js"></script>
 
     <script>
 // Get references to the date fields
