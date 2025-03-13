@@ -155,149 +155,73 @@
         </div>
     </div>
 
-    <!-- Modals -->
-    <div class="modal fade" id="requirementsModal1" tabindex="-1" aria-labelledby="modalTitle1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header bg-dark text-white">
-                <h5 class="modal-title" id="modalTitle1">UPLOAD REQUIREMENTS</h5>
-            </div>
-            <div class="modal-body">
-                <form id="requirementsForm1" enctype="multipart/form-data">
-                    @csrf
-                    <input type="hidden" id="procurement_id" name="procurement_id" value="{{ $prNumber }}">
-                    <!-- ORS File Upload -->
-                    <div class="mb-3">
-                        <label for="orsFile" class="form-label">Upload ORS</label>
-                        <input class="form-control" type="file" id="orsFile" name="orsFile">
-                    </div>
-
-                    <!-- DV File Upload -->
-                    <div class="mb-3">
-                        <label for="dvFile" class="form-label">Upload DV</label>
-                        <input class="form-control" type="file" id="dvFile" name="dvFile">
-                    </div>
-
-                    <!-- Travel Order Upload -->
-                    <div class="mb-3">
-                        <label for="travelOrderFile" class="form-label">Upload Travel Order</label>
-                        <input class="form-control" type="file" id="travelOrderFile" name="travelOrderFile">
-                    </div>
-
-                    <!-- Certificate of Appearance Upload -->
-                    <div class="mb-3">
-                        <label for="appearanceFile" class="form-label">Upload Certificate of Appearance</label>
-                        <input class="form-control" type="file" id="appearanceFile" name="appearanceFile">
-                    </div>
-
-                    <!-- Official Travel Report Upload -->
-                    <div class="mb-3">
-                        <label for="reportFile" class="form-label">Upload Official Travel Report</label>
-                        <input class="form-control" type="file" id="reportFile" name="reportFile">
-                    </div>
-
-                    <!-- Itinerary of Travel Upload -->
-                    <div class="mb-3">
-                        <label for="itineraryFile" class="form-label">Upload Itinerary of Travel</label>
-                        <input class="form-control" type="file" id="itineraryFile" name="itineraryFile">
-                    </div>
-
-                    <!-- Certificate of Travel Completion Upload -->
-                    <div class="mb-3">
-                        <label for="certFile" class="form-label">Upload Certificate of Travel Completion</label>
-                        <input class="form-control" type="file" id="certFile" name="certFile">
-                    </div>
-
-                    <!-- Container to display uploaded files -->
-                    <div class="mb-3">                    <!-- Button to trigger the modal -->
-                    <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#requirementsModal1">
-                        Upload Requirements
-                    </button>
-                    
-                    <!-- Modal definition -->
-                    <div class="modal fade" id="requirementsModal1" tabindex="-1" aria-labelledby="modalTitle1" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content">
-                                <div class="modal-header bg-dark text-white">
-                                    <h5 class="modal-title" id="modalTitle1">UPLOAD REQUIREMENTS</h5>
-                                </div>
-                                <div class="modal-body">
-                                    <form id="requirementsForm1" enctype="multipart/form-data">
-                                        @csrf
-                                        <input type="hidden" id="procurement_id" name="procurement_id" value="{{ $prNumber }}">
-                                        <!-- ORS File Upload -->
-                                        <div class="mb-3">
-                                            <label for="orsFile" class="form-label">Upload ORS</label>
-                                            <input class="form-control" type="file" id="orsFile" name="orsFile">
-                                        </div>
-                    
-                                        <!-- DV File Upload -->
-                                        <div class="mb-3">
-                                            <label for="dvFile" class="form-label">Upload DV</label>
-                                            <input class="form-control" type="file" id="dvFile" name="dvFile">
-                                        </div>
-                    
-                                        <!-- Travel Order Upload -->
-                                        <div class="mb-3">
-                                            <label for="travelOrderFile" class="form-label">Upload Travel Order</label>
-                                            <input class="form-control" type="file" id="travelOrderFile" name="travelOrderFile">
-                                        </div>
-                    
-                                        <!-- Certificate of Appearance Upload -->
-                                        <div class="mb-3">
-                                            <label for="appearanceFile" class="form-label">Upload Certificate of Appearance</label>
-                                            <input class="form-control" type="file" id="appearanceFile" name="appearanceFile">
-                                        </div>
-                    
-                                        <!-- Official Travel Report Upload -->
-                                        <div class="mb-3">
-                                            <label for="reportFile" class="form-label">Upload Official Travel Report</label>
-                                            <input class="form-control" type="file" id="reportFile" name="reportFile">
-                                        </div>
-                    
-                                        <!-- Itinerary of Travel Upload -->
-                                        <div class="mb-3">
-                                            <label for="itineraryFile" class="form-label">Upload Itinerary of Travel</label>
-                                            <input class="form-control" type="file" id="itineraryFile" name="itineraryFile">
-                                        </div>
-                    
-                                        <!-- Certificate of Travel Completion Upload -->
-                                        <div class="mb-3">
-                                            <label for="certFile" class="form-label">Upload Certificate of Travel Completion</label>
-                                            <input class="form-control" type="file" id="certFile" name="certFile">
-                                        </div>
-                    
-                                        <!-- Container to display uploaded files -->
-                                        <div class="mb-3">
-                                            <label class="form-label">Uploaded Files</label>
-                                            <ul id="uploadedFilesList"></ul>
-                                        </div>
-                                    </form>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
-                                    <button type="button" class="btn btn-success" id="saveBtn1">Save</button>
-                                </div>
-                            </div>
+    <!-- Other Expense Modal -->
+    <div class="modal fade" id="requirementsModalOtherExpense" tabindex="-1" aria-labelledby="modalTitleOtherExpense" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-dark text-white">
+                    <h5 class="modal-title" id="modalTitleOtherExpense">UPLOAD REQUIREMENTS</h5>
+                </div>
+                <div class="modal-body">
+                    <form id="requirementsFormOtherExpense" enctype="multipart/form-data" data-form-type="otherexpense">
+                        @csrf
+                        <input type="hidden" id="procurement_id_otherexpense" name="procurement_id" value="{{ $prNumber }}">
+                        <!-- ORS File Upload -->
+                        <div class="mb-3">
+                            <label for="orsFile" class="form-label">Upload ORS</label>
+                            <input class="form-control" type="file" id="orsFile" name="orsFile">
                         </div>
-                    </div>
-                        <label class="form-label">Uploaded Files</label>
-                        <ul id="uploadedFilesList"></ul>
-                    </div>
-                    <!-- Container to display uploaded files -->
-                    <div class="mb-3">
-                    <label class="form-label">Uploaded Files</label>
-                    <ul id="uploadedFilesList"></ul>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-success" id="saveBtn1">Save</button>
+
+                        <!-- DV File Upload -->
+                        <div class="mb-3">
+                            <label for="dvFile" class="form-label">Upload DV</label>
+                            <input class="form-control" type="file" id="dvFile" name="dvFile">
+                        </div>
+
+                        <!-- Travel Order Upload -->
+                        <div class="mb-3">
+                            <label for="travelOrderFile" class="form-label">Upload Travel Order</label>
+                            <input class="form-control" type="file" id="travelOrderFile" name="travelOrderFile">
+                        </div>
+
+                        <!-- Certificate of Appearance Upload -->
+                        <div class="mb-3">
+                            <label for="appearanceFile" class="form-label">Upload Certificate of Appearance</label>
+                            <input class="form-control" type="file" id="appearanceFile" name="appearanceFile">
+                        </div>
+
+                        <!-- Official Travel Report Upload -->
+                        <div class="mb-3">
+                            <label for="reportFile" class="form-label">Upload Official Travel Report</label>
+                            <input class="form-control" type="file" id="reportFile" name="reportFile">
+                        </div>
+
+                        <!-- Itinerary of Travel Upload -->
+                        <div class="mb-3">
+                            <label for="itineraryFile" class="form-label">Upload Itinerary of Travel</label>
+                            <input class="form-control" type="file" id="itineraryFile" name="itineraryFile">
+                        </div>
+
+                        <!-- Certificate of Travel Completion Upload -->
+                        <div class="mb-3">
+                            <label for="certFile" class="form-label">Upload Certificate of Travel Completion</label>
+                            <input class="form-control" type="file" id="certFile" name="certFile">
+                        </div>
+
+                        <!-- Container to display uploaded files -->
+                        <div class="mb-3">
+                            <label class="form-label">Uploaded Files</label>
+                            <ul id="uploadedFilesListOtherExpense"></ul>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-success saveBtn" data-form-type="otherexpense">Save</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
     <!-- Custom JS -->
     <script src="/js/menu.js"></script>
