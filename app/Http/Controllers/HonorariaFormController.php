@@ -63,17 +63,23 @@ class HonorariaFormController extends Controller
         try {
             Log::info("Received Data: ", $validatedData);
 
-            $unit = $validatedData['dt_submitted'] ? 'Budget Unit' : null;
-            $status = ($unit === 'Budget Unit' && $validatedData['dt_submitted'] && !$validatedData['dt_received']) ? 'Pending' : 'Done';
+            $status = 'null'; // Default status
 
-            DB::connection('ilcdb')->transaction(function () use ($validatedData, $unit, $status) {
+            if ($validatedData['dt_submitted'] && !$validatedData['dt_received']) {
+                $status = 'Ongoing';
+            } elseif ($validatedData['dt_received'] && !$validatedData['budget_spent']) {
+                $status = 'Pending';
+            } elseif ($validatedData['budget_spent']) {
+                $status = 'Done';
+            }
+
+            DB::connection('ilcdb')->transaction(function () use ($validatedData, $status) {
                 DB::connection('ilcdb')->table('honoraria_form')
                     ->where('procurement_id', $validatedData['procurement_id'])
                     ->update([
                         'dt_submitted' => $validatedData['dt_submitted'] ? Carbon::parse($validatedData['dt_submitted'])->format('Y-m-d H:i:s') : null,
                         'dt_received'  => $validatedData['dt_received'] ? Carbon::parse($validatedData['dt_received'])->format('Y-m-d H:i:s') : null,
                         'budget_spent' => $validatedData['budget_spent'] ?? null,
-                        'unit'         => $unit,
                         'status'       => $status,
                     ]);
 
@@ -93,7 +99,6 @@ class HonorariaFormController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'Honoraria form updated successfully!',
-                'unit'    => $unit,
                 'status'  => $status,
             ]);
 
