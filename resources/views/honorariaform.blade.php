@@ -112,7 +112,7 @@
                                         <tr>
                                             <td>
                                                 <button type="button" class="btn btn-dark" data-bs-toggle="modal"
-                                                    data-bs-target="#requirementsModal">
+                                                    data-bs-target="#requirementsModalHonoraria">
                                                     Upload Requirements
                                                 </button>
                                             </td>
@@ -156,17 +156,17 @@
                         </form>
                     </div>
 
-                    <!-- Modals -->
-                    <div class="modal fade" id="requirementsModal" tabindex="-1" aria-labelledby="modalTitle" aria-hidden="true">
+                    <!-- Honoraria Modal -->
+                    <div class="modal fade" id="requirementsModalHonoraria" tabindex="-1" aria-labelledby="modalTitleHonoraria" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
                                 <div class="modal-header bg-dark text-white">
-                                    <h5 class="modal-title" id="modalTitle">UPLOAD REQUIREMENTS</h5>
+                                    <h5 class="modal-title" id="modalTitleHonoraria">UPLOAD REQUIREMENTS</h5>
                                 </div>
                                 <div class="modal-body">
-                                    <form id="requirementsForm" enctype="multipart/form-data">
+                                    <form id="requirementsFormHonoraria" enctype="multipart/form-data" data-form-type="honoraria">
                                         @csrf
-                                        <input type="hidden" id="procurement_id" name="procurement_id" value="{{ $prNumber }}">
+                                        <input type="hidden" id="procurement_id_honoraria" name="procurement_id" value="{{ $prNumber }}">
                                         <!-- ORS File Upload -->
                                         <div class="mb-3">
                                             <label for="orsFile" class="form-label">Upload ORS</label>
@@ -232,16 +232,17 @@
                                             <label for="certFile" class="form-label">Upload Certificate of Services Rendered</label>
                                             <input class="form-control" type="file" id="certFile" name="certFile">
                                         </div>
+
                                         <!-- Container to display uploaded files -->
                                         <div class="mb-3">
                                             <label class="form-label">Uploaded Files</label>
-                                            <ul id="uploadedFilesList"></ul>
+                                            <ul id="uploadedFilesListHonoraria"></ul>
                                         </div>
                                     </form>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
-                                    <button type="button" class="btn btn-success" id="saveBtn">Save</button>
+                                    <button type="button" class="btn btn-success saveBtn" data-form-type="honoraria">Save</button>
                                 </div>
                             </div>
                         </div>
