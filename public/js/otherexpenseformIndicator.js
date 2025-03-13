@@ -12,8 +12,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const dateSubmitted = document.getElementById('dateSubmitted').value;
         const dateReturned = document.getElementById('dateReturned').value;
-        let activeStage = (dateSubmitted && dateReturned) ? 1 : 0;
 
+        // Check if date fields are empty
+        if (!dateSubmitted || !dateReturned) {
+            alert('Error: Both Date Submitted and Date Returned must be filled.');
+            return;
+        }
+
+        let activeStage = (dateSubmitted && dateReturned) ? 1 : 0;
         formData.append('activeStage', activeStage);
 
         fetch(otherexpenseUpdateUrl, {

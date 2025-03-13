@@ -8,10 +8,16 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('saveChanges').addEventListener('click', function (e) {
         e.preventDefault();
 
-        let formData = new FormData(document.getElementById('honorariaForm'));
-
         const dateSubmitted = document.getElementById('dateSubmitted').value;
         const dateReturned = document.getElementById('dateReturned').value;
+
+        // Check if date fields are empty
+        if (!dateSubmitted || !dateReturned) {
+            alert('Error: Both Date Submitted and Date Returned must be filled.');
+            return;
+        }
+
+        let formData = new FormData(document.getElementById('honorariaForm'));
         let activeStage = (dateSubmitted && dateReturned) ? 1 : 0;
 
         formData.append('activeStage', activeStage);
