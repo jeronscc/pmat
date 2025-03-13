@@ -380,6 +380,10 @@
                         <input type="text" class="form-control" id="activity" placeholder="Enter Activity">
                     </div>
                     <div class="mb-3">
+                        <label for="pr-amount" class="form-label">PR AMOUNT</label>
+                        <input type="number" class="form-control" id="pr-amount" placeholder="Enter PR Amount">
+                    </div>
+                    <div class="mb-3">
                         <label for="description" class="form-label">DESCRIPTION</label>
                         <textarea class="form-control" id="description" rows="3" placeholder="Enter Description"></textarea>
                     </div>
@@ -416,18 +420,29 @@
         // Reset form fields before changing
         resetForm();
 
+        // Get current year
+        const currentYear = new Date().getFullYear();
+        // Generate PR number with random 5 digits
+        const generatePRNumber = () => `PROC-${currentYear}-${Math.floor(10000 + Math.random() * 90000)}`;
+
         if (category === 'SVP') {
             // Retain original form for SVP
             document.getElementById('activityLabel').innerText = 'ACTIVITY';
             document.getElementById('pr-number').setAttribute('placeholder', 'Enter PR Number');
+            document.getElementById('pr-number').removeAttribute('readonly');
+            document.getElementById('activity').setAttribute('placeholder', 'Enter Activity');
         } else if (category === 'Honoraria') {
             // Modify form for Honoraria
             document.getElementById('activityLabel').innerText = 'NAME OF SPEAKER';
-            document.getElementById('pr-number').setAttribute('placeholder', 'Auto-generated (e.g., PROC-{current year}-xxxxx)');
+            document.getElementById('pr-number').value = generatePRNumber();  // Auto-generate PR number
+            document.getElementById('pr-number').setAttribute('readonly', 'true'); // Make PR Number non-editable
+            document.getElementById('activity').setAttribute('placeholder', 'Enter title of the training');
         } else if (category === 'Other expense') {
             // Modify form for Other expense
             document.getElementById('activityLabel').innerText = 'NAME OF TRAVELLER';
-            document.getElementById('pr-number').setAttribute('placeholder', 'Auto-generated (e.g., PROC-{current year}-xxxxx)');
+            document.getElementById('pr-number').value = generatePRNumber();  // Auto-generate PR number
+            document.getElementById('pr-number').setAttribute('readonly', 'true'); // Make PR Number non-editable
+            document.getElementById('activity').setAttribute('placeholder', 'Enter the purpose of travel');
         }
     });
 
@@ -435,9 +450,10 @@
     function resetForm() {
         document.getElementById('activity').value = '';
         document.getElementById('description').value = '';
-        document.getElementById('pr-number').value = '';
+        document.getElementById('pr-number').value = '';  // Clear PR Number
         document.getElementById('pr-year').value = '';
         document.getElementById('saro-number').value = '';
+        document.getElementById('pr-amount').value = '';  // Reset PR Amount
     }
 </script>
     </body>
