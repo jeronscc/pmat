@@ -8,30 +8,30 @@ use Illuminate\Support\Facades\Log;
 class ProcurementFormController extends Controller
 {
     public function showForm(Request $request)
-    {
-        // Retrieve the PR number from the URL query parameters
-        $prNumber = $request->query('pr_number');
+{
+    $prNumber = $request->query('pr_number');
 
-        // Fetch procurement details from the 'procurement' table using the PR number
-        $procurement = DB::connection('ilcdb')
-            ->table('procurement')
-            ->where('procurement_id', $prNumber)
-            ->first();
+    // Fetch procurement details (including description)
+    $procurement = DB::connection('ilcdb')
+        ->table('procurement')
+        ->where('procurement_id', $prNumber)
+        ->first();
 
-        // If a procurement record is found, use its activity; otherwise, use a default value.
-        $activityName = $procurement ? $procurement->activity : 'N/A';
+    // Fetch procurement_form details (without description since it's in procurement)
+    $record = DB::connection('ilcdb')
+        ->table('procurement_form')
+        ->where('procurement_id', $prNumber)
+        ->first();
 
-        // Pass the variables to the view
-        return view('procurementform', [
-            'prNumber'     => $prNumber,
-            'activityName' => $activityName,
-            // Optionally, if you want to prefill the update form from a separate table:
-            'record'       => DB::connection('ilcdb')
-                              ->table('procurement_form')
-                              ->where('procurement_id', $prNumber)
-                              ->first()           
-        ]);
-    }
+    return view('procurementform', [
+        'prNumber'     => $prNumber,
+        'activityName' => $procurement->activity ?? 'N/A',
+        'description'  => $procurement->description ?? 'No description available', // Get description from procurement
+        'record'       => $record, 
+        'procurement'  => $procurement
+    ]);
+}
+
     
     public function update(Request $request)
     {
