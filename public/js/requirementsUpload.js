@@ -94,4 +94,10 @@ document.addEventListener('DOMContentLoaded', function () {
             fetchUploadedFiles(procurementId);
         }
     });
+
+    // Fetch uploaded files when the page loads
+    const procurementId = document.getElementById('procurement_id')?.value;
+    if (procurementId) {
+        fetchUploadedFiles(procurementId);
+    }
 });
