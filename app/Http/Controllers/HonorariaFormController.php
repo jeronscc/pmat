@@ -157,6 +157,9 @@ class HonorariaFormController extends Controller
                 ], 400);
             }
 
+            // Update the honoraria form with the uploaded files
+            $this->updateHonoraria($request);
+
             return response()->json([
                 'success' => true,
                 'message' => 'Files uploaded successfully: ' . implode(', ', $uploads),

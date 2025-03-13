@@ -37,6 +37,20 @@ function fetchProcurementForSaro(saroNo) {
             Object.values(tableBodies).forEach(tableBody => tableBody.innerHTML = ''); // ✅ Clear old rows
 
             if (data.length > 0) {
+                // Sort data by status order and maintain original order for FIFO
+                const statusOrder = { 'overdue': 1, 'ongoing': 2, 'pending': 3, 'done': 4 };
+            
+                data.sort((a, b) => {
+                    const statusA = (a.status || 'unknown').toLowerCase();
+                    const statusB = (b.status || 'unknown').toLowerCase();
+            
+                    // Sort by status first
+                    const statusComparison = (statusOrder[statusA] || 5) - (statusOrder[statusB] || 5);
+            
+                    // If statuses are the same, maintain original FIFO order
+                    return statusComparison !== 0 ? statusComparison : data.indexOf(a) - data.indexOf(b);
+                });
+            
                 data.forEach(item => {
                     const row = document.createElement('tr');
                     row.setAttribute('data-procurement-id', item.procurement_id); // ✅ Trackable row ID
@@ -116,6 +130,20 @@ function fetchProcurementForYear(year) {
             Object.values(tableBodies).forEach(tableBody => tableBody.innerHTML = '');
 
             if (data.length > 0) {
+                // Sort data by status order and maintain original order for FIFO
+                const statusOrder = { 'overdue': 1, 'ongoing': 2, 'pending': 3, 'done': 4 };
+            
+                data.sort((a, b) => {
+                    const statusA = (a.status || 'unknown').toLowerCase();
+                    const statusB = (b.status || 'unknown').toLowerCase();
+            
+                    // Sort by status first
+                    const statusComparison = (statusOrder[statusA] || 5) - (statusOrder[statusB] || 5);
+            
+                    // If statuses are the same, maintain original FIFO order
+                    return statusComparison !== 0 ? statusComparison : data.indexOf(a) - data.indexOf(b);
+                });
+            
                 data.forEach(item => {
                     const row = document.createElement('tr');
 
@@ -205,6 +233,20 @@ function fetchProcurementRequirements(saroNo) {
             Object.values(tableBodies).forEach(tableBody => tableBody.innerHTML = '');
 
             if (data.length > 0) {
+                // Sort data by status order and maintain original order for FIFO
+                const statusOrder = { 'overdue': 1, 'ongoing': 2, 'pending': 3, 'done': 4 };
+            
+                data.sort((a, b) => {
+                    const statusA = (a.status || 'unknown').toLowerCase();
+                    const statusB = (b.status || 'unknown').toLowerCase();
+            
+                    // Sort by status first
+                    const statusComparison = (statusOrder[statusA] || 5) - (statusOrder[statusB] || 5);
+            
+                    // If statuses are the same, maintain original FIFO order
+                    return statusComparison !== 0 ? statusComparison : data.indexOf(a) - data.indexOf(b);
+                });
+            
                 data.forEach(item => {
                     const row = document.createElement('tr');
 
@@ -469,6 +511,20 @@ function updateProcurementTable(data) {
     Object.values(tableBodies).forEach(tableBody => tableBody.innerHTML = '');
 
     if (data.length > 0) {
+        // Sort data by status order and maintain original order for FIFO
+        const statusOrder = { 'overdue': 1, 'ongoing': 2, 'pending': 3, 'done': 4 };
+    
+        data.sort((a, b) => {
+            const statusA = (a.status || 'unknown').toLowerCase();
+            const statusB = (b.status || 'unknown').toLowerCase();
+    
+            // Sort by status first
+            const statusComparison = (statusOrder[statusA] || 5) - (statusOrder[statusB] || 5);
+    
+            // If statuses are the same, maintain original FIFO order
+            return statusComparison !== 0 ? statusComparison : data.indexOf(a) - data.indexOf(b);
+        });
+    
         data.forEach(item => {
             const row = document.createElement('tr');
 
