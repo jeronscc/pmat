@@ -164,7 +164,8 @@
             </div>
             <div class="modal-body">
                 <form id="requirementsForm1" enctype="multipart/form-data">
-
+                    @csrf
+                    <input type="hidden" id="procurement_id" name="procurement_id" value="{{ $prNumber }}">
                     <!-- ORS File Upload -->
                     <div class="mb-3">
                         <label for="orsFile" class="form-label">Upload ORS</label>
@@ -207,6 +208,11 @@
                         <input class="form-control" type="file" id="certFile" name="certFile">
                     </div>
 
+                    <!-- Container to display uploaded files -->
+                    <div class="mb-3">
+                        <label class="form-label">Uploaded Files</label>
+                        <ul id="uploadedFilesList"></ul>
+                    </div>
                 </form>
             </div>
             <div class="modal-footer">
