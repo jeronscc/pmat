@@ -87,10 +87,10 @@ section {
     max-width: 100%;
     
 }
-#procurementTable tr:hover td:nth-child(-n+3),
-#procurementTableOngoing tr:hover td:nth-child(-n+3),
-#procurementTableDone tr:hover td:nth-child(-n+3),
-#procurementTableOverdue tr:hover td:nth-child(-n+3) {
+#procurementTable tr:hover td:nth-child(-n+4),
+#procurementTableOngoing tr:hover td:nth-child(-n+4),
+#procurementTableDone tr:hover td:nth-child(-n+4),
+#procurementTableOverdue tr:hover td:nth-child(-n+4) {
     background-color: #ddd;
 }
 
