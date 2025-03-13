@@ -14,8 +14,8 @@ document.addEventListener('DOMContentLoaded', function () {
         const dateReturned = document.getElementById('dateReturned').value;
 
         // Check if date fields are empty
-        if (!dateSubmitted || !dateReturned) {
-            alert('Error: Both Date Submitted and Date Returned must be filled.');
+        if (!dateSubmitted) {
+            alert('Error: Both Date Submitted must be filled.');
             return;
         }
 
