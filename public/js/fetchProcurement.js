@@ -74,11 +74,7 @@ function fetchProcurementForSaro(saroNo) {
                     statusCell.appendChild(badge);
                     row.appendChild(statusCell);
 
-                    tableBodies.all.appendChild(row);
-
-                    // Append row to the appropriate table body
-                    const clonedRow = row.cloneNode(true);
-                    tableBodies.all.appendChild(clonedRow);
+                    tableBodies.all.appendChild(row); // Append the original row to "All" only
 
                     if (statusMessage.toLowerCase() === 'done') {
                         tableBodies.done.appendChild(row.cloneNode(true));
@@ -87,6 +83,7 @@ function fetchProcurementForSaro(saroNo) {
                     } else if (statusMessage.toLowerCase() === 'overdue') {
                         tableBodies.overdue.appendChild(row.cloneNode(true));
                     }
+
 
                 });
             } else {
@@ -155,11 +152,7 @@ function fetchProcurementForYear(year) {
                     statusCell.appendChild(badge);
                     row.appendChild(statusCell);
 
-                    tableBodies.all.appendChild(row);
-
-                    // Append row to the appropriate table body
-                    const clonedRow = row.cloneNode(true);
-                    tableBodies.all.appendChild(clonedRow);
+                    tableBodies.all.appendChild(row); // Append the original row to "All" only
 
                     if (statusMessage.toLowerCase() === 'done') {
                         tableBodies.done.appendChild(row.cloneNode(true));
@@ -168,6 +161,7 @@ function fetchProcurementForYear(year) {
                     } else if (statusMessage.toLowerCase() === 'overdue') {
                         tableBodies.overdue.appendChild(row.cloneNode(true));
                     }
+
 
                 });
 
@@ -249,11 +243,7 @@ function fetchProcurementRequirements(saroNo) {
                     statusCell.appendChild(badge);
                     row.appendChild(statusCell);
 
-                    tableBodies.all.appendChild(row);
-
-                    // Append row to the appropriate table body
-                    const clonedRow = row.cloneNode(true);
-                    tableBodies.all.appendChild(clonedRow);
+                    tableBodies.all.appendChild(row); // Append the original row to "All" only
 
                     if (statusMessage.toLowerCase() === 'done') {
                         tableBodies.done.appendChild(row.cloneNode(true));
@@ -262,6 +252,7 @@ function fetchProcurementRequirements(saroNo) {
                     } else if (statusMessage.toLowerCase() === 'overdue') {
                         tableBodies.overdue.appendChild(row.cloneNode(true));
                     }
+
 
                 });
 
@@ -505,11 +496,7 @@ function updateProcurementTable(data) {
             statusCell.appendChild(badge);
             row.appendChild(statusCell);
 
-            tableBodies.all.appendChild(row);
-            
-            // Append row to the appropriate table body
-            const clonedRow = row.cloneNode(true);
-            tableBodies.all.appendChild(clonedRow);
+            tableBodies.all.appendChild(row); // Append the original row to "All" only
 
             if (statusMessage.toLowerCase() === 'done') {
                 tableBodies.done.appendChild(row.cloneNode(true));
@@ -518,6 +505,7 @@ function updateProcurementTable(data) {
             } else if (statusMessage.toLowerCase() === 'overdue') {
                 tableBodies.overdue.appendChild(row.cloneNode(true));
             }
+
 
         });
 
