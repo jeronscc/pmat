@@ -29,6 +29,7 @@ function fetchProcurementForSaro(saroNo) {
         .then(data => {
             const tableBodies = {
                 all: document.getElementById('procurementTable'),
+                pending: document.getElementById('procurementTablePending'),
                 ongoing: document.getElementById('procurementTableOngoing'),
                 overdue: document.getElementById('procurementTableOverdue'),
                 done: document.getElementById('procurementTableDone')
@@ -96,6 +97,8 @@ function fetchProcurementForSaro(saroNo) {
                         tableBodies.ongoing.appendChild(row.cloneNode(true));
                     } else if (statusMessage.toLowerCase() === 'overdue') {
                         tableBodies.overdue.appendChild(row.cloneNode(true));
+                    } else if (statusMessage.toLowerCase() === 'pending') {
+                        tableBodies.pending.appendChild(row.cloneNode(true));
                     }
 
 
@@ -121,6 +124,7 @@ function fetchProcurementForYear(year) {
         .then(data => {
             const tableBodies = {
                 all: document.getElementById('procurementTable'),
+                pending: document.getElementById('procurementTablePending'),
                 ongoing: document.getElementById('procurementTableOngoing'),
                 overdue: document.getElementById('procurementTableOverdue'),
                 done: document.getElementById('procurementTableDone')
@@ -188,6 +192,8 @@ function fetchProcurementForYear(year) {
                         tableBodies.ongoing.appendChild(row.cloneNode(true));
                     } else if (statusMessage.toLowerCase() === 'overdue') {
                         tableBodies.overdue.appendChild(row.cloneNode(true));
+                    } else if (statusMessage.toLowerCase() === 'pending') {
+                        tableBodies.pending.appendChild(row.clone(true));
                     }
 
 
@@ -224,6 +230,7 @@ function fetchProcurementRequirements(saroNo) {
         .then(data => {
             const tableBodies = {
                 all: document.getElementById('procurementTable'),
+                pending: document.getElementById('procurementTablePending'),
                 ongoing: document.getElementById('procurementTableOngoing'),
                 overdue: document.getElementById('procurementTableOverdue'),
                 done: document.getElementById('procurementTableDone')
@@ -293,6 +300,8 @@ function fetchProcurementRequirements(saroNo) {
                         tableBodies.ongoing.appendChild(row.cloneNode(true));
                     } else if (statusMessage.toLowerCase() === 'overdue') {
                         tableBodies.overdue.appendChild(row.cloneNode(true));
+                    } else if (statusMessage.toLowerCase() === 'pending') { 
+                        tableBodies.pending.appendChild(row.cloneNode(true));
                     }
 
 
@@ -375,6 +384,7 @@ document.getElementById('closeModalBtn').addEventListener('click', function () {
 // Event listener for table row click
 const tableBodies = {
     all: document.getElementById('procurementTable'),
+    pending: document.getElementById('procurementTablePending'),
     ongoing: document.getElementById('procurementTableOngoing'),
     overdue: document.getElementById('procurementTableOverdue'),
     done: document.getElementById('procurementTableDone')
@@ -399,6 +409,7 @@ function fetchProcurementData(year = '', status = 'all') {
         .then(data => {
             const tableBodies = {
                 all: document.getElementById('procurementTable'),
+                pending: document.getElementById('procurementTablePending'),
                 ongoing: document.getElementById('procurementTableOngoing'),
                 overdue: document.getElementById('procurementTableOverdue'),
                 done: document.getElementById('procurementTableDone')
@@ -433,6 +444,7 @@ function fetchProcurementData(year = '', status = 'all') {
             
                 tableBodies.all.appendChild(row);
                 if (statusMessage.toLowerCase() === 'done') tableBodies.done.appendChild(row);
+                else if (statusMessage.toLowerCase() === 'pending') tableBodies.pending.appendChild(row);
                 else if (statusMessage.toLowerCase() === 'ongoing') tableBodies.ongoing.appendChild(row);
                 else if (statusMessage.toLowerCase() === 'overdue') tableBodies.overdue.appendChild(row);
             });
@@ -502,6 +514,7 @@ setInterval(checkOverdue, 5000); // Check every 5 seconds
 function updateProcurementTable(data) {
     const tableBodies = {
         all: document.getElementById('procurementTable'),
+        pending: document.getElementById('procurementTablePending'),
         ongoing: document.getElementById('procurementTableOngoing'),
         overdue: document.getElementById('procurementTableOverdue'),
         done: document.getElementById('procurementTableDone')
@@ -560,6 +573,8 @@ function updateProcurementTable(data) {
                 tableBodies.ongoing.appendChild(row.cloneNode(true));
             } else if (statusMessage.toLowerCase() === 'overdue') {
                 tableBodies.overdue.appendChild(row.cloneNode(true));
+            } else if (statusMessage.toLowerCase() === 'pending') {
+                tableBodies.pending.appendChild(row.cloneNode(true));
             }
 
 

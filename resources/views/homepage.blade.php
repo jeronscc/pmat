@@ -127,6 +127,9 @@
                     <a class="nav-link active" style="color: black;" id="tabAll-tab" data-bs-toggle="tab" href="#tabAll">All</a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" style="color: black;" id="tabOngoing-tab" data-bs-toggle="tab" href="#tabPending">Pending</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" style="color: black;" id="tabOngoing-tab" data-bs-toggle="tab" href="#tabOngoing">Ongoing</a>
                 </li>
                 <li class="nav-item">
@@ -156,7 +159,23 @@
                         </table>
                     </div>
                 </div>
-
+                <!-- Pending Tab -->
+                <div class="tab-pane fade " id="tabPending">
+                    <div class="record-box">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>PR NUMBER</th>
+                                    <th>ACTIVITY</th>
+                                    <th>STATUS</th>
+                                </tr>
+                            </thead>
+                            <tbody id="procurementTablePending">
+                            <!-- Pending content (All) -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
                 <!-- Ongoing Tab -->
                 <div class="tab-pane fade" id="tabOngoing">
                     <div class="record-box">
