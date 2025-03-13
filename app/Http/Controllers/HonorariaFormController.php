@@ -130,6 +130,12 @@ class HonorariaFormController extends Controller
                     $filePath = "uploads/requirements/{$request->procurement_id}/" . $fileName;
                     $request->file($file)->move($uploadDir, $fileName);
 
+                    // Delete existing file entry if it exists
+                    DB::connection('ilcdb')->table('requirements')
+                        ->where('procurement_id', $request->procurement_id)
+                        ->where('requirement_name', $file)
+                        ->delete();
+
                     // Store file path in the ilcdb database requirements table
                     DB::connection('ilcdb')->table('requirements')->insert([
                         'procurement_id'    => $request->procurement_id,
@@ -165,6 +171,7 @@ class HonorariaFormController extends Controller
             ], 500);
         }
     }
+
     public function getUploadedFiles($procurement_id)
     {
         try {

@@ -8,8 +8,6 @@
     <title>Procurement Tracking and Monitoring System</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
     <link rel="stylesheet" href="/css/forms.css">
     <link rel="stylesheet" href="/css/mainheader.css">
@@ -160,95 +158,94 @@
 
                     <!-- Modals -->
                     <div class="modal fade" id="requirementsModal" tabindex="-1" aria-labelledby="modalTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header bg-dark text-white">
-                <h5 class="modal-title" id="modalTitle">UPLOAD REQUIREMENTS</h5>
-            </div>
-            <div class="modal-body">
-                <form id="requirementsForm" enctype="multipart/form-data">
-                @csrf
-                <input type="hidden" id="procurement_id" name="procurement_id" value="{{ $prNumber }}">
-                    <!-- ORS File Upload -->
-                    <div class="mb-3">
-                        <label for="orsFile" class="form-label">Upload ORS</label>
-                        <input class="form-control" type="file" id="orsFile" name="orsFile">
-                    </div>
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header bg-dark text-white">
+                                    <h5 class="modal-title" id="modalTitle">UPLOAD REQUIREMENTS</h5>
+                                </div>
+                                <div class="modal-body">
+                                    <form id="requirementsForm" enctype="multipart/form-data">
+                                        @csrf
+                                        <input type="hidden" id="procurement_id" name="procurement_id" value="{{ $prNumber }}">
+                                        <!-- ORS File Upload -->
+                                        <div class="mb-3">
+                                            <label for="orsFile" class="form-label">Upload ORS</label>
+                                            <input class="form-control" type="file" id="orsFile" name="orsFile">
+                                        </div>
 
-                    <!-- DV File Upload -->
-                    <div class="mb-3">
-                        <label for="dvFile" class="form-label">Upload DV</label>
-                        <input class="form-control" type="file" id="dvFile" name="dvFile">
-                    </div>
+                                        <!-- DV File Upload -->
+                                        <div class="mb-3">
+                                            <label for="dvFile" class="form-label">Upload DV</label>
+                                            <input class="form-control" type="file" id="dvFile" name="dvFile">
+                                        </div>
 
-                    <!-- Service Contract Upload -->
-                    <div class="mb-3">
-                        <label for="contractFile" class="form-label">Upload Service Contract</label>
-                        <input class="form-control" type="file" id="contractFile" name="contractFile">
-                    </div>
+                                        <!-- Service Contract Upload -->
+                                        <div class="mb-3">
+                                            <label for="contractFile" class="form-label">Upload Service Contract</label>
+                                            <input class="form-control" type="file" id="contractFile" name="contractFile">
+                                        </div>
 
-                    <!-- Certificate Honoraria Classification Upload -->
-                    <div class="mb-3">
-                        <label for="classificationFile" class="form-label">Upload Certificate Honoraria Classification</label>
-                        <input class="form-control" type="file" id="classificationFile" name="classificationFile">
-                    </div>
+                                        <!-- Certificate Honoraria Classification Upload -->
+                                        <div class="mb-3">
+                                            <label for="classificationFile" class="form-label">Upload Certificate Honoraria Classification</label>
+                                            <input class="form-control" type="file" id="classificationFile" name="classificationFile">
+                                        </div>
 
-                    <!-- Terminal Report Upload -->
-                    <div class="mb-3">
-                        <label for="reportFile" class="form-label">Upload Terminal Report</label>
-                        <input class="form-control" type="file" id="reportFile" name="reportFile">
-                    </div>
+                                        <!-- Terminal Report Upload -->
+                                        <div class="mb-3">
+                                            <label for="reportFile" class="form-label">Upload Terminal Report</label>
+                                            <input class="form-control" type="file" id="reportFile" name="reportFile">
+                                        </div>
 
-                    <!-- Attendance Upload -->
-                    <div class="mb-3">
-                        <label for="attendanceFile" class="form-label">Upload Attendance</label>
-                        <input class="form-control" type="file" id="attendanceFile" name="attendanceFile">
-                    </div>
+                                        <!-- Attendance Upload -->
+                                        <div class="mb-3">
+                                            <label for="attendanceFile" class="form-label">Upload Attendance</label>
+                                            <input class="form-control" type="file" id="attendanceFile" name="attendanceFile">
+                                        </div>
 
-                    <!-- Resume/CV Upload -->
-                    <div class="mb-3">
-                        <label for="resumeFile" class="form-label">Upload Resume/CV</label>
-                        <input class="form-control" type="file" id="resumeFile" name="resumeFile">
-                    </div>
+                                        <!-- Resume/CV Upload -->
+                                        <div class="mb-3">
+                                            <label for="resumeFile" class="form-label">Upload Resume/CV</label>
+                                            <input class="form-control" type="file" id="resumeFile" name="resumeFile">
+                                        </div>
 
-                    <!-- Government ID Upload -->
-                    <div class="mb-3">
-                        <label for="govidFile" class="form-label">Upload Government ID</label>
-                        <input class="form-control" type="file" id="govidFile" name="govidFile">
-                    </div>
+                                        <!-- Government ID Upload -->
+                                        <div class="mb-3">
+                                            <label for="govidFile" class="form-label">Upload Government ID</label>
+                                            <input class="form-control" type="file" id="govidFile" name="govidFile">
+                                        </div>
 
-                    <!-- Payslip/Certificate of Gross Income Upload -->
-                    <div class="mb-3">
-                        <label for="payslipFile" class="form-label">Upload Payslip/Certificate of Gross Income</label>
-                        <input class="form-control" type="file" id="payslipFile" name="payslipFile">
-                    </div>
+                                        <!-- Payslip/Certificate of Gross Income Upload -->
+                                        <div class="mb-3">
+                                            <label for="payslipFile" class="form-label">Upload Payslip/Certificate of Gross Income</label>
+                                            <input class="form-control" type="file" id="payslipFile" name="payslipFile">
+                                        </div>
 
-                    <!-- TIN and Bank Account Details Upload -->
-                    <div class="mb-3">
-                        <label for="bankFile" class="form-label">Upload TIN and Bank Account Details</label>
-                        <input class="form-control" type="file" id="bankFile" name="bankFile">
-                    </div>
+                                        <!-- TIN and Bank Account Details Upload -->
+                                        <div class="mb-3">
+                                            <label for="bankFile" class="form-label">Upload TIN and Bank Account Details</label>
+                                            <input class="form-control" type="file" id="bankFile" name="bankFile">
+                                        </div>
 
-                    <!-- Certificate of Services Rendered Upload -->
-                    <div class="mb-3">
-                        <label for="certFile" class="form-label">Upload Certificate of Services Rendered</label>
-                        <input class="form-control" type="file" id="certFile" name="certFile">
+                                        <!-- Certificate of Services Rendered Upload -->
+                                        <div class="mb-3">
+                                            <label for="certFile" class="form-label">Upload Certificate of Services Rendered</label>
+                                            <input class="form-control" type="file" id="certFile" name="certFile">
+                                        </div>
+                                        <!-- Container to display uploaded files -->
+                                        <div class="mb-3">
+                                            <label class="form-label">Uploaded Files</label>
+                                            <ul id="uploadedFilesList"></ul>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+                                    <button type="button" class="btn btn-success" id="saveBtn">Save</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <!-- Container to display uploaded files -->
-                    <div class="mb-3">
-                        <label class="form-label">Uploaded Files</label>
-                        <ul id="uploadedFilesList"></ul>
-                    </div>
-                </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-success" id="saveBtn">Save</button>
-
-                </div>
-                </div>
-            </div>
-        </div>
                 </div>
             </div>
         </div>

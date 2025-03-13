@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 const data = JSON.parse(text);
                 if (data.success) {
                     alert(data.message);
-                    location.reload();
+                    fetchUploadedFiles(procurementId); // Fetch and display uploaded files after saving
                 } else {
                     alert("Upload failed: " + (data.message || "Unknown error."));
                 }
@@ -75,6 +75,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
             const listItem = document.createElement('li');
             listItem.appendChild(fileLink);
+
+            // Disable the corresponding file input field
+            const inputField = document.getElementById(file.requirement_name);
+            if (inputField) {
+                inputField.disabled = true;
+                inputField.style.display = 'none';
+            }
 
             fileListContainer.appendChild(listItem);
         });
