@@ -85,6 +85,7 @@
             <div class="activity-info">
                 <h3>PR Number: <span id="prtrNumber">{{ $prNumber }}</span></h3>
                 <h3>Activity Name: <span id="activityName">{{ $activity }}</span></h3>
+                <h3>Description: <span id="procurement-description">{{ $description }}</span></h3>
             </div>
         
             <form id="otherexpenseForm">

@@ -10,35 +10,45 @@ use Illuminate\Support\Facades\Log;
 class OtherExpenseFormController extends Controller
 {
     public function showForm(Request $request)
-    {
-        // Retrieve PR number and activity from the URL query parameters
-        $prNumber = $request->query('pr_number');
-        $activity  = $request->query('activity');
+{
+    $prNumber = $request->query('pr_number');
+    $activity = $request->query('activity');
 
-        // Fetch existing data from the honoraria_form table using procurement_id
-        $record = DB::connection('ilcdb')
-                    ->table('otherexpense_form')
-                    ->where('procurement_id', $prNumber)
-                    ->first();
-    // If no record exists, you might want to create an empty record:
+    // Fetch existing data from the honoraria_form table
+    $record = DB::connection('ilcdb')
+                ->table('honoraria_form')
+                ->where('procurement_id', $prNumber)
+                ->first();
+
+    // If no record exists, insert a new one
     if (!$record) {
-        DB::connection('ilcdb')->table('otherexpense_form')->insert([
+        DB::connection('ilcdb')->table('honoraria_form')->insert([
             'procurement_id' => $prNumber,
             'activity'       => $activity,
-            // Other fields can be left null
         ]);
-        // Re-fetch the record after insertion
+
+        // Re-fetch the record
         $record = DB::connection('ilcdb')
-                    ->table('otherexpense_form')
+                    ->table('honoraria_form')
                     ->where('procurement_id', $prNumber)
                     ->first();
     }
-        return view('otherexpenseform', [
-            'prNumber'   => $prNumber,
-            'activity'   => $activity,
-            'record'     => $record  // May be null if no record exists yet.
-        ]);
-    }
+
+    // Fetch the description from the procurement table
+    $procurement = DB::connection('ilcdb')
+        ->table('procurement')
+        ->where('procurement_id', $prNumber)
+        ->first();
+
+    return view('honorariaform', [
+        'prNumber'    => $prNumber,
+        'activity'    => $activity,
+        'description' => $procurement->description ?? 'No description available', // Get description from procurement
+        'record'      => $record,
+        'procurement' => $procurement
+    ]);
+}
+
 
     public function updateOtherExpense(Request $request)
     {

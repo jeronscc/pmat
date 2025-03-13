@@ -11,32 +11,45 @@ use App\Models\Requirement;
 class HonorariaFormController extends Controller
 {
     public function showForm(Request $request)
-    {
-        $prNumber = $request->query('pr_number');
-        $activity = $request->query('activity');
+{
+    $prNumber = $request->query('pr_number');
+    $activity = $request->query('activity');
 
-        // Fetch existing data from the honoraria_form table
+    // Fetch existing data from the honoraria_form table
+    $record = DB::connection('ilcdb')
+                ->table('honoraria_form')
+                ->where('procurement_id', $prNumber)
+                ->first();
+
+    // If no record exists, insert a new one
+    if (!$record) {
+        DB::connection('ilcdb')->table('honoraria_form')->insert([
+            'procurement_id' => $prNumber,
+            'activity'       => $activity,
+        ]);
+
+        // Re-fetch the record
         $record = DB::connection('ilcdb')
                     ->table('honoraria_form')
                     ->where('procurement_id', $prNumber)
                     ->first();
-
-        // If no record exists, insert a new one
-        if (!$record) {
-            DB::connection('ilcdb')->table('honoraria_form')->insert([
-                'procurement_id' => $prNumber,
-                'activity'       => $activity,
-            ]);
-
-            // Re-fetch the record
-            $record = DB::connection('ilcdb')
-                        ->table('honoraria_form')
-                        ->where('procurement_id', $prNumber)
-                        ->first();
-        }
-
-        return view('honorariaform', compact('prNumber', 'activity', 'record'));
     }
+
+    // Fetch the description from the procurement table
+    $procurement = DB::connection('ilcdb')
+        ->table('procurement')
+        ->where('procurement_id', $prNumber)
+        ->first();
+
+    return view('honorariaform', [
+        'prNumber'    => $prNumber,
+        'activity'    => $activity,
+        'description' => $procurement->description ?? 'No description available', // Get description from procurement
+        'record'      => $record,
+        'procurement' => $procurement
+    ]);
+}
+
 
     public function updateHonoraria(Request $request)
     {
