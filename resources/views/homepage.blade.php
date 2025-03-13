@@ -431,18 +431,21 @@
             document.getElementById('pr-number').setAttribute('placeholder', 'Enter PR Number');
             document.getElementById('pr-number').removeAttribute('readonly');
             document.getElementById('activity').setAttribute('placeholder', 'Enter Activity');
+            document.getElementById('description').setAttribute('placeholder', 'Enter Description');
         } else if (category === 'Honoraria') {
             // Modify form for Honoraria
             document.getElementById('activityLabel').innerText = 'NAME OF SPEAKER';
             document.getElementById('pr-number').value = generatePRNumber();  // Auto-generate PR number
             document.getElementById('pr-number').setAttribute('readonly', 'true'); // Make PR Number non-editable
-            document.getElementById('activity').setAttribute('placeholder', 'Enter title of the training');
+            document.getElementById('activity').setAttribute('placeholder', 'Enter name of the resource speaker');
+            document.getElementById('description').setAttribute('placeholder', 'Enter title of the training');
         } else if (category === 'Other expense') {
             // Modify form for Other expense
             document.getElementById('activityLabel').innerText = 'NAME OF TRAVELLER';
             document.getElementById('pr-number').value = generatePRNumber();  // Auto-generate PR number
             document.getElementById('pr-number').setAttribute('readonly', 'true'); // Make PR Number non-editable
-            document.getElementById('activity').setAttribute('placeholder', 'Enter the purpose of travel');
+            document.getElementById('activity').setAttribute('placeholder', 'Enter name of traveller');
+            document.getElementById('description').setAttribute('placeholder', 'Enter the purpose of travel');
         }
     });
 
