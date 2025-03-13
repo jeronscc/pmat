@@ -45,4 +45,46 @@ document.addEventListener('DOMContentLoaded', function () {
             alert("Upload failed. Check console for details.");
         });
     });
+
+    // Function to fetch and display uploaded files
+    function fetchUploadedFiles(procurementId) {
+        fetch(`/api/requirements/${procurementId}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    displayUploadedFiles(data.files);
+                } else {
+                    console.error("Failed to fetch uploaded files:", data.message);
+                }
+            })
+            .catch(error => {
+                console.error("Error fetching uploaded files:", error);
+            });
+    }
+
+    // Function to display uploaded files
+    function displayUploadedFiles(files) {
+        const fileListContainer = document.getElementById('uploadedFilesList');
+        fileListContainer.innerHTML = ''; // Clear existing files
+
+        files.forEach(file => {
+            const fileLink = document.createElement('a');
+            fileLink.href = `/${file.file_path}`;
+            fileLink.textContent = file.requirement_name;
+            fileLink.target = '_blank';
+
+            const listItem = document.createElement('li');
+            listItem.appendChild(fileLink);
+
+            fileListContainer.appendChild(listItem);
+        });
+    }
+
+    // Event listener to open the modal and fetch uploaded files
+    document.getElementById('openModalBtn').addEventListener('click', function () {
+        const procurementId = document.getElementById('procurement_id')?.value;
+        if (procurementId) {
+            fetchUploadedFiles(procurementId);
+        }
+    });
 });

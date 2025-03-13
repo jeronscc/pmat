@@ -234,7 +234,11 @@
                         <label for="certFile" class="form-label">Upload Certificate of Services Rendered</label>
                         <input class="form-control" type="file" id="certFile" name="certFile">
                     </div>
-
+                    <!-- Container to display uploaded files -->
+                    <div class="mb-3">
+                        <label class="form-label">Uploaded Files</label>
+                        <ul id="uploadedFilesList"></ul>
+                    </div>
                 </form>
                 </div>
                 <div class="modal-footer">

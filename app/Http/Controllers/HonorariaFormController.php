@@ -165,4 +165,25 @@ class HonorariaFormController extends Controller
             ], 500);
         }
     }
+    public function getUploadedFiles($procurement_id)
+    {
+        try {
+            $files = DB::connection('ilcdb')->table('requirements')
+                ->where('procurement_id', $procurement_id)
+                ->get();
+
+            return response()->json([
+                'success' => true,
+                'files' => $files,
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Failed to fetch uploaded files: ' . $e->getMessage());
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Server error: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
 }
