@@ -118,10 +118,14 @@ function fetchProcurementForSaro(saroNo) {
 // Fetch procurement data by year filter
 function fetchProcurementForYear(year) {
     const url = year === '' ? '/api/fetch-procurement-ilcdb' : `/api/fetch-procurement-ilcdb?year=${year}`;
+    
+    console.log("Fetching procurement data from:", url); // Debugging log
 
     fetch(url)
         .then(response => response.json())
         .then(data => {
+            console.log("Fetched procurement data:", data); // Debugging log
+
             const tableBodies = {
                 all: document.getElementById('procurementTable'),
                 pending: document.getElementById('procurementTablePending'),
@@ -134,20 +138,16 @@ function fetchProcurementForYear(year) {
             Object.values(tableBodies).forEach(tableBody => tableBody.innerHTML = '');
 
             if (data.length > 0) {
-                // Sort data by status order and maintain original order for FIFO
+                // Sort data by status
                 const statusOrder = { 'overdue': 1, 'ongoing': 2, 'pending': 3, 'done': 4 };
-            
+
                 data.sort((a, b) => {
                     const statusA = (a.status || 'unknown').toLowerCase();
                     const statusB = (b.status || 'unknown').toLowerCase();
-            
-                    // Sort by status first
-                    const statusComparison = (statusOrder[statusA] || 5) - (statusOrder[statusB] || 5);
-            
-                    // If statuses are the same, maintain original FIFO order
-                    return statusComparison !== 0 ? statusComparison : data.indexOf(a) - data.indexOf(b);
+
+                    return (statusOrder[statusA] || 5) - (statusOrder[statusB] || 5);
                 });
-            
+
                 data.forEach(item => {
                     const row = document.createElement('tr');
 
@@ -165,27 +165,26 @@ function fetchProcurementForYear(year) {
                     const statusCell = document.createElement('td');
                     const badge = document.createElement('span');
 
-                    let statusMessage = item.status || ''; // Default to empty if no status
-                    let unitMessage = item.unit ? ` at ${item.unit}` : ''; // Default to empty if no unit
+                    let statusMessage = item.status || '';
+                    let unitMessage = item.unit ? ` at ${item.unit}` : '';
 
-                    // Check if honoraria form status is available
                     if (item.honoraria_status && item.honoraria_status.toLowerCase() !== 'no status') {
-                        statusMessage = item.honoraria_status; // Use honoraria form status if available
+                        statusMessage = item.honoraria_status;
                     }
 
-                    // If status is "done", don't append the unit
                     if (statusMessage.toLowerCase() === 'done') {
-                        unitMessage = ''; // Don't append the unit when status is "done"
+                        unitMessage = ''; 
                     }
 
-                    badge.className = getStatusClass(statusMessage || ''); // Apply appropriate badge class
-                    badge.textContent = statusMessage + unitMessage; // Combine status and unit for display
+                    badge.className = getStatusClass(statusMessage || '');
+                    badge.textContent = statusMessage + unitMessage;
 
                     statusCell.appendChild(badge);
                     row.appendChild(statusCell);
 
-                    tableBodies.all.appendChild(row); // Append the original row to "All" only
+                    tableBodies.all.appendChild(row);
 
+                    // Clone row properly
                     if (statusMessage.toLowerCase() === 'done') {
                         tableBodies.done.appendChild(row.cloneNode(true));
                     } else if (statusMessage.toLowerCase() === 'ongoing') {
@@ -193,19 +192,16 @@ function fetchProcurementForYear(year) {
                     } else if (statusMessage.toLowerCase() === 'overdue') {
                         tableBodies.overdue.appendChild(row.cloneNode(true));
                     } else if (statusMessage.toLowerCase() === 'pending') {
-                        tableBodies.pending.appendChild(row.clone(true));
+                        tableBodies.pending.appendChild(row.cloneNode(true));
                     }
-
-
                 });
 
-                // Add event listener to each table body for delegation
-                Object.values(tableBodies).forEach(tableBody => {
-                    tableBody.addEventListener('click', function(event) {
+                // Add event listener for row click
+                document.querySelectorAll('#procurementTable tr').forEach(row => {
+                    row.addEventListener('click', function(event) {
                         const prNumberCell = event.target.closest('td');
                         if (prNumberCell && prNumberCell.parentElement) {
                             const procurementId = prNumberCell.textContent;
-                            const row = prNumberCell.parentElement;
                             openProcurementModal({ procurement_id: procurementId });
                         }
                     });
@@ -219,8 +215,9 @@ function fetchProcurementForYear(year) {
                 tableBodies.all.appendChild(emptyMessage);
             }
         })
-        .catch(error => console.error('Error fetching procurement data:', error));
+        .catch(error => console.error("Error fetching procurement data:", error));
 }
+
 // FETCH PROCUREMENT DATA FOR MODAL
 function fetchProcurementRequirements(saroNo) {
     const url = saroNo === '' ? '/api/fetch-procurement-ilcdb' : `/api/fetch-procurement-ilcdb?saro_no=${saroNo}`;
