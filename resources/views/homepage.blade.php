@@ -149,6 +149,7 @@
                             <thead>
                                 <tr>
                                     <th>PR NUMBER</th>
+                                    <th>CATEGORY</th>
                                     <th>ACTIVITY</th>
                                     <th>STATUS</th>
                                 </tr>
@@ -166,6 +167,7 @@
                             <thead>
                                 <tr>
                                     <th>PR NUMBER</th>
+                                    <th>CATEGORY</th>
                                     <th>ACTIVITY</th>
                                     <th>STATUS</th>
                                 </tr>
@@ -183,6 +185,7 @@
                             <thead>
                                 <tr>
                                     <th>PR NUMBER</th>
+                                    <th>CATEGORY</th>
                                     <th>ACTIVITY</th>
                                     <th>STATUS</th>
                                 </tr>
@@ -201,6 +204,7 @@
                             <thead>
                                 <tr>
                                     <th>PR NUMBER</th>
+                                    <th>CATEGORY</th>
                                     <th>ACTIVITY</th>
                                     <th>STATUS</th>
                                 </tr>
@@ -219,6 +223,7 @@
                             <thead>
                                 <tr>
                                     <th>PR NUMBER</th>
+                                    <th>CATEGORY</th>
                                     <th>ACTIVITY</th>
                                     <th>STATUS</th>
                                 </tr>
