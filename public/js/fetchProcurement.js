@@ -77,13 +77,17 @@ function fetchProcurementForSaro(saroNo) {
                     tableBodies.all.appendChild(row);
 
                     // Append row to the appropriate table body
+                    const clonedRow = row.cloneNode(true);
+                    tableBodies.all.appendChild(clonedRow);
+
                     if (statusMessage.toLowerCase() === 'done') {
-                        tableBodies.done.appendChild(row);
+                        tableBodies.done.appendChild(row.cloneNode(true));
                     } else if (statusMessage.toLowerCase() === 'ongoing') {
-                        tableBodies.ongoing.appendChild(row);
+                        tableBodies.ongoing.appendChild(row.cloneNode(true));
                     } else if (statusMessage.toLowerCase() === 'overdue') {
-                        tableBodies.overdue.appendChild(row);
+                        tableBodies.overdue.appendChild(row.cloneNode(true));
                     }
+
                 });
             } else {
                 const emptyMessage = document.createElement('tr');
@@ -154,13 +158,17 @@ function fetchProcurementForYear(year) {
                     tableBodies.all.appendChild(row);
 
                     // Append row to the appropriate table body
+                    const clonedRow = row.cloneNode(true);
+                    tableBodies.all.appendChild(clonedRow);
+
                     if (statusMessage.toLowerCase() === 'done') {
-                        tableBodies.done.appendChild(row);
+                        tableBodies.done.appendChild(row.cloneNode(true));
                     } else if (statusMessage.toLowerCase() === 'ongoing') {
-                        tableBodies.ongoing.appendChild(row);
+                        tableBodies.ongoing.appendChild(row.cloneNode(true));
                     } else if (statusMessage.toLowerCase() === 'overdue') {
-                        tableBodies.overdue.appendChild(row);
+                        tableBodies.overdue.appendChild(row.cloneNode(true));
                     }
+
                 });
 
                 // Add event listener to each table body for delegation
@@ -244,13 +252,17 @@ function fetchProcurementRequirements(saroNo) {
                     tableBodies.all.appendChild(row);
 
                     // Append row to the appropriate table body
+                    const clonedRow = row.cloneNode(true);
+                    tableBodies.all.appendChild(clonedRow);
+
                     if (statusMessage.toLowerCase() === 'done') {
-                        tableBodies.done.appendChild(row);
+                        tableBodies.done.appendChild(row.cloneNode(true));
                     } else if (statusMessage.toLowerCase() === 'ongoing') {
-                        tableBodies.ongoing.appendChild(row);
+                        tableBodies.ongoing.appendChild(row.cloneNode(true));
                     } else if (statusMessage.toLowerCase() === 'overdue') {
-                        tableBodies.overdue.appendChild(row);
+                        tableBodies.overdue.appendChild(row.cloneNode(true));
                     }
+
                 });
 
                 // Add event listener to each table body for delegation
@@ -496,13 +508,17 @@ function updateProcurementTable(data) {
             tableBodies.all.appendChild(row);
             
             // Append row to the appropriate table body
+            const clonedRow = row.cloneNode(true);
+            tableBodies.all.appendChild(clonedRow);
+
             if (statusMessage.toLowerCase() === 'done') {
-                tableBodies.done.appendChild(row);
+                tableBodies.done.appendChild(row.cloneNode(true));
             } else if (statusMessage.toLowerCase() === 'ongoing') {
-                tableBodies.ongoing.appendChild(row);
+                tableBodies.ongoing.appendChild(row.cloneNode(true));
             } else if (statusMessage.toLowerCase() === 'overdue') {
-                tableBodies.overdue.appendChild(row);
+                tableBodies.overdue.appendChild(row.cloneNode(true));
             }
+
         });
 
         // Add event listener to each table body for delegation
