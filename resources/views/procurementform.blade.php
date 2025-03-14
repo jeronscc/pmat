@@ -368,7 +368,6 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Previously Submitted Requirements</label>
-                        <ul>
                             <div class="mb-3">
                                 <label for="purchaseFile2" class="form-label" id="purchaseFileLabel2">Purchase Request</label>
                                 <div id="purchaseFile2Link"></div>
@@ -406,7 +405,6 @@
                                 <div id="marketFile2Link"></div>
                             </div>
                     </div>
-                    
                 </form>
             </div>
             <div class="modal-footer">
@@ -448,17 +446,42 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Previously Submitted Requirements (For Reference)</label>
-                        <ul>
-                            <li>Purchase Request</li>
-                            <li>Quotations</li>
-                            <li>APP / PPMP</li>
-                            <li>SARO</li>
-                            <li>Budget Breakdown</li>
-                            <li>Distribution List</li>
-                            <li>POI / Activity Design</li>
-                            <li>Market Research</li>
-                        </ul>
-                        <small class="text-muted">These were already submitted in previous steps.</small>
+                        <div class="mb-3">
+                                <label for="purchaseFile3" class="form-label" id="purchaseFileLabel3">Purchase Request</label>
+                                <div id="purchaseFile3Link"></div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="quotationsFile3" class="form-label" id="quotationsFileLabel3">Quotations</label>
+                                <div id="quotationsFile3Link"></div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="appFile3" class="form-label" id="appFileLabel3">APP/PPMP</label>
+                                <div id="appFile3Link"></div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="saroFile3" class="form-label" id="saroFileLabel3">SARO</label>
+                                <div id="saroFile3Link"></div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="budgetFile3" class="form-label" id="budgetFileLabel3">Budget Breakdown</label>
+                                <div id="budgetFile3Link"></div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="distributionFile3" class="form-label" id="distributionFileLabel3">Distribution List</label>
+                                <div id="distributionFile3Link"></div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="saroFile3" class="form-label" id="saroFileLabel3">SARO</label>
+                                <div id="saroFile3Link"></div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="poiFile3" class="form-label" id="poiFileLabel3">POI / Activity Design</label>
+                                <div id="poiFile3Link"></div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="marketFile3" class="form-label" id="marketFileLabel3">Market Research</label>
+                                <div id="marketFile3Link"></div>
+                            </div>
                     </div>
                 </form>
             </div>
