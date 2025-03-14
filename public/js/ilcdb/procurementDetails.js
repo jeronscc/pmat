@@ -11,9 +11,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Change the label for "Activity" based on the procurement category
         const activityLabel = document.getElementById('modalActivityLabel');
-        if (procurement.category.toLowerCase() === 'honoraria') {
+        const category = procurement.category.toLowerCase();
+        console.log("Procurement category:", category); // Debugging log
+
+        if (category === 'honoraria') {
             activityLabel.textContent = 'Speaker:';
-        } else if (procurement.category.toLowerCase() === 'other expense') {
+        } else if (category === 'other expense') {
             activityLabel.textContent = 'Traveller:';
         } else {
             activityLabel.textContent = 'Activity:';
@@ -28,9 +31,12 @@ document.addEventListener('DOMContentLoaded', function () {
     document.querySelectorAll('.open-procurement-details').forEach(button => {
         button.addEventListener('click', function () {
             const procurementId = this.getAttribute('data-procurement-id');
+            console.log("Fetching details for procurement ID:", procurementId); // Debugging log
+
             fetch(`/api/procurement/${procurementId}`)
                 .then(response => response.json())
                 .then(data => {
+                    console.log("Procurement data:", data); // Debugging log
                     openProcurementDetailsModal(data);
                 })
                 .catch(error => {
