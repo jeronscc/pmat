@@ -292,10 +292,9 @@
                     <div class="alert alert-info">
                         Only PDF files are accepted. The file size must not exceed 5 MB.
                     </div>
-                    <div class="mb-3">
+                    <div class="mb-3" id="appFile1Link">
                         <label for="appFile1" class="form-label">APP / PPMP</label>
                         <input class="form-control" type="file" id="appFile1" name="appFile">
-                        <div id="appFile1Link">APP/PPMP</div>
                     </div>
                     <div class="mb-3">
                         <label for="saroFile1" class="form-label">SARO</label>
