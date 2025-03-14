@@ -88,7 +88,7 @@ class OtherExpenseFormController extends Controller
                 ($validatedData['dt_submitted'] && !$validatedData['dt_received']) => 'Ongoing',
                 ($validatedData['dt_received'] && !$validatedData['budget_spent']) => 'Pending',
                 ($validatedData['budget_spent']) => 'Done',
-                default => 'Pending',
+                default => 'Done',
             };
 
             Log::info("Calculated Status: " . $status);
@@ -107,6 +107,18 @@ class OtherExpenseFormController extends Controller
                         'status'       => $status,
                         'unit'         => $unit,
                     ]);
+
+                $record = DB::connection('ilcdb')->table('honoraria_form')
+                            ->where('procurement_id', $validatedData['procurement_id'])
+                            ->first();
+
+                if ($record && isset($record->saro_no) && $validatedData['budget_spent']) {
+                    DB::connection('ilcdb')->table('saro')
+                        ->where('saro_no', $record->saro_no)
+                        ->update([
+                            'current_budget' => DB::raw("current_budget - " . floatval($validatedData['budget_spent']))
+                        ]);
+                }
             });
 
             return response()->json([

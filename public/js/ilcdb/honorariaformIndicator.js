@@ -32,7 +32,8 @@ document.addEventListener('DOMContentLoaded', function () {
         .then(response => response.json())
         .then(data => {
             alert(data.message);
-            location.reload();
+            disableSaveButton();  // Disable the save button after success
+            location.reload();  // Refresh to reflect changes
         })
         .catch(error => {
             console.error('Error saving data:', error);
@@ -108,6 +109,14 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('dateSubmitted').setAttribute('readonly', 'true');
         document.getElementById('dateReturned').setAttribute('readonly', 'true');
         document.getElementById('budgetSpent').setAttribute('readonly', 'true');
+    }
+
+    // Disable the save button after data is saved
+    function disableSaveButton() {
+        const saveButton = document.getElementById('saveChanges');
+        if (saveButton) {
+            saveButton.setAttribute('disabled', 'true');
+        }
     }
 
     // Initial check on load

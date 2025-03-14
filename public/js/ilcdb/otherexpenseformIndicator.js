@@ -30,6 +30,7 @@ document.addEventListener('DOMContentLoaded', function () {
         .then(data => {
             if (data.success) {
                 alert(data.message);
+                disableSaveButton();  // Disable the save button after success
                 location.reload();  // Refresh to reflect changes
             } else {
                 alert('Error: ' + data.message);
@@ -113,6 +114,14 @@ document.addEventListener('DOMContentLoaded', function () {
         // Optionally disable the save button
         const saveButton = document.getElementById('saveChanges');
         if (saveButton) saveButton.setAttribute('disabled', 'true');
+    }
+
+    // Disable the save button after data is saved
+    function disableSaveButton() {
+        const saveButton = document.getElementById('saveChanges');
+        if (saveButton) {
+            saveButton.setAttribute('disabled', 'true');
+        }
     }
 
     // Initial lock check when page loads
