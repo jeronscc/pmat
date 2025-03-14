@@ -166,7 +166,7 @@
                             <thead>
                                 <tr>
                                     <th>PR NUMBER</th>
-                                    <th>ACTIVITY</th>
+                                    <th>ACTIVITY/PERSON-IN-CHARGE</th>
                                     <th>STATUS</th>
                                 </tr>
                             </thead>
@@ -201,7 +201,7 @@
                             <thead>
                                 <tr>
                                     <th>PR NUMBER</th>
-                                    <th>ACTIVITY</th>
+                                    <th>ACTIVITY/PERSON-IN-CHARGE</th>
                                     <th>STATUS</th>
                                 </tr>
                             </thead>
@@ -219,7 +219,7 @@
                             <thead>
                                 <tr>
                                     <th>PR NUMBER</th>
-                                    <th>ACTIVITY</th>
+                                    <th>ACTIVITY/PERSON-IN-CHARGE</th>
                                     <th>STATUS</th>
                                 </tr>
                             </thead>
