@@ -248,7 +248,7 @@
                 <p><strong>Purchase Request:</strong> <span id="modalPurchaseRequest"></span></p>
                 <p><strong>Year:</strong> <span id="modalYear"></span></p>
                 <p><strong>Description:</strong> <span id="modalDescription"></span></p>
-                <p><strong>Activity:</strong> <span id="modalActivity"></span></p>
+                <p><strong id="modalActivityLabel">Activity:</strong> <span id="modalActivity"></span></p>
             </div>
             <div class="modal-footer">
                 <!-- Cancel Button -->
@@ -405,6 +405,8 @@
         <script src="/js/ilcdb/filterSaroByYear.js"></script>
         <script src="/sarohover.js"></script>
         <script src="/js/ilcdb/overdueNotification.js"></script>
+        <script src="/js/ilcdb/procurementDetails.js"></script>
+
         <!-- Bootstrap JS (Optional, only needed for dropdowns, modals, etc.) -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
