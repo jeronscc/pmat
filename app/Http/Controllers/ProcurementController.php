@@ -18,6 +18,7 @@ class ProcurementController extends Controller
                 'pr_year'      => 'required',
                 'activity'     => 'required',
                 'description'  => 'required',
+                'pr_amount'    => 'required', // Add validation for pr_amount
             ]);
 
             // Save the procurement data to the database
@@ -28,6 +29,7 @@ class ProcurementController extends Controller
                 'year'                 => $request->input('pr_year'),
                 'activity'             => $request->input('activity'),
                 'description'          => $request->input('description'),
+                'pr_amount'            => $request->input('pr_amount'), // Add pr_amount
             ]);
 
             // Determine which table to insert into based on the category
@@ -38,27 +40,31 @@ class ProcurementController extends Controller
                 DB::connection('ilcdb')->table('procurement_form')->insert([
                     'procurement_id' => $request->input('pr_number'),
                     'activity'       => $request->input('activity'),
-                    'saro_no'       => $request->input('saro_number'),
+                    'saro_no'        => $request->input('saro_number'),
+                    'pr_amount'      => $request->input('pr_amount'), // Add pr_amount
                 ]);
             } elseif ($category === 'honoraria') {
                 // Insert into 'honoraria_form' table
                 DB::connection('ilcdb')->table('honoraria_form')->insert([
                     'procurement_id' => $request->input('pr_number'),
                     'activity'       => $request->input('activity'),
-                    'saro_no'       => $request->input('saro_number'),
+                    'saro_no'        => $request->input('saro_number'),
+                    'pr_amount'      => $request->input('pr_amount'), // Add pr_amount
                 ]);
             } elseif ($category === 'other expense' || $category === 'other expenses') {
                 // Insert into 'otherexpense_form' table
                 DB::connection('ilcdb')->table('otherexpense_form')->insert([
                     'procurement_id' => $request->input('pr_number'),
                     'activity'       => $request->input('activity'),
-                    'saro_no'       => $request->input('saro_number'),
+                    'saro_no'        => $request->input('saro_number'),
+                    'pr_amount'      => $request->input('pr_amount'), // Add pr_amount
                 ]);
             }
 
             // Return a success response
             return response()->json(['message' => 'Procurement added successfully']);
         } catch (\Exception $e) {
+            Log::info('Request Data:', $request->all());
             Log::error('Error adding procurement: ' . $e->getMessage());
             return response()->json([
                 'message' => 'Failed to add procurement',

@@ -6,8 +6,9 @@ document.addEventListener('DOMContentLoaded', function() {
         const prYear = document.getElementById('pr-year').value;
         const activity = document.getElementById('activity').value;
         const description = document.getElementById('description').value;
+        const prAmount = parseFloat(document.getElementById('pr-amount').value); // Add pr_amount
 
-        if (!category || !prNumber || !saroNumber || !prYear || !activity || !description) {
+        if (!category || !prNumber || !saroNumber || !prYear || !activity || !description || !prAmount) {
             alert('All fields must be filled out.');
             return;
         }
@@ -25,7 +26,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 saro_number: saroNumber,
                 pr_year: prYear,
                 activity: activity,
-                description: description
+                description: description,
+                pr_amount: prAmount // Add pr_amount to the request payload
             })
         })
         .then(response => {
@@ -45,14 +47,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 procurementModal.hide();
 
                 // Redirect based on category
-            // Redirect with both pr_number and activity in the query string
-            if (category === 'SVP') {
-                window.location.href = '/procurementform?pr_number=' + encodeURIComponent(prNumber) + '&activity=' + encodeURIComponent(activity);
-            } else if (category === 'Honoraria') {
-                window.location.href = '/honorariaform?pr_number=' + encodeURIComponent(prNumber) + '&activity=' + encodeURIComponent(activity);
-            } else if (category === 'Other expense') {
-                window.location.href = '/otherexpenseform?pr_number=' + encodeURIComponent(prNumber) + '&activity=' + encodeURIComponent(activity);
-            }
+                if (category === 'SVP') {
+                    window.location.href = '/procurementform?pr_number=' + encodeURIComponent(prNumber) + '&activity=' + encodeURIComponent(activity);
+                } else if (category === 'Honoraria') {
+                    window.location.href = '/honorariaform?pr_number=' + encodeURIComponent(prNumber) + '&activity=' + encodeURIComponent(activity);
+                } else if (category === 'Other expense') {
+                    window.location.href = '/otherexpenseform?pr_number=' + encodeURIComponent(prNumber) + '&activity=' + encodeURIComponent(activity);
+                }
             } else {
                 alert('Failed to add procurement');
             }
