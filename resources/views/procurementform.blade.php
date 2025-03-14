@@ -288,6 +288,10 @@
             <div class="modal-body">
                 <form id="requirementsForm1" enctype="multipart/form-data">
                     @csrf
+                    <!-- Reminder about file requirements -->
+                    <div class="alert alert-info">
+                        Only PDF files are accepted. The file size must not exceed 5 MB.
+                    </div>
                     <div class="mb-3">
                         <label for="appFile1" class="form-label">APP / PPMP</label>
                         <input class="form-control" type="file" id="appFile1" name="appFile">
@@ -348,6 +352,10 @@
             <div class="modal-body">
                 <form id="requirementsForm2" enctype="multipart/form-data">
                     @csrf
+                    <!-- Reminder about file requirements -->
+                    <div class="alert alert-info">
+                        Only PDF files are accepted. The file size must not exceed 5 MB.
+                    </div>
                     <div class="mb-3">
                         <label for="poFile2" class="form-label">Purchase Order</label>
                         <input class="form-control" type="file" id="poFile2" name="poFile">
@@ -392,6 +400,10 @@
             <div class="modal-body">
                 <form id="requirementsForm3" enctype="multipart/form-data">
                     @csrf
+                    <!-- Reminder about file requirements -->
+                    <div class="alert alert-info">
+                        Only PDF files are accepted. The file size must not exceed 5 MB.
+                    </div>
                     <div class="mb-3">
                         <label for="orsFile3" class="form-label">ORS (Obligation Request and Status)</label>
                         <input class="form-control" type="file" id="orsFile3" name="orsFile">
@@ -441,6 +453,10 @@
             <div class="modal-body">
                 <form id="requirementsForm4" enctype="multipart/form-data">
                     @csrf
+                    <!-- Reminder about file requirements -->
+                    <div class="alert alert-info">
+                        Only PDF files are accepted. The file size must not exceed 5 MB.
+                    </div>
                     <div class="mb-3">
                         <label for="attendanceFile4" class="form-label">Attendance Sheet</label>
                         <input class="form-control" type="file" id="attendanceFile4" name="attendanceFile">

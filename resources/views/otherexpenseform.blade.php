@@ -171,8 +171,8 @@
                     <form id="requirementsForm1" enctype="multipart/form-data">
                         @csrf
                         <input type="hidden" id="procurement_id" name="procurement_id" value="{{ $prNumber }}">
-                         <!-- Reminder about file requirements -->
-                         <div class="alert alert-info">
+                        <!-- Reminder about file requirements -->
+                        <div class="alert alert-info">
                             Only PDF files are accepted. The file size must not exceed 5 MB.
                         </div>
                         <!-- ORS File Upload -->
