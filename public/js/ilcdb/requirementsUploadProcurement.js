@@ -82,22 +82,19 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Function to display uploaded files
     function displayUploadedFiles(files, modalNumber) {
-        const fileListContainer = document.getElementById(`uploadedFilesList${modalNumber}`);
-        if (fileListContainer) {
-            fileListContainer.innerHTML = ''; // Clear existing files
-
-            files.forEach(file => {
+        files.forEach(file => {
+            const fileInput = document.getElementById(`${file.requirement_name}${modalNumber}`);
+            const fileLinkContainer = document.getElementById(`${file.requirement_name}${modalNumber}Link`);
+            if (fileInput && fileLinkContainer) {
+                fileInput.disabled = true; // Disable the file input
                 const fileLink = document.createElement('a');
                 fileLink.href = `/${file.file_path}`;
-                fileLink.textContent = file.requirement_name;
+                fileLink.textContent = 'View Uploaded File';
                 fileLink.target = '_blank';
-
-                const listItem = document.createElement('li');
-                listItem.appendChild(fileLink);
-
-                fileListContainer.appendChild(listItem);
-            });
-        }
+                fileLinkContainer.innerHTML = ''; // Clear existing content
+                fileLinkContainer.appendChild(fileLink);
+            }
+        });
     }
 
     // Fetch uploaded files when the page loads
