@@ -83,49 +83,30 @@ document.addEventListener('DOMContentLoaded', function () {
     // Function to display uploaded files
     function displayUploadedFiles(files, modalNumber) {
         files.forEach(file => {
-            // Get the input and link container based on the requirement name and modal number
             const fileInput = document.getElementById(`${file.requirement_name}${modalNumber}`);
             const fileLinkContainer = document.getElementById(`${file.requirement_name}${modalNumber}Link`);
-    
             if (fileInput && fileLinkContainer) {
-                // Hide the file input after upload
-                fileInput.style.display = 'none';
-    
-                // Create the file link element
+                fileInput.style.display = 'none'; // Hide the file input
                 const fileLink = document.createElement('a');
-                fileLink.href = `/${file.file_path}`; // Path to the uploaded file
-                fileLink.textContent = file.requirement_name; // Set the link text to the requirement name
-                fileLink.target = '_blank'; // Open the link in a new tab
-    
-                // Clear existing content in the container and append the link
-                fileLinkContainer.innerHTML = '';
+                fileLink.href = `/${file.file_path}`;
+                fileLink.textContent = file.requirement_name;
+                fileLink.target = '_blank';
+                fileLinkContainer.innerHTML = ''; // Clear existing content
                 fileLinkContainer.appendChild(fileLink);
-    
-                // Insert the link in the corresponding list item in the <ul>
-                const listItem = document.getElementById(`${file.requirement_name}${modalNumber}`);
-                if (listItem) {
-                    const linkContainer = document.createElement('div');
-                    linkContainer.appendChild(fileLink);
-                    listItem.appendChild(linkContainer);
-                }
-    
-                // Loop through all modals and show the uploaded file link in each one
+
+                // Show the uploaded file link in other modals that need it
                 modals.forEach(otherModalNumber => {
                     if (otherModalNumber !== modalNumber) {
-                        // Get the link container in other modals
                         const otherFileLinkContainer = document.getElementById(`${file.requirement_name}${otherModalNumber}Link`);
-                        
                         if (otherFileLinkContainer) {
-                            // Clear existing content and add the new link
-                            otherFileLinkContainer.innerHTML = '';
-                            otherFileLinkContainer.appendChild(fileLink.cloneNode(true)); // Clone the link to avoid reference issues
+                            otherFileLinkContainer.innerHTML = ''; // Clear existing content
+                            otherFileLinkContainer.appendChild(fileLink.cloneNode(true));
                         }
                     }
                 });
             }
         });
     }
-    
 
     // Fetch uploaded files when the page loads
     const procurementId = document.getElementById('procurementId')?.value;
