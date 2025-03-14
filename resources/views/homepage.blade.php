@@ -345,7 +345,7 @@
                             <option value="" disabled selected>Select Category</option>
                             <option value="SVP">SVP</option>
                             <option value="Honoraria">Honoraria</option>
-                            <option value="Other expense">Other Expenses</option>
+                            <option value="Daily travel expense">Daily travel expense</option>
                         </select>
                     </div>
                     <div class="mb-3">
@@ -435,7 +435,7 @@
             document.getElementById('pr-number').setAttribute('readonly', 'true'); // Make PR Number non-editable
             document.getElementById('activity').setAttribute('placeholder', 'Enter name of the resource speaker');
             document.getElementById('description').setAttribute('placeholder', 'Enter title of the training');
-        } else if (category === 'Other expense') {
+        } else if (category === 'Daily travel expense') {
             // Modify form for Other expense
             document.getElementById('activityLabel').innerText = 'NAME OF TRAVELLER';
             document.getElementById('pr-number').value = generatePRNumber();  // Auto-generate PR number

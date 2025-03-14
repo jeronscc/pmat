@@ -116,7 +116,7 @@ class OtherExpenseFormController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => 'Other Expense form updated successfully!',
+                'message' => 'Daily Travel Expense form updated successfully!',
                 'status'  => $status . (($status === 'Ongoing' || $status === 'Pending') ? " at $unit" : ''),
             ]);
 

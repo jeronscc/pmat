@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     window.location.href = '/procurementform?pr_number=' + encodeURIComponent(prNumber) + '&activity=' + encodeURIComponent(activity);
                 } else if (category === 'Honoraria') {
                     window.location.href = '/honorariaform?pr_number=' + encodeURIComponent(prNumber) + '&activity=' + encodeURIComponent(activity);
-                } else if (category === 'Other expense') {
+                } else if (category === 'Daily travel expense') {
                     window.location.href = '/otherexpenseform?pr_number=' + encodeURIComponent(prNumber) + '&activity=' + encodeURIComponent(activity);
                 }
             } else {
@@ -116,7 +116,7 @@ document.addEventListener('DOMContentLoaded', function() {
         var redirectUrl = '/procurementform'; // default for SVP
         if (category === 'Honoraria') {
             redirectUrl = '/honorariaform';
-        } else if (category === 'Other expense') {
+        } else if (category === 'Daily Travel expense') {
             redirectUrl = '/otherexpenseform';
         }
         

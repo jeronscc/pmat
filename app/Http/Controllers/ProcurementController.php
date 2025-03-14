@@ -52,7 +52,7 @@ class ProcurementController extends Controller
                     'saro_no'        => $request->input('saro_number'),
                     'pr_amount'      => $request->input('pr_amount'), // Add pr_amount
                 ]);
-            } elseif ($category === 'other expense' || $category === 'other expenses') {
+            } elseif ($category === 'daily travel expense' || $category === 'daily travel expenses') {
                 // Insert into 'otherexpense_form' table
                 DB::connection('ilcdb')->table('otherexpense_form')->insert([
                     'procurement_id' => $request->input('pr_number'),
