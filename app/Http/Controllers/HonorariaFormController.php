@@ -71,10 +71,11 @@ class HonorariaFormController extends Controller
 
             // Determine status
             $status = match (true) {
+                (!$validatedData['dt_submitted'] && !$validatedData['dt_received']) => null,
                 ($validatedData['dt_submitted'] && !$validatedData['dt_received']) => 'Ongoing',
                 ($validatedData['dt_received'] && !$validatedData['budget_spent']) => 'Pending',
                 ($validatedData['budget_spent']) => 'Done',
-                default => 'Pending',
+                default => 'Done',
             };
 
             Log::info("Calculated Status: " . $status);
