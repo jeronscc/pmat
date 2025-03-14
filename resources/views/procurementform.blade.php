@@ -361,7 +361,6 @@
                     <div class="mb-3">
                         <label class="form-label">Previously Submitted Requirements</label>
                         <ul>
-                        <ul>
                             <li id="purchaseRequest1">Purchase Request</li>
                             <li id="quotations1">Quotations</li>
                             <li id="appPPMP1">APP / PPMP</li> <!-- This is where the link will go -->
@@ -370,7 +369,6 @@
                             <li id="distributionList1">Distribution List</li>
                             <li id="poiActivityDesign1">POI / Activity Design</li>
                             <li id="marketResearch1">Market Research</li>
-                        </ul>
                         </ul>
                         <small class="text-muted">These were already submitted earlier and are listed here for reference.</small>
                     </div>
