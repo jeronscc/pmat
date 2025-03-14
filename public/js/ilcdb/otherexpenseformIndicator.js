@@ -8,19 +8,16 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('saveChanges').addEventListener('click', function (e) {
         e.preventDefault();
 
-        let formData = new FormData(document.getElementById('otherexpenseForm'));
+        const form = document.getElementById('otherexpenseForm');
+        const formData = new FormData(form);
 
         const dateSubmitted = document.getElementById('dateSubmitted').value;
-        const dateReturned = document.getElementById('dateReturned').value;
 
-        // Check if date fields are empty
+        // Validate required fields
         if (!dateSubmitted) {
-            alert('Error: Both Date Submitted must be filled.');
+            alert('Error: Date Submitted must be filled.');
             return;
         }
-
-        let activeStage = (dateSubmitted && dateReturned) ? 1 : 0;
-        formData.append('activeStage', activeStage);
 
         fetch(otherexpenseUpdateUrl, {
             method: 'POST',
@@ -31,8 +28,12 @@ document.addEventListener('DOMContentLoaded', function () {
         })
         .then(response => response.json())
         .then(data => {
-            alert(data.message);
-            location.reload();  // Refresh to reflect locked fields
+            if (data.success) {
+                alert(data.message);
+                location.reload();  // Refresh to reflect changes
+            } else {
+                alert('Error: ' + data.message);
+            }
         })
         .catch(error => {
             console.error('Error saving data:', error);

@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Log;
 class OtherExpenseFormController extends Controller
 {
     public function showForm(Request $request)
-    {
+    {  
         $prNumber = $request->query('pr_number');
         $activity = $request->query('activity');
 
@@ -37,6 +37,21 @@ class OtherExpenseFormController extends Controller
             ->where('procurement_id', $prNumber)
             ->first();
 
+
+        // If no record exists, insert a new one
+        if (!$record) {
+            DB::connection('ilcdb')->table('otherexpense_form')->insert([
+                'procurement_id' => $prNumber,
+                'activity'       => $activity,
+            ]);
+
+            // Re-fetch the record
+            $record = DB::connection('ilcdb')
+                        ->table('otherexpense_form')
+                        ->where('procurement_id', $prNumber)
+                        ->first();
+        }
+
         return view('otherexpenseform', [
             'prNumber'    => $prNumber,
             'activity'    => $activity,
@@ -46,7 +61,7 @@ class OtherExpenseFormController extends Controller
         ]);
     }
 
-    public function updateOtherExpense(Request $request)
+    public function updateotherexpense(Request $request)
     {
         $validatedData = $request->validate([
             'procurement_id' => 'required|exists:ilcdb.otherexpense_form,procurement_id',
@@ -96,7 +111,7 @@ class OtherExpenseFormController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => 'otherexpense form updated successfully!',
+                'message' => 'Other Expense form updated successfully!',
                 'status'  => $status . (($status === 'Ongoing' || $status === 'Pending') ? " at $unit" : ''),
             ]);
 
@@ -122,8 +137,8 @@ class OtherExpenseFormController extends Controller
 
             // Define required files
             $requiredFiles = [
-                'orsFile', 'dvFile', 'contractFile', 'classificationFile', 'reportFile',
-                'attendanceFile', 'resumeFile', 'govidFile', 'payslipFile', 'bankFile', 'certFile'
+                'orsFile', 'dvFile', 'travelOrderFile', 'appearanceFile', 'reportFile',
+                'itineraryFile', 'certFile'
             ];
 
             $uploads = [];
