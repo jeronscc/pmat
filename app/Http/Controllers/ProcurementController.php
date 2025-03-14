@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
+
 class ProcurementController extends Controller
 {
     public function addProcurement(Request $request)
@@ -188,8 +189,6 @@ class ProcurementController extends Controller
     
         return response()->json($overdueProcurements);
     }
-    
-    
 }
 
 

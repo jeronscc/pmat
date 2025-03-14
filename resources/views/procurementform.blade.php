@@ -279,51 +279,50 @@
 
     <!-- Modals -->
     <div class="modal fade" id="requirementsModal1" tabindex="-1" aria-labelledby="modalTitle1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header bg-dark text-white">
-                <h5 class="modal-title" id="modalTitle1">UPLOAD REQUIREMENTS</h5>
-            </div>
-            <div class="modal-body">
-                <form id="requirementsForm1" enctype="multipart/form-data">
-                    <div class="mb-3">
-                        <label for="appFile1" class="form-label">APP / PPMP</label>
-                        <input class="form-control" type="file" id="appFile1" name="appFile">
-                    </div>
-                    <div class="mb-3">
-                        <label for="saroFile1" class="form-label">SARO</label>
-                        <input class="form-control" type="file" id="saroFile1" name="saroFile">
-                    </div>
-                    <div class="mb-3">
-                        <label for="budgetFile1" class="form-label">Budget Breakdown</label>
-                        <input class="form-control" type="file" id="budgetFile1" name="budgetFile">
-                    </div>
-                    <div class="mb-3">
-                        <label for="distributionFile1" class="form-label">Distribution List</label>
-                        <input class="form-control" type="file" id="distributionFile1" name="distributionFile">
-                    </div>
-                    <div class="mb-3">
-                        <label for="poiFile1" class="form-label">POI / Activity Design</label>
-                        <input class="form-control" type="file" id="poiFile1" name="poiFile">
-                    </div>
-                    <div class="mb-3">
-                        <label for="researchFile1" class="form-label">Market Research</label>
-                        <input class="form-control" type="file" id="researchFile1" name="researchFile">
-                    </div>
-                    <div class="mb-3">
-                        <label for="purchaseFile1" class="form-label">Purchase Request</label>
-                        <input class="form-control" type="file" id="purchaseFile1" name="purchaseFile">
-                    </div>
-                    <div class="mb-3">
-                        <label for="quotationsFile1" class="form-label">Quotations</label>
-                        <input class="form-control" type="file" id="quotationsFile1" name="quotationsFile">
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-success" id="saveBtn1">Save</button>
-            </div>
+<div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+        <div class="modal-header bg-dark text-white">
+            <h5 class="modal-title" id="modalTitle1">UPLOAD REQUIREMENTS</h5>
+        </div>
+        <div class="modal-body">
+            <form id="requirementsForm1" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <label for="appFile1" class="form-label">APP / PPMP</label>
+                    <input class="form-control" type="file" id="appFile1" name="appFile">
+                </div>
+                <div class="mb-3">
+                    <label for="saroFile1" class="form-label">SARO</label>
+                    <input class="form-control" type="file" id="saroFile1" name="saroFile">
+                </div>
+                <div class="mb-3">
+                    <label for="budgetFile1" class="form-label">Budget Breakdown</label>
+                    <input class="form-control" type="file" id="budgetFile1" name="budgetFile">
+                </div>
+                <div class="mb-3">
+                    <label for="distributionFile1" class="form-label">Distribution List</label>
+                    <input class="form-control" type="file" id="distributionFile1" name="distributionFile">
+                </div>
+                <div class="mb-3">
+                    <label for="poiFile1" class="form-label">POI / Activity Design</label>
+                    <input class="form-control" type="file" id="poiFile1" name="poiFile">
+                </div>
+                <div class="mb-3">
+                    <label for="researchFile1" class="form-label">Market Research</label>
+                    <input class="form-control" type="file" id="researchFile1" name="researchFile">
+                </div>
+                <div class="mb-3">
+                    <label for="purchaseFile1" class="form-label">Purchase Request</label>
+                    <input class="form-control" type="file" id="purchaseFile1" name="purchaseFile">
+                </div>
+                <div class="mb-3">
+                    <label for="quotationsFile1" class="form-label">Quotations</label>
+                    <input class="form-control" type="file" id="quotationsFile1" name="quotationsFile">
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-success" id="saveBtn1">Save</button>
         </div>
     </div>
 </div>
@@ -485,54 +484,33 @@
             </div>
             <div class="modal-body">
                 <form id="requirementsForm5" enctype="multipart/form-data">
-
-                    <!-- Section 1: Upload Combined Document (ORS, PO, Abstract, Philgeps Posting, IAR, ICS/PAR, Request for Inspection) -->
-                    <div class="mb-3">
-                        <label for="budgetAllFile5" class="form-label">Upload Combined Document (ORS, PO, Abstract, Philgeps Posting, IAR, ICS/PAR, Request for Inspection)</label>
-                        <input class="form-control" type="file" id="budgetAllFile5" name="budgetAllFile5[]" multiple>
-                    </div>
-
                     <!-- Display Existing Files (Optional if you want to load previously uploaded files here) -->
                     <div class="mb-3">
-                        <label class="form-label">Previously Uploaded Documents (ORS, PO, etc.)</label>
+                        <label class="form-label">Previously Uploaded Documents (ORS, PO, Abstract, Philgeps Posting, IAR, ICS/PAR, Request for Inspection)</label>
                         <div id="budgetAllFilePreview5">
                             <p class="text-muted">Loading files...</p>
                         </div>
                     </div>
 
-                    <!-- Section 2: Upload Combined Document (Attendance, Certificate, Photos, SOA, DR, Distribution List) -->
-                    <div class="mb-3">
-                        <label for="supplyAllFile5" class="form-label">Upload Combined Document (Attendance, Certificate, Photos, SOA, DR, Distribution List)</label>
-                        <input class="form-control" type="file" id="supplyAllFile5" name="supplyAllFile5[]" multiple>
-                    </div>
-
                     <!-- Display Existing Files (Optional) -->
                     <div class="mb-3">
-                        <label class="form-label">Previously Uploaded Documents (Attendance, Certificate, etc.)</label>
+                        <label class="form-label">Previously Uploaded Documents (Attendance, Certificate, Photos, SOA, DR, Distribution List)</label>
                         <div id="supplyAllFilePreview5">
                             <p class="text-muted">Loading files...</p>
                         </div>
                     </div>
 
-                    <!-- Section 3: Upload Combined Document (PR, Quotations, APP/PPMP, SARO, Budget Breakdown, etc.) -->
-                    <div class="mb-3">
-                        <label for="allReqsFile5" class="form-label">Upload Combined Document (PR, Quotations, APP/PPMP, SARO, Budget Breakdown, Distribution List, POI, Market Research)</label>
-                        <input class="form-control" type="file" id="allReqsFile5" name="allReqsFile5[]" multiple>
-                    </div>
-
                     <!-- Display Existing Files (Optional) -->
                     <div class="mb-3">
-                        <label class="form-label">Previously Uploaded Documents (PR, Quotations, etc.)</label>
+                        <label class="form-label">Previously Uploaded Documents (PR, Quotations, APP/PPMP, SARO, Budget Breakdown, Distribution List, POI, Market Research)</label>
                         <div id="allReqsFilePreview5">
                             <p class="text-muted">Loading files...</p>
                         </div>
                     </div>
-
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-success" id="saveBtn5">Save</button>
             </div>
         </div>
     </div>
@@ -546,15 +524,7 @@
             </div>
             <div class="modal-body">
                 <form id="requirementsForm6" enctype="multipart/form-data">
-                    
-                    <!-- Upload DV (Disbursement Voucher) -->
-                    <div class="mb-3">
-                        <label for="dvFile" class="form-label">Upload DV (Disbursement Voucher)</label>
-                        <input class="form-control" type="file" id="dvFile" name="dvFile">
-                    </div>
-
                     <!-- Display Existing Files (These are from previous steps, just display, no re-upload) -->
-
                     <!-- Section: ORS, PO, Abstract, etc. -->
                     <div class="mb-3">
                         <label class="form-label">Uploaded Documents (ORS, PO, Abstract, Philgeps Posting, IAR, ICS/PAR, Request for Inspection)</label>
@@ -582,7 +552,6 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-success" id="saveBtn6">Save</button>
             </div>
         </div>
     </div>
