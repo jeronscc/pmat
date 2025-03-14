@@ -87,26 +87,47 @@ document.addEventListener('DOMContentLoaded', function () {
             const fileLinkContainer = document.getElementById(`${file.requirement_name}${modalNumber}Link`);
             if (fileInput && fileLinkContainer) {
                 fileInput.style.display = 'none'; // Hide the file input
+    
+                // Create the file link
                 const fileLink = document.createElement('a');
                 fileLink.href = `/${file.file_path}`;
-                fileLink.textContent = "";
+                
+                // Get the file size (assuming it's in bytes)
+                const fileSize = file.size;  // Ensure the 'size' is included in your file response data
+                
+                // Format the file size to KB or MB
+                let formattedFileSize = '';
+                if (fileSize < 1024) {
+                    formattedFileSize = `${fileSize} bytes`;
+                } else if (fileSize < 1048576) {
+                    formattedFileSize = `${(fileSize / 1024).toFixed(2)} KB`;
+                } else {
+                    formattedFileSize = `${(fileSize / 1048576).toFixed(2)} MB`;
+                }
+    
+                // Set the link text content (including requirement name and file size)
+                fileLink.textContent = `${file.requirement_name} (${formattedFileSize})`;
                 fileLink.target = '_blank';
-                fileLinkContainer.innerHTML = ''; // Clear existing content
+    
+                // Clear existing content and append the new file link
+                fileLinkContainer.innerHTML = ''; 
                 fileLinkContainer.appendChild(fileLink);
-
+    
                 // Show the uploaded file link in other modals that need it
                 modals.forEach(otherModalNumber => {
                     if (otherModalNumber !== modalNumber) {
                         const otherFileLinkContainer = document.getElementById(`${file.requirement_name}${otherModalNumber}Link`);
                         if (otherFileLinkContainer) {
-                            otherFileLinkContainer.innerHTML = ''; // Clear existing content
-                            otherFileLinkContainer.appendChild(fileLink.cloneNode(true));
+                            otherFileLinkContainer.style.display = 'block';  // Ensure it's visible
+                            otherFileLinkContainer.innerHTML = '';  // Clear existing content
+                            otherFileLinkContainer.appendChild(fileLink.cloneNode(true)); // Append the link in other modal
                         }
                     }
                 });
             }
         });
     }
+    
 
     // Fetch uploaded files when the page loads
     const procurementId = document.getElementById('procurementId')?.value;
