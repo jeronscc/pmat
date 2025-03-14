@@ -364,7 +364,7 @@ function openProcurementModal(item) {
 
                 if (category === 'honoraria') {
                     activityLabel.textContent = 'Speaker:';
-                } else if (category === 'other expense') {
+                } else if (category === 'daily travel expense') {
                     activityLabel.textContent = 'Traveller:';
                 } else {
                     activityLabel.textContent = 'Activity:';
