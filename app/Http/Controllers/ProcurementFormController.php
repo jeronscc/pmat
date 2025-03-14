@@ -155,14 +155,6 @@ class ProcurementFormController extends Controller
                             ->where('procurement_id', $validatedData['procurement_id'])
                             ->first();
 
-                // If a matching saro_no is found and budget_spent is provided, perform the deduction.
-                if ($record && isset($record->saro_no) && $validatedData['budget_spent']) {
-                    DB::connection('ilcdb')->table('saro')
-                        ->where('saro_no', $record->saro_no)
-                        ->update([
-                            'current_budget' => DB::raw("current_budget - " . floatval($validatedData['budget_spent']))
-                        ]);
-                }
             });
 
             return response()->json([
