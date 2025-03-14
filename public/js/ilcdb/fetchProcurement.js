@@ -357,6 +357,19 @@ function openProcurementModal(item) {
                 document.getElementById('modalDescription').textContent = data.description || 'N/A';
                 document.getElementById('modalActivity').textContent = data.activity || 'N/A';
 
+                // Change the label for "Activity" based on the procurement category
+                const activityLabel = document.getElementById('modalActivityLabel');
+                const category = data.procurement_category.toLowerCase();
+                console.log("Procurement category:", category); // Debugging log
+
+                if (category === 'honoraria') {
+                    activityLabel.textContent = 'Speaker:';
+                } else if (category === 'other expense') {
+                    activityLabel.textContent = 'Traveller:';
+                } else {
+                    activityLabel.textContent = 'Activity:';
+                }
+
                 // Initialize Bootstrap modal only once
                 if (!bootstrapModalInstance) {
                     bootstrapModalInstance = new bootstrap.Modal(modal);
