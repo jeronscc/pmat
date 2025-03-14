@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
+
 class ProcurementController extends Controller
 {
     public function addProcurement(Request $request)
@@ -18,6 +19,7 @@ class ProcurementController extends Controller
                 'pr_year'      => 'required',
                 'activity'     => 'required',
                 'description'  => 'required',
+                'pr_amount'    => 'required|numeric', // Add validation for pr_amount
             ]);
 
             // Save the procurement data to the database
@@ -28,6 +30,7 @@ class ProcurementController extends Controller
                 'year'                 => $request->input('pr_year'),
                 'activity'             => $request->input('activity'),
                 'description'          => $request->input('description'),
+                'pr_amount'            => $request->input('pr_amount'), // Add pr_amount to the database
             ]);
 
             // Determine which table to insert into based on the category
@@ -182,8 +185,6 @@ class ProcurementController extends Controller
     
         return response()->json($overdueProcurements);
     }
-    
-    
 }
 
 
