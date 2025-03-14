@@ -279,51 +279,52 @@
 
     <!-- Modals -->
     <div class="modal fade" id="requirementsModal1" tabindex="-1" aria-labelledby="modalTitle1" aria-hidden="true">
-<div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-        <div class="modal-header bg-dark text-white">
-            <h5 class="modal-title" id="modalTitle1">UPLOAD REQUIREMENTS</h5>
-        </div>
-        <div class="modal-body">
-            <form id="requirementsForm1" enctype="multipart/form-data">
-                @csrf
-                <div class="mb-3">
-                    <label for="appFile1" class="form-label">APP / PPMP</label>
-                    <input class="form-control" type="file" id="appFile1" name="appFile">
-                </div>
-                <div class="mb-3">
-                    <label for="saroFile1" class="form-label">SARO</label>
-                    <input class="form-control" type="file" id="saroFile1" name="saroFile">
-                </div>
-                <div class="mb-3">
-                    <label for="budgetFile1" class="form-label">Budget Breakdown</label>
-                    <input class="form-control" type="file" id="budgetFile1" name="budgetFile">
-                </div>
-                <div class="mb-3">
-                    <label for="distributionFile1" class="form-label">Distribution List</label>
-                    <input class="form-control" type="file" id="distributionFile1" name="distributionFile">
-                </div>
-                <div class="mb-3">
-                    <label for="poiFile1" class="form-label">POI / Activity Design</label>
-                    <input class="form-control" type="file" id="poiFile1" name="poiFile">
-                </div>
-                <div class="mb-3">
-                    <label for="researchFile1" class="form-label">Market Research</label>
-                    <input class="form-control" type="file" id="researchFile1" name="researchFile">
-                </div>
-                <div class="mb-3">
-                    <label for="purchaseFile1" class="form-label">Purchase Request</label>
-                    <input class="form-control" type="file" id="purchaseFile1" name="purchaseFile">
-                </div>
-                <div class="mb-3">
-                    <label for="quotationsFile1" class="form-label">Quotations</label>
-                    <input class="form-control" type="file" id="quotationsFile1" name="quotationsFile">
-                </div>
-            </form>
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
-            <button type="button" class="btn btn-success" id="saveBtn1">Save</button>
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-dark text-white">
+                <h5 class="modal-title" id="modalTitle1">UPLOAD REQUIREMENTS</h5>
+            </div>
+            <div class="modal-body">
+                <form id="requirementsForm1" enctype="multipart/form-data">
+                    @csrf
+                    <div class="mb-3">
+                        <label for="appFile1" class="form-label">APP / PPMP</label>
+                        <input class="form-control" type="file" id="appFile1" name="appFile">
+                    </div>
+                    <div class="mb-3">
+                        <label for="saroFile1" class="form-label">SARO</label>
+                        <input class="form-control" type="file" id="saroFile1" name="saroFile">
+                    </div>
+                    <div class="mb-3">
+                        <label for="budgetFile1" class="form-label">Budget Breakdown</label>
+                        <input class="form-control" type="file" id="budgetFile1" name="budgetFile">
+                    </div>
+                    <div class="mb-3">
+                        <label for="distributionFile1" class="form-label">Distribution List</label>
+                        <input class="form-control" type="file" id="distributionFile1" name="distributionFile">
+                    </div>
+                    <div class="mb-3">
+                        <label for="poiFile1" class="form-label">POI / Activity Design</label>
+                        <input class="form-control" type="file" id="poiFile1" name="poiFile">
+                    </div>
+                    <div class="mb-3">
+                        <label for="researchFile1" class="form-label">Market Research</label>
+                        <input class="form-control" type="file" id="researchFile1" name="researchFile">
+                    </div>
+                    <div class="mb-3">
+                        <label for="purchaseFile1" class="form-label">Purchase Request</label>
+                        <input class="form-control" type="file" id="purchaseFile1" name="purchaseFile">
+                    </div>
+                    <div class="mb-3">
+                        <label for="quotationsFile1" class="form-label">Quotations</label>
+                        <input class="form-control" type="file" id="quotationsFile1" name="quotationsFile">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-success" id="saveBtn1">Save</button>
+            </div>
         </div>
     </div>
 </div>
@@ -339,14 +340,14 @@
                     @csrf
                     <!-- Upload for Purchase Order -->
                     <div class="mb-3">
-                        <label for="poFile1" class="form-label">Purchase Order</label>
-                        <input class="form-control" type="file" id="poFile1" name="poFile">
+                        <label for="poFile2" class="form-label">Purchase Order</label>
+                        <input class="form-control" type="file" id="poFile2" name="poFile">
                     </div>
 
                     <!-- Upload for Abstract/Philgeps posting -->
                     <div class="mb-3">
-                        <label for="absFile1" class="form-label">Abstract / Philgeps Posting*</label>
-                        <input class="form-control" type="file" id="absFile1" name="absFile">
+                        <label for="absFile2" class="form-label">Abstract / Philgeps Posting*</label>
+                        <input class="form-control" type="file" id="absFile2" name="absFile">
                     </div>
 
                     <!-- Optional: Other files (already submitted files - you can show a note here) -->
@@ -385,8 +386,8 @@
                     @csrf
                     <!-- ORS Upload -->
                     <div class="mb-3">
-                        <label for="orsFile" class="form-label">ORS (Obligation Request and Status)</label>
-                        <input class="form-control" type="file" id="orsFile" name="orsFile">
+                        <label for="orsFile3" class="form-label">ORS (Obligation Request and Status)</label>
+                        <input class="form-control" type="file" id="orsFile3" name="orsFile">
                     </div>
 
                     <!-- Purchase Order Upload -->
@@ -437,38 +438,38 @@
                     @csrf
                     <!-- Attendance Upload -->
                     <div class="mb-3">
-                        <label for="attendanceFile" class="form-label">Attendance Sheet</label>
-                        <input class="form-control" type="file" id="attendanceFile" name="attendanceFile">
+                        <label for="attendanceFile4" class="form-label">Attendance Sheet</label>
+                        <input class="form-control" type="file" id="attendanceFile4" name="attendanceFile">
                     </div>
 
                     <!-- Certificate of Completion Upload -->
                     <div class="mb-3">
-                        <label for="cocFile" class="form-label">Certificate of Completion/Satisfaction for Supplier</label>
-                        <input class="form-control" type="file" id="cocFile" name="cocFile">
+                        <label for="cocFile4" class="form-label">Certificate of Completion/Satisfaction for Supplier</label>
+                        <input class="form-control" type="file" id="cocFile4" name="cocFile">
                     </div>
 
                     <!-- Photo Upload -->
                     <div class="mb-3">
-                        <label for="photoFile" class="form-label">Photo</label>
-                        <input class="form-control" type="file" id="photoFile" name="photoFile">
+                        <label for="photoFile4" class="form-label">Photo</label>
+                        <input class="form-control" type="file" id="photoFile4" name="photoFile">
                     </div>
 
                     <!-- SOA/Billing Statement Upload -->
                     <div class="mb-3">
-                        <label for="soaFile" class="form-label">SOA / Billing Statement</label>
-                        <input class="form-control" type="file" id="soaFile" name="soaFile">
+                        <label for="soaFile4" class="form-label">SOA / Billing Statement</label>
+                        <input class="form-control" type="file" id="soaFile4" name="soaFile">
                     </div>
 
                     <!-- Delivery Receipt Upload -->
                     <div class="mb-3">
-                        <label for="drFile" class="form-label">Delivery Receipt</label>
-                        <input class="form-control" type="file" id="drFile" name="drFile">
+                        <label for="drFile4" class="form-label">Delivery Receipt</label>
+                        <input class="form-control" type="file" id="drFile4" name="drFile">
                     </div>
 
                     <!-- Distribution List Upload -->
                     <div class="mb-3">
-                        <label for="dlFile" class="form-label">Distribution List (Receiving Copy)</label>
-                        <input class="form-control" type="file" id="dlFile" name="dlFile">
+                        <label for="dlFile4" class="form-label">Distribution List (Receiving Copy)</label>
+                        <input class="form-control" type="file" id="dlFile4" name="dlFile">
                     </div>
                 </form>
             </div>
