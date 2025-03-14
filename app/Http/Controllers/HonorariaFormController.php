@@ -79,20 +79,28 @@ class HonorariaFormController extends Controller
 
             Log::info("Calculated Status: " . $status);
 
-            DB::connection('ilcdb')->transaction(function () use ($validatedData, $status, $unit) {
+            DB::connection('ilcdb')->transaction(function () use ($validatedData, $unit, $status) {
                 DB::connection('ilcdb')->table('honoraria_form')
                     ->where('procurement_id', $validatedData['procurement_id'])
                     ->update([
-                        'dt_submitted' => $validatedData['dt_submitted']
-                            ? Carbon::parse($validatedData['dt_submitted'])->format('Y-m-d H:i:s')
-                            : null,
-                        'dt_received'  => $validatedData['dt_received']
-                            ? Carbon::parse($validatedData['dt_received'])->format('Y-m-d H:i:s')
-                            : null,
+                        'dt_submitted' => $validatedData['dt_submitted'] ? Carbon::parse($validatedData['dt_submitted'])->format('Y-m-d H:i:s') : null,
+                        'dt_received'  => $validatedData['dt_received'] ? Carbon::parse($validatedData['dt_received'])->format('Y-m-d H:i:s') : null,
                         'budget_spent' => $validatedData['budget_spent'] ?? null,
-                        'status'       => $status,
                         'unit'         => $unit,
+                        'status'       => $status,
                     ]);
+
+                $record = DB::connection('ilcdb')->table('honoraria_form')
+                            ->where('procurement_id', $validatedData['procurement_id'])
+                            ->first();
+
+                if ($record && isset($record->saro_no) && $validatedData['budget_spent']) {
+                    DB::connection('ilcdb')->table('saro')
+                        ->where('saro_no', $record->saro_no)
+                        ->update([
+                            'current_budget' => DB::raw("current_budget - " . floatval($validatedData['budget_spent']))
+                        ]);
+                }
             });
 
             return response()->json([
