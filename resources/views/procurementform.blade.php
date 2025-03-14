@@ -295,7 +295,7 @@
                     <div class="mb-3">
                         <label for="appFile1" class="form-label">APP / PPMP</label>
                         <input class="form-control" type="file" id="appFile1" name="appFile">
-                        <div id="appFile1Link"></div>
+                        <div id="appFile1Link">APP/PPMP</div>
                     </div>
                     <div class="mb-3">
                         <label for="saroFile1" class="form-label">SARO</label>
