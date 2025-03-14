@@ -378,7 +378,10 @@
                             <li id="poiActivityDesign1">POI / Activity Design</li>
                             <li id="marketResearch1">Market Research</li>
                         </ul>
-                        <small class="text-muted">These were already submitted earlier and are listed here for reference.</small>
+                    </div>
+                    <div class="mb-3">
+                        <label for="appFile2" class="form-label">APP/PPMP</label>
+                        <div id="appFile2Link"></div>
                     </div>
                 </form>
             </div>
