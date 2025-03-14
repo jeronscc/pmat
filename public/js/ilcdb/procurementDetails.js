@@ -24,17 +24,4 @@ document.addEventListener('DOMContentLoaded', function () {
         procurementDetailsModal.show();
     }
 
-    // Example usage: Open the modal with procurement details
-    // This should be replaced with actual data fetching and event handling
-    const exampleProcurement = {
-        category: 'Honoraria',
-        procurement_no: 'PROC-2025-12345',
-        saro_no: 'SARO-2025-67890',
-        year: '2025',
-        description: 'Training for new employees',
-        activity: 'John Doe'
-    };
-
-    // Open the modal with example procurement details
-    openProcurementDetailsModal(exampleProcurement);
 });
