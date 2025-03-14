@@ -157,7 +157,7 @@ class OtherExpenseFormController extends Controller
             foreach ($requiredFiles as $file) {
                 if ($request->hasFile($file)) {
                     $validated = $request->validate([
-                        $file => 'file|max:5120|mimes:pdf,doc,docx,jpg,png'
+                        $file => 'file|max:5120|mimes:pdf'
                     ]);
     
                     $uploadDir = public_path("uploads/requirements/{$request->procurement_id}");

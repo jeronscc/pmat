@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function () {
         files.forEach(file => {
             const fileLink = document.createElement('a');
             fileLink.href = `/${file.file_path}`; // File link path
-            fileLink.textContent = `View ${file.requirement_name} File`; // File name as text
+            fileLink.textContent = `View ${file.requirement_name} File (${(file.size / 1024).toFixed(2)} KB)`; // File name and size as text
             fileLink.target = '_blank'; // Open in new tab
 
             const listItem = document.createElement('li');
@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             // Insert the link directly below the file name in the modal
-            const fileSection = document.getElementById(`${file.requirement_name}File`);
+            const fileSection = document.getElementById(`${file.requirement_name}Section`);
             if (fileSection) {
                 const uploadedFileList = fileSection.querySelector('.uploaded-files-list');
                 if (!uploadedFileList) {
