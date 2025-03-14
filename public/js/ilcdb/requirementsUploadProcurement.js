@@ -83,7 +83,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Function to display uploaded files
     function displayUploadedFiles(files, modalNumber) {
         files.forEach(file => {
-            // Select the input and link container based on the requirement name and modal number
+            // Get the input and link container based on the requirement name and modal number
             const fileInput = document.getElementById(`${file.requirement_name}${modalNumber}`);
             const fileLinkContainer = document.getElementById(`${file.requirement_name}${modalNumber}Link`);
     
@@ -91,15 +91,23 @@ document.addEventListener('DOMContentLoaded', function () {
                 // Hide the file input after upload
                 fileInput.style.display = 'none';
     
-                // Create a new file link element
+                // Create the file link element
                 const fileLink = document.createElement('a');
                 fileLink.href = `/${file.file_path}`; // Path to the uploaded file
-                fileLink.textContent = file.requirement_name;
+                fileLink.textContent = file.requirement_name; // Set the link text to the requirement name
                 fileLink.target = '_blank'; // Open the link in a new tab
     
-                // Clear any existing content in the container
+                // Clear existing content in the container and append the link
                 fileLinkContainer.innerHTML = '';
                 fileLinkContainer.appendChild(fileLink);
+    
+                // Insert the link in the corresponding list item in the <ul>
+                const listItem = document.getElementById(`${file.requirement_name}${modalNumber}`);
+                if (listItem) {
+                    const linkContainer = document.createElement('div');
+                    linkContainer.appendChild(fileLink);
+                    listItem.appendChild(linkContainer);
+                }
     
                 // Loop through all modals and show the uploaded file link in each one
                 modals.forEach(otherModalNumber => {
@@ -110,7 +118,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         if (otherFileLinkContainer) {
                             // Clear existing content and add the new link
                             otherFileLinkContainer.innerHTML = '';
-                            otherFileLinkContainer.appendChild(fileLink.cloneNode(true)); // Clone to avoid reference issues
+                            otherFileLinkContainer.appendChild(fileLink.cloneNode(true)); // Clone the link to avoid reference issues
                         }
                     }
                 });
