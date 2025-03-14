@@ -89,7 +89,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 fileInput.style.display = 'none'; // Hide the file input
                 const fileLink = document.createElement('a');
                 fileLink.href = `/${file.file_path}`;
-                fileLink.textContent = fileLink.textContent;
+                fileLink.textContent = "";
                 fileLink.target = '_blank';
                 fileLinkContainer.innerHTML = ''; // Clear existing content
                 fileLinkContainer.appendChild(fileLink);
