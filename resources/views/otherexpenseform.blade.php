@@ -175,48 +175,49 @@
                         <div class="mb-3">
                             <label for="orsFile" class="form-label">Upload ORS</label>
                             <input class="form-control" type="file" id="orsFile" name="orsFile">
+                            <ul class="uploaded-files-list"></ul>
                         </div>
 
                         <!-- DV File Upload -->
                         <div class="mb-3">
                             <label for="dvFile" class="form-label">Upload DV</label>
                             <input class="form-control" type="file" id="dvFile" name="dvFile">
+                            <ul class="uploaded-files-list"></ul>
                         </div>
 
                         <!-- Travel Order Upload -->
                         <div class="mb-3">
                             <label for="travelOrderFile" class="form-label">Upload Travel Order</label>
                             <input class="form-control" type="file" id="travelOrderFile" name="travelOrderFile">
+                            <ul class="uploaded-files-list"></ul>
                         </div>
 
                         <!-- Certificate of Appearance Upload -->
                         <div class="mb-3">
                             <label for="appearanceFile" class="form-label">Upload Certificate of Appearance</label>
                             <input class="form-control" type="file" id="appearanceFile" name="appearanceFile">
+                            <ul class="uploaded-files-list"></ul>
                         </div>
 
                         <!-- Official Travel Report Upload -->
                         <div class="mb-3">
                             <label for="reportFile" class="form-label">Upload Official Travel Report</label>
                             <input class="form-control" type="file" id="reportFile" name="reportFile">
+                            <ul class="uploaded-files-list"></ul>
                         </div>
 
                         <!-- Itinerary of Travel Upload -->
                         <div class="mb-3">
                             <label for="itineraryFile" class="form-label">Upload Itinerary of Travel</label>
                             <input class="form-control" type="file" id="itineraryFile" name="itineraryFile">
+                            <ul class="uploaded-files-list"></ul>
                         </div>
 
                         <!-- Certificate of Travel Completion Upload -->
                         <div class="mb-3">
                             <label for="certFile" class="form-label">Upload Certificate of Travel Completion</label>
                             <input class="form-control" type="file" id="certFile" name="certFile">
-                        </div>
-
-                        <!-- Container to display uploaded files -->
-                        <div class="mb-3">
-                            <label class="form-label">Uploaded Files</label>
-                            <ul id="uploadedFilesListOtherExpense"></ul>
+                            <ul class="uploaded-files-list"></ul>
                         </div>
                     </form>
                 </div>
