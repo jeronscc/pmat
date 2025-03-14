@@ -164,3 +164,5 @@ Route::get('/overdue-procurements', [ProcurementController::class, 'getOverduePr
 Route::get('/requirements/{procurement_id}', [HonorariaFormController::class, 'getUploadedFiles']);
 Route::post('/otherexpense/upload', [OtherExpenseFormController::class, 'upload'])->name('otherexpense.upload');
 Route::get('/otherexpense/requirements/{procurement_id}', [OtherExpenseFormController::class, 'getUploadedFiles']);
+Route::post('/procurement/upload', [ProcurementFormController::class, 'upload'])->name('procurement.upload');
+Route::get('/procurement/requirements/{procurement_id}', [ProcurementFormController::class, 'getUploadedFiles']);

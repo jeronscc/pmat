@@ -32,7 +32,6 @@ class ProcurementFormController extends Controller
     ]);
 }
 
-    
     public function update(Request $request)
     {
         $validatedData = $request->validate([
@@ -176,8 +175,106 @@ class ProcurementFormController extends Controller
             return response()->json(['message' => 'An error occurred while updating the form.'], 500);
         }
     }
-    
 
-}       
+    public function upload(Request $request)
+    {
+        try {
+            // Validate procurement_id first
+            if (!$request->filled('procurement_id')) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Error: Procurement ID is missing.',
+                ], 400);
+            }
+
+            // Define required files for modals 1 to 4
+            $requiredFiles = [
+                'appFile', 'saroFile', 'budgetFile', 'distributionFile', 'poiFile', 'researchFile', 'purchaseFile', 'quotationsFile',
+                'poFile', 'absFile', 'orsFile', 'attendanceFile', 'cocFile', 'photoFile', 'soaFile', 'drFile', 'dlFile', 'dvFile'
+            ];
+
+            $uploads = [];
+            $missingFiles = [];
+
+            // Check if files are uploaded
+            foreach ($requiredFiles as $file) {
+                if ($request->hasFile($file)) {
+                    $validated = $request->validate([
+                        $file => 'file|max:5120|mimes:pdf'
+                    ]);
+
+                    $uploadDir = public_path("uploads/requirements/{$request->procurement_id}");
+                    if (!file_exists($uploadDir)) {
+                        mkdir($uploadDir, 0777, true);
+                    }
+
+                    $fileName = time() . '_' . $request->file($file)->getClientOriginalName();
+                    $filePath = "uploads/requirements/{$request->procurement_id}/" . $fileName;
+                    $request->file($file)->move($uploadDir, $fileName);
+
+                    // Delete existing file entry if it exists
+                    DB::connection('ilcdb')->table('requirements')
+                        ->where('procurement_id', $request->procurement_id)
+                        ->where('requirement_name', $file)
+                        ->delete();
+
+                    // Store file path in the ilcdb database requirements table
+                    DB::connection('ilcdb')->table('requirements')->insert([
+                        'procurement_id'    => $request->procurement_id,
+                        'requirement_name'  => $file,
+                        'file_path'         => $filePath,
+                    ]);
+
+                    $uploads[] = $file;
+                } else {
+                    $missingFiles[] = $file;
+                }
+            }
+
+            // If no files were uploaded, return an error
+            if (empty($uploads)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No files uploaded. Missing: ' . implode(', ', $missingFiles),
+                ], 400);
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Files uploaded successfully: ' . implode(', ', $uploads),
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('File upload failed: ' . $e->getMessage());
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Server error: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function getUploadedFiles($procurement_id)
+    {
+        try {
+            $files = DB::connection('ilcdb')->table('requirements')
+                ->where('procurement_id', $procurement_id)
+                ->get();
+
+            return response()->json([
+                'success' => true,
+                'files' => $files,
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Failed to fetch uploaded files: ' . $e->getMessage());
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Server error: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+}
 
 
