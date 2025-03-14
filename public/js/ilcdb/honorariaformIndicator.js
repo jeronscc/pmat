@@ -1,26 +1,23 @@
 document.addEventListener('DOMContentLoaded', function () {
     initializeStatusTracking();
-    toggleBudgetSpent();  // Initial check on page load to lock/unlock budget spent
-    checkCompletionAndLock(); // Check and lock on initial load
+    toggleBudgetSpent();  // Initial check to lock/unlock budgetSpent
+    checkAndLockFields(); // Initial lock check on page load
 
-    const honorariaUpdateUrl = "/api/honoraria/update";  // Use the API route for procurement update
+    const honorariaUpdateUrl = "/api/honoraria/update";  // Use the correct API route
 
     document.getElementById('saveChanges').addEventListener('click', function (e) {
         e.preventDefault();
 
-        const dateSubmitted = document.getElementById('dateSubmitted').value;
-        const dateReturned = document.getElementById('dateReturned').value;
+        const form = document.getElementById('honorariaForm');
+        const formData = new FormData(form);
 
-        // Check if date fields are empty
+        const dateSubmitted = document.getElementById('dateSubmitted').value;
+
+        // Validate required fields
         if (!dateSubmitted) {
-            alert('Error: Both Date Submitted filled.');
+            alert('Error: Date Submitted must be filled.');
             return;
         }
-
-        let formData = new FormData(document.getElementById('honorariaForm'));
-        let activeStage = (dateSubmitted && dateReturned) ? 1 : 0;
-
-        formData.append('activeStage', activeStage);
 
         fetch(honorariaUpdateUrl, {
             method: 'POST',
@@ -31,9 +28,13 @@ document.addEventListener('DOMContentLoaded', function () {
         })
         .then(response => response.json())
         .then(data => {
-            alert(data.message);
-            disableSaveButton();  // Disable the save button after success
-            location.reload();  // Refresh to reflect changes
+            if (data.success) {
+                alert(data.message);
+                disableSaveButton();  // Disable the save button after success
+                location.reload();  // Refresh to reflect changes
+            } else {
+                alert('Error: ' + data.message);
+            }
         })
         .catch(error => {
             console.error('Error saving data:', error);
@@ -72,13 +73,13 @@ document.addEventListener('DOMContentLoaded', function () {
         dateSubmitted.addEventListener("change", function () {
             updateIndicator(dateSubmitted, dateReturned, indicator);
             toggleBudgetSpent();
-            checkCompletionAndLock();
+            checkAndLockFields();  // Check and lock after date change
         });
 
         dateReturned.addEventListener("change", function () {
             updateIndicator(dateSubmitted, dateReturned, indicator);
             toggleBudgetSpent();
-            checkCompletionAndLock();
+            checkAndLockFields();  // Check and lock after date change
         });
     }
 
@@ -94,8 +95,8 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // Lock fields if form is completed
-    function checkCompletionAndLock() {
+    // Check if the form is completed and lock all fields if needed
+    function checkAndLockFields() {
         const dateSubmitted = document.getElementById('dateSubmitted').value;
         const dateReturned = document.getElementById('dateReturned').value;
         const budgetSpent = document.getElementById('budgetSpent').value;
@@ -109,6 +110,10 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('dateSubmitted').setAttribute('readonly', 'true');
         document.getElementById('dateReturned').setAttribute('readonly', 'true');
         document.getElementById('budgetSpent').setAttribute('readonly', 'true');
+
+        // Optionally disable the save button
+        const saveButton = document.getElementById('saveChanges');
+        if (saveButton) saveButton.setAttribute('disabled', 'true');
     }
 
     // Disable the save button after data is saved
@@ -119,6 +124,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // Initial check on load
-    checkCompletionAndLock();
+    // Initial lock check when page loads
+    checkAndLockFields();
 });
