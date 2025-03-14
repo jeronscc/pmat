@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const category = procurement.category.toLowerCase();
         console.log("Procurement category:", category); // Debugging log
 
-        if (category === 'honoraria') {
+        if (category === 'Honoraria') {
             activityLabel.textContent = 'Speaker:';
         } else if (category === 'other expense') {
             activityLabel.textContent = 'Traveller:';
