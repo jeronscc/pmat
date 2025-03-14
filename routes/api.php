@@ -137,17 +137,46 @@ Route::get('/search-procurement-ilcdb', function (Request $request) {
         return response()->json([], 400); // Return an empty array if no query provided
     }
 
-    // Perform the search using the provided query parameter
-    $procurements = DB::connection('ilcdb')
-        ->table('procurement')  // Start from procurement table
-        ->join('procurement_form', 'procurement.procurement_id', '=', 'procurement_form.procurement_id')  // Join procurement_form table on procurement_id
-        ->select('procurement.procurement_id', 'procurement.activity', 'procurement_form.status', 'procurement_form.unit')  // Select columns from both tables
-        ->where('procurement.procurement_id', 'like', "%{$query}%")  // Search in procurement_id
-        ->orWhere('procurement.activity', 'like', "%{$query}%")  // Search in activity
-        ->orderBy('procurement.procurement_id', 'desc')  // Order by procurement_id
-        ->get();  // Get the result
+    try {
+        // Perform the search using the provided query parameter
+        $procurements = DB::connection('ilcdb')
+            ->table('procurement')
+            ->select('procurement_id', 'activity')
+            ->where('procurement_id', 'like', "%{$query}%")
+            ->orWhere('activity', 'like', "%{$query}%")
+            ->orderBy('procurement_id', 'desc')
+            ->get();
 
-    return response()->json($procurements);  // Return the results as JSON
+        // Fetch procurement form data (status, unit) for regular procurement
+        $procurementForms = DB::connection('ilcdb')->table('procurement_form')->get();
+
+        // Fetch honoraria form data (status, unit) for honoraria category procurements
+        $honorariaForms = DB::connection('ilcdb')->table('honoraria_form')->get();
+
+        // Fetch other expense form data (status, unit) for other expense category procurements
+        $otherexpenseForms = DB::connection('ilcdb')->table('otherexpense_form')->get();
+
+        // Merge procurement data with form data
+        $mergedData = $procurements->map(function ($procurement) use ($procurementForms, $honorariaForms, $otherexpenseForms) {
+            // Try fetching the corresponding form for honoraria, procurement, or other expense
+            $form = $honorariaForms->firstWhere('procurement_id', $procurement->procurement_id) ??
+                    $procurementForms->firstWhere('procurement_id', $procurement->procurement_id) ??
+                    $otherexpenseForms->firstWhere('procurement_id', $procurement->procurement_id);
+
+            return [
+                'procurement_id' => $procurement->procurement_id,
+                'activity' => $procurement->activity,
+                'status' => $form && !empty($form->status) ? $form->status : 'No Status',
+                'unit' => $form && !empty($form->unit) ? $form->unit : 'No Unit',
+            ];
+        });
+
+        return response()->json($mergedData->values()->all());
+
+    } catch (\Exception $e) {
+        Log::error('Error searching procurement: ' . $e->getMessage());
+        return response()->json(['error' => 'Error searching procurement data: ' . $e->getMessage()], 500);
+    }
 });
 
 // ILCDB POST REQUESTS
