@@ -166,8 +166,8 @@ Route::get('/search-procurement-ilcdb', function (Request $request) {
             return [
                 'procurement_id' => $procurement->procurement_id,
                 'activity' => $procurement->activity,
-                'status' => $form && !empty($form->status) ? $form->status : 'No Status',
-                'unit' => $form && !empty($form->unit) ? $form->unit : 'No Unit',
+                'status' => $form && !empty($form->status) ? $form->status : '',
+                'unit' => $form && !empty($form->unit) ? $form->unit : '',
             ];
         });
 
