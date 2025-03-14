@@ -24,4 +24,18 @@ document.addEventListener('DOMContentLoaded', function () {
         procurementDetailsModal.show();
     }
 
+    // Event listener for opening the modal with actual data
+    document.querySelectorAll('.open-procurement-details').forEach(button => {
+        button.addEventListener('click', function () {
+            const procurementId = this.getAttribute('data-procurement-id');
+            fetch(`/api/procurement/${procurementId}`)
+                .then(response => response.json())
+                .then(data => {
+                    openProcurementDetailsModal(data);
+                })
+                .catch(error => {
+                    console.error('Error fetching procurement details:', error);
+                });
+        });
+    });
 });
