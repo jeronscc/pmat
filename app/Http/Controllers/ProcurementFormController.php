@@ -190,7 +190,7 @@ class ProcurementFormController extends Controller
             // Define required files for modals 1 to 4
             $requiredFiles = [
                 'appFile', 'saroFile', 'budgetFile', 'distributionFile', 'poiFile', 'researchFile', 'purchaseFile', 'quotationsFile',
-                'poFile', 'absFile', 'orsFile', 'attendanceFile', 'cocFile', 'photoFile', 'soaFile', 'drFile', 'dlFile', 'dvFile'
+                'poFile1', 'poFile2', 'poFile3', 'absFile1', 'absFile2', 'absFile3', 'orsFile', 'attendanceFile', 'cocFile', 'photoFile', 'soaFile', 'drFile', 'dlFile', 'dvFile'
             ];
 
             $uploads = [];
