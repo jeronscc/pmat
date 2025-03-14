@@ -52,12 +52,21 @@ function searchProcurement() {
             return response.json();
         })
         .then(data => {
-            const tableBody = document.getElementById('procurementTable');
-            tableBody.innerHTML = ''; // Clear any existing rows in the table
+            const tableBodies = {
+                all: document.getElementById('procurementTable'),
+                pending: document.getElementById('procurementTablePending'),
+                ongoing: document.getElementById('procurementTableOngoing'),
+                overdue: document.getElementById('procurementTableOverdue'),
+                done: document.getElementById('procurementTableDone')
+            };
+
+            // Clear any existing rows in the tables
+            Object.values(tableBodies).forEach(tableBody => tableBody.innerHTML = '');
 
             if (data.length > 0) {
                 data.forEach(item => {
                     const row = document.createElement('tr');
+                    row.setAttribute('data-procurement-id', item.procurement_id); // Ensure each row has a unique identifier
 
                     // PR NUMBER cell (procurement_id)
                     const prNumberCell = document.createElement('td');
@@ -88,15 +97,22 @@ function searchProcurement() {
                     statusCell.appendChild(badge);
                     row.appendChild(statusCell);
 
-                    tableBody.appendChild(row);
+                    // Append the row to the appropriate table based on the status
+                    tableBodies.all.appendChild(row);
+                    if (statusMessage.toLowerCase() === 'done') tableBodies.done.appendChild(row.cloneNode(true));
+                    else if (statusMessage.toLowerCase() === 'pending') tableBodies.pending.appendChild(row.cloneNode(true));
+                    else if (statusMessage.toLowerCase() === 'ongoing') tableBodies.ongoing.appendChild(row.cloneNode(true));
+                    else if (statusMessage.toLowerCase() === 'overdue') tableBodies.overdue.appendChild(row.cloneNode(true));
                 });
             } else {
-                const emptyMessage = document.createElement('tr');
-                const emptyCell = document.createElement('td');
-                emptyCell.setAttribute('colspan', '3');
-                emptyCell.textContent = 'No procurement records found for the search term.';
-                emptyMessage.appendChild(emptyCell);
-                tableBody.appendChild(emptyMessage);
+                Object.values(tableBodies).forEach(tableBody => {
+                    const emptyMessage = document.createElement('tr');
+                    const emptyCell = document.createElement('td');
+                    emptyCell.setAttribute('colspan', '3');
+                    emptyCell.textContent = 'No procurement records found for the search term.';
+                    emptyMessage.appendChild(emptyCell);
+                    tableBody.appendChild(emptyMessage);
+                });
             }
         })
         .catch(error => {
