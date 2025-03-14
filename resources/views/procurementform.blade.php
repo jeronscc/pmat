@@ -286,6 +286,7 @@
         </div>
         <div class="modal-body">
             <form id="requirementsForm1" enctype="multipart/form-data">
+                @csrf
                 <div class="mb-3">
                     <label for="appFile1" class="form-label">APP / PPMP</label>
                     <input class="form-control" type="file" id="appFile1" name="appFile">
@@ -335,6 +336,7 @@
             </div>
             <div class="modal-body">
                 <form id="requirementsForm2" enctype="multipart/form-data">
+                    @csrf
                     <!-- Upload for Purchase Order -->
                     <div class="mb-3">
                         <label for="poFile1" class="form-label">Purchase Order</label>
@@ -380,6 +382,7 @@
             </div>
             <div class="modal-body">
                 <form id="requirementsForm3" enctype="multipart/form-data">
+                    @csrf
                     <!-- ORS Upload -->
                     <div class="mb-3">
                         <label for="orsFile" class="form-label">ORS (Obligation Request and Status)</label>
@@ -431,6 +434,7 @@
             </div>
             <div class="modal-body">
                 <form id="requirementsForm4" enctype="multipart/form-data">
+                    @csrf
                     <!-- Attendance Upload -->
                     <div class="mb-3">
                         <label for="attendanceFile" class="form-label">Attendance Sheet</label>
@@ -484,6 +488,7 @@
             </div>
             <div class="modal-body">
                 <form id="requirementsForm5" enctype="multipart/form-data">
+                    @csrf
                     <!-- Display Existing Files (Optional if you want to load previously uploaded files here) -->
                     <div class="mb-3">
                         <label class="form-label">Previously Uploaded Documents (ORS, PO, Abstract, Philgeps Posting, IAR, ICS/PAR, Request for Inspection)</label>
@@ -524,6 +529,7 @@
             </div>
             <div class="modal-body">
                 <form id="requirementsForm6" enctype="multipart/form-data">
+                    @csrf
                     <!-- Display Existing Files (These are from previous steps, just display, no re-upload) -->
                     <!-- Section: ORS, PO, Abstract, etc. -->
                     <div class="mb-3">
@@ -564,7 +570,7 @@
     <script src="/js/menu.js"></script>
     <script src="/js/ilcdb/procurementformIndicator.js"></script>
     <script src="/js/ilcdb/addProcurementForm.js"></script>
-
+    <script src="/js/ilcdb/requirementsUploadProcurement.js"></script>
     <script>
 // Get references to the date fields
 const dateReturned1 = document.getElementById('dateReturned1');
