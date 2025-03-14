@@ -85,23 +85,36 @@ document.addEventListener('DOMContentLoaded', function () {
         files.forEach(file => {
             const fileInput = document.getElementById(`${file.requirement_name}${modalNumber}`);
             const fileLinkContainer = document.getElementById(`${file.requirement_name}${modalNumber}Link`);
-            if (fileInput && fileLinkContainer) {
-                fileInput.style.display = 'none'; // Hide the file input
+            const fileLabel = document.getElementById(`${file.requirement_name}${modalNumber}Label`); // Reference to the label
+    
+            if (fileInput && fileLinkContainer && fileLabel) {
+                // Hide the file input once the file is uploaded
+                fileInput.style.display = 'none'; 
+    
+                // Create the file link
                 const fileLink = document.createElement('a');
-                fileLink.href = `/${file.file_path}`;
-                fileLink.textContent = file.requirement_name;
+                fileLink.href = `/${file.file_path}`; // Path to the uploaded file
+                fileLink.textContent = `View ${file.requirement_name} File`;
                 fileLink.target = '_blank';
-                fileLinkContainer.innerHTML = ''; // Clear existing content
-                fileLinkContainer.appendChild(fileLink);
-
-                otherFileLinkContainer.style.display = 'none';
-                // Show the uploaded file link in other modals that need it
+    
+                // Initially hide the file link container
+                fileLinkContainer.style.display = 'none';
+    
+                // Add a click event to the label
+                fileLabel.addEventListener('click', function () {
+                    // Show the uploaded file link when the label is clicked
+                    fileLinkContainer.style.display = 'block'; // Show the container with the link
+                    fileLinkContainer.innerHTML = ''; // Clear any previous content
+                    fileLinkContainer.appendChild(fileLink); // Append the link to the container
+                });
+    
+                // Now, display the link in the other modals
                 modals.forEach(otherModalNumber => {
                     if (otherModalNumber !== modalNumber) {
                         const otherFileLinkContainer = document.getElementById(`${file.requirement_name}${otherModalNumber}Link`);
                         if (otherFileLinkContainer) {
                             otherFileLinkContainer.style.display = 'block';
-                            otherFileLinkContainer.innerHTML = ''; // Clear existing content
+                            otherFileLinkContainer.innerHTML = ''; // Clear any existing content
                             otherFileLinkContainer.appendChild(fileLink.cloneNode(true));
                         }
                     }
@@ -109,6 +122,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     }
+    
 
     // Fetch uploaded files when the page loads
     const procurementId = document.getElementById('procurementId')?.value;
