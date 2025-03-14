@@ -352,6 +352,7 @@ function openProcurementModal(item) {
                 document.getElementById('modalProcurementCategory').textContent = data.procurement_category || 'N/A';
                 document.getElementById('modalProcurementNo').textContent = data.procurement_id || 'N/A';
                 document.getElementById('modalSaroNo').textContent = data.saro_no || 'N/A';
+                document.getElementById('modalPurchaseRequest').textContent = data.pr_amount || 'N/A';
                 document.getElementById('modalYear').textContent = data.year || 'N/A';
                 document.getElementById('modalDescription').textContent = data.description || 'N/A';
                 document.getElementById('modalActivity').textContent = data.activity || 'N/A';

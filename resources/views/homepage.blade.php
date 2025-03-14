@@ -245,6 +245,7 @@
                 <p><strong>Procurement Category:</strong> <span id="modalProcurementCategory"></span></p>
                 <p><strong>Procurement No:</strong> <span id="modalProcurementNo"></span></p>
                 <p><strong>SARO No:</strong> <span id="modalSaroNo"></span></p>
+                <p><strong>Purchase Request:</strong> <span id="modalPurchaseRequest"></span></p>
                 <p><strong>Year:</strong> <span id="modalYear"></span></p>
                 <p><strong>Description:</strong> <span id="modalDescription"></span></p>
                 <p><strong>Activity:</strong> <span id="modalActivity"></span></p>
