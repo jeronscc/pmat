@@ -278,7 +278,8 @@
     </div>
 
     <!-- Modals -->
-    <div class="modal fade" id="requirementsModal1" tabindex="-1" aria-labelledby="modalTitle1" aria-hidden="true">
+    <!-- Modal 1 -->
+<div class="modal fade" id="requirementsModal1" tabindex="-1" aria-labelledby="modalTitle1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header bg-dark text-white">
@@ -290,34 +291,42 @@
                     <div class="mb-3">
                         <label for="appFile1" class="form-label">APP / PPMP</label>
                         <input class="form-control" type="file" id="appFile1" name="appFile">
+                        <div id="appFile1Link"></div>
                     </div>
                     <div class="mb-3">
                         <label for="saroFile1" class="form-label">SARO</label>
                         <input class="form-control" type="file" id="saroFile1" name="saroFile">
+                        <div id="saroFile1Link"></div>
                     </div>
                     <div class="mb-3">
                         <label for="budgetFile1" class="form-label">Budget Breakdown</label>
                         <input class="form-control" type="file" id="budgetFile1" name="budgetFile">
+                        <div id="budgetFile1Link"></div>
                     </div>
                     <div class="mb-3">
                         <label for="distributionFile1" class="form-label">Distribution List</label>
                         <input class="form-control" type="file" id="distributionFile1" name="distributionFile">
+                        <div id="distributionFile1Link"></div>
                     </div>
                     <div class="mb-3">
                         <label for="poiFile1" class="form-label">POI / Activity Design</label>
                         <input class="form-control" type="file" id="poiFile1" name="poiFile">
+                        <div id="poiFile1Link"></div>
                     </div>
                     <div class="mb-3">
                         <label for="researchFile1" class="form-label">Market Research</label>
                         <input class="form-control" type="file" id="researchFile1" name="researchFile">
+                        <div id="researchFile1Link"></div>
                     </div>
                     <div class="mb-3">
                         <label for="purchaseFile1" class="form-label">Purchase Request</label>
                         <input class="form-control" type="file" id="purchaseFile1" name="purchaseFile">
+                        <div id="purchaseFile1Link"></div>
                     </div>
                     <div class="mb-3">
                         <label for="quotationsFile1" class="form-label">Quotations</label>
                         <input class="form-control" type="file" id="quotationsFile1" name="quotationsFile">
+                        <div id="quotationsFile1Link"></div>
                     </div>
                 </form>
             </div>
@@ -329,6 +338,7 @@
     </div>
 </div>
 
+<!-- Modal 2 -->
 <div class="modal fade" id="requirementsModal2" tabindex="-1" aria-labelledby="modalTitle2" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -338,19 +348,16 @@
             <div class="modal-body">
                 <form id="requirementsForm2" enctype="multipart/form-data">
                     @csrf
-                    <!-- Upload for Purchase Order -->
                     <div class="mb-3">
                         <label for="poFile2" class="form-label">Purchase Order</label>
                         <input class="form-control" type="file" id="poFile2" name="poFile">
+                        <div id="poFile2Link"></div>
                     </div>
-
-                    <!-- Upload for Abstract/Philgeps posting -->
                     <div class="mb-3">
                         <label for="absFile2" class="form-label">Abstract / Philgeps Posting*</label>
                         <input class="form-control" type="file" id="absFile2" name="absFile">
+                        <div id="absFile2Link"></div>
                     </div>
-
-                    <!-- Optional: Other files (already submitted files - you can show a note here) -->
                     <div class="mb-3">
                         <label class="form-label">Previously Submitted Requirements</label>
                         <ul>
@@ -375,6 +382,7 @@
     </div>
 </div>
 
+<!-- Modal 3 -->
 <div class="modal fade" id="requirementsModal3" tabindex="-1" aria-labelledby="modalTitle3" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -384,25 +392,21 @@
             <div class="modal-body">
                 <form id="requirementsForm3" enctype="multipart/form-data">
                     @csrf
-                    <!-- ORS Upload -->
                     <div class="mb-3">
                         <label for="orsFile3" class="form-label">ORS (Obligation Request and Status)</label>
                         <input class="form-control" type="file" id="orsFile3" name="orsFile">
+                        <div id="orsFile3Link"></div>
                     </div>
-
-                    <!-- Purchase Order Upload -->
                     <div class="mb-3">
                         <label for="poFile3" class="form-label">Purchase Order</label>
                         <input class="form-control" type="file" id="poFile3" name="poFile">
+                        <div id="poFile3Link"></div>
                     </div>
-
-                    <!-- Abstract / Philgeps Posting Upload -->
                     <div class="mb-3">
                         <label for="absFile3" class="form-label">Abstract / Philgeps Posting*</label>
                         <input class="form-control" type="file" id="absFile3" name="absFile">
+                        <div id="absFile3Link"></div>
                     </div>
-
-                    <!-- Previously Submitted Files - Listed (No upload, just for reference) -->
                     <div class="mb-3">
                         <label class="form-label">Previously Submitted Requirements (For Reference)</label>
                         <ul>
@@ -427,6 +431,7 @@
     </div>
 </div>
 
+<!-- Modal 4 -->
 <div class="modal fade" id="requirementsModal4" tabindex="-1" aria-labelledby="modalTitle4" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -436,40 +441,35 @@
             <div class="modal-body">
                 <form id="requirementsForm4" enctype="multipart/form-data">
                     @csrf
-                    <!-- Attendance Upload -->
                     <div class="mb-3">
                         <label for="attendanceFile4" class="form-label">Attendance Sheet</label>
                         <input class="form-control" type="file" id="attendanceFile4" name="attendanceFile">
+                        <div id="attendanceFile4Link"></div>
                     </div>
-
-                    <!-- Certificate of Completion Upload -->
                     <div class="mb-3">
                         <label for="cocFile4" class="form-label">Certificate of Completion/Satisfaction for Supplier</label>
                         <input class="form-control" type="file" id="cocFile4" name="cocFile">
+                        <div id="cocFile4Link"></div>
                     </div>
-
-                    <!-- Photo Upload -->
                     <div class="mb-3">
                         <label for="photoFile4" class="form-label">Photo</label>
                         <input class="form-control" type="file" id="photoFile4" name="photoFile">
+                        <div id="photoFile4Link"></div>
                     </div>
-
-                    <!-- SOA/Billing Statement Upload -->
                     <div class="mb-3">
                         <label for="soaFile4" class="form-label">SOA / Billing Statement</label>
                         <input class="form-control" type="file" id="soaFile4" name="soaFile">
+                        <div id="soaFile4Link"></div>
                     </div>
-
-                    <!-- Delivery Receipt Upload -->
                     <div class="mb-3">
                         <label for="drFile4" class="form-label">Delivery Receipt</label>
                         <input class="form-control" type="file" id="drFile4" name="drFile">
+                        <div id="drFile4Link"></div>
                     </div>
-
-                    <!-- Distribution List Upload -->
                     <div class="mb-3">
                         <label for="dlFile4" class="form-label">Distribution List (Receiving Copy)</label>
                         <input class="form-control" type="file" id="dlFile4" name="dlFile">
+                        <div id="dlFile4Link"></div>
                     </div>
                 </form>
             </div>
@@ -481,6 +481,7 @@
     </div>
 </div>
 
+<!-- Modal 5 -->
 <div class="modal fade" id="requirementsModal5" tabindex="-1" aria-labelledby="modalTitle5" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -490,23 +491,18 @@
             <div class="modal-body">
                 <form id="requirementsForm5" enctype="multipart/form-data">
                     @csrf
-                    <!-- Display Existing Files (Optional if you want to load previously uploaded files here) -->
                     <div class="mb-3">
                         <label class="form-label">Previously Uploaded Documents (ORS, PO, Abstract, Philgeps Posting, IAR, ICS/PAR, Request for Inspection)</label>
                         <div id="budgetAllFilePreview5">
                             <p class="text-muted">Loading files...</p>
                         </div>
                     </div>
-
-                    <!-- Display Existing Files (Optional) -->
                     <div class="mb-3">
                         <label class="form-label">Previously Uploaded Documents (Attendance, Certificate, Photos, SOA, DR, Distribution List)</label>
                         <div id="supplyAllFilePreview5">
                             <p class="text-muted">Loading files...</p>
                         </div>
                     </div>
-
-                    <!-- Display Existing Files (Optional) -->
                     <div class="mb-3">
                         <label class="form-label">Previously Uploaded Documents (PR, Quotations, APP/PPMP, SARO, Budget Breakdown, Distribution List, POI, Market Research)</label>
                         <div id="allReqsFilePreview5">
@@ -522,6 +518,7 @@
     </div>
 </div>
 
+<!-- Modal 6 -->
 <div class="modal fade" id="requirementsModal6" tabindex="-1" aria-labelledby="modalTitle6" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -531,24 +528,18 @@
             <div class="modal-body">
                 <form id="requirementsForm6" enctype="multipart/form-data">
                     @csrf
-                    <!-- Display Existing Files (These are from previous steps, just display, no re-upload) -->
-                    <!-- Section: ORS, PO, Abstract, etc. -->
                     <div class="mb-3">
                         <label class="form-label">Uploaded Documents (ORS, PO, Abstract, Philgeps Posting, IAR, ICS/PAR, Request for Inspection)</label>
                         <div id="budgetAllFilePreview6">
                             <p class="text-muted">Loading files...</p>
                         </div>
                     </div>
-
-                    <!-- Section: Attendance, Certificate, Photos, etc. -->
                     <div class="mb-3">
                         <label class="form-label">Uploaded Documents (Attendance, Certificate, Photos, SOA, DR, Distribution List)</label>
                         <div id="supplyAllFilePreview6">
                             <p class="text-muted">Loading files...</p>
                         </div>
                     </div>
-
-                    <!-- Section: Purchase Request, Quotations, etc. -->
                     <div class="mb-3">
                         <label class="form-label">Uploaded Documents (PR, Quotations, APP/PPMP, SARO, Budget Breakdown, etc.)</label>
                         <div id="allReqsFilePreview6">
