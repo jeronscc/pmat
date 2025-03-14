@@ -94,13 +94,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 fileLinkContainer.innerHTML = ''; // Clear existing content
                 fileLinkContainer.appendChild(fileLink);
 
-                otherFileLinkContainer.style.display = 'none';
                 // Show the uploaded file link in other modals that need it
                 modals.forEach(otherModalNumber => {
                     if (otherModalNumber !== modalNumber) {
                         const otherFileLinkContainer = document.getElementById(`${file.requirement_name}${otherModalNumber}Link`);
                         if (otherFileLinkContainer) {
-                            otherFileLinkContainer.style.display = 'block';
                             otherFileLinkContainer.innerHTML = ''; // Clear existing content
                             otherFileLinkContainer.appendChild(fileLink.cloneNode(true));
                         }
