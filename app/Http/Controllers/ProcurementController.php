@@ -19,7 +19,6 @@ class ProcurementController extends Controller
                 'pr_year'      => 'required',
                 'activity'     => 'required',
                 'description'  => 'required',
-                'pr-amount'    => 'required|numeric', // Add validation for pr_amount
             ]);
 
             // Save the procurement data to the database
@@ -30,7 +29,6 @@ class ProcurementController extends Controller
                 'year'                 => $request->input('pr_year'),
                 'activity'             => $request->input('activity'),
                 'description'          => $request->input('description'),
-                'pr-amount'            => $request->input('pr_amount'), // Add pr_amount to the database
             ]);
 
             // Determine which table to insert into based on the category
