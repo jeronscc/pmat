@@ -361,14 +361,16 @@
                     <div class="mb-3">
                         <label class="form-label">Previously Submitted Requirements</label>
                         <ul>
-                            <li>Purchase Request</li>
-                            <li>Quotations</li>
-                            <li>APP / PPMP</li>
-                            <li>SARO</li>
-                            <li>Budget Breakdown</li>
-                            <li>Distribution List</li>
-                            <li>POI / Activity Design</li>
-                            <li>Market Research</li>
+                        <ul>
+                            <li id="purchaseRequest1">Purchase Request</li>
+                            <li id="quotations1">Quotations</li>
+                            <li id="appPPMP1">APP / PPMP</li> <!-- This is where the link will go -->
+                            <li id="saro1">SARO</li>
+                            <li id="budgetBreakdown1">Budget Breakdown</li>
+                            <li id="distributionList1">Distribution List</li>
+                            <li id="poiActivityDesign1">POI / Activity Design</li>
+                            <li id="marketResearch1">Market Research</li>
+                        </ul>
                         </ul>
                         <small class="text-muted">These were already submitted earlier and are listed here for reference.</small>
                     </div>

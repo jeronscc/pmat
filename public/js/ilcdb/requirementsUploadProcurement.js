@@ -83,30 +83,41 @@ document.addEventListener('DOMContentLoaded', function () {
     // Function to display uploaded files
     function displayUploadedFiles(files, modalNumber) {
         files.forEach(file => {
+            // Select the input and link container based on the requirement name and modal number
             const fileInput = document.getElementById(`${file.requirement_name}${modalNumber}`);
             const fileLinkContainer = document.getElementById(`${file.requirement_name}${modalNumber}Link`);
+    
             if (fileInput && fileLinkContainer) {
-                fileInput.style.display = 'none'; // Hide the file input
+                // Hide the file input after upload
+                fileInput.style.display = 'none';
+    
+                // Create a new file link element
                 const fileLink = document.createElement('a');
-                fileLink.href = `/${file.file_path}`;
-                fileLink.textContent = 'View Uploaded File';
-                fileLink.target = '_blank';
-                fileLinkContainer.innerHTML = ''; // Clear existing content
+                fileLink.href = `/${file.file_path}`; // Path to the uploaded file
+                fileLink.textContent = file.requirement_name;
+                fileLink.target = '_blank'; // Open the link in a new tab
+    
+                // Clear any existing content in the container
+                fileLinkContainer.innerHTML = '';
                 fileLinkContainer.appendChild(fileLink);
-
-                // Show the uploaded file link in other modals that need it
+    
+                // Loop through all modals and show the uploaded file link in each one
                 modals.forEach(otherModalNumber => {
                     if (otherModalNumber !== modalNumber) {
+                        // Get the link container in other modals
                         const otherFileLinkContainer = document.getElementById(`${file.requirement_name}${otherModalNumber}Link`);
+                        
                         if (otherFileLinkContainer) {
-                            otherFileLinkContainer.innerHTML = ''; // Clear existing content
-                            otherFileLinkContainer.appendChild(fileLink.cloneNode(true));
+                            // Clear existing content and add the new link
+                            otherFileLinkContainer.innerHTML = '';
+                            otherFileLinkContainer.appendChild(fileLink.cloneNode(true)); // Clone to avoid reference issues
                         }
                     }
                 });
             }
         });
     }
+    
 
     // Fetch uploaded files when the page loads
     const procurementId = document.getElementById('procurementId')?.value;
