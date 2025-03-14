@@ -75,6 +75,7 @@
             <div class="balance-container p-3 mb-3">
                 <h6>Remaining Balance (<span id="currentSaroName"></span>):</h6>
                 <h2 id="remainingBalance"></h2>
+                <h2 id="remainingSaroBalance"></h2>
             </div>
 
             <div class="d-flex justify-content-end align-items-center mb-2">

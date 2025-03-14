@@ -62,6 +62,11 @@ class ProcurementController extends Controller
                 ]);
             }
 
+            // Deduct pr_amount from the current_budget of the corresponding SARO record
+            DB::connection('ilcdb')->table('saro')
+                ->where('saro_no', $request->input('saro_number'))
+                ->decrement('current_budget', $request->input('pr_amount'));
+
             // Return a success response
             return response()->json(['message' => 'Procurement added successfully']);
         } catch (\Exception $e) {
