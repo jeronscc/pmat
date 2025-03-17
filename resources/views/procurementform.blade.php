@@ -569,9 +569,40 @@
                         </div>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">Previously Uploaded Documents (PR, Quotations, APP/PPMP, SARO, Budget Breakdown, Distribution List, POI, Market Research)</label>
+                        <label class="form-label">Previously Uploaded Documents (PR, Quotations, APP/PPMP, SARO, Budget Breakdown, Distribution List, POI/Activity Design, Market Research)</label>
                         <div id="allReqsFilePreview5">
-                            <p class="text-muted">Loading files...</p>
+                        <div class="mb-3">
+                                <label for="purchaseFile4" class="form-label" id="purchaseFileLabel4">Purchase Request</label>
+                                <div id="purchaseFile4Link"></div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="quotationsFile4" class="form-label" id="quotationsFileLabel4">Quotations</label>
+                                <div id="quotationsFile4Link"></div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="appFile4" class="form-label" id="appFileLabel4">APP/PPMP</label>
+                                <div id="appFile4Link"></div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="saroFile4" class="form-label" id="saroFileLabel4">SARO</label>
+                                <div id="saroFile4Link"></div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="budgetFile4" class="form-label" id="budgetFileLabel4">Budget Breakdown</label>
+                                <div id="budgetFile4Link"></div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="distributionFile4" class="form-label" id="distributionFileLabel4">Distribution List</label>
+                                <div id="distributionFile4Link"></div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="poiFile4" class="form-label" id="poiFileLabel4">POI / Activity Design</label>
+                                <div id="poiFile4Link"></div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="marketFile4" class="form-label" id="marketFileLabel4">Market Research</label>
+                                <div id="marketFile4Link"></div>
+                            </div>
                         </div>
                     </div>
                 </form>
@@ -593,6 +624,14 @@
             <div class="modal-body">
                 <form id="requirementsForm6" enctype="multipart/form-data">
                     @csrf
+                    <div class="alert alert-info">
+                        Only PDF files are accepted. The file size must not exceed 5 MB.
+                    </div>
+                    <div class="mb-3">
+                        <label for="dvFile1" class="form-label">Disbursement Voucher</label>
+                        <input class="form-control" type="file" id="dvFile1" name="dvFile">
+                        <div id="dvFile1Link"></div>
+                    </div>
                     <div class="mb-3">
                         <label class="form-label">Uploaded Documents (ORS, PO, Abstract, Philgeps Posting, IAR, ICS/PAR, Request for Inspection)</label>
                         <div id="budgetAllFilePreview6">
@@ -606,15 +645,47 @@
                         </div>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">Uploaded Documents (PR, Quotations, APP/PPMP, SARO, Budget Breakdown, etc.)</label>
+                        <label class="form-label">Uploaded Documents (PR, Quotations, APP/PPMP, SARO, Budget Breakdown, Distribution List, POI/Activity Design, Market Research)</label>
                         <div id="allReqsFilePreview6">
-                            <p class="text-muted">Loading files...</p>
+                        <div class="mb-3">
+                                <label for="purchaseFile5" class="form-label" id="purchaseFileLabel5">Purchase Request</label>
+                                <div id="purchaseFile5Link"></div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="quotationsFile5" class="form-label" id="quotationsFileLabel5">Quotations</label>
+                                <div id="quotationsFile5Link"></div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="appFile5" class="form-label" id="appFileLabel5">APP/PPMP</label>
+                                <div id="appFile5Link"></div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="saroFile5" class="form-label" id="saroFileLabel5">SARO</label>
+                                <div id="saroFile5Link"></div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="budgetFile5" class="form-label" id="budgetFileLabel2">Budget Breakdown</label>
+                                <div id="budgetFile2Link"></div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="distributionFile5" class="form-label" id="distributionFileLabel5">Distribution List</label>
+                                <div id="distributionFile5Link"></div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="poiFile5" class="form-label" id="poiFileLabel5">POI / Activity Design</label>
+                                <div id="poiFile5Link"></div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="marketFile5" class="form-label" id="marketFileLabel5">Market Research</label>
+                                <div id="marketFile5Link"></div>
+                            </div>
                         </div>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-success" id="saveBtn6">Save</button>
             </div>
         </div>
     </div>
