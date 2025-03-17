@@ -89,4 +89,11 @@ document.addEventListener('DOMContentLoaded', function () {
             alert("Upload failed. Check console for details.");
         });
     });
+
+    // Re-fetch files when the modal is opened
+    document.getElementById('requirementsModal1').addEventListener('shown.bs.modal', function () {
+        if (procurementId) {
+            fetchUploadedFiles(procurementId);
+        }
+    });
 });
