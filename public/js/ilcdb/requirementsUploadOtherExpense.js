@@ -29,36 +29,26 @@ document.addEventListener('DOMContentLoaded', function () {
     function displayUploadedFiles(requirement, files) {
         // Get the container for the specific file list (e.g., ORS, DV, etc.)
         const fileListContainer = document.getElementById(`uploadedFilesList${requirement}`);
-        const fileLinkContainer = document.getElementById(`${requirement}FileLink`);
+        fileListContainer.innerHTML = ''; // Clear the existing list
 
-        if (fileListContainer && fileLinkContainer) {
-            fileListContainer.innerHTML = ''; // Clear the existing list
-            fileLinkContainer.innerHTML = ''; // Clear the existing file link container
+        // Filter the files by requirement name and display them
+        files.filter(file => file.requirement_name.includes(requirement)).forEach(file => {
+            const fileLink = document.createElement('a');
+            fileLink.href = `/${file.file_path}`;
+            fileLink.textContent = file.requirement_name;
+            fileLink.target = '_blank';
 
-            // Filter the files by requirement name and display them
-            files.filter(file => file.requirement_name.includes(requirement)).forEach(file => {
-                const fileLink = document.createElement('a');
-                fileLink.href = `/${file.file_path}`;
-                fileLink.textContent = file.requirement_name;
-                fileLink.target = '_blank';
+            const listItem = document.createElement('li');
+            listItem.appendChild(fileLink);
 
-                const listItem = document.createElement('li');
-                listItem.appendChild(fileLink);
+            fileListContainer.appendChild(listItem);
 
-                // Append to the respective file list container
-                fileListContainer.appendChild(listItem);
-
-                // Hide the file input field
-                const inputField = document.getElementById(`${requirement.toLowerCase()}File`);
-                if (inputField) {
-                    inputField.style.display = 'none';
-                }
-
-                // Show the file link below the input field
-                fileLinkContainer.appendChild(fileLink);
-                fileLinkContainer.style.display = 'block'; // Make sure the link container is visible
-            });
-        }
+            // Hide the file input field
+            const inputField = document.getElementById(`${requirement.toLowerCase()}File`);
+            if (inputField) {
+                inputField.style.display = 'none';
+            }
+        });
     }
 
     // Call fetchUploadedFiles when the page loads
