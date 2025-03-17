@@ -31,6 +31,11 @@ document.addEventListener('DOMContentLoaded', function () {
         const fileListContainer = document.getElementById(`uploadedFilesList${requirement}`);
         fileListContainer.innerHTML = ''; // Clear the existing list
 
+        // Create a title for the section
+        const title = document.createElement('h5');
+        title.textContent = requirement;  // e.g., ORS, DV, etc.
+        fileListContainer.appendChild(title);
+
         // Filter the files by requirement name and display them
         files.filter(file => file.requirement_name.includes(requirement)).forEach(file => {
             const fileLink = document.createElement('a');
