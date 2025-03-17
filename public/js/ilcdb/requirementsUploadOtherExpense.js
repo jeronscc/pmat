@@ -41,18 +41,13 @@ document.addEventListener('DOMContentLoaded', function () {
             const listItem = document.createElement('li');
             listItem.appendChild(fileLink);
 
-            const inputField = document.getElementById(`${file.requirement_name}`);
-            if (inputField) {
-                inputField.style.display = 'none'; // Hide the file input field
-            }
-
-            const fileLinkContainer = document.getElementById(`${file.requirement_name}Link`);
-            if (fileLinkContainer) {
-                fileLinkContainer.innerHTML = ''; // Clear previous content if any
-                fileLinkContainer.appendChild(fileLink); // Display the uploaded file link
-            }
-
             fileListContainer.appendChild(listItem);
+
+            // Hide the file input field
+            const inputField = document.getElementById(`${requirement.toLowerCase()}File`);
+            if (inputField) {
+                inputField.style.display = 'none';
+            }
         });
     }
 
@@ -84,13 +79,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (data.success) {
                 alert(data.message);
                 // Update displayed files after saving
-                displayUploadedFiles('ORS', data.files);
-                displayUploadedFiles('DV', data.files);
-                displayUploadedFiles('TravelOrder', data.files);
-                displayUploadedFiles('Appearance', data.files);
-                displayUploadedFiles('Report', data.files);
-                displayUploadedFiles('Itinerary', data.files);
-                displayUploadedFiles('Cert', data.files);
+                fetchUploadedFiles(procurementId);
             } else {
                 alert("Upload failed: " + (data.message || "Unknown error."));
             }
