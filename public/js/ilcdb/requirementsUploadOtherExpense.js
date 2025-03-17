@@ -41,10 +41,15 @@ document.addEventListener('DOMContentLoaded', function () {
             const listItem = document.createElement('li');
             listItem.appendChild(fileLink);
 
-            const inputField = document.getElementById(file.requirement_name);
+            const inputField = document.getElementById(`${file.requirement_name}`);
             if (inputField) {
-                inputField.disabled = true;
-                inputField.style.display = 'none';
+                inputField.style.display = 'none'; // Hide the file input field
+            }
+
+            const fileLinkContainer = document.getElementById(`${file.requirement_name}Link`);
+            if (fileLinkContainer) {
+                fileLinkContainer.innerHTML = ''; // Clear previous content if any
+                fileLinkContainer.appendChild(fileLink); // Display the uploaded file link
             }
 
             fileListContainer.appendChild(listItem);
