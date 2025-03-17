@@ -171,57 +171,68 @@
                     <form id="requirementsForm1" enctype="multipart/form-data">
                         @csrf
                         <input type="hidden" id="procurement_id" name="procurement_id" value="{{ $prNumber }}">
+
                         <!-- Reminder about file requirements -->
                         <div class="alert alert-info">
                             Only PDF files are accepted. The file size must not exceed 5 MB.
                         </div>
+
                         <!-- ORS File Upload -->
                         <div class="mb-3">
                             <label for="orsFile" class="form-label">Upload ORS</label>
                             <input class="form-control" type="file" id="orsFile" name="orsFile">
+                            <!-- Uploaded files list for ORS (No label, just file links) -->
+                            <ul id="uploadedFilesListORS"></ul>
                         </div>
 
                         <!-- DV File Upload -->
                         <div class="mb-3">
                             <label for="dvFile" class="form-label">Upload DV</label>
                             <input class="form-control" type="file" id="dvFile" name="dvFile">
+                            <!-- Uploaded files list for DV (No label, just file links) -->
+                            <ul id="uploadedFilesListDV"></ul>
                         </div>
 
                         <!-- Travel Order Upload -->
                         <div class="mb-3">
                             <label for="travelOrderFile" class="form-label">Upload Travel Order</label>
                             <input class="form-control" type="file" id="travelOrderFile" name="travelOrderFile">
+                            <!-- Uploaded files list for Travel Order (No label, just file links) -->
+                            <ul id="uploadedFilesListTravelOrder"></ul>
                         </div>
 
                         <!-- Certificate of Appearance Upload -->
                         <div class="mb-3">
                             <label for="appearanceFile" class="form-label">Upload Certificate of Appearance</label>
                             <input class="form-control" type="file" id="appearanceFile" name="appearanceFile">
+                            <!-- Uploaded files list for Certificate of Appearance (No label, just file links) -->
+                            <ul id="uploadedFilesListAppearance"></ul>
                         </div>
 
                         <!-- Official Travel Report Upload -->
                         <div class="mb-3">
                             <label for="reportFile" class="form-label">Upload Official Travel Report</label>
                             <input class="form-control" type="file" id="reportFile" name="reportFile">
+                            <!-- Uploaded files list for Official Travel Report (No label, just file links) -->
+                            <ul id="uploadedFilesListReport"></ul>
                         </div>
 
                         <!-- Itinerary of Travel Upload -->
                         <div class="mb-3">
                             <label for="itineraryFile" class="form-label">Upload Itinerary of Travel</label>
                             <input class="form-control" type="file" id="itineraryFile" name="itineraryFile">
+                            <!-- Uploaded files list for Itinerary of Travel (No label, just file links) -->
+                            <ul id="uploadedFilesListItinerary"></ul>
                         </div>
 
                         <!-- Certificate of Travel Completion Upload -->
                         <div class="mb-3">
                             <label for="certFile" class="form-label">Upload Certificate of Travel Completion</label>
                             <input class="form-control" type="file" id="certFile" name="certFile">
+                            <!-- Uploaded files list for Certificate of Travel Completion (No label, just file links) -->
+                            <ul id="uploadedFilesListCert"></ul>
                         </div>
 
-                        <!-- Container to display uploaded files -->
-                        <div class="mb-3">
-                            <label class="form-label">Uploaded Files</label>
-                            <ul id="uploadedFilesListOtherExpense"></ul>
-                        </div>
                     </form>
                 </div>
                 <div class="modal-footer">

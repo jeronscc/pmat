@@ -1,14 +1,21 @@
 document.addEventListener('DOMContentLoaded', function () {
     const procurementIdField = document.getElementById('procurement_id');
     const procurementId = procurementIdField?.value;
-    const fileListContainer = document.getElementById('uploadedFilesListOtherExpense');
 
+    // Fetch and display files for each section
     function fetchUploadedFiles(procurementId) {
         fetch(`/api/otherexpense/requirements/${procurementId}`)
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    displayUploadedFiles(data.files);
+                    // Display files in respective lists based on requirement
+                    displayUploadedFiles('ORS', data.files);
+                    displayUploadedFiles('DV', data.files);
+                    displayUploadedFiles('TravelOrder', data.files);
+                    displayUploadedFiles('Appearance', data.files);
+                    displayUploadedFiles('Report', data.files);
+                    displayUploadedFiles('Itinerary', data.files);
+                    displayUploadedFiles('Cert', data.files);
                 } else {
                     console.error("Failed to fetch uploaded files:", data.message);
                 }
@@ -18,10 +25,14 @@ document.addEventListener('DOMContentLoaded', function () {
             });
     }
 
-    function displayUploadedFiles(files) {
-        fileListContainer.innerHTML = '';
+    // Display files in their respective lists based on requirement type
+    function displayUploadedFiles(requirement, files) {
+        // Get the container for the specific file list (e.g., ORS, DV, etc.)
+        const fileListContainer = document.getElementById(`uploadedFilesList${requirement}`);
+        fileListContainer.innerHTML = ''; // Clear the existing list
 
-        files.forEach(file => {
+        // Filter the files by requirement name and display them
+        files.filter(file => file.requirement_name.includes(requirement)).forEach(file => {
             const fileLink = document.createElement('a');
             fileLink.href = `/${file.file_path}`;
             fileLink.textContent = file.requirement_name;
@@ -45,6 +56,7 @@ document.addEventListener('DOMContentLoaded', function () {
         fetchUploadedFiles(procurementId);
     }
 
+    // Handle the file upload
     document.getElementById('saveBtn1').addEventListener('click', function () {
         const form = document.getElementById('requirementsForm1');
         const formData = new FormData(form);
@@ -66,7 +78,14 @@ document.addEventListener('DOMContentLoaded', function () {
         .then(data => {
             if (data.success) {
                 alert(data.message);
-                displayUploadedFiles(data.files); // ✅ Update displayed files after saving
+                // Update displayed files after saving
+                displayUploadedFiles('ORS', data.files);
+                displayUploadedFiles('DV', data.files);
+                displayUploadedFiles('TravelOrder', data.files);
+                displayUploadedFiles('Appearance', data.files);
+                displayUploadedFiles('Report', data.files);
+                displayUploadedFiles('Itinerary', data.files);
+                displayUploadedFiles('Cert', data.files);
             } else {
                 alert("Upload failed: " + (data.message || "Unknown error."));
             }
