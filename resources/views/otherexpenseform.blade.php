@@ -245,6 +245,7 @@
 
     <!-- Custom JS -->
     <script src="/js/menu.js"></script>
+    <script src="/js/ilcdb/travelExpensesUploadCheck.js"></script>
     <script src="/js/ilcdb/otherexpenseformIndicator.js"></script>
     <script src="/js/ilcdb/requirementsUploadOtherExpense.js"></script>
 </body>

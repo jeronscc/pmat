@@ -232,4 +232,39 @@ class OtherExpenseFormController extends Controller
             ], 500);
         }
     }
+
+    public function uploadedFilesCheck($procurement_id)
+    {
+        $requiredFiles = [
+            'orsFile', 
+            'dvFile', 
+            'travelOrderFile', 
+            'appearanceFile', 
+            'reportFile', 
+            'itineraryFile', 
+            'certFile', 
+        ];
+
+        $uploadedFiles = DB::connection('ilcdb')->table('requirements')
+            ->where('procurement_id', $procurement_id)
+            ->pluck('file_path','requirement_name')
+            ->toArray();
+        $missingFiles = array_diff($requiredFiles, array_keys($uploadedFiles));
+
+        $requirementsStatus = empty($missingFiles)? 1 : 0;
+
+        DB::connection('ilcdb')->table('otherexpense_form')
+            ->where('procurement_id', $procurement_id)
+            ->update(['requirements' => $requirementsStatus]);
+
+        return response()->json([
+            'success'=> true,
+            'missingFiles'=> $missingFiles,
+            'requirementsStatus'=> $requirementsStatus
+        ]);
+
+
+
+    }
+
 }
