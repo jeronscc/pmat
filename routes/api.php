@@ -195,3 +195,4 @@ Route::post('/otherexpense/upload', [OtherExpenseFormController::class, 'upload'
 Route::get('/otherexpense/requirements/{procurement_id}', [OtherExpenseFormController::class, 'getUploadedFiles']);
 Route::post('/procurement/upload', [ProcurementFormController::class, 'upload'])->name('procurement.upload');
 Route::get('/procurement/requirements/{procurement_id}', [ProcurementFormController::class, 'getUploadedFiles']);
+Route::get('/uploadedHonorariaFilesCheck/{procurement_id}', [HonorariaFormController::class, 'uploadedFilesCheck']);
