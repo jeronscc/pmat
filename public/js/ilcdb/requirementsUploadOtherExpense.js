@@ -44,9 +44,45 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
+    document.getElementById('saveBtn1').addEventListener('click', function () {
+        const form = document.getElementById('requirementsForm1');
+        const formData = new FormData(form);
+
+        formData.append('procurement_id', procurementId);
+
+        console.log("Sending form data:", [...formData.entries()]); // ✅ Debugging log
+
+        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+        if (!csrfToken) {
+            console.error("Error: CSRF token not found.");
+            return;
+        }
+
+        fetch('/api/otherexpense/upload', {
+            method: 'POST',
+            headers: { 'X-CSRF-TOKEN': csrfToken },
+            body: formData
+        })
+        .then(response => response.json()) // Read as JSON
+        .then(data => {
+            console.log("Server response:", data); // Log response
+
+            if (data.success) {
+                alert(data.message);
+                fetchUploadedFiles(procurementId); // Fetch and display uploaded files after saving
+            } else {
+                alert("Upload failed: " + (data.message || "Unknown error."));
+            }
+        })
+        .catch(error => {
+            console.error("Error during upload:", error);
+            alert("Upload failed. Check console for details.");
+        });
+    });
+
     // Function to fetch and display uploaded files
     function fetchUploadedFiles(procurementId) {
-        fetch(`/api/requirements/${procurementId}/files`)
+        fetch(`/api/requirements/${procurementId}`)
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
@@ -69,7 +105,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Function to display uploaded files in their respective sections
     function displayUploadedFiles(requirement, files) {
-        const fileListContainer = document.getElementById(`uploadFilesList${requirement}`);
+        const fileListContainer = document.getElementById(`uploadedFilesList${requirement}`);
         if (!fileListContainer) {
             console.error(`Container for ${requirement} not found`);
             return;
@@ -100,6 +136,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Event listener to open the modal and fetch uploaded files
     document.getElementById('openModalBtn').addEventListener('click', function () {
+        if (procurementId) {
+            fetchUploadedFiles(procurementId);
+        }
+    });
+
+    document.getElementById('requirementsModal1').addEventListener('shown.bs.modal', function () {
         if (procurementId) {
             fetchUploadedFiles(procurementId);
         }
