@@ -54,16 +54,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Function to fetch and display uploaded files
     function fetchUploadedFiles(procurementId) {
-        fetch(`/api/requirements/${procurementId}`)
+        fetch(`/api/otherexpense/requirements/${procurementId}`)
             .then(response => response.json())
             .then(data => {
                 console.log("Fetched files data:", data); // Log the fetched data for debugging
 
                 if (data.success && data.files) {
-                    // Check if files is an array or an object
+                    // Ensure files is an array
                     if (!Array.isArray(data.files)) {
                         console.error("Files is not an array, converting to array:", data.files);
-                        // If it's an object, convert it to an array of values
                         data.files = Object.values(data.files);
                     }
 
