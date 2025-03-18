@@ -429,6 +429,7 @@
                         <input class="form-control" type="file" id="orsFile3" name="orsFile">
                         <div id="orsFile3Link"></div>
                     </div>
+                    <!--
                     <div class="mb-3">
                         <label for="poFile3" class="form-label">Purchase Order</label>
                         <input class="form-control" type="file" id="poFile3" name="poFile">
@@ -439,9 +440,18 @@
                         <input class="form-control" type="file" id="absFile3" name="absFile">
                         <div id="absFile3Link"></div>
                     </div>
+                -->
                     <div class="mb-3">
                         <label class="form-label">Previously Submitted Requirements (For Reference)</label>
-                        <div class="mb-3">
+                            <div class="mb-3">
+                                <label for="poFile3" class="form-label" id="poFile3">Purchase Order</label>
+                                <div id="poFile3Link"></div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="absFile3" class="form-label">Abstract / Philgeps Posting*</label>
+                                <div id="absFile3Link"></div>
+                            </div>
+                            <div class="mb-3">
                                 <label for="purchaseFile3" class="form-label" id="purchaseFileLabel3">Purchase Request</label>
                                 <div id="purchaseFile3Link"></div>
                             </div>
@@ -464,10 +474,6 @@
                             <div class="mb-3">
                                 <label for="distributionFile3" class="form-label" id="distributionFileLabel3">Distribution List</label>
                                 <div id="distributionFile3Link"></div>
-                            </div>
-                            <div class="mb-3">
-                                <label for="saroFile3" class="form-label" id="saroFileLabel3">SARO</label>
-                                <div id="saroFile3Link"></div>
                             </div>
                             <div class="mb-3">
                                 <label for="poiFile3" class="form-label" id="poiFileLabel3">POI / Activity Design</label>
@@ -696,6 +702,7 @@
     <script src="/js/ilcdb/addProcurementForm.js"></script>
     <script src="/js/ilcdb/requirementsUploadProcurement.js"></script>
     <script>
+        /*
 // Get references to the date fields
 const dateReturned1 = document.getElementById('dateReturned1');
 const dateSubmitted2 = document.getElementById('dateSubmitted2');
@@ -794,8 +801,7 @@ if (!dateReturned5.value) {
     dateSubmitted6.setAttribute('readonly', 'true');
     dateReturned6.setAttribute('readonly', 'true');
 }
-
+*/
 </script>
-
 </body>
 </html>
