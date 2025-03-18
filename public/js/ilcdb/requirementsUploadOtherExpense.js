@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    // Display files in respective lists based on requirement
+                    // Display files in respective sections based on the requirement type
                     displayUploadedFiles('ORS', data.files);
                     displayUploadedFiles('DV', data.files);
                     displayUploadedFiles('TravelOrder', data.files);
@@ -25,10 +25,10 @@ document.addEventListener('DOMContentLoaded', function () {
             });
     }
 
-    // Display files in their respective lists based on requirement type
+    // Display files in their respective sections based on requirement type
     function displayUploadedFiles(requirement, files) {
-        // Get the container for the specific file list (e.g., ORS, DV, etc.)
         const fileListContainer = document.getElementById(`uploadedFilesList${requirement}`);
+        const fileInput = document.getElementById(`${requirement.toLowerCase()}File`);
         fileListContainer.innerHTML = ''; // Clear the existing list
 
         // Filter the files by requirement name and display them
@@ -43,10 +43,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
             fileListContainer.appendChild(listItem);
 
-            // Hide the file input field
-            const inputField = document.getElementById(`${requirement.toLowerCase()}File`);
-            if (inputField) {
-                inputField.style.display = 'none';
+            // Hide the input field once the file is uploaded
+            if (fileInput) {
+                fileInput.style.display = 'none';  // Hide input field
             }
         });
     }
@@ -56,7 +55,7 @@ document.addEventListener('DOMContentLoaded', function () {
         fetchUploadedFiles(procurementId);
     }
 
-    // Handle the file upload
+    // Handle the file upload for the modal form
     document.getElementById('saveBtn1').addEventListener('click', function () {
         const form = document.getElementById('requirementsForm1');
         const formData = new FormData(form);
@@ -78,7 +77,7 @@ document.addEventListener('DOMContentLoaded', function () {
         .then(data => {
             if (data.success) {
                 alert(data.message);
-                // Update displayed files after saving
+                // After saving, update the displayed files
                 fetchUploadedFiles(procurementId);
             } else {
                 alert("Upload failed: " + (data.message || "Unknown error."));
