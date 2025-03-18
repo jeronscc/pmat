@@ -60,10 +60,22 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     function updateUIAfterSave() {
-        // Refresh file upload statuses and update UI accordingly
+        // Re-lock all appropriate fields
+        let activeStage = 1;
+        for (let i = 6; i >= 1; i--) {
+            if (document.getElementById(`dateSubmitted${i}`).value) {
+                activeStage = i;
+                break;
+            }
+        }
+        
+        lockPreviousStages(activeStage);
+        checkIfFormCompleted();
+        
+        // Then refresh file upload statuses
         refreshFileUploadStatuses(procurementId);
     }
-
+    
     document.getElementById('cancelChanges').addEventListener('click', function(e) {
         e.preventDefault();
         window.location.href = '/homepage-ilcdb';
@@ -109,6 +121,11 @@ document.addEventListener('DOMContentLoaded', function() {
         
         if (!dateSubmitted || !dateReturned) return;
         
+        // First check: If field is already marked as readonly, keep it locked
+        if (dateSubmitted.hasAttribute('readonly')) {
+            return; // Don't change the state of fields that are deliberately locked
+        }
+        
         // Get current active stage
         let activeStage = 1;
         for (let i = 6; i >= 1; i--) {
@@ -117,7 +134,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 break;
             }
         }
-
+    
         // Handle stage 1 or stages where the previous stage is completed
         const prevStageCompleted = stageNumber === 1 || 
             (document.getElementById(`dateReturned${stageNumber-1}`) && 
