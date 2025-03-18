@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
+    // Get procurementId and check if it's present
     const procurementId = document.getElementById('procurement_id')?.value;
     if (!procurementId) {
         alert('Error: Procurement ID is missing.');
@@ -8,49 +9,17 @@ document.addEventListener('DOMContentLoaded', function () {
     // Fetch uploaded files when the page loads
     fetchUploadedFiles(procurementId);
 
-    document.getElementById('saveBtn1').addEventListener('click', function () {
-        const form = document.getElementById('requirementsForm');
-        const formData = new FormData(form);
-
-            formData.append('procurement_id', procurementId);
-
-            console.log("Sending form data:", [...formData.entries()]); // ✅ Debugging log
-
-            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
-            if (!csrfToken) {
-                console.error("Error: CSRF token not found.");
-                return;
-            }
-
-            fetch('/api/requirements/upload', {
-                method: 'POST',
-                headers: { 'X-CSRF-TOKEN': csrfToken },
-                body: formData
-            })
-            .then(response => response.json()) // Read as JSON
-            .then(data => {
-                console.log("Server response:", data); // Log response
-
-                if (data.success) {
-                    alert(data.message);
-                    fetchUploadedFiles(procurementId); // Fetch and display uploaded files after saving
-                } else {
-                    alert("Upload failed: " + (data.message || "Unknown error."));
-                }
-            })
-            .catch(error => {
-                console.error("Error during upload:", error);
-                alert("Upload failed. Check console for details.");
-            });
-                });
-            });
-
+    // Save button click event listener for form 1
     const saveBtn1 = document.getElementById('saveBtn1');
     if (saveBtn1) {
         saveBtn1.addEventListener('click', function () {
             const form = document.getElementById('requirementsForm1');
-            const formData = new FormData(form);
+            if (!form) {
+                console.error("Form not found.");
+                return;
+            }
 
+            const formData = new FormData(form);
             formData.append('procurement_id', procurementId);
 
             console.log("Sending form data:", [...formData.entries()]); // ✅ Debugging log
@@ -114,13 +83,13 @@ document.addEventListener('DOMContentLoaded', function () {
             console.error(`Container for ${requirement} not found`);
             return;
         }
-        
+
         fileListContainer.innerHTML = ''; // Clear existing files
 
-        // Ensure files is an array
+        // Ensure files is an array (in case it's an object)
         if (!Array.isArray(files)) {
-            console.error("Files is not an array:", files);
-            return;
+            console.error("Files is not an array, converting to array:", files);
+            files = Object.values(files);  // Convert object to array
         }
 
         // Filter the files by requirement name and display them
@@ -145,8 +114,10 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Event listener to open the modal and fetch uploaded files
-    document.getElementById('requirementsModal1').addEventListener('shown.bs.modal', function () {
-        if (procurementId) {
+    const requirementsModal1 = document.getElementById('requirementsModal1');
+    if (requirementsModal1) {
+        requirementsModal1.addEventListener('shown.bs.modal', function () {
             fetchUploadedFiles(procurementId);
-        }
-    });
+        });
+    }
+});
