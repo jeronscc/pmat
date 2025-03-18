@@ -5,10 +5,27 @@ document.addEventListener('DOMContentLoaded', function () {
         const saveButton = document.getElementById(`saveBtn${modalNumber}`);
         if (saveButton) {
             saveButton.addEventListener('click', function () {
-                uploadFiles(modalNumber); // ✅ Calls uploadFiles properly
+                if (areAllFilesSelected(modalNumber)) {
+                    uploadFiles(modalNumber); // ✅ Proceed only if all files are selected
+                } else {
+                    alert(`Please upload all required files before saving Modal ${modalNumber}.`);
+                }
             });
         }
     });
+
+    function areAllFilesSelected(modalNumber) {
+        const form = document.getElementById(`requirementsForm${modalNumber}`);
+        if (!form) return false;
+
+        const fileInputs = form.querySelectorAll('input[type="file"]');
+        for (const fileInput of fileInputs) {
+            if (fileInput.files.length === 0) {
+                return false; // ❌ Missing a required file
+            }
+        }
+        return true; // ✅ All files are selected
+    }
 
     function uploadFiles(modalNumber) {
         const form = document.getElementById(`requirementsForm${modalNumber}`);

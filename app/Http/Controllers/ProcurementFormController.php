@@ -182,7 +182,7 @@ class ProcurementFormController extends Controller
     
             // Define required files for each modal separately
             $modalFiles = [
-                1 => ['appFile', 'saroFile', 'budgetFile', 'distributionFile', 'poiFile', 'researchFile'],
+                1 => ['appFile', 'saroFile', 'budgetFile', 'distributionFile', 'poiFile', 'researchFile','purchaseFile', 'quotationsFile'],
                 2 => ['poFile', 'absFile'],
                 3 => ['orsFile',],
                 4 => ['attendanceFile', 'cocFile', 'photoFile', 'soaFile', 'drFile', 'dlFile'],
@@ -275,6 +275,45 @@ class ProcurementFormController extends Controller
         }
     }
 
+    public function uploadedFilesCheck(Request $request, $procurement_id)
+    {
+        $modal = $request->input('modal');
+    
+        // Define required files for each modal
+        $modalFiles = [
+            1 => ['appFile', 'saroFile', 'budgetFile', 'distributionFile', 'poiFile', 'researchFile','purchaseFile', 'quotationsFile'],
+            2 => ['poFile', 'absFile'],
+            3 => ['orsFile'],
+            4 => ['attendanceFile', 'cocFile', 'photoFile', 'soaFile', 'drFile', 'dlFile'],
+            5 => [], // No required files for modal 5
+            6 => ['dvFile'],
+        ];
+    
+        // Get the required files for the specified modal
+        $requiredFiles = $modalFiles[$modal] ?? [];
+    
+        // Fetch uploaded files for the specified modal from the database
+        $uploadedFiles = DB::connection('ilcdb')->table('requirements')
+            ->where('procurement_id', $procurement_id)
+            ->pluck('file_path', 'requirement_name')
+            ->toArray();
+    
+        // Calculate file status for the modal
+        $fileStatus = [];
+        foreach ($requiredFiles as $file) {
+            $fileStatus[$file . 'Uploaded'] = array_key_exists($file, $uploadedFiles);
+        }
+    
+        // Determine missing files for the specified modal
+        $missingFiles = array_diff($requiredFiles, array_keys($uploadedFiles));
+    
+        // Return the response
+        return response()->json([
+            'success' => true,
+            'fileStatus' => $fileStatus,
+            'missingFiles' => $missingFiles,
+        ]);
+    }
 
 
 }
