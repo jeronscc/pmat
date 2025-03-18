@@ -306,78 +306,48 @@
 </div> 
         <!-- SARO Modal -->
         <div class="modal fade" id="addSaroModal" tabindex="-1" aria-labelledby="saroTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header bg-dark text-white">
-                <h5 class="modal-title" id="saroTitle">ADD SARO</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form id="saroForm">
-                    @csrf
-                    <!-- Dropdown to select NTCA or SARO -->
-                    <div class="mb-3">
-                        <label for="categorySelect" class="form-label">Select Category</label>
-                        <select class="form-select" id="categorySelect" required>
-                            <option value="" disabled selected>Select Category</option>
-                            <option value="NTCA">NTCA</option>
-                            <option value="SARO">SARO</option>
-                        </select>
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header bg-dark text-white">
+                        <h5 class="modal-title" id="saroTitle">ADD SARO</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-
-                    <!-- NTCA Specific Fields -->
-                    <div id="ntcaFields" class="d-none">
-                        <div class="mb-3">
-                            <label for="ntca_number" class="form-label">NTCA NUMBER</label>
-                            <input type="text" class="form-control" id="ntca_number" name="ntca_number" readonly>
-                        </div>
-                        <div class="mb-3">
-                            <label for="saro_select" class="form-label">Select SARO</label>
-                            <select class="form-select" id="saro_select" name="saro_select" required>
-                                <option value="" disabled selected>Select SARO</option>
-                                <!-- Populate dynamically with SAROs from the server -->
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="budget" class="form-label">BUDGET</label>
-                            <input type="text" class="form-control" id="budget" name="budget" required>
-                        </div>
-                    </div>
-
-                    <!-- SARO Specific Fields -->
-                    <div id="saroFields" class="d-none">
-                        <div class="mb-3">
-                            <label for="saro_number" class="form-label">SARO NUMBER</label>
-                            <input type="text" class="form-control" id="saro_number" name="saro_number" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="description" class="form-label">DESCRIPTION</label>
-                            <textarea class="form-control" rows="3" id="saroDesc" placeholder="Enter Description"></textarea>
-                        </div>
-                        <div class="mb-3">
-                            <label for="year" class="form-label">YEAR</label>
-                            <select class="form-select" name="saro_year" id="saro_year" required>
-                                <option value="" disabled selected>Select Year</option>
-                                <!-- Populate with last 10 years -->
-                                <?php
-                                    $startYear = max(2026, date("Y")); 
+                    <div class="modal-body">
+                        <form id="saroForm">
+                            @csrf
+                            <div class="mb-3">
+                                <label for="saro_number" class="form-label">SARO NUMBER</label>
+                                <input type="text" class="form-control" id="saro_number" name="saro_number" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="budget" class="form-label">BUDGET</label>
+                                <input type="text" class="form-control" id="budget" name="budget" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="description" class="form-label">DESCRIPTION</label>
+                                <textarea class="form-control"  rows="3" id="saroDesc" placeholder="Enter Description"></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="year" class="form-label">YEAR</label>
+                                <select class="form-select" name="saro_year" id="saro_year" required>
+                                    <option value="" disabled selected>Select Year</option>
+                                    <?php
+                                    $startYear = max(2026, date("Y")); // Start from 2026, or the current year if it's later
                                     for ($year = $startYear; $year >= $startYear - 10; $year--) {
-                                        echo "<option value=\"$year\">$year</option>";
+                                    echo "<option value=\"$year\">$year</option>";
                                     }
-                                ?>
-                            </select>
-                        </div>
+                                    ?>
+                                </select>
+                            </div>
+                        </form>
                     </div>
-
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-success" id="saveSaro">Add</button>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-success" id="saveSaro">Add</button>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-</div>
         <!-- Overdue Modal -->
         <div class="modal fade" id="overdueModal" tabindex="-1" aria-labelledby="overdueModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg"> <!-- Added 'modal-lg' for better space -->
@@ -527,58 +497,6 @@
         document.getElementById('pr-year').value = '';
         document.getElementById('saro-number').value = '';
         document.getElementById('pr-amount').value = '';  // Reset PR Amount
-    }
-</script>
-<script>
-    function openAddSaroModal() {
-        const modal = new bootstrap.Modal(document.getElementById('addSaroModal'));
-        modal.show();
-    }
-
-    document.getElementById('categorySelect').addEventListener('change', function() {
-        const category = this.value;
-        
-        // Show or hide fields based on the selected category
-        if (category === 'NTCA') {
-            document.getElementById('ntcaFields').classList.remove('d-none');
-            document.getElementById('saroFields').classList.add('d-none');
-            generateNTCANumber();
-            populateSARODropdown();
-        } else if (category === 'SARO') {
-            document.getElementById('saroFields').classList.remove('d-none');
-            document.getElementById('ntcaFields').classList.add('d-none');
-        }
-    });
-
-    // Function to generate the NTCA number
-    function generateNTCANumber() {
-        const saroNumber = document.getElementById('saro_number').value;  // Get SARO number
-        const currentMonthYear = new Date().toLocaleDateString('en-GB', { year: '2-digit', month: '2-digit' }).replace('/', '');
-        const lastDigits = saroNumber.slice(-5);  // Extract last 5 digits of SARO number
-        const ntcaNumber = `NTCA-${lastDigits}-${currentMonthYear}`;
-        document.getElementById('ntca_number').value = ntcaNumber;
-    }
-
-    // Function to populate the SARO dropdown dynamically (fetch from the server)
-    function populateSARODropdown() {
-        const saroSelect = document.getElementById('saro_select');
-        saroSelect.innerHTML = '';  // Clear existing options
-        
-        fetch('/api/saros')  // Replace with actual endpoint to fetch SAROs
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    data.saros.forEach(saro => {
-                        const option = document.createElement('option');
-                        option.value = saro.id;
-                        option.textContent = saro.number;
-                        saroSelect.appendChild(option);
-                    });
-                } else {
-                    console.error('Failed to fetch SAROs:', data.message);
-                }
-            })
-            .catch(error => console.error('Error fetching SAROs:', error));
     }
 </script>
     </body>
