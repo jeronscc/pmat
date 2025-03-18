@@ -8,77 +8,81 @@ document.addEventListener('DOMContentLoaded', function () {
     // Fetch uploaded files when the page loads
     fetchUploadedFiles(procurementId);
 
-    document.getElementById('saveBtn').addEventListener('click', function () {
+    document.getElementById('saveBtn1').addEventListener('click', function () {
         const form = document.getElementById('requirementsForm');
         const formData = new FormData(form);
 
-        formData.append('procurement_id', procurementId);
+            formData.append('procurement_id', procurementId);
 
-        console.log("Sending form data:", [...formData.entries()]); // ✅ Debugging log
+            console.log("Sending form data:", [...formData.entries()]); // ✅ Debugging log
 
-        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
-        if (!csrfToken) {
-            console.error("Error: CSRF token not found.");
-            return;
-        }
-
-        fetch('/api/requirements/upload', {
-            method: 'POST',
-            headers: { 'X-CSRF-TOKEN': csrfToken },
-            body: formData
-        })
-        .then(response => response.json()) // Read as JSON
-        .then(data => {
-            console.log("Server response:", data); // Log response
-
-            if (data.success) {
-                alert(data.message);
-                fetchUploadedFiles(procurementId); // Fetch and display uploaded files after saving
-            } else {
-                alert("Upload failed: " + (data.message || "Unknown error."));
+            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+            if (!csrfToken) {
+                console.error("Error: CSRF token not found.");
+                return;
             }
-        })
-        .catch(error => {
-            console.error("Error during upload:", error);
-            alert("Upload failed. Check console for details.");
-        });
-    });
 
-    document.getElementById('saveBtn1').addEventListener('click', function () {
-        const form = document.getElementById('requirementsForm1');
-        const formData = new FormData(form);
+            fetch('/api/requirements/upload', {
+                method: 'POST',
+                headers: { 'X-CSRF-TOKEN': csrfToken },
+                body: formData
+            })
+            .then(response => response.json()) // Read as JSON
+            .then(data => {
+                console.log("Server response:", data); // Log response
 
-        formData.append('procurement_id', procurementId);
+                if (data.success) {
+                    alert(data.message);
+                    fetchUploadedFiles(procurementId); // Fetch and display uploaded files after saving
+                } else {
+                    alert("Upload failed: " + (data.message || "Unknown error."));
+                }
+            })
+            .catch(error => {
+                console.error("Error during upload:", error);
+                alert("Upload failed. Check console for details.");
+            });
+                });
+            });
 
-        console.log("Sending form data:", [...formData.entries()]); // ✅ Debugging log
+    const saveBtn1 = document.getElementById('saveBtn1');
+    if (saveBtn1) {
+        saveBtn1.addEventListener('click', function () {
+            const form = document.getElementById('requirementsForm1');
+            const formData = new FormData(form);
 
-        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
-        if (!csrfToken) {
-            console.error("Error: CSRF token not found.");
-            return;
-        }
+            formData.append('procurement_id', procurementId);
 
-        fetch('/api/otherexpense/upload', {
-            method: 'POST',
-            headers: { 'X-CSRF-TOKEN': csrfToken },
-            body: formData
-        })
-        .then(response => response.json()) // Read as JSON
-        .then(data => {
-            console.log("Server response:", data); // Log response
+            console.log("Sending form data:", [...formData.entries()]); // ✅ Debugging log
 
-            if (data.success) {
-                alert(data.message);
-                fetchUploadedFiles(procurementId); // Fetch and display uploaded files after saving
-            } else {
-                alert("Upload failed: " + (data.message || "Unknown error."));
+            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+            if (!csrfToken) {
+                console.error("Error: CSRF token not found.");
+                return;
             }
-        })
-        .catch(error => {
-            console.error("Error during upload:", error);
-            alert("Upload failed. Check console for details.");
+
+            fetch('/api/otherexpense/upload', {
+                method: 'POST',
+                headers: { 'X-CSRF-TOKEN': csrfToken },
+                body: formData
+            })
+            .then(response => response.json()) // Read as JSON
+            .then(data => {
+                console.log("Server response:", data); // Log response
+
+                if (data.success) {
+                    alert(data.message);
+                    fetchUploadedFiles(procurementId); // Fetch and display uploaded files after saving
+                } else {
+                    alert("Upload failed: " + (data.message || "Unknown error."));
+                }
+            })
+            .catch(error => {
+                console.error("Error during upload:", error);
+                alert("Upload failed. Check console for details.");
+            });
         });
-    });
+    }
 
     // Function to fetch and display uploaded files
     function fetchUploadedFiles(procurementId) {
@@ -113,6 +117,12 @@ document.addEventListener('DOMContentLoaded', function () {
         
         fileListContainer.innerHTML = ''; // Clear existing files
 
+        // Ensure files is an array
+        if (!Array.isArray(files)) {
+            console.error("Files is not an array:", files);
+            return;
+        }
+
         // Filter the files by requirement name and display them
         files.filter(file => file.requirement_name.includes(requirement)).forEach(file => {
             const fileLink = document.createElement('a');
@@ -135,15 +145,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Event listener to open the modal and fetch uploaded files
-    document.getElementById('openModalBtn').addEventListener('click', function () {
-        if (procurementId) {
-            fetchUploadedFiles(procurementId);
-        }
-    });
-
     document.getElementById('requirementsModal1').addEventListener('shown.bs.modal', function () {
         if (procurementId) {
             fetchUploadedFiles(procurementId);
         }
     });
-});
