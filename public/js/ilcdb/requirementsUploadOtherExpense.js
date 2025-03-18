@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', function () {
-    // Get procurementId and check if it's present
     const procurementId = document.getElementById('procurement_id')?.value;
     if (!procurementId) {
         alert('Error: Procurement ID is missing.');
@@ -58,7 +57,16 @@ document.addEventListener('DOMContentLoaded', function () {
         fetch(`/api/requirements/${procurementId}`)
             .then(response => response.json())
             .then(data => {
-                if (data.success) {
+                console.log("Fetched files data:", data); // Log the fetched data for debugging
+
+                if (data.success && data.files) {
+                    // Check if files is an array or an object
+                    if (!Array.isArray(data.files)) {
+                        console.error("Files is not an array, converting to array:", data.files);
+                        // If it's an object, convert it to an array of values
+                        data.files = Object.values(data.files);
+                    }
+
                     // Display uploaded files in their respective sections (DV, ORS, etc.)
                     displayUploadedFiles('ORS', data.files);
                     displayUploadedFiles('DV', data.files);
@@ -68,7 +76,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     displayUploadedFiles('Itinerary', data.files);
                     displayUploadedFiles('Cert', data.files);
                 } else {
-                    console.error("Failed to fetch uploaded files:", data.message);
+                    console.error("Failed to fetch uploaded files or no files found:", data.message);
                 }
             })
             .catch(error => {
@@ -86,14 +94,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
         fileListContainer.innerHTML = ''; // Clear existing files
 
-        // Ensure files is an array (in case it's an object)
-        if (!Array.isArray(files)) {
-            console.error("Files is not an array, converting to array:", files);
-            files = Object.values(files);  // Convert object to array
-        }
+        // Log the files array for each section for debugging purposes
+        console.log(`Files for ${requirement}:`, files);
 
         // Filter the files by requirement name and display them
-        files.filter(file => file.requirement_name.includes(requirement)).forEach(file => {
+        files.filter(file => file.requirement_name && file.requirement_name.includes(requirement)).forEach(file => {
             const fileLink = document.createElement('a');
             fileLink.href = `/${file.file_path}`;
             fileLink.textContent = file.requirement_name;
