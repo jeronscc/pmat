@@ -392,16 +392,12 @@
                                 <div id="distributionFile2Link"></div>
                             </div>
                             <div class="mb-3">
-                                <label for="saroFile2" class="form-label" id="saroFileLabel2">SARO</label>
-                                <div id="saroFile2Link"></div>
-                            </div>
-                            <div class="mb-3">
                                 <label for="poiFile2" class="form-label" id="poiFileLabel2">POI / Activity Design</label>
                                 <div id="poiFile2Link"></div>
                             </div>
                             <div class="mb-3">
-                                <label for="marketFile2" class="form-label" id="marketFileLabel2">Market Research</label>
-                                <div id="marketFile2Link"></div>
+                                <label for="researchFile2" class="form-label" id="researchFileLabel2">Market Research</label>
+                                <div id="researchFile2Link"></div>
                             </div>
                     </div>
                 </form>
@@ -478,8 +474,8 @@
                                 <div id="poiFile3Link"></div>
                             </div>
                             <div class="mb-3">
-                                <label for="marketFile3" class="form-label" id="marketFileLabel3">Market Research</label>
-                                <div id="marketFile3Link"></div>
+                                <label for="researchFile3" class="form-label" id="researchFileLabel3">Market Research</label>
+                                <div id="researchFile3Link"></div>
                             </div>
                     </div>
                 </form>
@@ -600,8 +596,8 @@
                                 <div id="poiFile4Link"></div>
                             </div>
                             <div class="mb-3">
-                                <label for="marketFile4" class="form-label" id="marketFileLabel4">Market Research</label>
-                                <div id="marketFile4Link"></div>
+                                <label for="researchFile4" class="form-label" id="researchFileLabel4">Market Research</label>
+                                <div id="researchFile4Link"></div>
                             </div>
                         </div>
                     </div>
@@ -676,8 +672,8 @@
                                 <div id="poiFile5Link"></div>
                             </div>
                             <div class="mb-3">
-                                <label for="marketFile5" class="form-label" id="marketFileLabel5">Market Research</label>
-                                <div id="marketFile5Link"></div>
+                                <label for="researchFile5" class="form-label" id="researchFileLabel5">Market Research</label>
+                                <div id="researchFile5Link"></div>
                             </div>
                         </div>
                     </div>
@@ -799,6 +795,7 @@ if (!dateReturned5.value) {
     dateReturned6.setAttribute('readonly', 'true');
 }
 
-    </script>
+</script>
+
 </body>
 </html>

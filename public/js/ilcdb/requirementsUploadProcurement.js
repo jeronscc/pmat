@@ -5,66 +5,57 @@ document.addEventListener('DOMContentLoaded', function () {
         const saveButton = document.getElementById(`saveBtn${modalNumber}`);
         if (saveButton) {
             saveButton.addEventListener('click', function () {
-                const form = document.getElementById(`requirementsForm${modalNumber}`);
-                const formData = new FormData(form);
-
-                const procurementId = document.getElementById('procurementId')?.value;
-                if (!procurementId) {
-                    alert('Error: Procurement ID is missing.');
-                    return;
-                }
-                formData.append('procurement_id', procurementId);
-
-                console.log("Sending form data:", [...formData.entries()]); // ✅ Debugging log
-
-                const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
-                if (!csrfToken) {
-                    console.error("Error: CSRF token not found.");
-                    return;
-                }
-
-                fetch(`/api/procurement/upload`, {
-                    method: 'POST',
-                    headers: { 'X-CSRF-TOKEN': csrfToken },
-                    body: formData
-                })
-                .then(response => response.text()) // ✅ Read as text first
-                .then(text => {
-                    console.log("Server response:", text); // ✅ Log raw response
-
-                    try {
-                        const data = JSON.parse(text);
-                        if (data.success) {
-                            alert(data.message);
-                            fetchUploadedFiles(procurementId, modalNumber); // Fetch and display uploaded files after saving
-                        } else {
-                            alert("Upload failed: " + (data.message || "Unknown error."));
-                        }
-                    } catch (error) {
-                        console.error("Response is not valid JSON:", text);
-                        alert("Upload failed. Server returned an unexpected response.");
-                    }
-                })
-                .catch(error => {
-                    console.error("Error during upload:", error);
-                    alert("Upload failed. Check console for details.");
-                });
-            });
-        }
-
-        // Event listener to open the modal and fetch uploaded files
-        const modalButton = document.querySelector(`[data-bs-target="#requirementsModal${modalNumber}"]`);
-        if (modalButton) {
-            modalButton.addEventListener('click', function () {
-                const procurementId = document.getElementById('procurementId')?.value;
-                if (procurementId) {
-                    fetchUploadedFiles(procurementId, modalNumber);
-                }
+                uploadFiles(modalNumber); // ✅ Calls uploadFiles properly
             });
         }
     });
 
-    // Function to fetch and display uploaded files
+    function uploadFiles(modalNumber) {
+        const form = document.getElementById(`requirementsForm${modalNumber}`);
+        if (!form) {
+            console.error(`Error: Form requirementsForm${modalNumber} not found.`);
+            return;
+        }
+
+        const formData = new FormData(form);
+        const procurementId = document.getElementById('procurementId')?.value;
+        if (!procurementId) {
+            alert('Error: Procurement ID is missing.');
+            return;
+        }
+
+        formData.append('procurement_id', procurementId);
+        formData.append('modal', modalNumber); // ✅ Send modal number
+
+        console.log(`Uploading files for modal ${modalNumber}:`, [...formData.entries()]);
+
+        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+        if (!csrfToken) {
+            console.error("Error: CSRF token not found.");
+            return;
+        }
+
+        fetch(`/api/procurement/upload`, {
+            method: 'POST',
+            headers: { 'X-CSRF-TOKEN': csrfToken },
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(`Server response for modal ${modalNumber}:`, data); 
+            if (data.success) {
+                alert(data.message);
+                fetchUploadedFiles(procurementId, modalNumber);
+            } else {
+                alert("Upload failed: " + (data.message || "Unknown error."));
+            }
+        })
+        .catch(error => {
+            console.error("Error during upload:", error);
+            alert("Upload failed. Check console for details.");
+        });
+    }
+
     function fetchUploadedFiles(procurementId, modalNumber) {
         fetch(`/api/procurement/requirements/${procurementId}`)
             .then(response => response.json())
@@ -80,7 +71,6 @@ document.addEventListener('DOMContentLoaded', function () {
             });
     }
 
-    // Function to display uploaded files
     function displayUploadedFiles(files, modalNumber) {
         files.forEach(file => {
             const fileInput = document.getElementById(`${file.requirement_name}${modalNumber}`);
@@ -127,9 +117,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     }
-    
 
-    // Fetch uploaded files when the page loads
     const procurementId = document.getElementById('procurementId')?.value;
     if (procurementId) {
         modals.forEach(modalNumber => {
