@@ -73,9 +73,52 @@
             <!-- Left Panel (SARO & Balance) -->
             <div class="col-md-3 left-panel">
             <div class="balance-container p-3 mb-3">
-                <h6>SARO Remaining Balance (<span id="currentSaroName"></span>):</h6>
-                <h2 id="remainingBalance"></h2>
+    <h6 class="text-white">SARO Remaining Balance (<span id="currentSaroName"></span>):</h6>
+    <h2 id="remainingBalance"></h2>
+    
+    <hr>
+<!-- NTCA balance -->
+    <div class="d-flex align-items-center justify-content-between">
+        <h6 class="text-white mb-0">NTCA:</h6>
+        <button class="btn btn-primary btn-sm py-1" type="button" data-bs-toggle="modal" data-bs-target="#ntcaBreakdownModal">
+    Expand
+</button>
+
+    </div>
+    <h2 id="ntcaBalance">₱0</h2>
+</div>
+
+<!-- NTCA Breakdown Modal -->
+<div class="modal fade" id="ntcaBreakdownModal" tabindex="-1" aria-labelledby="ntcaBreakdownModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ntcaBreakdownModalLabel">NTCA Balance Breakdown</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
+            <div class="modal-body">
+                <ul class="list-group">
+                    <li class="list-group-item d-flex justify-content-between">
+                        Item 1 <span class="fw-bold">₱5,000</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between">
+                        Item 2 <span class="fw-bold">₱3,000</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between">
+                        Item 3 <span class="fw-bold">₱2,500</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between">
+                        Total <span class="fw-bold text-success">₱10,500</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
             <div class="d-flex justify-content-end align-items-center mb-2">
                 <div class="dropdown me-2">
