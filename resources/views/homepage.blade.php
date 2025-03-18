@@ -529,5 +529,57 @@
         document.getElementById('pr-amount').value = '';  // Reset PR Amount
     }
 </script>
+<script>
+    function openAddSaroModal() {
+        const modal = new bootstrap.Modal(document.getElementById('addSaroModal'));
+        modal.show();
+    }
+
+    document.getElementById('categorySelect').addEventListener('change', function() {
+        const category = this.value;
+        
+        // Show or hide fields based on the selected category
+        if (category === 'NTCA') {
+            document.getElementById('ntcaFields').classList.remove('d-none');
+            document.getElementById('saroFields').classList.add('d-none');
+            generateNTCANumber();
+            populateSARODropdown();
+        } else if (category === 'SARO') {
+            document.getElementById('saroFields').classList.remove('d-none');
+            document.getElementById('ntcaFields').classList.add('d-none');
+        }
+    });
+
+    // Function to generate the NTCA number
+    function generateNTCANumber() {
+        const saroNumber = document.getElementById('saro_number').value;  // Get SARO number
+        const currentMonthYear = new Date().toLocaleDateString('en-GB', { year: '2-digit', month: '2-digit' }).replace('/', '');
+        const lastDigits = saroNumber.slice(-5);  // Extract last 5 digits of SARO number
+        const ntcaNumber = `NTCA-${lastDigits}-${currentMonthYear}`;
+        document.getElementById('ntca_number').value = ntcaNumber;
+    }
+
+    // Function to populate the SARO dropdown dynamically (fetch from the server)
+    function populateSARODropdown() {
+        const saroSelect = document.getElementById('saro_select');
+        saroSelect.innerHTML = '';  // Clear existing options
+        
+        fetch('/api/saros')  // Replace with actual endpoint to fetch SAROs
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    data.saros.forEach(saro => {
+                        const option = document.createElement('option');
+                        option.value = saro.id;
+                        option.textContent = saro.number;
+                        saroSelect.appendChild(option);
+                    });
+                } else {
+                    console.error('Failed to fetch SAROs:', data.message);
+                }
+            })
+            .catch(error => console.error('Error fetching SAROs:', error));
+    }
+</script>
     </body>
 </html>
