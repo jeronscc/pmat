@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 return;
             }
 
-            fetch('/api/honoraria/upload', {
+            fetch('/api/upload', {
                 method: 'POST',
                 headers: { 'X-CSRF-TOKEN': csrfToken },
                 body: formData
@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Function to fetch and display uploaded files
     function fetchUploadedFiles(procurementId) {
-        fetch(`/api/honoraria/requirements/${procurementId}`)
+        fetch(`/api/requirements/${procurementId}`)
             .then(response => response.json())
             .then(data => {
                 console.log("Fetched files data:", data); // Log the fetched data for debugging
