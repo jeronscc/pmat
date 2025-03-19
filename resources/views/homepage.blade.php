@@ -192,6 +192,7 @@
                             <thead>
                                 <tr>
                                     <th>PR NUMBER</th>
+                                    <th>CATEGORY</th>
                                     <th>ACTIVITY/PERSON-IN-CHARGE</th>
                                     <th>STATUS</th>
                                 </tr>
@@ -209,6 +210,7 @@
                             <thead>
                                 <tr>
                                     <th>PR NUMBER</th>
+                                    <th>CATEGORY</th>
                                     <th>ACTIVITY/PERSON-IN-CHARGE</th>
                                     <th>STATUS</th>
                                 </tr>
@@ -226,6 +228,7 @@
                             <thead>
                                 <tr>
                                     <th>PR NUMBER</th>
+                                    <th>CATEGORY</th>
                                     <th>ACTIVITY/PERSON-IN-CHARGE</th>
                                     <th>STATUS</th>
                                 </tr>
@@ -244,6 +247,7 @@
                             <thead>
                                 <tr>
                                     <th>PR NUMBER</th>
+                                    <th>CATEGORY</th>
                                     <th>ACTIVITY/PERSON-IN-CHARGE</th>
                                     <th>STATUS</th>
                                 </tr>
@@ -262,6 +266,7 @@
                             <thead>
                                 <tr>
                                     <th>PR NUMBER</th>
+                                    <th>CATEGORY</th>
                                     <th>ACTIVITY/PERSON-IN-CHARGE</th>
                                     <th>STATUS</th>
                                 </tr>
