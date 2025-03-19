@@ -309,7 +309,7 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header bg-dark text-white">
-                <h5 class="modal-title" id="saroTitle">ADD SARO</h5>
+                <h5 class="modal-title" id="saroTitle">Add SARO/NTCA</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -324,16 +324,45 @@
                             <option value="SARO">SARO</option>
                         </select>
                     </div>
+                    <!-- SARO Specific Fields -->
+                    <div id="saroFields">
+                        <h5>SARO Details</h5>
+                        <div class="mb-3">
+                            <label for="saro_number" class="form-label">SARO NUMBER</label>
+                            <input type="text" class="form-control" id="saro_number" name="saro_number" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="saroDesc" class="form-label">DESCRIPTION</label>
+                            <textarea class="form-control" rows="3" id="saroDesc" name="saroDesc" placeholder="Enter Description" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="saro_year" class="form-label">YEAR</label>
+                            <select class="form-select" id="saro_year" name="saro_year" required>
+                                <option value="" disabled selected>Select Year</option>
+                                <?php
+                                $startYear = date("Y");
+                                for ($year = $startYear; $year >= $startYear - 10; $year--) {
+                                    echo "<option value='$year'>$year</option>";
+                                }
+                                ?>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="saro_budget" class="form-label">BUDGET</label>
+                            <input type="number" class="form-control" id="saro_budget" name="saro_budget" required>
+                        </div>
+                    </div>
 
                     <!-- NTCA Specific Fields -->
-			<div class="mb-3">
+                    <div id="ntcaFields" class="d-none">
+                        <h5>NTCA Details</h5>
+                        <div class="mb-3">
                             <label for="saro_select" class="form-label">Select SARO</label>
                             <select class="form-select" id="saro_select" name="saro_select" required>
                                 <option value="" disabled selected>Select SARO</option>
                                 <!-- Populate dynamically with SAROs from the server -->
                             </select>
                         </div>
-                    <div id="ntcaFields" class="d-none">
                         <div class="mb-3">
                             <label for="ntca_number" class="form-label">NTCA NUMBER</label>
                             <input type="text" class="form-control" id="ntca_number" name="ntca_number" readonly>
@@ -350,35 +379,9 @@
                         </div>
                         <div class="mb-3">
                             <label for="budget" class="form-label">BUDGET</label>
-                            <input type="text" class="form-control" id="budget" name="budget" required>
+                            <input type="number" class="form-control" id="budget" name="budget" required>
                         </div>
                     </div>
-
-                    <!-- SARO Specific Fields -->
-                    <div id="saroFields" class="d-none">
-                        <div class="mb-3">
-                            <label for="saro_number" class="form-label">SARO NUMBER</label>
-                            <input type="text" class="form-control" id="saro_number" name="saro_number" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="description" class="form-label">DESCRIPTION</label>
-                            <textarea class="form-control" rows="3" id="saroDesc" placeholder="Enter Description"></textarea>
-                        </div>
-                        <div class="mb-3">
-                            <label for="year" class="form-label">YEAR</label>
-                            <select class="form-select" name="saro_year" id="saro_year" required>
-                                <option value="" disabled selected>Select Year</option>
-                                <!-- Populate with last 10 years -->
-                                <?php
-                                    $startYear = max(2026, date("Y")); 
-                                    for ($year = $startYear; $year >= $startYear - 10; $year--) {
-                                        echo "<option value=\"$year\">$year</option>";
-                                    }
-                                ?>
-                            </select>
-                        </div>
-                    </div>
-
                 </form>
             </div>
             <div class="modal-footer">

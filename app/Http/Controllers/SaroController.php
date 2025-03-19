@@ -8,33 +8,28 @@ use Illuminate\Support\Facades\Log;
 
 class SaroController extends Controller
 {
-        public function addSaro(Request $request)
+    public function addSaro(Request $request)
     {
+        $request->validate([
+            'saro_number' => 'required',
+            'budget' => 'required|numeric|min:0',
+            'saro_year' => 'required|integer',
+            'saroDesc' => 'required|string',
+        ]);
+
         try {
-            Log::info('Request Data: ', $request->all()); // Log incoming request data
-
-            // Validate the request data
-            $request->validate([
-                'saro_number' => 'required',
-                'budget' => 'required',
-                'saro_year' => 'required',
-                'saroDesc' => 'required'
-            ]);
-
-            // Save the SARO data to the database
             DB::connection('ilcdb')->table('saro')->insert([
                 'saro_no' => $request->input('saro_number'),
                 'budget_allocated' => $request->input('budget'),
-                'current_budget'  => $request->input('budget'),
+                'current_budget' => $request->input('budget'),
                 'description' => $request->input('saroDesc'),
                 'year' => $request->input('saro_year'),
             ]);
 
-            // Return a success response
-            return response()->json(['message' => 'SARO added successfully']);
+            return response()->json(['success' => true, 'message' => 'SARO added successfully.']);
         } catch (\Exception $e) {
             Log::error('Error adding SARO: ' . $e->getMessage());
-            return response()->json(['message' => 'Failed to add SARO', 'error' => $e->getMessage()], 500);
+            return response()->json(['success' => false, 'message' => 'Failed to add SARO.'], 500);
         }
     }
 
