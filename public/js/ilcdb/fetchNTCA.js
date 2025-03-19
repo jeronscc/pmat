@@ -63,3 +63,34 @@ document.getElementById('ntcaBreakdownModal').addEventListener('shown.bs.modal',
     const ntcaNo = document.getElementById('ntca_number').value; // Replace with the actual NTCA number
     fetchNTCABreakdown(ntcaNo);
 });
+
+function fetchNTCABalance(ntcaNo) {
+    fetch(`/api/ntca-balance/${ntcaNo}`)
+        .then(response => response.json())
+        .then(data => {
+            const ntcaBalanceElement = document.getElementById('ntcaBalance');
+
+            if (data.success) {
+                const { currentQuarter, balance } = data;
+                ntcaBalanceElement.textContent = `₱${balance.toLocaleString()} (${currentQuarter})`;
+            } else {
+                ntcaBalanceElement.textContent = '₱0 (No Data)';
+                console.error(data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching NTCA balance:', error);
+            document.getElementById('ntcaBalance').textContent = '₱0 (Error)';
+        });
+}
+
+// Trigger NTCA balance fetch when a SARO is selected
+document.getElementById('saro_select').addEventListener('change', function () {
+    const selectedSaro = this.value;
+    if (selectedSaro) {
+        const ntcaNo = document.getElementById('ntca_number').value; // Ensure NTCA number is set
+        if (ntcaNo) {
+            fetchNTCABalance(ntcaNo);
+        }
+    }
+});
