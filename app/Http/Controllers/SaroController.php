@@ -113,14 +113,22 @@ class SaroController extends Controller
                 ], 404);
             }
 
+            $firstQuarter = $ntca->first_q ?? 0;
+            $secondQuarter = $ntca->second_q ?? 0;
+            $thirdQuarter = $ntca->third_q ?? 0;
+            $fourthQuarter = $ntca->fourth_q ?? 0;
+            $totalQuarters = $firstQuarter + $secondQuarter + $thirdQuarter + $fourthQuarter;
+
             return response()->json([
                 'success' => true,
                 'ntca' => [
-                    'first_q' => $ntca->first_q ?? 0,
-                    'second_q' => $ntca->second_q ?? 0,
-                    'third_q' => $ntca->third_q ?? 0,
-                    'fourth_q' => $ntca->fourth_q ?? 0,
+                    'ntca_no' => $ntca->ntca_no,
+                    'first_q' => $firstQuarter,
+                    'second_q' => $secondQuarter,
+                    'third_q' => $thirdQuarter,
+                    'fourth_q' => $fourthQuarter,
                     'current_budget' => $ntca->current_budget ?? 0,
+                    'total_quarters' => $totalQuarters,
                 ],
             ]);
         } catch (\Exception $e) {

@@ -6,7 +6,21 @@ function fetchNTCABreakdown(ntcaNo) {
             breakdownList.innerHTML = ''; // Clear existing items
 
             if (data.success) {
-                const { first_q, second_q, third_q, fourth_q, current_budget } = data.ntca;
+                const { ntca_no, first_q, second_q, third_q, fourth_q, current_budget, total_quarters } = data.ntca;
+
+                // Add NTCA No.
+                breakdownList.innerHTML += `
+                    <li class="list-group-item d-flex justify-content-between">
+                        <strong>NTCA No:</strong> <span>${ntca_no}</span>
+                    </li>
+                `;
+
+                // Add Unclaimed NTCA Budget
+                breakdownList.innerHTML += `
+                    <li class="list-group-item d-flex justify-content-between">
+                        Unclaimed NTCA Budget <span class="fw-bold text-success">₱${current_budget.toLocaleString()}</span>
+                    </li>
+                `;
 
                 // Add balances for each quarter
                 breakdownList.innerHTML += `
@@ -24,10 +38,10 @@ function fetchNTCABreakdown(ntcaNo) {
                     </li>
                 `;
 
-                // Add unclaimed NTCA budget
+                // Add total of all quarters
                 breakdownList.innerHTML += `
                     <li class="list-group-item d-flex justify-content-between">
-                        Unclaimed NTCA Budget <span class="fw-bold text-success">₱${current_budget.toLocaleString()}</span>
+                        Total of All Quarters <span class="fw-bold text-primary">₱${total_quarters.toLocaleString()}</span>
                     </li>
                 `;
             } else {
