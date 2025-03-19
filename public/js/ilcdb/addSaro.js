@@ -114,12 +114,11 @@ function generateNTCANumber() {
     const ntcaNumber = `NTCA-${lastDigits}-${currentMonthYear}`;
     document.getElementById('ntca_number').value = ntcaNumber;
 }
-
+// Function to populate the SARO dropdown dynamically (fetch from the server)
 // Function to populate the SARO dropdown dynamically (fetch from the server)
 function populateSARODropdown() {
     const saroSelect = document.getElementById('saro_select');
     saroSelect.innerHTML = ''; // Clear existing options
-
     fetch('/api/fetch-saro-ilcdb')
         .then(response => response.json())
         .then(data => {
@@ -130,8 +129,14 @@ function populateSARODropdown() {
                 saroSelect.appendChild(option);
             });
         })
-        .catch(error => console.error('Error fetching SAROs:', error));
+        .catch(error => {
+            console.error('Error fetching SAROs:', error);
+        });
+    // Trigger NTCA number generation when a SARO is selected
+    saroSelect.addEventListener('change', generateNTCANumber);
 }
-
+document.getElementById('addSaroModal').addEventListener('shown.bs.modal', function () {
+    populateSARODropdown();
+});
 // Call populateSARODropdown when the modal is opened
 document.getElementById('addSaroModal').addEventListener('shown.bs.modal', populateSARODropdown);
