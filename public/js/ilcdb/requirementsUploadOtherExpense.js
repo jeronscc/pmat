@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const formData = new FormData(form);
             formData.append('procurement_id', procurementId);
 
-            console.log("Sending form data:", [...formData.entries()]); // ✅ Debugging log
+            console.log("Sending form data:", [...formData.entries()]); // Debugging log
 
             const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
             if (!csrfToken) {
@@ -34,13 +34,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 headers: { 'X-CSRF-TOKEN': csrfToken },
                 body: formData
             })
-            .then(response => response.json()) // Read as JSON
+            .then(response => response.json())
             .then(data => {
                 console.log("Server response:", data); // Log response
 
                 if (data.success) {
                     alert(data.message);
-                    fetchUploadedFiles(procurementId); // Fetch and display uploaded files after saving
+                    // Important: Fetch files again after successful upload
+                    fetchUploadedFiles(procurementId);
                 } else {
                     alert("Upload failed: " + (data.message || "Unknown error."));
                 }
@@ -61,19 +62,17 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 if (data.success && data.files) {
                     // Ensure files is an array
-                    if (!Array.isArray(data.files)) {
-                        console.error("Files is not an array, converting to array:", data.files);
-                        data.files = Object.values(data.files);
-                    }
-
-                    // Display uploaded files in their respective sections (DV, ORS, etc.)
-                    displayUploadedFiles('ORS', data.files);
-                    displayUploadedFiles('DV', data.files);
-                    displayUploadedFiles('TravelOrder', data.files);
-                    displayUploadedFiles('Appearance', data.files);
-                    displayUploadedFiles('Report', data.files);
-                    displayUploadedFiles('Itinerary', data.files);
-                    displayUploadedFiles('Cert', data.files);
+                    const files = Array.isArray(data.files) ? data.files : Object.values(data.files);
+                    console.log("Processing files:", files); // Log processed files array
+                    
+                    // Display each file type
+                    displayFilesForRequirement('ORS', files);
+                    displayFilesForRequirement('DV', files);
+                    displayFilesForRequirement('TravelOrder', files);
+                    displayFilesForRequirement('Appearance', files);
+                    displayFilesForRequirement('Report', files);
+                    displayFilesForRequirement('Itinerary', files);
+                    displayFilesForRequirement('Cert', files);
                 } else {
                     console.error("Failed to fetch uploaded files or no files found:", data.message);
                 }
@@ -83,38 +82,75 @@ document.addEventListener('DOMContentLoaded', function () {
             });
     }
 
-    // Function to display uploaded files in their respective sections
-    function displayUploadedFiles(requirement, files) {
-        const fileListContainer = document.getElementById(`uploadedFilesList${requirement}`);
+    // Function to display files for a specific requirement
+    function displayFilesForRequirement(requirementType, files) {
+        // Get the file list container for this requirement
+        const fileListContainer = document.getElementById(`uploadedFilesList${requirementType}`);
         if (!fileListContainer) {
-            console.error(`Container for ${requirement} not found`);
+            console.error(`Container for ${requirementType} not found: uploadedFilesList${requirementType}`);
             return;
         }
 
-        fileListContainer.innerHTML = ''; // Clear existing files
+        // Get the file input associated with this requirement
+        // Fixed: Handle TravelOrder properly with lowercase first letter in ID (travelOrderFile)
+        const fileInputId = requirementType === 'TravelOrder' ? 'travelOrderFile' : `${requirementType.toLowerCase()}File`;
+        const fileInput = document.getElementById(fileInputId);
 
-        // Log the files array for each section for debugging purposes
-        console.log(`Files for ${requirement}:`, files);
+        // Clear existing content
+        fileListContainer.innerHTML = '';
 
-        // Filter the files by requirement name and display them
-        files.filter(file => file.requirement_name && file.requirement_name.includes(requirement)).forEach(file => {
-            const fileLink = document.createElement('a');
-            fileLink.href = `/${file.file_path}`;
-            fileLink.textContent = file.requirement_name;
-            fileLink.target = '_blank';
-
-            const listItem = document.createElement('li');
-            listItem.appendChild(fileLink);
-
-            // Disable and hide the corresponding file input field
-            const inputField = document.getElementById(`${requirement.toLowerCase()}File`);
-            if (inputField) {
-                inputField.disabled = true;
-                inputField.style.display = 'none';
-            }
-
-            fileListContainer.appendChild(listItem);
+        // Find files for this requirement type - consider multiple possible formats
+        const matchingFiles = files.filter(file => {
+            if (!file.requirement_name) return false;
+            
+            // Check for various formats of the requirement name
+            const reqName = file.requirement_name.toLowerCase();
+            const searchType = requirementType.toLowerCase();
+            
+            return reqName.includes(searchType) || 
+                  reqName.includes(searchType.replace(/([A-Z])/g, ' $1').trim().toLowerCase()) ||  // Check with spaces
+                  reqName.includes(searchType.replace(/([A-Z])/g, '_$1').trim().toLowerCase());    // Check with underscores
         });
+        
+        console.log(`Files matching ${requirementType}:`, matchingFiles);
+
+        // If we have matching files, show them and hide the file input
+        if (matchingFiles.length > 0) {
+            matchingFiles.forEach(file => {
+                // Create the file link
+                const fileLink = document.createElement('a');
+                fileLink.href = `/${file.file_path}`;
+                fileLink.textContent = file.original_filename || `View ${requirementType} file`;
+                fileLink.target = '_blank';
+                fileLink.classList.add('text-primary', 'fw-bold');
+                
+                // Create a container for the link
+                const linkContainer = document.createElement('div');
+                linkContainer.classList.add('mt-2', 'mb-2');
+                linkContainer.appendChild(fileLink);
+                
+                // Add the link to the file list container
+                fileListContainer.appendChild(linkContainer);
+                
+                if (fileInput) {
+                    // Hide the file input since we already have a file
+                    fileInput.style.display = 'none';
+                    fileInput.disabled = true;
+                    
+                    // Explicitly log when we're hiding an input
+                    console.log(`Hiding input for ${requirementType} (ID: ${fileInputId})`);
+                }
+            });
+        } else {
+            // Make sure the file input is visible if no files exist
+            if (fileInput) {
+                fileInput.style.display = '';
+                fileInput.disabled = false;
+                
+                // Explicitly log when we're showing an input
+                console.log(`Showing input for ${requirementType} (ID: ${fileInputId})`);
+            }
+        }
     }
 
     // Event listener to open the modal and fetch uploaded files
