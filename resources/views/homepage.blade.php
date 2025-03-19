@@ -458,6 +458,20 @@
                         </select>
                     </div>
                     <div class="mb-3">
+                        <label for="ntca-number" class="form-label">NTCA NUMBER</label>
+                        <input type="text" class="form-control" id="ntca-number" placeholder="NTCA Number" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="quarter" class="form-label">NTCA Quarter</label>
+                        <select class="form-select" id="quarter">
+                            <option value="" disabled selected>Select Current Quarter</option>
+                            <option value="First Quarter">First Quarter</option>
+                            <option value="Second Quarter">Second Quarter</option>
+                            <option value="Third Quarter">Third Quarter</option>
+                            <option value="Fourth Quarter">Fourth Quarter</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
                         <label for="activity" class="form-label" id="activityLabel">ACTIVITY</label>
                         <input type="text" class="form-control" id="activity" placeholder="Enter Activity">
                     </div>
