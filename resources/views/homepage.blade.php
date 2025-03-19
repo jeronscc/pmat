@@ -92,24 +92,13 @@
 <div class="modal fade" id="ntcaBreakdownModal" tabindex="-1" aria-labelledby="ntcaBreakdownModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-        <div class="modal-header" style="background-color:rgb(36, 36, 36); color: white;">
+            <div class="modal-header" style="background-color:rgb(36, 36, 36); color: white;">
                 <h5 class="modal-title" id="ntcaBreakdownModalLabel">NTCA Balance Breakdown</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <ul class="list-group">
-                    <li class="list-group-item d-flex justify-content-between">
-                        Item 1 <span class="fw-bold">₱5,000</span>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between">
-                        Item 2 <span class="fw-bold">₱3,000</span>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between">
-                        Item 3 <span class="fw-bold">₱2,500</span>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between">
-                        Total <span class="fw-bold text-success">₱10,500</span>
-                    </li>
+                <ul class="list-group" id="ntcaBreakdownList">
+                    <!-- NTCA records will be dynamically populated here -->
                 </ul>
             </div>
             <div class="modal-footer">
@@ -510,6 +499,7 @@
         <script src="/js/ilcdb/filterSaroByYear.js"></script>
         <script src="/sarohover.js"></script>
         <script src="/js/ilcdb/overdueNotification.js"></script>
+        <sctipt src="/js/ilcdb/ntcaBreakdown.js"></sctipt>
 
         <!-- Bootstrap JS (Optional, only needed for dropdowns, modals, etc.) -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

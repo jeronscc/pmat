@@ -64,8 +64,8 @@ class SaroController extends Controller
                 DB::connection('ilcdb')->table('ntca')
                     ->where('ntca_no', $validatedData['ntca_no'])
                     ->update([
-                        $validatedData['quarter'] => $validatedData['budget'],
-                        'current_budget' => DB::raw("current_budget + {$validatedData['budget']}"),
+                        $validatedData['quarter'] => DB::raw("{$validatedData['quarter']} + {$validatedData['budget']}"),
+                        'current_budget' => DB::raw("budget_allocated - (COALESCE(first_q, 0) + COALESCE(second_q, 0) + COALESCE(third_q, 0) + COALESCE(fourth_q, 0))"),
                     ]);
             } else {
                 // Fetch the SARO's budget
@@ -82,7 +82,7 @@ class SaroController extends Controller
                 DB::connection('ilcdb')->table('ntca')->insert([
                     'ntca_no' => $validatedData['ntca_no'],
                     'budget_allocated' => $saro->budget_allocated, // Use SARO's budget
-                    'current_budget' => $validatedData['budget'],
+                    'current_budget' => $saro->budget_allocated - $validatedData['budget'],
                     $validatedData['quarter'] => $validatedData['budget'], // Save the budget in the selected quarter
                     'saro_no' => $validatedData['saro_no'],
                 ]);
@@ -97,6 +97,56 @@ class SaroController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to save NTCA. Please try again.',
+            ], 500);
+        }
+    }
+
+    public function getNTCABreakdown($ntcaNo)
+    {
+        try {
+            $ntca = DB::connection('ilcdb')->table('ntca')->where('ntca_no', $ntcaNo)->first();
+
+            if (!$ntca) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'NTCA not found.',
+                ], 404);
+            }
+
+            return response()->json([
+                'success' => true,
+                'ntca' => $ntca,
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Failed to fetch NTCA breakdown: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to fetch NTCA breakdown.',
+            ], 500);
+        }
+    }
+
+    public function fetchNTCABySaro($saroNo)
+    {
+        try {
+            $ntcaRecords = DB::connection('ilcdb')->table('ntca')->where('saro_no', $saroNo)->get();
+
+            if ($ntcaRecords->isEmpty()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No NTCA records found for the selected SARO.',
+                ], 404);
+            }
+
+            return response()->json([
+                'success' => true,
+                'ntca' => $ntcaRecords,
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Failed to fetch NTCA by SARO: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to fetch NTCA records. Please try again.',
             ], 500);
         }
     }

@@ -201,3 +201,5 @@ Route::get('/uploadedHonorariaFilesCheck/{procurement_id}', [HonorariaFormContro
 Route::get('/uploadedTravelExpenseFileCheck/{procurement_id}', [OtherExpenseFormController::class, 'uploadedFilesCheck']);
 Route::get('/uploadedProcurementFilesCheck/{procurement_id}', [ProcurementFormController::class, 'uploadedFilesCheck']);
 Route::post('/save-ntca', [SaroController::class, 'saveNTCA']);
+Route::get('/ntca-breakdown/{ntcaNo}', [SaroController::class, 'getNTCABreakdown']);
+Route::get('/fetch-ntca-by-saro/{saroNo}', [SaroController::class, 'fetchNTCABySaro']);

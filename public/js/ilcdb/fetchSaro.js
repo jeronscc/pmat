@@ -80,6 +80,9 @@ function displayCurrentBudget(saro) {
     // Fetch and display the requirements associated with the selected SARO
     // Fetch and display the requirements associated with the selected SARO
     fetchProcurementForSaro(saro.saro_no);
+
+    // Fetch and display NTCA records for the selected SARO
+    fetchNTCAForSaro(saro.saro_no);
 }
 
 function fetchSaroDataAndRequirements(year) {
@@ -115,4 +118,30 @@ function fetchSaroDataAndRequirements(year) {
             }
         })
         .catch((error) => console.error("Error fetching SARO data:", error));
+}
+
+function fetchNTCAForSaro(saroNo) {
+    fetch(`/api/fetch-ntca-by-saro/${saroNo}`)
+        .then(response => response.json())
+        .then(data => {
+            const ntcaList = document.getElementById('ntcaBreakdownList');
+            ntcaList.innerHTML = ''; // Clear existing NTCA records
+
+            if (data.success) {
+                data.ntca.forEach(ntca => {
+                    ntcaList.innerHTML += `
+                        <li class="list-group-item d-flex justify-content-between">
+                            NTCA No: ${ntca.ntca_no} <span class="fw-bold">₱${ntca.current_budget.toLocaleString()}</span>
+                        </li>
+                    `;
+                });
+            } else {
+                ntcaList.innerHTML = `
+                    <li class="list-group-item text-danger">${data.message}</li>
+                `;
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching NTCA records:', error);
+        });
 }
