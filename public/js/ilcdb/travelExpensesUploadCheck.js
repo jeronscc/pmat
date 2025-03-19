@@ -16,7 +16,7 @@ function uploadCompleteCheck() {
     const dateSubmitted = document.getElementById('dateSubmitted');
     const dateReturned = document.getElementById('dateReturned');
 
-    fetch(`/api/uploadedHonorariaFilesCheck/${procurementId}`)
+    fetch(`/api/uploadedTravelExpenseFileCheck/${procurementId}`)
         .then(response => response.json())
         .then(result => {
             if (result.success) {
