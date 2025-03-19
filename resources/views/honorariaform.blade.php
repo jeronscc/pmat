@@ -85,7 +85,7 @@
                         <!-- Display PR number and Activity (retrieved from URL) -->
                         <div class="activity-info">
                             <h3><b>PR/Transaction Number: </b><span id="prtrNumber">{{ $prNumber }}</span></h3>
-                            <h3><b>Activity Name: </b><span id="activityName">{{ $activity }}</span></h3>
+                            <h3><b>Name of Speaker: </b><span id="activityName">{{ $activity }}</span></h3>
                             <h3><b>Description: </b><span id="procurement-description">{{ $description }}</span></h3>
                         </div>
 
