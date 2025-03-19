@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 indicator.style.backgroundColor = "green";
                 indicator.textContent = "";
             } else if (submitted && !returned) {
-                indicator.style.backgroundColor = "yellow";
+                indicator.style.backgroundColor = "green";
                 indicator.textContent = "";
             } else {
                 indicator.style.backgroundColor = "transparent";
