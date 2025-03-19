@@ -6,7 +6,7 @@ function uploadCompleteCheck() {
     }
 
     const procurementId = procurementIdElement.value;
-    console.log('Procurement ID:', procurementId);  // Check the ID value
+    console.log('Procurement ID:', procurementId);
 
     if (!procurementId) {
         console.error('Procurement ID is missing!');
@@ -47,6 +47,62 @@ function uploadCompleteCheck() {
         });
 }
 
+function incompFilesDisable() {
+    const orsFiles = document.getElementById('orsFile');
+    const dvFiles = document.getElementById('dvFile');
+    const contractFiles = document.getElementById('contractFile');
+    const classificationFiles = document.getElementById('classificationFile');
+    const report = document.getElementById('reportFile');
+    const attendance = document.getElementById('attendanceFile');
+    const resume = document.getElementById('resumeFile');
+    const govId = document.getElementById('govidFile');
+    const paySlip = document.getElementById('payslipFile');
+    const bank = document.getElementById('bankFile');
+    const cert = document.getElementById('certFile');
+    const save = document.getElementById('saveBtn');
+
+    // Check if all file inputs have files selected
+    if (
+        !orsFiles?.files.length ||
+        !dvFiles?.files.length ||
+        !contractFiles?.files.length ||
+        !classificationFiles?.files.length ||
+        !report?.files.length ||
+        !attendance?.files.length ||
+        !resume?.files.length ||
+        !govId?.files.length ||
+        !paySlip?.files.length ||
+        !bank?.files.length ||
+        !cert?.files.length
+    ) {
+        save.disabled = true; // Disable the save button if any file input is empty
+    } else {
+        save.disabled = false; // Enable the save button if all file inputs have files
+        
+        // Call the upload complete check after all files are selected
+        uploadCompleteCheck();
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
+    // Initial check on page load
     uploadCompleteCheck();
+    
+    // Add event listeners to file inputs
+    const fileInputs = document.querySelectorAll(
+        '#orsFile, #dvFile, #contractFile, #classificationFile, #reportFile, #attendanceFile, #resumeFile, #govidFile, #payslipFile, #bankFile, #certFile'
+    );
+
+    fileInputs.forEach(input => {
+        input.addEventListener('change', incompFilesDisable);
+    });
+
+    // Also add event listener to the save button
+    const saveBtn = document.getElementById('saveBtn');
+    if (saveBtn) {
+        saveBtn.addEventListener('click', () => {
+            // Wait a short time for the files to be processed and then check again
+            setTimeout(uploadCompleteCheck, 1000);
+        });
+    }
 });

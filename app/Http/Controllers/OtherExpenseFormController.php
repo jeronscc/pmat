@@ -194,6 +194,8 @@ class OtherExpenseFormController extends Controller
                     $filePath = "uploads/requirements/{$request->procurement_id}/" . $fileName;
                     $request->file($file)->move($uploadDir, $fileName);
 
+                     // Get the file size in bytes
+                    $fileSize = filesize($uploadDir . '/' . $fileName);
                     // Delete existing file entry if it exists
                     DB::connection('ilcdb')->table('requirements')
                         ->where('procurement_id', $request->procurement_id)
@@ -205,6 +207,7 @@ class OtherExpenseFormController extends Controller
                         'procurement_id'    => $request->procurement_id,
                         'requirement_name'  => $file,
                         'file_path'         => $filePath,
+                        'size'             => $fileSize,
                     ]);
 
                     $uploads[] = $file;

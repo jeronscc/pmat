@@ -100,7 +100,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 fileLink.href = `/${file.file_path}`;
                 
                 // Get the file size (assuming it's in bytes)
-                const fileSize = file.size;  // Ensure the 'size' is included in your file response data
+                const fileSize = file.size || 0; // Default to 0 if size is missing or invalid
                 
                 // Format the file size to KB or MB
                 let formattedFileSize = '';
@@ -113,8 +113,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
     
                 // Set the link text content (including requirement name and file size)
-                fileLink.textContent = `${file.requirement_name} (${formattedFileSize})`;
+                fileLink.textContent = `View ${file.requirement_name} (${formattedFileSize})`;
                 fileLink.target = '_blank';
+                fileLink.style.fontWeight = 'bold';
     
                 // Clear existing content and append the new file link
                 fileLinkContainer.innerHTML = ''; 

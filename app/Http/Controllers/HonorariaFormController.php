@@ -117,16 +117,26 @@ class HonorariaFormController extends Controller
     {
         try {
             if (!$request->filled('procurement_id')) {
-                return response()->json(['success' => false, 'message' => 'Procurement ID is missing.'], 400);
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Error: Procurement ID is missing.',
+                ], 400);
             }
 
-            $requiredFiles = ['orsFile', 'dvFile', 'contractFile', 'classificationFile', 'reportFile', 'attendanceFile', 'resumeFile', 'govidFile', 'payslipFile', 'bankFile', 'certFile'];
+            $requiredFiles = [
+                'orsFile', 'dvFile', 'travelOrderFile', 'appearanceFile', 'reportFile',
+                'itineraryFile', 'certFile'
+            ];
+
             $uploads = [];
+            $missingFiles = [];
 
             foreach ($requiredFiles as $file) {
                 if ($request->hasFile($file)) {
-                    $request->validate([$file => 'file|max:5120|mimes:pdf,doc,docx,jpg,png']);
-                    
+                    $validated = $request->validate([
+                        $file => 'file|max:5120|mimes:pdf'
+                    ]);
+
                     $uploadDir = public_path("uploads/requirements/{$request->procurement_id}");
                     if (!file_exists($uploadDir)) {
                         mkdir($uploadDir, 0777, true);
@@ -136,24 +146,54 @@ class HonorariaFormController extends Controller
                     $filePath = "uploads/requirements/{$request->procurement_id}/" . $fileName;
                     $request->file($file)->move($uploadDir, $fileName);
 
-                    DB::connection('ilcdb')->table('requirements')->updateOrInsert(
-                        ['procurement_id' => $request->procurement_id, 'requirement_name' => $file],
-                        ['file_path' => $filePath]
-                    );
+                     // Get the file size in bytes
+                    $fileSize = filesize($uploadDir . '/' . $fileName);
+                    // Delete existing file entry if it exists
+                    DB::connection('ilcdb')->table('requirements')
+                        ->where('procurement_id', $request->procurement_id)
+                        ->where('requirement_name', $file)
+                        ->delete();
+
+                    // Store file path in the database
+                    DB::connection('ilcdb')->table('requirements')->insert([
+                        'procurement_id'    => $request->procurement_id,
+                        'requirement_name'  => $file,
+                        'file_path'         => $filePath,
+                        'size'             => $fileSize,
+                    ]);
 
                     $uploads[] = $file;
+                } else {
+                    $missingFiles[] = $file;
                 }
             }
 
             if (empty($uploads)) {
-                return response()->json(['success' => false, 'message' => 'No files uploaded.'], 400);
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No files uploaded. Missing: ' . implode(', ', $missingFiles),
+                ], 400);
             }
 
-            return response()->json(['success' => true, 'message' => 'Files uploaded successfully: ' . implode(', ', $uploads)]);
+            // Fetch the latest uploaded files after saving
+            $uploadedFiles = DB::connection('ilcdb')
+                ->table('requirements')
+                ->where('procurement_id', $request->procurement_id)
+                ->get();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Files uploaded successfully: ' . implode(', ', $uploads),
+                'files'   => $uploadedFiles, // ✅ Return updated files
+            ]);
 
         } catch (\Exception $e) {
             Log::error('File upload failed: ' . $e->getMessage());
-            return response()->json(['success' => false, 'message' => 'Server error: ' . $e->getMessage()], 500);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Server error: ' . $e->getMessage(),
+            ], 500);
         }
     }
 
@@ -162,12 +202,20 @@ class HonorariaFormController extends Controller
         try {
             $files = DB::connection('ilcdb')->table('requirements')
                 ->where('procurement_id', $procurement_id)
-                ->pluck('file_path', 'requirement_name');
+                ->get();
 
-            return response()->json(['success' => true, 'files' => $files]);
+            return response()->json([
+                'success' => true,
+                'files' => $files,
+            ]);
+
         } catch (\Exception $e) {
             Log::error('Failed to fetch uploaded files: ' . $e->getMessage());
-            return response()->json(['success' => false, 'message' => 'Server error: ' . $e->getMessage()], 500);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Server error: ' . $e->getMessage(),
+            ], 500);
         }
     }
 

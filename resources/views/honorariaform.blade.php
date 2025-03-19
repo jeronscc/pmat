@@ -176,77 +176,77 @@
                                         <div class="mb-3">
                                             <label for="orsFile" class="form-label">Upload ORS</label>
                                             <input class="form-control" type="file" id="orsFile" name="orsFile">
-                                            <div id="orsFileUploaded"></div>
+                                            <div id="uploadedFilesListORS"></div>
                                         </div>
 
                                         <!-- DV File Upload -->
                                         <div class="mb-3">
                                             <label for="dvFile" class="form-label">Upload DV</label>
                                             <input class="form-control" type="file" id="dvFile" name="dvFile">
-                                            <div id="dvFileUploaded"></div>
+                                            <div id="uploadedFilesListDV"></div>
                                         </div>
 
                                         <!-- Service Contract Upload -->
                                         <div class="mb-3">
                                             <label for="contractFile" class="form-label">Upload Service Contract</label>
                                             <input class="form-control" type="file" id="contractFile" name="contractFile">
-                                            <div id="dvFileUploaded"></div>
+                                            <div id="uploadedFilesListContract"></div>
                                         </div>
 
                                         <!-- Certificate Honoraria Classification Upload -->
                                         <div class="mb-3">
                                             <label for="classificationFile" class="form-label">Upload Certificate Honoraria Classification</label>
                                             <input class="form-control" type="file" id="classificationFile" name="classificationFile">
-                                            <div id="classificationFileUploaded"></div>
+                                            <div id="uploadedFilesListClassification"></div>
                                         </div>
 
                                         <!-- Terminal Report Upload -->
                                         <div class="mb-3">
                                             <label for="reportFile" class="form-label">Upload Terminal Report</label>
                                             <input class="form-control" type="file" id="reportFile" name="reportFile">
-                                            <div id="reportFileUploaded"></div>
+                                            <div id="uploadedFilesListReport"></div>
                                         </div>
 
                                         <!-- Attendance Upload -->
                                         <div class="mb-3">
                                             <label for="attendanceFile" class="form-label">Upload Attendance</label>
                                             <input class="form-control" type="file" id="attendanceFile" name="attendanceFile">
-                                            <div id="attendanceFileUploaded"></div>
+                                            <div id="uploadedFilesListAttendance"></div>
                                         </div>
 
                                         <!-- Resume/CV Upload -->
                                         <div class="mb-3">
                                             <label for="resumeFile" class="form-label">Upload Resume/CV</label>
                                             <input class="form-control" type="file" id="resumeFile" name="resumeFile">
-                                            <div id="resumeFileUploaded"></div>
+                                            <div id="uploadedFilesListResume"></div>
                                         </div>
 
                                         <!-- Government ID Upload -->
                                         <div class="mb-3">
                                             <label for="govidFile" class="form-label">Upload Government ID</label>
                                             <input class="form-control" type="file" id="govidFile" name="govidFile">
-                                            <div id="govidFileUploaded"></div>
+                                            <div id="uploadedFilesListGovID"></div>
                                         </div>
 
                                         <!-- Payslip/Certificate of Gross Income Upload -->
                                         <div class="mb-3">
                                             <label for="payslipFile" class="form-label">Upload Payslip/Certificate of Gross Income</label>
                                             <input class="form-control" type="file" id="payslipFile" name="payslipFile">
-                                            <div id="payslipFileUploaded"></div>
+                                            <div id="uploadedFilesListPayslip"></div>
                                         </div>
 
                                         <!-- TIN and Bank Account Details Upload -->
                                         <div class="mb-3">
                                             <label for="bankFile" class="form-label">Upload TIN and Bank Account Details</label>
                                             <input class="form-control" type="file" id="bankFile" name="bankFile">
-                                            <div id="bankFileUploaded"></div>
+                                            <div id="uploadedFilesListBank"></div>
                                         </div>
 
                                         <!-- Certificate of Services Rendered Upload -->
                                         <div class="mb-3">
                                             <label for="certFile" class="form-label">Upload Certificate of Services Rendered</label>
                                             <input class="form-control" type="file" id="certFile" name="certFile">
-                                            <div id="certFileUploaded"></div>
+                                            <div id="uploadedFilesListCert"></div>
                                         </div>
                                     </form>
                                 </div>
