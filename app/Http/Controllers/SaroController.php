@@ -150,4 +150,39 @@ class SaroController extends Controller
             ], 500);
         }
     }
+
+    public function getNTCABalanceForCurrentQuarter($ntcaNo)
+    {
+        try {
+            $ntca = DB::connection('ilcdb')->table('ntca')->where('ntca_no', $ntcaNo)->first();
+
+            if (!$ntca) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'NTCA not found.',
+                ], 404);
+            }
+
+            // Determine the current quarter
+            $currentMonth = date('n'); // Get the current month (1-12)
+            $currentQuarter = match (true) {
+                $currentMonth <= 3 => 'first_q',
+                $currentMonth <= 6 => 'second_q',
+                $currentMonth <= 9 => 'third_q',
+                default => 'fourth_q',
+            };
+
+            return response()->json([
+                'success' => true,
+                'currentQuarter' => ucfirst(str_replace('_q', ' Quarter', $currentQuarter)),
+                'balance' => $ntca->$currentQuarter ?? 0,
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Failed to fetch NTCA balance for current quarter: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to fetch NTCA balance. Please try again.',
+            ], 500);
+        }
+    }
 }
