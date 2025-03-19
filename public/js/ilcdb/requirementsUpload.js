@@ -87,8 +87,11 @@ document.addEventListener('DOMContentLoaded', function () {
             fileLink.href = `/${filePath}`;
             fileLink.textContent = `View ${requirementName}`;
             fileLink.target = '_blank';
+            fileLink.style.fontWeight = 'bold';
+            
 
             const listItem = document.createElement('li');
+            listItem.style.listStyleType = 'none'; 
             listItem.appendChild(fileLink);
             fileListContainer.appendChild(listItem);
 
