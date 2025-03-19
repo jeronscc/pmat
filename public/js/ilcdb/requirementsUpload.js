@@ -9,10 +9,10 @@ document.addEventListener('DOMContentLoaded', function () {
     fetchUploadedFiles(procurementId);
 
     // Save button click event listener for form 1
-    const saveBtn1 = document.getElementById('saveBtn1');
+    const saveBtn1 = document.getElementById('saveBtn');
     if (saveBtn1) {
         saveBtn1.addEventListener('click', function () {
-            const form = document.getElementById('requirementsForm1');
+            const form = document.getElementById('requirementsForm');
             if (!form) {
                 console.error("Form not found.");
                 return;
@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Function to fetch and display uploaded files
     function fetchUploadedFiles(procurementId) {
-        fetch(`/api/otherexpense/requirements/${procurementId}`)
+        fetch(`/api/requirements/${procurementId}`)
             .then(response => response.json())
             .then(data => {
                 console.log("Fetched files data:", data); // Log the fetched data for debugging

@@ -123,10 +123,7 @@ class HonorariaFormController extends Controller
                 ], 400);
             }
 
-            $requiredFiles = [
-                'orsFile', 'dvFile', 'travelOrderFile', 'appearanceFile', 'reportFile',
-                'itineraryFile', 'certFile'
-            ];
+            $requiredFiles = ['orsFile', 'dvFile', 'contractFile', 'classificationFile', 'reportFile', 'attendanceFile', 'resumeFile', 'govidFile', 'payslipFile', 'bankFile', 'certFile'];
 
             $uploads = [];
             $missingFiles = [];
