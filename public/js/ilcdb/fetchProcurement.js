@@ -61,6 +61,11 @@ function fetchProcurementForSaro(saroNo) {
                     prNumberCell.textContent = item.procurement_id;
                     row.appendChild(prNumberCell);
 
+                    // CATEGORY cell
+                    const categoryCell = document.createElement('td');
+                    categoryCell.textContent = item.procurement_category || 'N/A'; // Add category cell
+                    row.appendChild(categoryCell);
+
                     // ACTIVITY cell
                     const activityCell = document.createElement('td');
                     activityCell.textContent = item.activity;
@@ -155,6 +160,11 @@ function fetchProcurementForYear(year) {
                     const prNumberCell = document.createElement('td');
                     prNumberCell.textContent = item.procurement_id;
                     row.appendChild(prNumberCell);
+
+                    // CATEGORY cell
+                    const categoryCell = document.createElement('td');
+                    categoryCell.textContent = item.procurement_category || 'N/A'; // Add category cell
+                    row.appendChild(categoryCell);
 
                     // ACTIVITY cell
                     const activityCell = document.createElement('td');
@@ -259,6 +269,11 @@ function fetchProcurementRequirements(saroNo) {
                     prNumberCell.textContent = item.procurement_id;
                     prNumberCell.style.cursor = 'pointer'; // Add cursor pointer for visual feedback
                     row.appendChild(prNumberCell);
+
+                    // CATEGORY cell
+                    const categoryCell = document.createElement('td');
+                    categoryCell.textContent = item.procurement_category || 'N/A'; // Add category cell
+                    row.appendChild(categoryCell);
 
                     // ACTIVITY cell
                     const activityCell = document.createElement('td');
@@ -435,6 +450,10 @@ function fetchProcurementData(year = '', status = 'all') {
                 const prNumberCell = document.createElement('td');
                 prNumberCell.textContent = item.procurement_id;
                 row.appendChild(prNumberCell);
+
+                const categoryCell = document.createElement('td');
+                categoryCell.textContent = item.procurement_category || 'N/A'; // Add category cell
+                row.appendChild(categoryCell);
             
                 const activityCell = document.createElement('td');
                 activityCell.textContent = item.activity;
@@ -555,6 +574,10 @@ function updateProcurementTable(data) {
             const prNumberCell = document.createElement('td');
             prNumberCell.textContent = item.procurement_id;
             row.appendChild(prNumberCell);
+
+            const categoryCell = document.createElement('td');
+            categoryCell.textContent = item.procurement_category || 'N/A'; // Add category cell
+            row.appendChild(categoryCell);
 
             const activityCell = document.createElement('td');
             activityCell.textContent = item.activity;
