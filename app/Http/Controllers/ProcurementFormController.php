@@ -184,7 +184,7 @@ class ProcurementFormController extends Controller
             $modalFiles = [
                 1 => ['appFile', 'saroFile', 'budgetFile', 'distributionFile', 'poiFile', 'researchFile','purchaseFile', 'quotationsFile'],
                 2 => ['poFile', 'absFile'],
-                3 => ['orsFile',],
+                3 => ['orsFile'],
                 4 => ['attendanceFile', 'cocFile', 'photoFile', 'soaFile', 'drFile', 'dlFile'],
                 5 => [],
                 6 => ['dvFile'],
@@ -206,19 +206,26 @@ class ProcurementFormController extends Controller
                         mkdir($uploadDir, 0777, true);
                     }
     
-                    $fileName = time() . '_' . $request->file($file)->getClientOriginalName();
+                    $uploadedFile = $request->file($file);
+                    $fileName = time() . '_' . $uploadedFile->getClientOriginalName();
                     $filePath = "uploads/requirements/{$request->procurement_id}/" . $fileName;
-                    $request->file($file)->move($uploadDir, $fileName);
+                    $uploadedFile->move($uploadDir, $fileName);
     
+                    // Get the file size in bytes
+                    $fileSize = filesize($uploadDir . '/' . $fileName);
+    
+                    // Delete any existing record for this file
                     DB::connection('ilcdb')->table('requirements')
                         ->where('procurement_id', $request->procurement_id)
                         ->where('requirement_name', $file)
                         ->delete();
     
+                    // Insert the new file record with size
                     DB::connection('ilcdb')->table('requirements')->insert([
                         'procurement_id'   => $request->procurement_id,
                         'requirement_name' => $file,
                         'file_path'        => $filePath,
+                        'size'             => $fileSize, // Store the file size
                     ]);
     
                     $uploads[] = $file;
@@ -258,16 +265,17 @@ class ProcurementFormController extends Controller
         try {
             $files = DB::connection('ilcdb')->table('requirements')
                 ->where('procurement_id', $procurement_id)
+                ->select('requirement_name', 'file_path', 'size') // Include size in the query
                 ->get();
-
+    
             return response()->json([
                 'success' => true,
                 'files' => $files,
             ]);
-
+    
         } catch (\Exception $e) {
             Log::error('Failed to fetch uploaded files: ' . $e->getMessage());
-
+    
             return response()->json([
                 'success' => false,
                 'message' => 'Server error: ' . $e->getMessage(),
