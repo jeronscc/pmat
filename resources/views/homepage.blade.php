@@ -462,9 +462,9 @@
                         <input type="text" class="form-control" id="ntca-number" placeholder="NTCA Number" readonly>
                     </div>
                     <div class="mb-3">
-                        <label for="quarter" class="form-label">Quarter</label>
+                        <label for="quarter" class="form-label">NTCA Quarter</label>
                         <select class="form-select" id="quarter">
-                            <option value="" disabled selected>Select Quarter</option>
+                            <option value="" disabled selected>Select Current Quarter</option>
                             <option value="First Quarter">First Quarter</option>
                             <option value="Second Quarter">Second Quarter</option>
                             <option value="Third Quarter">Third Quarter</option>
