@@ -109,12 +109,10 @@ function generateNTCANumber() {
         return;
     }
 
-    const currentMonthYear = new Date().toLocaleDateString('en-GB', { year: '2-digit', month: '2-digit' }).replace('/', '');
-    const lastDigits = selectedSaro.slice(-6); // Extract last 5 digits of SARO number
-    const ntcaNumber = `NTCA-${lastDigits}-${currentMonthYear}`;
+    const lastDigits = selectedSaro.slice(-6); // Extract last 6 digits of SARO number
+    const ntcaNumber = `NTCA-${lastDigits}`;
     document.getElementById('ntca_number').value = ntcaNumber;
 }
-
 // Function to populate the SARO dropdown dynamically (fetch from the server)
 function populateSARODropdown() {
     const saroSelect = document.getElementById('saro_select');
@@ -129,6 +127,9 @@ function populateSARODropdown() {
                 option.textContent = `${saro.saro_no} (${saro.year})`;
                 saroSelect.appendChild(option);
             });
+
+            // Trigger NTCA number generation when a SARO is selected
+            saroSelect.addEventListener('change', generateNTCANumber);
         })
         .catch(error => console.error('Error fetching SAROs:', error));
 }
