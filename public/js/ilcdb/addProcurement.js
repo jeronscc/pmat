@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const prNumber = document.getElementById("pr-number").value;
             const saroNumber = document.getElementById("saro-number").value;
             const ntcaNumber = document.getElementById('ntca-number').value;
-            const quarter = document.getElementById('quarter').value;
+            const quarter = document.getElementById('quarter-pr').value;
             const prYear = document.getElementById("pr-year").value;
             const activity = document.getElementById("activity").value;
             const description = document.getElementById("description").value;

@@ -462,8 +462,8 @@
                         <input type="text" class="form-control" id="ntca-number" placeholder="NTCA Number" readonly>
                     </div>
                     <div class="mb-3">
-                        <label for="quarter" class="form-label">NTCA Quarter</label>
-                        <select class="form-select" id="quarter">
+                        <label for="quarter-pr" class="form-label">NTCA Quarter</label>
+                        <select class="form-select" id="quarter-pr">
                             <option value="" disabled selected>Select Current Quarter</option>
                             <option value="First Quarter">First Quarter</option>
                             <option value="Second Quarter">Second Quarter</option>
@@ -556,7 +556,7 @@
         document.getElementById('saro-number').value = '';
         document.getElementById('ntca-number').value = '';  // Clear NTCA Number
         document.getElementById('pr-amount').value = '';  // Reset PR Amount
-        document.getElementById('quarter').value = '';  // Reset Quarter
+        document.getElementById('quarter-pr').value = '';  // Reset Quarter
     }
 </script>
     </body>
