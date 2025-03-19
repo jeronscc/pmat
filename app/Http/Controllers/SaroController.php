@@ -56,24 +56,37 @@ class SaroController extends Controller
         ]);
 
         try {
-            // Fetch the SARO's budget
-            $saro = DB::connection('ilcdb')->table('saro')->where('saro_no', $validatedData['saro_no'])->first();
+            // Check if the NTCA already exists
+            $existingNTCA = DB::connection('ilcdb')->table('ntca')->where('ntca_no', $validatedData['ntca_no'])->first();
 
-            if (!$saro) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'SARO not found.',
-                ], 404);
+            if ($existingNTCA) {
+                // Update the existing NTCA for the specified quarter
+                DB::connection('ilcdb')->table('ntca')
+                    ->where('ntca_no', $validatedData['ntca_no'])
+                    ->update([
+                        $validatedData['quarter'] => $validatedData['budget'],
+                        'current_budget' => DB::raw("current_budget + {$validatedData['budget']}"),
+                    ]);
+            } else {
+                // Fetch the SARO's budget
+                $saro = DB::connection('ilcdb')->table('saro')->where('saro_no', $validatedData['saro_no'])->first();
+
+                if (!$saro) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'SARO not found.',
+                    ], 404);
+                }
+
+                // Insert a new NTCA record
+                DB::connection('ilcdb')->table('ntca')->insert([
+                    'ntca_no' => $validatedData['ntca_no'],
+                    'budget_allocated' => $saro->budget_allocated, // Use SARO's budget
+                    'current_budget' => $validatedData['budget'],
+                    $validatedData['quarter'] => $validatedData['budget'], // Save the budget in the selected quarter
+                    'saro_no' => $validatedData['saro_no'],
+                ]);
             }
-
-            // Save NTCA details
-            DB::connection('ilcdb')->table('ntca')->insert([
-                'ntca_no' => $validatedData['ntca_no'],
-                'budget_allocated' => $saro->budget_allocated, // Use SARO's budget
-                'current_budget' => $validatedData['budget'],
-                $validatedData['quarter'] => $validatedData['budget'], // Save the budget in the selected quarter
-                'saro_no' => $validatedData['saro_no'],
-            ]);
 
             return response()->json([
                 'success' => true,
