@@ -21,7 +21,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 !prYear ||
                 !activity ||
                 !description ||
-                !prAmount
+                !prAmount ||
+                !ntcaNumber  
             ) {
                 alert("All fields must be filled out.");
                 return;
@@ -95,10 +96,22 @@ document.addEventListener("DOMContentLoaded", function () {
                     alert("An error occurred while adding procurement");
                 });
         });
-});
 
-// OPTIONS FOR EXISTING SARO IN PROC MODAL
-document.addEventListener("DOMContentLoaded", function () {
+    // Listen for SARO number selection change
+    document.getElementById('saro-number').addEventListener('change', function() {
+        const saroNumber = this.value;
+        const ntcaNumberField = document.getElementById('ntca-number');
+
+        if (saroNumber) {
+            const saroParts = saroNumber.split('-');
+            const ntcaDigits = saroParts[saroParts.length - 1];
+            ntcaNumberField.value = `NTCA-${ntcaDigits}`;
+        } else {
+            ntcaNumberField.value = '';
+        }
+    });
+
+    // OPTIONS FOR EXISTING SARO IN PROC MODAL
     const yearSelect = document.getElementById("pr-year");
     const saroSelect = document.getElementById("saro-number");
 
@@ -129,20 +142,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 console.error("Error fetching SARO data:", error)
             );
     }
-        // Listen for SARO number selection change
-        document.getElementById('saro-number').addEventListener('change', function() {
-            const saroNumber = this.value;
-            const ntcaNumberField = document.getElementById('ntca-number');
-    
-            if (saroNumber) {
-                const saroParts = saroNumber.split('-');
-                const ntcaDigits = saroParts[saroParts.length - 1];
-                ntcaNumberField.value = `NTCA-${ntcaDigits}`;
-            } else {
-                ntcaNumberField.value = '';
-            }
-        });
-        
+
     // Listen for the year selection change
     yearSelect.addEventListener("change", function () {
         const selectedYear = this.value;

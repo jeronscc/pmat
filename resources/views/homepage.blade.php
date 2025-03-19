@@ -547,13 +547,16 @@
     });
 
     // Reset the form fields
+    // Reset the form fields
     function resetForm() {
         document.getElementById('activity').value = '';
         document.getElementById('description').value = '';
         document.getElementById('pr-number').value = '';  // Clear PR Number
         document.getElementById('pr-year').value = '';
         document.getElementById('saro-number').value = '';
+        document.getElementById('ntca-number').value = '';  // Clear NTCA Number
         document.getElementById('pr-amount').value = '';  // Reset PR Amount
+        document.getElementById('quarter').value = '';  // Reset Quarter
     }
 </script>
     </body>

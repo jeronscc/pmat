@@ -16,9 +16,11 @@ class ProcurementController extends Controller
                 'category'     => 'required',
                 'pr_number'    => 'required',
                 'saro_number'  => 'required',
+                'ntca_number'  => 'required',
+                'quarter'      => 'required',
                 'pr_year'      => 'required',
                 'activity'     => 'required',
-                'description'  => 'required',
+                'description'  => 'required',   
                 'pr_amount'    => 'required', // Add validation for pr_amount
             ]);
 
@@ -27,6 +29,8 @@ class ProcurementController extends Controller
                 'procurement_category' => $request->input('category'),
                 'procurement_id'       => $request->input('pr_number'),
                 'saro_no'              => $request->input('saro_number'),
+                'ntca_no'              => $request->input('ntca_number'),
+                'quarter'              => $request->input('quarter'),
                 'year'                 => $request->input('pr_year'),
                 'activity'             => $request->input('activity'),
                 'description'          => $request->input('description'),
@@ -43,6 +47,7 @@ class ProcurementController extends Controller
                     'activity'       => $request->input('activity'),
                     'saro_no'        => $request->input('saro_number'),
                     'pr_amount'      => $request->input('pr_amount'), // Add pr_amount
+                    'quarter'        => $request->input('quarter'),
                 ]);
             } elseif ($category === 'honoraria') {
                 // Insert into 'honoraria_form' table
@@ -51,6 +56,7 @@ class ProcurementController extends Controller
                     'activity'       => $request->input('activity'),
                     'saro_no'        => $request->input('saro_number'),
                     'pr_amount'      => $request->input('pr_amount'), // Add pr_amount
+                    'quarter'        => $request->input('quarter'),
                 ]);
             } elseif ($category === 'daily travel expense' || $category === 'daily travel expenses') {
                 // Insert into 'otherexpense_form' table
@@ -59,6 +65,7 @@ class ProcurementController extends Controller
                     'activity'       => $request->input('activity'),
                     'saro_no'        => $request->input('saro_number'),
                     'pr_amount'      => $request->input('pr_amount'), // Add pr_amount
+                    'quarter'        => $request->input('quarter'),
                 ]);
             }
 
