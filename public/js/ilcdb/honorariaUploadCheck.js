@@ -6,7 +6,7 @@ function uploadCompleteCheck() {
     }
 
     const procurementId = procurementIdElement.value;
-    console.log('Procurement ID:', procurementId);  // Check the ID value
+    console.log('Procurement ID:', procurementId);
 
     if (!procurementId) {
         console.error('Procurement ID is missing!');
@@ -47,10 +47,6 @@ function uploadCompleteCheck() {
         });
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    uploadCompleteCheck();
-});
-
 function incompFilesDisable() {
     const orsFiles = document.getElementById('orsFile');
     const dvFiles = document.getElementById('dvFile');
@@ -82,18 +78,31 @@ function incompFilesDisable() {
         save.disabled = true; // Disable the save button if any file input is empty
     } else {
         save.disabled = false; // Enable the save button if all file inputs have files
+        
+        // Call the upload complete check after all files are selected
+        uploadCompleteCheck();
     }
 }
 
-// Add event listeners to file inputs to trigger the check when files are selected
 document.addEventListener('DOMContentLoaded', () => {
+    // Initial check on page load
+    uploadCompleteCheck();
+    
+    // Add event listeners to file inputs
     const fileInputs = document.querySelectorAll(
         '#orsFile, #dvFile, #contractFile, #classificationFile, #reportFile, #attendanceFile, #resumeFile, #govidFile, #payslipFile, #bankFile, #certFile'
     );
 
     fileInputs.forEach(input => {
-        input.addEventListener('change', incompFilesDisable); // Re-check when a file is selected
+        input.addEventListener('change', incompFilesDisable);
     });
 
-    incompFilesDisable(); // Initial check on page load
+    // Also add event listener to the save button
+    const saveBtn = document.getElementById('saveBtn');
+    if (saveBtn) {
+        saveBtn.addEventListener('click', () => {
+            // Wait a short time for the files to be processed and then check again
+            setTimeout(uploadCompleteCheck, 1000);
+        });
+    }
 });
