@@ -51,5 +51,35 @@ class SaroController extends Controller
         return response()->json($data);
     }
     
+    public function saveNTCA(Request $request)
+    {
+        $validatedData = $request->validate([
+            'ntca_no' => 'required|string|max:64',
+            'budget' => 'required|numeric|min:0',
+            'quarter' => 'required|string|in:first_q,second_q,third_q,fourth_q',
+            'saro_no' => 'required|string|max:64',
+        ]);
 
+        try {
+            // Save NTCA details
+            DB::table('ntca')->insert([
+                'ntca_no' => $validatedData['ntca_no'],
+                'budget_allocated' => $validatedData['budget'],
+                'current_budget' => $validatedData['budget'],
+                $validatedData['quarter'] => $validatedData['budget'], // Save the budget in the selected quarter
+                'saro_no' => $validatedData['saro_no'],
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'NTCA saved successfully.',
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Failed to save NTCA: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to save NTCA. Please try again.',
+            ], 500);
+        }
+    }
 }
