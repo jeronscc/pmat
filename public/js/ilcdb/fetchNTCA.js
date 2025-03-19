@@ -7,40 +7,32 @@ function fetchNTCABreakdown(ntcaNo) {
 
             if (data.success) {
                 const { first_q, second_q, third_q, fourth_q, current_budget } = data.ntca;
-                const currentQuarter = getCurrentQuarter();
 
                 // Add balances for each quarter
                 breakdownList.innerHTML += `
                     <li class="list-group-item d-flex justify-content-between">
-                        First Quarter <span class="fw-bold">₱${first_q || 0}</span>
+                        First Quarter <span class="fw-bold">₱${first_q.toLocaleString()}</span>
                     </li>
                     <li class="list-group-item d-flex justify-content-between">
-                        Second Quarter <span class="fw-bold">₱${second_q || 0}</span>
+                        Second Quarter <span class="fw-bold">₱${second_q.toLocaleString()}</span>
                     </li>
                     <li class="list-group-item d-flex justify-content-between">
-                        Third Quarter <span class="fw-bold">₱${third_q || 0}</span>
+                        Third Quarter <span class="fw-bold">₱${third_q.toLocaleString()}</span>
                     </li>
                     <li class="list-group-item d-flex justify-content-between">
-                        Fourth Quarter <span class="fw-bold">₱${fourth_q || 0}</span>
+                        Fourth Quarter <span class="fw-bold">₱${fourth_q.toLocaleString()}</span>
                     </li>
                 `;
 
-                // Highlight the current quarter
-                breakdownList.innerHTML += `
-                    <li class="list-group-item d-flex justify-content-between bg-light">
-                        Current Quarter (${currentQuarter}) <span class="fw-bold text-primary">₱${data.ntca[currentQuarter.toLowerCase()] || 0}</span>
-                    </li>
-                `;
-
-                // Add unclaimed NTCA balance
+                // Add unclaimed NTCA budget
                 breakdownList.innerHTML += `
                     <li class="list-group-item d-flex justify-content-between">
-                        Unclaimed NTCA Balance <span class="fw-bold text-success">₱${current_budget || 0}</span>
+                        Unclaimed NTCA Budget <span class="fw-bold text-success">₱${current_budget.toLocaleString()}</span>
                     </li>
                 `;
             } else {
                 breakdownList.innerHTML = `
-                    <li class="list-group-item text-danger">Failed to fetch NTCA breakdown.</li>
+                    <li class="list-group-item text-danger">${data.message}</li>
                 `;
             }
         })
@@ -91,6 +83,7 @@ document.getElementById('saro_select').addEventListener('change', function () {
         const ntcaNo = document.getElementById('ntca_number').value; // Ensure NTCA number is set
         if (ntcaNo) {
             fetchNTCABalance(ntcaNo);
+            fetchNTCABreakdown(ntcaNo);
         }
     }
 });

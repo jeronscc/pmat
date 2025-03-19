@@ -115,13 +115,19 @@ class SaroController extends Controller
 
             return response()->json([
                 'success' => true,
-                'ntca' => $ntca,
+                'ntca' => [
+                    'first_q' => $ntca->first_q ?? 0,
+                    'second_q' => $ntca->second_q ?? 0,
+                    'third_q' => $ntca->third_q ?? 0,
+                    'fourth_q' => $ntca->fourth_q ?? 0,
+                    'current_budget' => $ntca->current_budget ?? 0,
+                ],
             ]);
         } catch (\Exception $e) {
             Log::error('Failed to fetch NTCA breakdown: ' . $e->getMessage());
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to fetch NTCA breakdown.',
+                'message' => 'Failed to fetch NTCA breakdown. Please try again.',
             ], 500);
         }
     }
