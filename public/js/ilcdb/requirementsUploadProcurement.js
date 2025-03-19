@@ -113,8 +113,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
     
                 // Set the link text content (including requirement name and file size)
-                fileLink.textContent = `${file.requirement_name} (${formattedFileSize})`;
+                fileLink.textContent = `View ${file.requirement_name}`;
                 fileLink.target = '_blank';
+                fileLink.style.fontWeight = 'bold';
     
                 // Clear existing content and append the new file link
                 fileLinkContainer.innerHTML = ''; 
