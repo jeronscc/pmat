@@ -5,6 +5,8 @@ document.addEventListener("DOMContentLoaded", function () {
             const category = document.getElementById("category").value;
             const prNumber = document.getElementById("pr-number").value;
             const saroNumber = document.getElementById("saro-number").value;
+            const ntcaNumber = document.getElementById('ntca-number').value;
+            const quarter = document.getElementById('quarter').value;
             const prYear = document.getElementById("pr-year").value;
             const activity = document.getElementById("activity").value;
             const description = document.getElementById("description").value;
@@ -38,10 +40,12 @@ document.addEventListener("DOMContentLoaded", function () {
                     category: category,
                     pr_number: prNumber,
                     saro_number: saroNumber,
+                    ntca_number: ntcaNumber,
+                    quarter: quarter,
                     pr_year: prYear,
                     activity: activity,
                     description: description,
-                    pr_amount: prAmount, // Add pr_amount to the request payload
+                    pr_amount: prAmount // Add pr_amount to the request payload
                 }),
             })
                 .then((response) => {
@@ -125,7 +129,20 @@ document.addEventListener("DOMContentLoaded", function () {
                 console.error("Error fetching SARO data:", error)
             );
     }
-
+        // Listen for SARO number selection change
+        document.getElementById('saro-number').addEventListener('change', function() {
+            const saroNumber = this.value;
+            const ntcaNumberField = document.getElementById('ntca-number');
+    
+            if (saroNumber) {
+                const saroParts = saroNumber.split('-');
+                const ntcaDigits = saroParts[saroParts.length - 1];
+                ntcaNumberField.value = `NTCA-${ntcaDigits}`;
+            } else {
+                ntcaNumberField.value = '';
+            }
+        });
+        
     // Listen for the year selection change
     yearSelect.addEventListener("change", function () {
         const selectedYear = this.value;
