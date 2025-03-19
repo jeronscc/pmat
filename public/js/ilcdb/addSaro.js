@@ -101,9 +101,16 @@ document.getElementById('categorySelect').addEventListener('change', function ()
 
 // Function to generate the NTCA number
 function generateNTCANumber() {
-    const saroNumber = document.getElementById('saro_number').value; // Get SARO number
+    const saroSelect = document.getElementById('saro_select');
+    const selectedSaro = saroSelect.options[saroSelect.selectedIndex]?.value; // Get selected SARO number
+
+    if (!selectedSaro) {
+        console.error('No SARO selected.');
+        return;
+    }
+
     const currentMonthYear = new Date().toLocaleDateString('en-GB', { year: '2-digit', month: '2-digit' }).replace('/', '');
-    const lastDigits = saroNumber.slice(-5); // Extract last 5 digits of SARO number
+    const lastDigits = selectedSaro.slice(-6); // Extract last 5 digits of SARO number
     const ntcaNumber = `NTCA-${lastDigits}-${currentMonthYear}`;
     document.getElementById('ntca_number').value = ntcaNumber;
 }

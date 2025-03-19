@@ -57,7 +57,7 @@ class SaroController extends Controller
 
         try {
             // Save NTCA details
-            DB::table('ntca')->insert([
+            DB::connection('ilcdb')->table('ntca')->insert([
                 'ntca_no' => $validatedData['ntca_no'],
                 'budget_allocated' => $validatedData['budget'],
                 'current_budget' => $validatedData['budget'],
