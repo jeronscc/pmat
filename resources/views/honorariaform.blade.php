@@ -190,7 +190,7 @@
                                         <div class="mb-3">
                                             <label for="contractFile" class="form-label">Upload Service Contract</label>
                                             <input class="form-control" type="file" id="contractFile" name="contractFile">
-                                            <div id="dvFileUploaded"></div>
+                                            <div id="contractFileUploaded"></div>
                                         </div>
 
                                         <!-- Certificate Honoraria Classification Upload -->
