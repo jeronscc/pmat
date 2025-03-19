@@ -71,7 +71,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Function to display uploaded files
     function displayUploadedFiles(files) {
         for (const [requirementName, filePath] of Object.entries(files)) {
-            const fileInputContainer = document.getElementById(`${requirementName}Container`);
+            const fileInputContainer = document.getElementById(`${requirementName}`);
             const fileListContainer = document.getElementById(`${requirementName}Uploaded`);
 
             if (!fileInputContainer || !fileListContainer) {
