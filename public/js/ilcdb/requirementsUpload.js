@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 return;
             }
 
-            fetch('/api/upload', {
+            fetch('/api/requirements/upload', {
                 method: 'POST',
                 headers: { 'X-CSRF-TOKEN': csrfToken },
                 body: formData
@@ -54,32 +54,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Function to fetch and display uploaded files
     function fetchUploadedFiles(procurementId) {
-        fetch(`/api/requirements/${procurementId}`)
+        fetch(`/api/requirements/${procurementId}/files`)
             .then(response => response.json())
             .then(data => {
-                console.log("Fetched files data:", data); // Log the fetched data for debugging
-
-                if (data.success && data.files) {
-                    // Ensure files is an array
-                    if (!Array.isArray(data.files)) {
-                        console.error("Files is not an array, converting to array:", data.files);
-                        data.files = Object.values(data.files);
-                    }
-
-                    // Display uploaded files in their respective sections
-                    displayUploadedFiles('ORS', data.files);
-                    displayUploadedFiles('DV', data.files);
-                    displayUploadedFiles('Contract', data.files);
-                    displayUploadedFiles('Classification', data.files);
-                    displayUploadedFiles('Report', data.files);
-                    displayUploadedFiles('Attendance', data.files);
-                    displayUploadedFiles('Resume', data.files);
-                    displayUploadedFiles('Govid', data.files);
-                    displayUploadedFiles('Payslip', data.files);
-                    displayUploadedFiles('Bank', data.files);
-                    displayUploadedFiles('Cert', data.files);
+                if (data.success) {
+                    displayUploadedFiles(data.files);
                 } else {
-                    console.error("Failed to fetch uploaded files or no files found:", data.message);
+                    console.error("Failed to fetch uploaded files:", data.message);
                 }
             })
             .catch(error => {
@@ -87,45 +68,42 @@ document.addEventListener('DOMContentLoaded', function () {
             });
     }
 
-    // Function to display uploaded files in their respective sections
-    function displayUploadedFiles(requirement, files) {
-        const fileListContainer = document.getElementById(`${requirement.toLowerCase()}FileUploaded`);
-        if (!fileListContainer) {
-            console.error(`Container for ${requirement} not found`);
-            return;
-        }
+    // Function to display uploaded files
+    function displayUploadedFiles(files) {
+        for (const [requirementName, filePath] of Object.entries(files)) {
+            const fileInputContainer = document.getElementById(`${requirementName}Container`);
+            const fileListContainer = document.getElementById(`${requirementName}Uploaded`);
 
-        fileListContainer.innerHTML = ''; // Clear existing files
+            if (!fileInputContainer || !fileListContainer) {
+                console.error(`Containers for ${requirementName} not found.`);
+                continue;
+            }
 
-        // Log the files array for each section for debugging purposes
-        console.log(`Files for ${requirement}:`, files);
+            // Clear existing files in the list container
+            fileListContainer.innerHTML = '';
 
-        // Filter the files by requirement name and display them
-        files.filter(file => file.requirement_name && file.requirement_name.includes(requirement)).forEach(file => {
+            // Create and append the file link
             const fileLink = document.createElement('a');
-            fileLink.href = `/${file.file_path}`;
-            fileLink.textContent = file.requirement_name;
+            fileLink.href = `/${filePath}`;
+            fileLink.textContent = `View ${requirementName}`;
             fileLink.target = '_blank';
 
             const listItem = document.createElement('li');
             listItem.appendChild(fileLink);
-
-            // Disable and hide the corresponding file input field
-            const inputField = document.getElementById(`${requirement.toLowerCase()}File`);
-            if (inputField) {
-                inputField.disabled = true;
-                inputField.style.display = 'none';
-            }
-
             fileListContainer.appendChild(listItem);
-        });
+
+            // Hide the file input container
+            fileInputContainer.style.display = 'none';
+        }
     }
 
     // Event listener to open the modal and fetch uploaded files
-    const requirementsModal = document.getElementById('requirementsModal');
-    if (requirementsModal) {
-        requirementsModal.addEventListener('shown.bs.modal', function () {
-            fetchUploadedFiles(procurementId);
+    const openModalBtn = document.getElementById('openModalBtn');
+    if (openModalBtn) {
+        openModalBtn.addEventListener('click', function () {
+            if (procurementId) {
+                fetchUploadedFiles(procurementId);
+            }
         });
     }
 });
