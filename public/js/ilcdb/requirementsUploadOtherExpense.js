@@ -119,8 +119,20 @@ document.addEventListener('DOMContentLoaded', function () {
             matchingFiles.forEach(file => {
                 // Create the file link
                 const fileLink = document.createElement('a');
+
+                const fileSize = file.size || 0; // Default to 0 if size is missing or invalid
+                // Format the file size to KB or MB
+                let formattedFileSize = '';
+                if (fileSize < 1024) {
+                    formattedFileSize = `${fileSize} bytes`;
+                } else if (fileSize < 1048576) {
+                    formattedFileSize = `${(fileSize / 1024).toFixed(2)} KB`;
+                } else {
+                    formattedFileSize = `${(fileSize / 1048576).toFixed(2)} MB`;
+                }
+
                 fileLink.href = `/${file.file_path}`;
-                fileLink.textContent = file.original_filename || `View ${requirementType} file`;
+                fileLink.textContent = file.original_filename || `View ${requirementType} (${formattedFileSize})`;
                 fileLink.target = '_blank';
                 fileLink.classList.add('text-primary', 'fw-bold');
                 
