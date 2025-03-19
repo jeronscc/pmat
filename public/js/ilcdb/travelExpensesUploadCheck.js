@@ -47,6 +47,54 @@ function uploadCompleteCheck() {
         });
 }
 
+function incompFilesDisable() {
+    const orsFiles = document.getElementById('orsFile');
+    const dvFiles = document.getElementById('dvFile');
+    const travel = document.getElementById('travelOrderFile');
+    const appearance = document.getElementById('appearanceFile');
+    const report = document.getElementById('reportFile');
+    const itinerary = document.getElementById('itineraryFile');
+    const cert = document.getElementById('certFile');
+    const save = document.getElementById('saveBtn1');
+
+    // Check if all file inputs have files selected
+    if (
+        !orsFiles?.files.length ||
+        !dvFiles?.files.length ||
+        !travel?.files.length ||
+        !appearance?.files.length ||
+        !report?.files.length ||
+        !itinerary?.files.length ||
+        !cert?.files.length
+    ) {
+        save.disabled = true; // Disable the save button if any file input is empty
+    } else {
+        save.disabled = false; // Enable the save button if all file inputs have files
+        
+        // Call the upload complete check after all files are selected
+        uploadCompleteCheck();
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
+    // Initial check on page load
     uploadCompleteCheck();
+    
+    // Add event listeners to file inputs
+    const fileInputs = document.querySelectorAll(
+        '#orsFile, #dvFile, #travelOrderFile, #appearanceFile, #appearanceFile, #reportFile, #itineraryFile, #certFile'
+    );
+
+    fileInputs.forEach(input => {
+        input.addEventListener('change', incompFilesDisable);
+    });
+
+    // Also add event listener to the save button
+    const saveBtn = document.getElementById('saveBtn1');
+    if (saveBtn) {
+        saveBtn.addEventListener('click', () => {
+            // Wait a short time for the files to be processed and then check again
+            setTimeout(uploadCompleteCheck, 1000);
+        });
+    }
 });
