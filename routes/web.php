@@ -8,6 +8,7 @@ use App\Http\Controllers\ProcurementFormController;
 use App\Http\Controllers\HonorariaFormController;
 use App\Http\Controllers\OtherExpenseFormController;
 use App\Http\Controllers\ProcurementController;
+use App\Http\Controllers\AccountController;
 
 Route::get('/', function () {
     return view('index');
@@ -24,6 +25,8 @@ Route::get('/select-project', function () {
 Route::get('/homepage-ilcdb', function () {
     return view('homepage'); 
 })->middleware('auth');
+
+Route::get('/accounts', [AccountController::class, 'index'])->middleware('auth');
 
 Route::get('/homepage-projectClick', function () {
     return view('projectClick'); 
