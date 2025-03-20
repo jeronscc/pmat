@@ -34,9 +34,18 @@ document.getElementById('saveSaro').addEventListener('click', function () {
             .then(data => {
                 if (data.success) {
                     alert(data.message);
+    
+                    // Close modal and reset form
                     const addSaroModal = bootstrap.Modal.getInstance(document.getElementById('addSaroModal'));
                     addSaroModal.hide();
                     document.getElementById('saroForm').reset();
+    
+                    // Call the function from fetchSaro.js to refresh the list
+                    if (typeof fetchSaroDataAndRequirements === "function") {
+                        fetchSaroDataAndRequirements("");  
+                    } else {
+                        console.error("fetchSaroDataAndRequirements is not defined");
+                    }
                 } else {
                     alert('Failed to add SARO: ' + data.message);
                 }

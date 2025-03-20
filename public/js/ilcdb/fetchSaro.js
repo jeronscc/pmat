@@ -86,19 +86,16 @@ function displayCurrentBudget(saro) {
 }
 
 function fetchSaroDataAndRequirements(year) {
-    const url =
-        year === ""
-            ? "/api/fetch-saro-ilcdb"
-            : `/api/fetch-saro-ilcdb?year=${year}`;
+    const url = year === "" ? "/api/fetch-saro-ilcdb" : `/api/fetch-saro-ilcdb?year=${year}`;
 
     fetch(url)
-        .then((response) => response.json())
-        .then((saros) => {
+        .then(response => response.json())
+        .then(saros => {
             const saroList = document.querySelector(".saro-list");
             saroList.innerHTML = ""; // Clear previous entries
 
             if (saros.length > 0) {
-                saros.forEach((saro) => {
+                saros.forEach(saro => {
                     const listItem = document.createElement("li");
                     listItem.classList.add("list-group-item");
                     listItem.textContent = `${saro.saro_no}`;
@@ -112,13 +109,16 @@ function fetchSaroDataAndRequirements(year) {
                 });
             } else {
                 const emptyMessage = document.createElement("li");
-                emptyMessage.classList.add("list-group-item");
+                emptyMessage.classList.add("list-group-item", "empty-message");
                 emptyMessage.textContent = "No SARO records found.";
                 saroList.appendChild(emptyMessage);
             }
         })
-        .catch((error) => console.error("Error fetching SARO data:", error));
+        .catch(error => console.error("Error fetching SARO data:", error));
 }
+
+
+window.fetchSaroDataAndRequirements = fetchSaroDataAndRequirements;
 
 function fetchNTCAForSaro(saroNo) {
     fetch(`/api/fetch-ntca-by-saro/${saroNo}`)
