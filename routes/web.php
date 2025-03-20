@@ -26,7 +26,9 @@ Route::get('/homepage-ilcdb', function () {
     return view('homepage'); 
 })->middleware('auth');
 
-Route::get('/accounts', [AccountController::class, 'index'])->middleware('auth');
+Route::get('/accounts', [AccountController::class, 'index'])
+    ->middleware('auth')
+    ->name('accounts');
 
 Route::get('/homepage-projectClick', function () {
     return view('projectClick'); 
