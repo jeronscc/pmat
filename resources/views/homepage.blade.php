@@ -77,13 +77,12 @@
     <h2 id="remainingBalance"></h2>
     
     <hr>
-<!-- NTCA balance -->
+    <!-- NTCA balance -->
     <div class="d-flex align-items-center justify-content-between">
         <h6 class="text-white mb-0">NTCA:</h6>
         <button class="btn btn-primary btn-sm py-1" type="button" data-bs-toggle="modal" data-bs-target="#ntcaBreakdownModal">
-    Expand
-</button>
-
+            Expand
+        </button>
     </div>
     <h2 id="ntcaBalance">₱0</h2>
 </div>
