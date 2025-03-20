@@ -500,7 +500,7 @@
         <script src="/js/ilcdb/filterSaroByYear.js"></script>
         <script src="/sarohover.js"></script>
         <script src="/js/ilcdb/overdueNotification.js"></script>
-        <script src="/js/ilcdb/ntcaBreakdown.js"></sctipt>
+        <script src="/js/ilcdb/ntcaBreakdown.js"></script>
         <script src="/js/ilcdb/fetchNTCA.js"></script>
 
         <!-- Bootstrap JS (Optional, only needed for dropdowns, modals, etc.) -->
