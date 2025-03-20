@@ -1,4 +1,9 @@
 function fetchNTCABreakdown(ntcaNo) {
+    if (!ntcaNo) {
+        console.error('NTCA No. is missing.');
+        return;
+    }
+
     fetch(`/api/ntca-breakdown/${ntcaNo}`)
         .then(response => response.json())
         .then(data => {
@@ -67,6 +72,11 @@ function getCurrentQuarter() {
 // Trigger NTCA breakdown fetch when the modal is opened
 document.getElementById('ntcaBreakdownModal').addEventListener('shown.bs.modal', function () {
     const ntcaNo = document.getElementById('ntca_number').value; // Replace with the actual NTCA number
+    if (!ntcaNo) {
+        console.error('NTCA No. is missing.');
+        return;
+    }
+    console.log(`Fetching NTCA breakdown for NTCA No: ${ntcaNo}`);
     fetchNTCABreakdown(ntcaNo);
 });
 
