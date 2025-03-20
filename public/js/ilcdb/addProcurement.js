@@ -5,8 +5,8 @@ document.addEventListener("DOMContentLoaded", function () {
             const category = document.getElementById("category").value;
             const prNumber = document.getElementById("pr-number").value;
             const saroNumber = document.getElementById("saro-number").value;
-            const ntcaNumber = document.getElementById('ntca-number').value;
-            const quarter = document.getElementById('quarter-pr').value;
+            const ntcaNumber = document.getElementById("ntca-number").value;
+            const quarter = document.getElementById("quarter-pr").value;
             const prYear = document.getElementById("pr-year").value;
             const activity = document.getElementById("activity").value;
             const description = document.getElementById("description").value;
@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 !activity ||
                 !description ||
                 !prAmount ||
-                !ntcaNumber  
+                !ntcaNumber
             ) {
                 alert("All fields must be filled out.");
                 return;
@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     pr_year: prYear,
                     activity: activity,
                     description: description,
-                    pr_amount: prAmount // Add pr_amount to the request payload
+                    pr_amount: prAmount, // Add pr_amount to the request payload
                 }),
             })
                 .then((response) => {
@@ -98,18 +98,20 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
     // Listen for SARO number selection change
-    document.getElementById('saro-number').addEventListener('change', function() {
-        const saroNumber = this.value;
-        const ntcaNumberField = document.getElementById('ntca-number');
+    document
+        .getElementById("saro-number")
+        .addEventListener("change", function () {
+            const saroNumber = this.value;
+            const ntcaNumberField = document.getElementById("ntca-number");
 
-        if (saroNumber) {
-            const saroParts = saroNumber.split('-');
-            const ntcaDigits = saroParts[saroParts.length - 1];
-            ntcaNumberField.value = `NTCA-${ntcaDigits}`;
-        } else {
-            ntcaNumberField.value = '';
-        }
-    });
+            if (saroNumber) {
+                const saroParts = saroNumber.split("-");
+                const ntcaDigits = saroParts[saroParts.length - 1];
+                ntcaNumberField.value = `NTCA-${ntcaDigits}`;
+            } else {
+                ntcaNumberField.value = "";
+            }
+        });
 
     // OPTIONS FOR EXISTING SARO IN PROC MODAL
     const yearSelect = document.getElementById("pr-year");
@@ -188,3 +190,69 @@ document.addEventListener("DOMContentLoaded", function () {
             window.location.href = redirectUrl;
         });
 });
+
+// PR MODAL SELECTION CHANGE
+// Listen for category selection change
+document.getElementById("category").addEventListener("change", function () {
+    const category = this.value;
+
+    // Reset form fields before changing
+    resetForm();
+
+    // Get current year
+    const currentYear = new Date().getFullYear();
+    // Generate PR number with random 5 digits
+    const generatePRNumber = () =>
+        `PROC-${currentYear}-${Math.floor(10000 + Math.random() * 90000)}`;
+
+    if (category === "SVP") {
+        // Retain original form for SVP
+        document.getElementById("activityLabel").innerText = "ACTIVITY";
+        document
+            .getElementById("pr-number")
+            .setAttribute("placeholder", "Enter PR Number");
+        document.getElementById("pr-number").removeAttribute("readonly");
+        document
+            .getElementById("activity")
+            .setAttribute("placeholder", "Enter Activity");
+        document
+            .getElementById("description")
+            .setAttribute("placeholder", "Enter Description");
+    } else if (category === "Honoraria") {
+        // Modify form for Honoraria
+        document.getElementById("activityLabel").innerText = "NAME OF SPEAKER";
+        document.getElementById("pr-number").value = generatePRNumber(); // Auto-generate PR number
+        document.getElementById("pr-number").setAttribute("readonly", "true"); // Make PR Number non-editable
+        document
+            .getElementById("activity")
+            .setAttribute("placeholder", "Enter name of the resource speaker");
+        document
+            .getElementById("description")
+            .setAttribute("placeholder", "Enter title of the training");
+    } else if (category === "Daily travel expense") {
+        // Modify form for Other expense
+        document.getElementById("activityLabel").innerText =
+            "NAME OF TRAVELLER";
+        document.getElementById("pr-number").value = generatePRNumber(); // Auto-generate PR number
+        document.getElementById("pr-number").setAttribute("readonly", "true"); // Make PR Number non-editable
+        document
+            .getElementById("activity")
+            .setAttribute("placeholder", "Enter name of traveller");
+        document
+            .getElementById("description")
+            .setAttribute("placeholder", "Enter the purpose of travel");
+    }
+});
+
+// Reset the form fields
+// Reset the form fields
+function resetForm() {
+    document.getElementById("activity").value = "";
+    document.getElementById("description").value = "";
+    document.getElementById("pr-number").value = ""; // Clear PR Number
+    document.getElementById("pr-year").value = "";
+    document.getElementById("saro-number").value = "";
+    document.getElementById("ntca-number").value = ""; // Clear NTCA Number
+    document.getElementById("pr-amount").value = ""; // Reset PR Amount
+    document.getElementById("quarter-pr").value = ""; // Reset Quarter
+}
