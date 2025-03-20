@@ -85,6 +85,7 @@ Route::middleware(['auth', PreventBackAfterLogout::class])->group(function () {
 
 
 // REDIRECTS TO FORMS (PR ID SPECIFIED)
+Route::post('/accounts/add', [AccountController::class, 'store'])->name('accounts.add');
 Route::get('/procurementform', [ProcurementFormController::class, 'showForm'])->name('procurementform');
 Route::post('/procurementform/update', [ProcurementFormController::class, 'update'])->name('procurement.update');
 
