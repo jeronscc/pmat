@@ -137,7 +137,12 @@ function generateNTCANumber() {
     const lastDigits = selectedSaro.slice(-6); // Extract last 6 digits of SARO number
     const ntcaNumber = `NTCA-${lastDigits}`;
     document.getElementById('ntca_number').value = ntcaNumber;
+
+    // Update NTCA label dynamically
+    const ntcaLabelElement = document.getElementById('ntcaLabel');
+    ntcaLabelElement.textContent = `NTCA (${ntcaNumber})`;
 }
+
 // Function to populate the SARO dropdown dynamically (fetch from the server)
 function populateSARODropdown() {
     const saroSelect = document.getElementById('saro_select');
@@ -161,3 +166,23 @@ function populateSARODropdown() {
 
 // Call populateSARODropdown when the modal is opened
 document.getElementById('addSaroModal').addEventListener('shown.bs.modal', populateSARODropdown);
+
+document.getElementById('quarter').addEventListener('change', function () {
+    const ntcaNo = document.getElementById('ntca_number').value;
+    const quarter = this.value;
+    if (ntcaNo && quarter) {
+        fetchNTCABalance(ntcaNo, quarter);
+    }
+});
+
+document.getElementById('saro_select').addEventListener('change', function () {
+    const selectedSaro = this.value;
+    if (selectedSaro) {
+        generateNTCANumber();
+        const ntcaNo = document.getElementById('ntca_number').value;
+        const quarter = document.getElementById('quarter').value;
+        if (ntcaNo && quarter) {
+            fetchNTCABalance(ntcaNo, quarter);
+        }
+    }
+});

@@ -80,28 +80,35 @@ document.getElementById('ntcaBreakdownModal').addEventListener('shown.bs.modal',
     fetchNTCABreakdown(ntcaNo);
 });
 
-function fetchNTCABalance(ntcaNo) {
-    if (!ntcaNo) {
-        console.error('NTCA No. is missing.');
+function fetchNTCABalance(ntcaNo, quarter) {
+    if (!ntcaNo || !quarter) {
+        console.error('NTCA No. or Quarter is missing.');
         return;
     }
 
-    fetch(`/api/ntca-balance/${ntcaNo}`)
+    fetch(`/api/ntca-balance/${ntcaNo}/${quarter}`)
         .then(response => response.json())
         .then(data => {
             const ntcaBalanceElement = document.getElementById('ntcaBalance');
+            const ntcaLabelElement = document.getElementById('ntcaLabel'); // Add a label for NTCA
 
             if (data.success) {
-                const { currentQuarter, balance } = data;
-                ntcaBalanceElement.textContent = `₱${balance.toLocaleString()} (${currentQuarter})`;
+                const { balance } = data;
+
+                // Update NTCA label to include NTCA No. and Quarter
+                ntcaLabelElement.textContent = `Unassigned Budget for NTCA (${ntcaNo})`;
+
+                // Update NTCA balance for the current quarter
+                ntcaBalanceElement.textContent = `₱${balance.toLocaleString()}`;
             } else {
-                ntcaBalanceElement.textContent = '₱0 (No Data)';
+                ntcaLabelElement.textContent = `Unassigned Budget for NTCA (${ntcaNo})`;
+                ntcaBalanceElement.textContent = '₱0';
                 console.error(data.message);
             }
         })
         .catch(error => {
             console.error('Error fetching NTCA balance:', error);
-            document.getElementById('ntcaBalance').textContent = '₱0 (Error)';
+            document.getElementById('ntcaBalance').textContent = '₱0';
         });
 }
 
@@ -110,8 +117,9 @@ document.getElementById('saro_select').addEventListener('change', function () {
     const selectedSaro = this.value;
     if (selectedSaro) {
         const ntcaNo = document.getElementById('ntca_number').value; // Ensure NTCA number is set
-        if (ntcaNo) {
-            fetchNTCABalance(ntcaNo);
+        const quarter = document.getElementById('quarter').value; // Get the selected quarter
+        if (ntcaNo && quarter) {
+            fetchNTCABalance(ntcaNo, quarter);
             fetchNTCABreakdown(ntcaNo);
         }
     }
