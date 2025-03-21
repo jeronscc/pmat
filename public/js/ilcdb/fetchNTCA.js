@@ -1,7 +1,7 @@
 function fetchNTCABreakdown(ntcaNo) {
     if (!ntcaNo) {
         console.error('NTCA No. is missing.');
-        return;
+        return; // Prevent further execution if NTCA No. is invalid
     }
 
     fetch(`/api/ntca-breakdown/${ntcaNo}`)
@@ -81,9 +81,14 @@ document.getElementById('ntcaBreakdownModal').addEventListener('shown.bs.modal',
 });
 
 function fetchNTCABalance(ntcaNo, quarter) {
-    if (!ntcaNo || !quarter) {
-        console.error('NTCA No. or Quarter is missing.');
-        return;
+    if (!ntcaNo) {
+        console.error('NTCA No. is missing.');
+        return; // Prevent further execution if NTCA No. is invalid
+    }
+
+    if (!quarter) {
+        console.error('Quarter is missing.');
+        return; // Prevent further execution if Quarter is invalid
     }
 
     fetch(`/api/ntca-balance/${ntcaNo}/${quarter}`)
