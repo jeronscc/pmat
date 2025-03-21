@@ -121,11 +121,22 @@ function fetchNTCABalance(ntcaNo, quarter) {
 document.getElementById('saro_select').addEventListener('change', function () {
     const selectedSaro = this.value;
     if (selectedSaro) {
-        const ntcaNo = document.getElementById('ntca_number').value; // Ensure NTCA number is set
-        const quarter = document.getElementById('quarter').value; // Get the selected quarter
+        generateNTCANumber();
+        const ntcaNo = document.getElementById('ntca_number').value; 
+        const quarter = document.getElementById('quarter').value;
         if (ntcaNo && quarter) {
-            fetchNTCABalance(ntcaNo, quarter);
-            fetchNTCABreakdown(ntcaNo);
+            // Trigger fetches together, wait for both to resolve
+            Promise.all([
+                fetchNTCABalance(ntcaNo, quarter),  // Fetch balance
+                fetchNTCABreakdown(ntcaNo)           // Fetch breakdown
+            ])
+            .then(() => {
+                console.log('Both NTCA balance and breakdown fetched successfully.');
+            })
+            .catch((error) => {
+                console.error('Error fetching NTCA data:', error);
+            });
         }
     }
-});
+ });
+ 
