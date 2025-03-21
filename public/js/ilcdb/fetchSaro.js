@@ -145,14 +145,15 @@ function fetchNTCAForSaro(saroNo) {
 
             if (data.success) {
                 const currentMonth = new Date().getMonth() + 1;
-                const currentQuarter = currentMonth <= 3 ? 'first_q' :
-                                       currentMonth <= 6 ? 'second_q' :
-                                       currentMonth <= 9 ? 'third_q' : 'fourth_q';
+                const currentQuarter = currentMonth <= 3 ? 'First Quarter' :
+                                       currentMonth <= 6 ? 'Second Quarter' :
+                                       currentMonth <= 9 ? 'Third Quarter' : 'Fourth Quarter';
 
                 data.ntca.forEach((ntca) => {
                     // Update NTCA container label and balance for the current quarter
-                    ntcaLabelElement.textContent = `NTCA (${ntca.ntca_no} - ${currentQuarter.replace('_q', ' Quarter')})`;
-                    const currentQuarterBalance = ntca[currentQuarter];
+                    ntcaLabelElement.textContent = `NTCA (${ntca.ntca_no} - ${currentQuarter})`;
+                    const currentQuarterKey = currentQuarter.toLowerCase().replace(' ', '_');
+                    const currentQuarterBalance = ntca[currentQuarterKey];
                     ntcaBalanceElement.textContent = currentQuarterBalance
                         ? `₱${currentQuarterBalance.toLocaleString()}`
                         : "₱0";
@@ -200,10 +201,10 @@ function fetchNTCAForSaro(saroNo) {
                     `;
 
                     // Add budget surplus if applicable
-                    if (currentQuarter && ntca[currentQuarter] > 0) {
+                    if (currentQuarterKey && ntca[currentQuarterKey] > 0) {
                         ntcaList.innerHTML += `
                             <li class="list-group-item d-flex justify-content-between">
-                                Budget Surplus <span class="fw-bold text-success">₱${ntca[currentQuarter].toLocaleString()}</span>
+                                Budget Surplus <span class="fw-bold text-success">₱${ntca[currentQuarterKey].toLocaleString()}</span>
                             </li>
                         `;
                     }
