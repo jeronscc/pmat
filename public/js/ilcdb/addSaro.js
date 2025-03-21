@@ -61,34 +61,50 @@ document.getElementById('saveSaro').addEventListener('click', function () {
             return;
         }
 
-        fetch('/api/save-ntca', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-            },
-            body: JSON.stringify({
-                ntca_no: ntcaNumber,
-                budget: ntcaBudget,
-                quarter: ntcaQuarter,
-                saro_no: saroSelect,
-            }),
-        })
+        // Check if the selected quarter already has a value
+        fetch(`/api/ntca-breakdown/${ntcaNumber}`)
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    alert(data.message);
-                    const addSaroModal = bootstrap.Modal.getInstance(document.getElementById('addSaroModal'));
-                    addSaroModal.hide();
-                    document.getElementById('saroForm').reset();
-                } else {
-                    alert('Failed to save NTCA: ' + data.message);
+                    if (data.ntca[ntcaQuarter] > 0) {
+                        alert(`The selected quarter (${ntcaQuarter}) already has a balance. Please choose a different quarter.`);
+                        return;
+                    }
                 }
+
+                // Proceed with saving NTCA
+                fetch('/api/save-ntca', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                    },
+                    body: JSON.stringify({
+                        ntca_no: ntcaNumber,
+                        budget: ntcaBudget,
+                        quarter: ntcaQuarter,
+                        saro_no: saroSelect,
+                    }),
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert(data.message);
+                            const addSaroModal = bootstrap.Modal.getInstance(document.getElementById('addSaroModal'));
+                            addSaroModal.hide();
+                            document.getElementById('saroForm').reset();
+                        } else {
+                            alert('Failed to save NTCA: ' + data.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error saving NTCA:', error);
+                        alert('An error occurred while saving NTCA.');
+                    });
             })
             .catch(error => {
-                console.error('Error saving NTCA:', error);
-                alert('An error occurred while saving NTCA.');
+                console.error('Error validating NTCA quarter:', error);
             });
     }
 });

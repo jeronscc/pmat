@@ -75,7 +75,7 @@ function displayCurrentBudget(saro) {
         : "₱0";
 
     // Display the current budget in the "remainingBalance" container
-    // Display the current budget in the "remainingBalance" containerBudget;
+    // Display the current budget in the "remainingBalance" container
     document.getElementById("remainingBalance").textContent = currentBudget;
     // Fetch and display the requirements associated with the selected SARO
     // Fetch and display the requirements associated with the selected SARO
@@ -83,6 +83,11 @@ function displayCurrentBudget(saro) {
 
     // Fetch and display NTCA records for the selected SARO
     fetchNTCAForSaro(saro.saro_no);
+    const ntcaNo = document.getElementById('ntca_number').value;
+    if (ntcaNo) {
+        fetchNTCABalance(ntcaNo); // Fetch NTCA balance
+        fetchNTCABreakdown(ntcaNo); // Fetch NTCA breakdown
+    }
 }
 
 function fetchSaroDataAndRequirements(year) {
