@@ -64,9 +64,7 @@ document.addEventListener("DOMContentLoaded", function () {
 // Function to display the remaining balance for the clicked SARO
 function displayCurrentBudget(saro) {
     // Set the current SARO name in the container
-    document.getElementById(
-        "currentViewingSaro"
-    ).textContent = `${saro.saro_no}`;
+    document.getElementById("currentViewingSaro").textContent = `${saro.saro_no}`;
     document.getElementById("currentSaroName").textContent = `${saro.saro_no}`;
 
     // Check if current_budget exists and format it with comma separation
@@ -75,9 +73,8 @@ function displayCurrentBudget(saro) {
         : "₱0";
 
     // Display the current budget in the "remainingBalance" container
-    // Display the current budget in the "remainingBalance" container
     document.getElementById("remainingBalance").textContent = currentBudget;
-    // Fetch and display the requirements associated with the selected SARO
+
     // Fetch and display the requirements associated with the selected SARO
     fetchProcurementForSaro(saro.saro_no);
 

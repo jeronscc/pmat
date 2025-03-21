@@ -81,6 +81,11 @@ document.getElementById('ntcaBreakdownModal').addEventListener('shown.bs.modal',
 });
 
 function fetchNTCABalance(ntcaNo) {
+    if (!ntcaNo) {
+        console.error('NTCA No. is missing.');
+        return;
+    }
+
     fetch(`/api/ntca-balance/${ntcaNo}`)
         .then(response => response.json())
         .then(data => {
