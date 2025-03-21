@@ -80,10 +80,11 @@ function displayCurrentBudget(saro) {
 
     // Fetch and display NTCA records for the selected SARO
     fetchNTCAForSaro(saro.saro_no);
-    const ntcaNo = document.getElementById('ntca_number').value;
-    if (ntcaNo) {
-        fetchNTCABalance(ntcaNo); // Fetch NTCA balance
-        fetchNTCABreakdown(ntcaNo); // Fetch NTCA breakdown
+
+    // Fetch NTCA balance and breakdown for the current quarter
+    if (saro.ntca_no && saro.current_quarter) {
+        fetchNTCABalance(saro.ntca_no, saro.current_quarter);
+        fetchNTCABreakdown(saro.ntca_no);
     }
 }
 
