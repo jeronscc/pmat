@@ -125,66 +125,82 @@ function fetchSaroDataAndRequirements(year) {
 
 window.fetchSaroDataAndRequirements = fetchSaroDataAndRequirements;
 
+// Helper function to determine the current quarter
+function getCurrentQuarter() {
+    const month = new Date().getMonth() + 1; // Months are 0-based, so add 1
+    if (month <= 3) return 'first_q';
+    if (month <= 6) return 'second_q';
+    if (month <= 9) return 'third_q';
+    return 'fourth_q';
+}
+
 function fetchNTCAForSaro(saroNo) {
     fetch(`/api/fetch-ntca-by-saro/${saroNo}`)
         .then((response) => response.json())
         .then((data) => {
             const ntcaList = document.getElementById("ntcaBreakdownList");
+            const ntcaLabelElement = document.getElementById("ntcaLabel");
+            const ntcaBalanceElement = document.getElementById("ntcaBalance");
             ntcaList.innerHTML = ""; // Clear existing NTCA records
 
             if (data.success) {
+                const currentQuarter = getCurrentQuarter(); // Determine the current quarter dynamically
+
                 data.ntca.forEach((ntca) => {
+                    // Update NTCA container label and balance for the current quarter
+                    ntcaLabelElement.textContent = `NTCA (${ntca.ntca_no} - ${currentQuarter.replace('_q', ' Quarter')})`;
+                    const currentQuarterBalance = ntca[currentQuarter];
+                    ntcaBalanceElement.textContent = currentQuarterBalance
+                        ? `₱${currentQuarterBalance.toLocaleString()}`
+                        : "₱0";
+
+                    // Add NTCA breakdown to the list
                     ntcaList.innerHTML += `
                     <li class="list-group-item d-flex justify-content-between">
-                        Unassigned Budget for ${
-                            ntca.first_q
-                        }<span class="fw-bold">${
-                        ntca.current_budget
-                            ? "₱" + ntca.current_budget.toLocaleString()
-                            : "<em style='color:#777;'>Not yet allocated</em>"
-                    }</span>
+                        <strong>Unassigned Budget for (${ntca.ntca_no}):</strong>
+                        <span class="fw-bold">
+                            ${ntca.current_budget ? "₱" + ntca.current_budget.toLocaleString() : "<em style='color:#777;'>Not yet allocated</em>"}
+                        </span>
                     </li>
                     <li class="list-group-item d-flex justify-content-between">
                         First Quarter: 
-                        <span class="fw-bold">${
-                            ntca.first_q
-                                ? "₱" + ntca.first_q.toLocaleString()
-                                : "<em style='color:#777;'>Not yet allocated</em>"
-                        }</span>
+                        <span class="fw-bold">
+                            ${ntca.first_q ? "₱" + ntca.first_q.toLocaleString() : "<em style='color:#777;'>Not yet allocated</em>"}
+                        </span>
                     </li>
                     <li class="list-group-item d-flex justify-content-between">
                         Second Quarter: 
-                        <span class="fw-bold">${
-                            ntca.second_q
-                                ? "₱" + ntca.second_q.toLocaleString()
-                                : "<em style='color:#777;'>Not yet allocated</em>"
-                        }</span>
+                        <span class="fw-bold">
+                            ${ntca.second_q ? "₱" + ntca.second_q.toLocaleString() : "<em style='color:#777;'>Not yet allocated</em>"}
+                        </span>
                     </li>
                     <li class="list-group-item d-flex justify-content-between">
                         Third Quarter: 
-                        <span class="fw-bold">${
-                            ntca.third_q
-                                ? "₱" + ntca.third_q.toLocaleString()
-                                : "<em style='color:#777;'>Not yet allocated</em>"
-                        }</span>
+                        <span class="fw-bold">
+                            ${ntca.third_q ? "₱" + ntca.third_q.toLocaleString() : "<em style='color:#777;'>Not yet allocated</em>"}
+                        </span>
                     </li>
                     <li class="list-group-item d-flex justify-content-between">
                         Fourth Quarter: 
-                        <span class="fw-bold">${
-                            ntca.fourth_q
-                                ? "₱" + ntca.fourth_q.toLocaleString()
-                                : "<em style='color:#777;'>Not yet allocated</em>"
-                        }</span>
+                        <span class="fw-bold">
+                            ${ntca.fourth_q ? "₱" + ntca.fourth_q.toLocaleString() : "<em style='color:#777;'>Not yet allocated</em>"}
+                        </span>
                     </li>
                 `;
+
+                    // Fetch breakdown for the NTCA
+                    fetchNTCABreakdown(ntca.ntca_no);
                 });
             } else {
                 ntcaList.innerHTML = `
                     <li class="list-group-item text-danger">${data.message}</li>
                 `;
+                ntcaLabelElement.textContent = "NTCA:";
+                ntcaBalanceElement.textContent = "₱0";
             }
         })
         .catch((error) => {
             console.error("Error fetching NTCA records:", error);
         });
 }
+
