@@ -13,6 +13,9 @@
 #addUserModal {
     z-index: 9999 !important; /* Ensures it's above other elements */
 }
+#editUserModal {
+    z-index: 9999 !important;
+}
 
     </style>
 <body>
@@ -71,7 +74,7 @@
             </div>
             <script src="/js/menu.js"></script>
 
-    <div class="container mt-5">
+            <div class="container mt-5">
     <div class="card shadow-lg">
         <div class="card-body">
             <div class="d-flex justify-content-between align-items-center mb-3">
@@ -98,18 +101,103 @@
                             <td>{{ $user->email }}</td>
                             <td>{{ $user->role }}</td>
                             <td>
-                                <button class="btn btn-warning btn-sm">Edit</button>
-                                <button class="btn btn-danger btn-sm">Delete</button>
+                                <!-- Edit Button -->
+                                <button class="btn btn-warning btn-sm edit-btn"
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#editUserModal"
+                                    data-id="{{ $user->id }}"
+                                    data-username="{{ $user->username }}"
+                                    data-email="{{ $user->email }}"
+                                    data-role="{{ $user->role }}">
+                                    Edit
+                                </button>
+
+                                <!-- Delete Button -->
+                                <button class="btn btn-danger btn-sm delete-btn" data-id="{{ $user->id }}">
+                                    Delete
+                                </button>
                             </td>
                         </tr>
                     @endforeach
                 </tbody>
-
                 </table>
             </div>
         </div>
     </div>
 </div>
+@if ($errors->any())
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var editUserModal = new bootstrap.Modal(document.getElementById('editUserModal'));
+            editUserModal.show();
+        });
+    </script>
+@endif
+
+<!-- Edit Account Modal -->
+<div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="editUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-light">
+                <h5 class="modal-title" id="editUserModalLabel">Edit Account: <span id="currentUsername"></span></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Show General Error Alert -->
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
+                <form action="{{ route('accounts.update') }}" method="POST">
+                    @csrf
+                    @method('PUT')
+
+                    <input type="hidden" id="editUserId" name="username">
+
+                    <div class="mb-3">
+                        <label for="editUsername" class="form-label">Username</label>
+                        <input type="text" class="form-control @error('username') is-invalid @enderror"
+                               id="editUsername" name="username" value="{{ old('username') }}" required readonly>
+                        @error('username')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="editEmail" class="form-label">Email</label>
+                        <input type="email" class="form-control @error('email') is-invalid @enderror"
+                               id="editEmail" name="email" value="{{ old('email') }}" required>
+                        @error('email')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="editRole" class="form-label">Role</label>
+                        <select class="form-select @error('role') is-invalid @enderror" id="editRole" name="role" required>
+                            <option value="Admin" {{ old('role') == 'Admin' ? 'selected' : '' }}>Admin</option>
+                            <option value="User" {{ old('role') == 'User' ? 'selected' : '' }}>User</option>
+                        </select>
+                        @error('role')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100">Save Changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
 
 
     <!-- Add User Modal -->
@@ -174,8 +262,44 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 </script>
 
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".edit-btn").forEach(button => {
+        button.addEventListener("click", function () {
+            let userId = this.getAttribute("data-id");
+            let username = this.getAttribute("data-username");
+            let email = this.getAttribute("data-email");
+            let role = this.getAttribute("data-role");
 
+            // Set values in the modal fields
+            document.getElementById("editUserId").value = userId;
+            document.getElementById("editUsername").value = username;
+            document.getElementById("editEmail").value = email;
+            document.getElementById("editRole").value = role;
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+            // Update modal header with the current username
+            document.getElementById("currentUsername").textContent = username;
+
+            // Set form action dynamically
+            document.getElementById("editUserForm").setAttribute("action", `/accounts/${userId}/update`);
+        });
+    });
+});
+</script>
+<script>
+    document.getElementById("saveChangesBtn").addEventListener("click", function() {
+    let userId = document.getElementById("editUserId").value;
+    let form = document.getElementById("editUserForm");
+    
+    if (userId) {
+        form.submit();
+    } else {
+        alert("User ID is missing.");
+    }
+});
+
+    </script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

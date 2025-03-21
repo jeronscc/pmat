@@ -87,6 +87,9 @@ Route::middleware(['auth', PreventBackAfterLogout::class])->group(function () {
 // REDIRECTS TO FORMS (PR ID SPECIFIED)
 Route::post('/accounts/add', [AccountController::class, 'store'])->name('accounts.add');
 Route::get('/procurementform', [ProcurementFormController::class, 'showForm'])->name('procurementform');
+Route::put('/accounts/update', [AccountController::class, 'update'])->name('accounts.update');
+Route::delete('/accounts/{id}/delete', [AccountController::class, 'destroy'])->name('accounts.delete'); // Delete user
+
 Route::post('/procurementform/update', [ProcurementFormController::class, 'update'])->name('procurement.update');
 
 Route::get('/honorariaform', [HonorariaFormController::class, 'showForm'])->name('honoraria.form');

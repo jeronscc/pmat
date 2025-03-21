@@ -32,4 +32,23 @@ class AccountController extends Controller
 
         return redirect()->back()->with('success', 'User added successfully!');
     }
+
+    public function update(Request $request)
+    {
+        $request->validate([
+            'username' => 'required|string|exists:user_accs,username',
+            'email' => 'required|email|unique:user_accs,email,' . $request->username . ',username',
+            'role' => 'required|string',
+        ]);
+    
+        $user = User::where('username', $request->username)->firstOrFail();
+        $user->email = $request->email;
+        $user->role = $request->role;
+        $user->save();
+    
+        return redirect()->back()->with('success', 'User updated successfully.');
+    }
+    
+    
+    
 }
