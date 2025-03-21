@@ -109,6 +109,76 @@ document.getElementById('saveSaro').addEventListener('click', function () {
     }
 });
 
+function fetchNTCABreakdown(ntcaNo) {
+    if (!ntcaNo) {
+        console.error('NTCA No. is missing.');
+        return;
+    }
+
+    fetch(`/api/ntca-breakdown/${ntcaNo}`)
+        .then(response => response.json())
+        .then(data => {
+            const breakdownList = document.getElementById('ntcaBreakdownList');
+            breakdownList.innerHTML = ''; // Clear existing items
+
+            if (data.success) {
+                const { ntca_no, first_q, second_q, third_q, fourth_q, current_budget } = data.ntca;
+
+                // Add balances for each quarter
+                breakdownList.innerHTML += `
+                    <li class="list-group-item d-flex justify-content-between">
+                        First Quarter <span class="fw-bold">₱${first_q.toLocaleString()}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between">
+                        Second Quarter <span class="fw-bold">₱${second_q.toLocaleString()}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between">
+                        Third Quarter <span class="fw-bold">₱${third_q.toLocaleString()}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between">
+                        Fourth Quarter <span class="fw-bold">₱${fourth_q.toLocaleString()}</span>
+                    </li>
+                `;
+
+                // Calculate total of all quarters
+                const totalQuarters = first_q + second_q + third_q + fourth_q;
+                breakdownList.innerHTML += `
+                    <li class="list-group-item d-flex justify-content-between">
+                        Total of All Quarters <span class="fw-bold text-primary">₱${totalQuarters.toLocaleString()}</span>
+                    </li>
+                `;
+
+                // Calculate budget surplus or deficit
+                const currentMonth = new Date().getMonth() + 1;
+                const currentQuarter = currentMonth <= 3 ? 'first_q' :
+                                       currentMonth <= 6 ? 'second_q' :
+                                       currentMonth <= 9 ? 'third_q' : 'fourth_q';
+                const remainingBalance = data.ntca[currentQuarter] ?? 0;
+
+                if (remainingBalance > 0) {
+                    breakdownList.innerHTML += `
+                        <li class="list-group-item d-flex justify-content-between">
+                            Budget Surplus <span class="fw-bold text-success">₱${remainingBalance.toLocaleString()}</span>
+                        </li>
+                    `;
+                } else if (remainingBalance < 0) {
+                    breakdownList.innerHTML += `
+                        <li class="list-group-item d-flex justify-content-between">
+                            Budget Deficit <span class="fw-bold text-danger">₱${Math.abs(remainingBalance).toLocaleString()}</span>
+                        </li>
+                    `;
+                }
+            } else {
+                breakdownList.innerHTML = `
+                    <li class="list-group-item text-danger">${data.message}</li>
+                `;
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching NTCA breakdown:', error);
+        });
+}
+
 document.getElementById('categorySelect').addEventListener('change', function () {
     const category = this.value;
 
