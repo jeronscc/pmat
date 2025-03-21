@@ -61,115 +61,53 @@ document.getElementById('saveSaro').addEventListener('click', function () {
             return;
         }
 
-        // Proceed with saving NTCA
-        fetch('/api/save-ntca', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-            },
-            body: JSON.stringify({
-                ntca_no: ntcaNumber,
-                budget: ntcaBudget,
-                quarter: ntcaQuarter,
-                saro_no: saroSelect,
-            }),
-        })
+        // Check if the selected quarter already has a value
+        fetch(`/api/ntca-breakdown/${ntcaNumber}`)
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    alert(data.message);
-                    const addSaroModal = bootstrap.Modal.getInstance(document.getElementById('addSaroModal'));
-                    addSaroModal.hide();
-                    document.getElementById('saroForm').reset();
-                } else {
-                    alert('Failed to save NTCA: ' + data.message);
+                    if (data.ntca[ntcaQuarter] > 0) {
+                        alert(`The selected quarter (${ntcaQuarter}) already has a balance. Please choose a different quarter.`);
+                        return;
+                    }
                 }
+
+                // Proceed with saving NTCA
+                fetch('/api/save-ntca', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                    },
+                    body: JSON.stringify({
+                        ntca_no: ntcaNumber,
+                        budget: ntcaBudget,
+                        quarter: ntcaQuarter,
+                        saro_no: saroSelect,
+                    }),
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert(data.message);
+                            const addSaroModal = bootstrap.Modal.getInstance(document.getElementById('addSaroModal'));
+                            addSaroModal.hide();
+                            document.getElementById('saroForm').reset();
+                        } else {
+                            alert('Failed to save NTCA: ' + data.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error saving NTCA:', error);
+                        alert('An error occurred while saving NTCA.');
+                    });
             })
             .catch(error => {
-                console.error('Error saving NTCA:', error);
-                alert('An error occurred while saving NTCA.');
+                console.error('Error validating NTCA quarter:', error);
             });
     }
 });
-
-function fetchNTCABreakdown(ntcaNo) {
-    if (!ntcaNo) {
-        console.error('NTCA No. is missing.');
-        return;
-    }
-
-    fetch(`/api/ntca-breakdown/${ntcaNo}`)
-        .then(response => response.json())
-        .then(data => {
-            const breakdownList = document.getElementById('ntcaBreakdownList');
-            breakdownList.innerHTML = ''; // Clear existing items
-
-            if (data.success) {
-                const { ntca_no, first_q, second_q, third_q, fourth_q, current_budget } = data.ntca;
-
-                // Add balances for each quarter
-                breakdownList.innerHTML += `
-                    <li class="list-group-item d-flex justify-content-between">
-                        First Quarter <span class="fw-bold">₱${first_q.toLocaleString()}</span>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between">
-                        Second Quarter <span class="fw-bold">₱${second_q.toLocaleString()}</span>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between">
-                        Third Quarter <span class="fw-bold">₱${third_q.toLocaleString()}</span>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between">
-                        Fourth Quarter <span class="fw-bold">₱${fourth_q.toLocaleString()}</span>
-                    </li>
-                `;
-
-                // Calculate total of all quarters
-                const totalQuarters = (first_q + second_q + third_q + fourth_q).toFixed(2);
-                breakdownList.innerHTML += `
-                    <li class="list-group-item d-flex justify-content-between">
-                        Total of All Quarters <span class="fw-bold text-primary">₱${parseFloat(totalQuarters).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
-                    </li>
-                `;
-
-                // Determine the current quarter
-                const currentMonth = new Date().getMonth() + 1;
-                const currentQuarter = currentMonth <= 3 ? 'first_q' :
-                                       currentMonth <= 6 ? 'second_q' :
-                                       currentMonth <= 9 ? 'third_q' : 'fourth_q';
-
-                // Determine the next quarter
-                const nextQuarter = currentQuarter === 'first_q' ? 'second_q' :
-                                    currentQuarter === 'second_q' ? 'third_q' :
-                                    currentQuarter === 'third_q' ? 'fourth_q' : null;
-
-                // Calculate budget surplus for the next quarter
-                if (nextQuarter && data.ntca[currentQuarter] > 0) {
-                    breakdownList.innerHTML += `
-                        <li class="list-group-item d-flex justify-content-between">
-                            Budget Surplus <span class="fw-bold text-success">₱${data.ntca[currentQuarter].toLocaleString()}</span>
-                        </li>
-                    `;
-                }
-
-                // Show budget deficit (default to 0 unless there is already a deficit)
-                const budgetDeficit = data.ntca.budget_deficit ?? 0;
-                breakdownList.innerHTML += `
-                    <li class="list-group-item d-flex justify-content-between">
-                        Budget Deficit <span class="fw-bold text-danger">₱${budgetDeficit.toLocaleString()}</span>
-                    </li>
-                `;
-            } else {
-                breakdownList.innerHTML = `
-                    <li class="list-group-item text-danger">${data.message}</li>
-                `;
-            }
-        })
-        .catch(error => {
-            console.error('Error fetching NTCA breakdown:', error);
-        });
-}
 
 document.getElementById('categorySelect').addEventListener('change', function () {
     const category = this.value;
@@ -199,12 +137,7 @@ function generateNTCANumber() {
     const lastDigits = selectedSaro.slice(-6); // Extract last 6 digits of SARO number
     const ntcaNumber = `NTCA-${lastDigits}`;
     document.getElementById('ntca_number').value = ntcaNumber;
-
-    // Update NTCA label dynamically
-    const ntcaLabelElement = document.getElementById('ntcaLabel');
-    ntcaLabelElement.textContent = `NTCA (${ntcaNumber})`;
 }
-
 // Function to populate the SARO dropdown dynamically (fetch from the server)
 function populateSARODropdown() {
     const saroSelect = document.getElementById('saro_select');
@@ -228,7 +161,6 @@ function populateSARODropdown() {
 
 // Call populateSARODropdown when the modal is opened
 document.getElementById('addSaroModal').addEventListener('shown.bs.modal', populateSARODropdown);
-
 document.getElementById('quarter').addEventListener('change', function () {
     const ntcaNo = document.getElementById('ntca_number').value;
     const quarter = this.value;
