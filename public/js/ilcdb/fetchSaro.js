@@ -125,6 +125,15 @@ function fetchSaroDataAndRequirements(year) {
 
 window.fetchSaroDataAndRequirements = fetchSaroDataAndRequirements;
 
+// Helper function to determine the current quarter
+function getCurrentQuarter() {
+    const month = new Date().getMonth() + 1; // Months are 0-based, so add 1
+    if (month <= 3) return 'first_q';
+    if (month <= 6) return 'second_q';
+    if (month <= 9) return 'third_q';
+    return 'fourth_q';
+}
+
 function fetchNTCAForSaro(saroNo) {
     fetch(`/api/fetch-ntca-by-saro/${saroNo}`)
         .then((response) => response.json())
@@ -135,17 +144,20 @@ function fetchNTCAForSaro(saroNo) {
             ntcaList.innerHTML = ""; // Clear existing NTCA records
 
             if (data.success) {
+                const currentQuarter = getCurrentQuarter(); // Determine the current quarter dynamically
+
                 data.ntca.forEach((ntca) => {
-                    // Update NTCA container label and balance
-                    ntcaLabelElement.textContent = `NTCA (${ntca.ntca_no} - ${ntca.current_quarter})`;
-                    ntcaBalanceElement.textContent = ntca.current_budget
-                        ? `₱${ntca.current_budget.toLocaleString()}`
+                    // Update NTCA container label and balance for the current quarter
+                    ntcaLabelElement.textContent = `NTCA (${ntca.ntca_no} - ${currentQuarter.replace('_q', ' Quarter')})`;
+                    const currentQuarterBalance = ntca[currentQuarter];
+                    ntcaBalanceElement.textContent = currentQuarterBalance
+                        ? `₱${currentQuarterBalance.toLocaleString()}`
                         : "₱0";
 
                     // Add NTCA breakdown to the list
                     ntcaList.innerHTML += `
                     <li class="list-group-item d-flex justify-content-between">
-                        <strong>Unassigned Budget for NTCA (${ntca.ntca_no}):</strong>
+                        <strong>Unassigned Budget for (${ntca.ntca_no}):</strong>
                         <span class="fw-bold">
                             ${ntca.current_budget ? "₱" + ntca.current_budget.toLocaleString() : "<em style='color:#777;'>Not yet allocated</em>"}
                         </span>
