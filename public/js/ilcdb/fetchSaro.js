@@ -134,6 +134,120 @@ function getCurrentQuarter() {
     return 'fourth_q';
 }
 
+function fetchNTCABreakdown(ntcaNo) {
+    if (!ntcaNo) {
+        console.error('NTCA No. is missing.');
+        return;
+    }
+
+    fetch(`/api/ntca-breakdown/${ntcaNo}`)
+        .then(response => response.json())
+        .then(data => {
+            const breakdownList = document.getElementById('ntcaBreakdownList');
+            breakdownList.innerHTML = ''; // Clear existing items
+
+            if (data.success) {
+                const { ntca_no, first_q, second_q, third_q, fourth_q, current_budget } = data.ntca;
+
+                // Add balances for each quarter
+                breakdownList.innerHTML += `
+                    <li class="list-group-item d-flex justify-content-between">
+                        First Quarter <span class="fw-bold">₱${first_q.toLocaleString()}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between">
+                        Second Quarter <span class="fw-bold">₱${second_q.toLocaleString()}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between">
+                        Third Quarter <span class="fw-bold">₱${third_q.toLocaleString()}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between">
+                        Fourth Quarter <span class="fw-bold">₱${fourth_q.toLocaleString()}</span>
+                    </li>
+                `;
+
+                // Calculate total of all quarters
+                const totalQuarters = (first_q + second_q + third_q + fourth_q).toFixed(2);
+                breakdownList.innerHTML += `
+                    <li class="list-group-item d-flex justify-content-between">
+                        Total of All Quarters <span class="fw-bold text-primary">₱${parseFloat(totalQuarters).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                    </li>
+                `;
+
+                // Determine the current quarter
+                const currentMonth = new Date().getMonth() + 1;
+                const currentQuarter = currentMonth <= 3 ? 'first_q' :
+                                       currentMonth <= 6 ? 'second_q' :
+                                       currentMonth <= 9 ? 'third_q' : 'fourth_q';
+
+                // Determine the next quarter
+                const nextQuarter = currentQuarter === 'first_q' ? 'second_q' :
+                                    currentQuarter === 'second_q' ? 'third_q' :
+                                    currentQuarter === 'third_q' ? 'fourth_q' : null;
+
+                // Calculate budget surplus for the next quarter
+                if (nextQuarter && data.ntca[currentQuarter] > 0) {
+                    breakdownList.innerHTML += `
+                        <li class="list-group-item d-flex justify-content-between">
+                            Budget Surplus <span class="fw-bold text-success">₱${data.ntca[currentQuarter].toLocaleString()}</span>
+                        </li>
+                    `;
+                }
+
+                // Show budget deficit (default to 0 unless there is already a deficit)
+                const budgetDeficit = data.ntca.budget_deficit ?? 0;
+                breakdownList.innerHTML += `
+                    <li class="list-group-item d-flex justify-content-between">
+                        Budget Deficit <span class="fw-bold text-danger">₱${budgetDeficit.toLocaleString()}</span>
+                    </li>
+                `;
+            } else {
+                breakdownList.innerHTML = `
+                    <li class="list-group-item text-danger">${data.message}</li>
+                `;
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching NTCA breakdown:', error);
+        });
+}
+
+function fetchNTCABalance(ntcaNo, quarter) {
+    if (!ntcaNo) {
+        console.error('NTCA No. is missing.');
+        return;
+    }
+
+    if (!quarter) {
+        console.error('Quarter is missing.');
+        return;
+    }
+
+    fetch(`/api/ntca-balance/${ntcaNo}/${quarter}`)
+        .then(response => response.json())
+        .then(data => {
+            const ntcaBalanceElement = document.getElementById('ntcaBalance');
+            const ntcaLabelElement = document.getElementById('ntcaLabel'); // Add a label for NTCA
+
+            if (data.success) {
+                const { balance } = data;
+
+                // Update NTCA label to include NTCA No. and Quarter
+                ntcaLabelElement.textContent = `Unassigned Budget for NTCA (${ntcaNo})`;
+
+                // Update NTCA balance for the current quarter
+                ntcaBalanceElement.textContent = `₱${balance.toLocaleString()}`;
+            } else {
+                ntcaLabelElement.textContent = `Unassigned Budget for NTCA (${ntcaNo})`;
+                ntcaBalanceElement.textContent = '₱0';
+                console.error(data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching NTCA balance:', error);
+            document.getElementById('ntcaBalance').textContent = '₱0';
+        });
+}
+
 function fetchNTCAForSaro(saroNo) {
     fetch(`/api/fetch-ntca-by-saro/${saroNo}`)
         .then((response) => response.json())
@@ -144,83 +258,60 @@ function fetchNTCAForSaro(saroNo) {
             ntcaList.innerHTML = ""; // Clear existing NTCA records
 
             if (data.success) {
-                const currentMonth = new Date().getMonth() + 1;
-                const currentQuarter = currentMonth <= 3 ? 'first_q' :
-                                       currentMonth <= 6 ? 'second_q' :
-                                       currentMonth <= 9 ? 'third_q' : 'fourth_q';
+                const currentQuarter = getCurrentQuarter(); // Determine the current quarter dynamically
 
                 data.ntca.forEach((ntca) => {
                     // Update NTCA container label and balance for the current quarter
-                    ntcaLabelElement.textContent = `NTCA (${ntca.ntca_no} - ${currentQuarter})`;
-                    const currentQuarterBalance = ntca[currentQuarterKey];
+                    ntcaLabelElement.textContent = `NTCA (${ntca.ntca_no} - ${currentQuarter.replace('_q', ' Quarter')})`;
+                    const currentQuarterBalance = ntca[currentQuarter];
                     ntcaBalanceElement.textContent = currentQuarterBalance
-                        ? `₱${currentQuarterBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
-                        : "₱0.00";
+                        ? `₱${currentQuarterBalance.toLocaleString()}`
+                        : "₱0";
 
                     // Add NTCA breakdown to the list
                     ntcaList.innerHTML += `
                     <li class="list-group-item d-flex justify-content-between">
                         <strong>Unassigned Budget for (${ntca.ntca_no}):</strong>
                         <span class="fw-bold">
-                            ${ntca.current_budget ? "₱" + ntca.current_budget.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : "<em style='color:#777;'>Not yet allocated</em>"}
+                            ${ntca.current_budget ? "₱" + ntca.current_budget.toLocaleString() : "<em style='color:#777;'>Not yet allocated</em>"}
                         </span>
                     </li>
                     <li class="list-group-item d-flex justify-content-between">
                         First Quarter: 
                         <span class="fw-bold">
-                            ${ntca.first_q ? "₱" + ntca.first_q.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : "<em style='color:#777;'>Not yet allocated</em>"}
+                            ${ntca.first_q ? "₱" + ntca.first_q.toLocaleString() : "<em style='color:#777;'>Not yet allocated</em>"}
                         </span>
                     </li>
                     <li class="list-group-item d-flex justify-content-between">
                         Second Quarter: 
                         <span class="fw-bold">
-                            ${ntca.second_q ? "₱" + ntca.second_q.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : "<em style='color:#777;'>Not yet allocated</em>"}
+                            ${ntca.second_q ? "₱" + ntca.second_q.toLocaleString() : "<em style='color:#777;'>Not yet allocated</em>"}
                         </span>
                     </li>
                     <li class="list-group-item d-flex justify-content-between">
                         Third Quarter: 
                         <span class="fw-bold">
-                            ${ntca.third_q ? "₱" + ntca.third_q.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : "<em style='color:#777;'>Not yet allocated</em>"}
+                            ${ntca.third_q ? "₱" + ntca.third_q.toLocaleString() : "<em style='color:#777;'>Not yet allocated</em>"}
                         </span>
                     </li>
                     <li class="list-group-item d-flex justify-content-between">
                         Fourth Quarter: 
                         <span class="fw-bold">
-                            ${ntca.fourth_q ? "₱" + ntca.fourth_q.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : "<em style='color:#777;'>Not yet allocated</em>"}
+                            ${ntca.fourth_q ? "₱" + ntca.fourth_q.toLocaleString() : "<em style='color:#777;'>Not yet allocated</em>"}
                         </span>
                     </li>
                 `;
 
-                    // Add total of all quarters
-                    const totalQuarters = (ntca.first_q + ntca.second_q + ntca.third_q + ntca.fourth_q).toFixed(2);
-                    ntcaList.innerHTML += `
-                        <li class="list-group-item d-flex justify-content-between">
-                            Total of All Quarters <span class="fw-bold text-primary">₱${parseFloat(totalQuarters).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
-                        </li>
-                    `;
-
-                    // Add budget surplus
-                    const budgetSurplus = ntca.budget_surplus ?? 0;
-                    ntcaList.innerHTML += `
-                        <li class="list-group-item d-flex justify-content-between">
-                            Budget Surplus <span class="fw-bold text-success">₱${budgetSurplus.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
-                        </li>
-                    `;
-
-                    // Add budget deficit
-                    const budgetDeficit = ntca.budget_deficit ?? 0;
-                    ntcaList.innerHTML += `
-                        <li class="list-group-item d-flex justify-content-between">
-                            Budget Deficit <span class="fw-bold text-danger">₱${budgetDeficit.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
-                        </li>
-                    `;
+                    // Fetch breakdown and balance for the NTCA
+                    fetchNTCABreakdown(ntca.ntca_no);
+                    fetchNTCABalance(ntca.ntca_no, currentQuarter);
                 });
             } else {
                 ntcaList.innerHTML = `
                     <li class="list-group-item text-danger">${data.message}</li>
                 `;
                 ntcaLabelElement.textContent = "NTCA:";
-                ntcaBalanceElement.textContent = "₱0.00";
+                ntcaBalanceElement.textContent = "₱0";
             }
         })
         .catch((error) => {
