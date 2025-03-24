@@ -139,7 +139,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header bg-light">
-                <h5 class="modal-title" id="editUserModalLabel">Edit Account: <span id="currentUsername"></span></h5>
+                <h5 class="modal-title" id="editUserModalLabel"><strong>Edit Account:</strong> <span id="currentUsername"></span></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -176,6 +176,14 @@
                             <option value="User" {{ old('role') == 'User' ? 'selected' : '' }}>User</option>
                         </select>
                         @error('role')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="mb-3">
+                        <label for="editPassword" class="form-label">New Password (Optional)</label>
+                        <input type="password" class="form-control @error('password') is-invalid @enderror"
+                            id="editPassword" name="password" placeholder="Enter new password">
+                        @error('password')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>

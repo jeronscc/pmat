@@ -36,16 +36,23 @@ class AccountController extends Controller
     public function update(Request $request)
     {
         $request->validate([
-            'user_id' => 'required|exists:user_accs,user_id',  // ✅ Ensures ID exists in DB
+            'user_id' => 'required|exists:user_accs,user_id',
             'username' => 'required|string|unique:user_accs,username,' . $request->user_id . ',user_id',
             'email' => 'required|email|unique:user_accs,email,' . $request->user_id . ',user_id',
             'role' => 'required|string',
+            'password' => 'nullable|string|min:6', // Password is optional but must be at least 6 characters
         ]);
     
-        $user = User::where('user_id', $request->user_id)->firstOrFail(); // ✅ Find by user_id
+        $user = User::where('user_id', $request->user_id)->firstOrFail();
         $user->username = $request->username;
         $user->email = $request->email;
         $user->role = $request->role;
+    
+        // Only update password if a new one is provided
+        if ($request->filled('password')) {
+            $user->password = Hash::make($request->password);
+        }
+    
         $user->save();
     
         return redirect()->back()->with('success', 'User updated successfully.');
