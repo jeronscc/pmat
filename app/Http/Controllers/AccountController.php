@@ -57,5 +57,14 @@ class AccountController extends Controller
     
         return redirect()->back()->with('success', 'User updated successfully.');
     }
+
+    public function destroy($user_id)
+{
+    $user = User::where('user_id', $user_id)->firstOrFail();
+    $user->delete();
+
+    return redirect()->back()->with('success', 'User deleted successfully.');
+}
+
     
 }

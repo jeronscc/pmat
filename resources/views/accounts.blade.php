@@ -113,9 +113,15 @@
                                 </button>
 
                                 <!-- Delete Button -->
-                                <button class="btn btn-danger btn-sm delete-btn" data-userid="{{ $user->user_id }}">
-                                    Delete
-                                </button>
+                                <form action="{{ route('accounts.delete', $user->user_id) }}" method="POST" class="d-inline">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger btn-sm delete-btn"
+                                            onclick="return confirm('Are you sure you want to delete this user?');">
+                                        Delete
+                                    </button>
+                                </form>
+
                             </td>
                         </tr>
                     @endforeach
