@@ -169,7 +169,7 @@ function updateProcurementTable(data) {
 }
 
 function checkOverdue() {
-    fetch('/check-overdue')
+    fetch('/api/check-overdue')
         .then(response => response.json())
         .then(data => {
             if (data.updated) {
