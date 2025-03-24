@@ -204,3 +204,4 @@ Route::post('/save-ntca', [SaroController::class, 'saveNTCA']);
 Route::get('/ntca-breakdown/{ntcaNo}', [SaroController::class, 'getNTCABreakdown']);
 Route::get('/fetch-ntca-by-saro/{saroNo}', [SaroController::class, 'fetchNTCABySaro']);
 Route::get('/ntca-balance/{ntcaNo}', [SaroController::class, 'getNTCABalanceForCurrentQuarter']);
+Route::get('/check-overdue',[ProcurementController::class,'getOverdueProcurements']);

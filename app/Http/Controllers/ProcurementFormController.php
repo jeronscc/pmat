@@ -32,41 +32,41 @@ class ProcurementFormController extends Controller
     ]);
 }
 
-public function update(Request $request)
-{
-    $validatedData = $request->validate([
-        'procurement_id' => 'required|exists:ilcdb.procurement_form,procurement_id',
-        'dt_submitted1'  => 'nullable|date',
-        'dt_received1'   => 'nullable|date',
-        'dt_submitted2'  => 'nullable|date',
-        'dt_received2'   => 'nullable|date',
-        'dt_submitted3'  => 'nullable|date',
-        'dt_received3'   => 'nullable|date',
-        'dt_submitted4'  => 'nullable|date',
-        'dt_received4'   => 'nullable|date',
-        'dt_submitted5'  => 'nullable|date',
-        'dt_received5'   => 'nullable|date',
-        'dt_submitted6'  => 'nullable|date',
-        'dt_received6'   => 'nullable|date',
-        'budget_spent'   => 'nullable|numeric',
-    ]);
-
-    try {
-        // Determine the unit based on the latest submitted date
-        $unit = null;
-        if ($validatedData['dt_submitted6']) {
-            $unit = 'Accounting Unit';
-        } elseif ($validatedData['dt_submitted5'] || $validatedData['dt_submitted4']) {
-            $unit = 'Supply Unit'; // Fix: Supply Unit for post-procurement as well
-        } elseif ($validatedData['dt_submitted3']) {
-            $unit = 'Budget Unit';
-        } elseif ($validatedData['dt_submitted2'] || $validatedData['dt_submitted1']) {
-            $unit = 'Supply Unit'; // Supply Unit for pre-procurement
-        }
-
-        // Initialize status to null
-        $status = null;
-
+    public function update(Request $request)
+    {
+        $validatedData = $request->validate([
+            'procurement_id' => 'required|exists:ilcdb.procurement_form,procurement_id',
+            'dt_submitted1'  => 'nullable|date',
+            'dt_received1'   => 'nullable|date',
+            'dt_submitted2'  => 'nullable|date',
+            'dt_received2'   => 'nullable|date',
+            'dt_submitted3'  => 'nullable|date',
+            'dt_received3'   => 'nullable|date',
+            'dt_submitted4'  => 'nullable|date',
+            'dt_received4'   => 'nullable|date',
+            'dt_submitted5'  => 'nullable|date',
+            'dt_received5'   => 'nullable|date',
+            'dt_submitted6'  => 'nullable|date',
+            'dt_received6'   => 'nullable|date',
+            'budget_spent'   => 'nullable|numeric',
+        ]);
+    
+        try {
+            // Determine the unit based on the latest submitted date
+            $unit = null;
+            if ($validatedData['dt_submitted6']) {
+                $unit = 'Accounting Unit';
+            } elseif ($validatedData['dt_submitted5'] || $validatedData['dt_submitted4']) {
+                $unit = 'Supply Unit'; // Fix: Supply Unit for post-procurement as well
+            } elseif ($validatedData['dt_submitted3']) {
+                $unit = 'Budget Unit';
+            } elseif ($validatedData['dt_submitted2'] || $validatedData['dt_submitted1']) {
+                $unit = 'Supply Unit'; // Supply Unit for pre-procurement
+            }
+    
+            // Initialize status to null
+            $status = null;
+    
             // Handle status for Supply Unit (Pre-Procurement and Post-Procurement)
             if ($unit === 'Supply Unit') {
                 if ($validatedData['dt_submitted5'] && !$validatedData['dt_received5']) {
@@ -95,7 +95,7 @@ public function update(Request $request)
                     $status = 'Pending';
                 }
             }
-
+    
             // Handle status for Budget Unit
             if ($unit === 'Budget Unit') {
                 if ($validatedData['dt_submitted3'] && !$validatedData['dt_received3']) {
@@ -106,7 +106,7 @@ public function update(Request $request)
                     $status = 'Pending';
                 }
             }
-
+    
             // Handle status for Accounting Unit
             if ($unit === 'Accounting Unit') {
                 if ($validatedData['dt_submitted6'] && !$validatedData['dt_received6']) {
@@ -117,76 +117,56 @@ public function update(Request $request)
                     $status = 'Pending';
                 }
             }
-
-        // Handle status for when all fields are filled (Done)
-        if ($validatedData['budget_spent']) {
-            $status = 'Done';
-        }
-
-        // Wrap the update and budget deduction in a transaction.
-        DB::connection('ilcdb')->transaction(function () use ($validatedData, $unit, $status) {
-            // Update the procurement_form record.
-            DB::connection('ilcdb')->table('procurement_form')
-                ->where('procurement_id', $validatedData['procurement_id'])
-                ->update([
-                    'dt_submitted1' => $validatedData['dt_submitted1'] ?? null,
-                    'dt_received1'  => $validatedData['dt_received1'] ?? null,
-                    'dt_submitted2' => $validatedData['dt_submitted2'] ?? null,
-                    'dt_received2'  => $validatedData['dt_received2'] ?? null,
-                    'dt_submitted3' => $validatedData['dt_submitted3'] ?? null,
-                    'dt_received3'  => $validatedData['dt_received3'] ?? null,
-                    'dt_submitted4' => $validatedData['dt_submitted4'] ?? null,
-                    'dt_received4'  => $validatedData['dt_received4'] ?? null,
-                    'dt_submitted5' => $validatedData['dt_submitted5'] ?? null,
-                    'dt_received5'  => $validatedData['dt_received5'] ?? null,
-                    'dt_submitted6' => $validatedData['dt_submitted6'] ?? null,
-                    'dt_received6'  => $validatedData['dt_received6'] ?? null,
-                    'budget_spent'  => $validatedData['budget_spent'] ?? null,
-                    'unit'          => $unit,
-                    'status'        => $status,
-                ]);
-
-            // Retrieve procurement form details for quarter and saro_no
-            $record = DB::connection('ilcdb')->table('procurement_form')
-                        ->where('procurement_id', $validatedData['procurement_id'])
-                        ->first();
-
-            if ($record && $record->budget_spent) {
-                $column = null;
-                switch ($record->quarter) {
-                    case 'First Quarter':
-                        $column = 'first_q';
-                        break;
-                    case 'Second Quarter':
-                        $column = 'second_q';
-                        break;
-                    case 'Third Quarter':
-                        $column = 'third_q';
-                        break;
-                    case 'Fourth Quarter':
-                        $column = 'fourth_q';
-                        break;
-                }
-
-                if ($column && $record->saro_no) {
-                    // Deduct the budget from the respective quarter in ntca table
-                    DB::connection('ilcdb')->table('ntca')
-                        ->where('saro_no', $record->saro_no)
-                        ->decrement($column, $record->budget_spent);
-                }
+    
+            // Handle status for when all fields are filled (Done)
+            $allCompleted = (
+                $validatedData['budget_spent']
+            );
+    
+            if ($allCompleted) {
+                $status = 'Done'; // All fields are completed
             }
-        });
+    
+            // Wrap the update and budget deduction in a transaction.
+            DB::connection('ilcdb')->transaction(function () use ($validatedData, $unit, $status) {
+                // Update the procurement_form record.
+                DB::connection('ilcdb')->table('procurement_form')
+                    ->where('procurement_id', $validatedData['procurement_id'])
+                    ->update([
+                        'dt_submitted1' => $validatedData['dt_submitted1'] ?? null,
+                        'dt_received1'  => $validatedData['dt_received1'] ?? null,
+                        'dt_submitted2' => $validatedData['dt_submitted2'] ?? null,
+                        'dt_received2'  => $validatedData['dt_received2'] ?? null,
+                        'dt_submitted3' => $validatedData['dt_submitted3'] ?? null,
+                        'dt_received3'  => $validatedData['dt_received3'] ?? null,
+                        'dt_submitted4' => $validatedData['dt_submitted4'] ?? null,
+                        'dt_received4'  => $validatedData['dt_received4'] ?? null,
+                        'dt_submitted5' => $validatedData['dt_submitted5'] ?? null,
+                        'dt_received5'  => $validatedData['dt_received5'] ?? null,
+                        'dt_submitted6' => $validatedData['dt_submitted6'] ?? null,
+                        'dt_received6'  => $validatedData['dt_received6'] ?? null,
+                        'budget_spent'  => $validatedData['budget_spent'] ?? null,
+                        'unit'          => $unit,
+                        'status'        => $status,
+                    ]);
 
-        return response()->json([
-            'message' => 'Procurement form updated successfully!',
-            'unit'    => $unit,
-            'status'  => $status
-        ]);
-    } catch (\Exception $e) {
-        Log::error('Update Error: ' . $e->getMessage());
-        return response()->json(['message' => 'An error occurred while updating the form.'], 500);
+                // Retrieve the updated procurement_form record.
+                $record = DB::connection('ilcdb')->table('procurement_form')
+                            ->where('procurement_id', $validatedData['procurement_id'])
+                            ->first();
+
+            });
+
+            return response()->json([
+                'message' => 'Procurement form updated successfully!',
+                'unit'    => $unit,
+                'status'  => $status
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Update Error: ' . $e->getMessage());
+            return response()->json(['message' => 'An error occurred while updating the form.'], 500);
+        }
     }
-}
 
     public function upload(Request $request)
     {
