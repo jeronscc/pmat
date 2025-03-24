@@ -275,6 +275,16 @@ document.addEventListener("DOMContentLoaded", function () {
             document.getElementById("editUserForm").setAttribute("action", `/accounts/${userId}/update`);
         });
     });
+    // Clear error messages when modal is closed
+    let editUserModal = document.getElementById("editUserModal");
+    editUserModal.addEventListener("hidden.bs.modal", function () {
+        // Remove validation error messages
+        document.querySelectorAll(".invalid-feedback").forEach(el => el.innerHTML = "");
+        document.querySelectorAll(".is-invalid").forEach(el => el.classList.remove("is-invalid"));
+
+        // Optional: Clear the form fields if needed
+        document.getElementById("editUserForm").reset();
+    });
 });
 </script>
 <script>
