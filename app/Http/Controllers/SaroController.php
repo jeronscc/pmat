@@ -64,7 +64,7 @@ class SaroController extends Controller
                 DB::connection('ilcdb')->table('ntca')
                     ->where('ntca_no', $validatedData['ntca_no'])
                     ->update([
-                        $validatedData['quarter'] => DB::raw("COALESCE({$validatedData['quarter']}, 0) + {$validatedData['budget']}"),
+                        $validatedData['quarter'] => DB::raw("{$validatedData['quarter']} + {$validatedData['budget']}"),
                         'current_budget' => DB::raw("budget_allocated - (COALESCE(first_q, 0) + COALESCE(second_q, 0) + COALESCE(third_q, 0) + COALESCE(fourth_q, 0))"),
                     ]);
             } else {
