@@ -105,7 +105,7 @@
                                 <button class="btn btn-warning btn-sm edit-btn"
                                     data-bs-toggle="modal" 
                                     data-bs-target="#editUserModal"
-                                    data-id="{{ $user->id }}"
+                                    data-userid="{{ $user->user_id }}"
                                     data-username="{{ $user->username }}"
                                     data-email="{{ $user->email }}"
                                     data-role="{{ $user->role }}">
@@ -113,7 +113,7 @@
                                 </button>
 
                                 <!-- Delete Button -->
-                                <button class="btn btn-danger btn-sm delete-btn" data-id="{{ $user->id }}">
+                                <button class="btn btn-danger btn-sm delete-btn" data-userid="{{ $user->user_id }}">
                                     Delete
                                 </button>
                             </td>
@@ -143,27 +143,18 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <!-- Show General Error Alert -->
-                @if ($errors->any())
-                    <div class="alert alert-danger">
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
+
 
                 <form action="{{ route('accounts.update') }}" method="POST">
                     @csrf
                     @method('PUT')
 
-                    <input type="hidden" id="editUserId" name="username">
+                    <input type="hidden" id="editUserId" name="user_id">
 
                     <div class="mb-3">
                         <label for="editUsername" class="form-label">Username</label>
                         <input type="text" class="form-control @error('username') is-invalid @enderror"
-                               id="editUsername" name="username" value="{{ old('username') }}" required readonly>
+                               id="editUsername" name="username" value="{{ old('username') }}" required>
                         @error('username')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -266,7 +257,7 @@ document.addEventListener("DOMContentLoaded", function () {
 document.addEventListener("DOMContentLoaded", function () {
     document.querySelectorAll(".edit-btn").forEach(button => {
         button.addEventListener("click", function () {
-            let userId = this.getAttribute("data-id");
+            let userId = this.getAttribute("data-userid");
             let username = this.getAttribute("data-username");
             let email = this.getAttribute("data-email");
             let role = this.getAttribute("data-role");

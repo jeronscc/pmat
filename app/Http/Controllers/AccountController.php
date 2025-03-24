@@ -36,19 +36,19 @@ class AccountController extends Controller
     public function update(Request $request)
     {
         $request->validate([
-            'username' => 'required|string|exists:user_accs,username',
-            'email' => 'required|email|unique:user_accs,email,' . $request->username . ',username',
+            'user_id' => 'required|exists:user_accs,user_id',  // ✅ Ensures ID exists in DB
+            'username' => 'required|string|unique:user_accs,username,' . $request->user_id . ',user_id',
+            'email' => 'required|email|unique:user_accs,email,' . $request->user_id . ',user_id',
             'role' => 'required|string',
         ]);
     
-        $user = User::where('username', $request->username)->firstOrFail();
+        $user = User::where('user_id', $request->user_id)->firstOrFail(); // ✅ Find by user_id
+        $user->username = $request->username;
         $user->email = $request->email;
         $user->role = $request->role;
         $user->save();
     
         return redirect()->back()->with('success', 'User updated successfully.');
     }
-    
-    
     
 }
