@@ -67,44 +67,56 @@ public function update(Request $request)
         // Initialize status to null
         $status = null;
 
-        // Handle status for Supply Unit (Pre-Procurement and Post-Procurement)
-        if ($unit === 'Supply Unit') {
-            if ($validatedData['dt_submitted5'] && !$validatedData['dt_received5']) {
-                $status = 'Ongoing';
-            } elseif ($validatedData['dt_received5']) {
-                $status = 'Pending';
-            } elseif ($validatedData['dt_submitted4'] && !$validatedData['dt_received4']) {
-                $status = 'Ongoing';
-            } elseif ($validatedData['dt_received4']) {
-                $status = 'Pending';
-            } elseif ($validatedData['dt_submitted2'] && !$validatedData['dt_received2']) {
-                $status = 'Ongoing';
-            } elseif ($validatedData['dt_received2']) {
-                $status = 'Pending';
-            } elseif ($validatedData['dt_submitted1'] && !$validatedData['dt_received1']) {
-                $status = 'Ongoing';
-            } elseif ($validatedData['dt_received1']) {
-                $status = 'Pending';
+            // Handle status for Supply Unit (Pre-Procurement and Post-Procurement)
+            if ($unit === 'Supply Unit') {
+                if ($validatedData['dt_submitted5'] && !$validatedData['dt_received5']) {
+                    // If dt_submitted5 is filled and dt_received5 is not, set status to "Pending"
+                    $status = 'Ongoing';
+                } elseif ($validatedData['dt_received5']) {
+                    // If dt_received5 is filled, set status to "Pending"
+                    $status = 'Pending';
+                } elseif ($validatedData['dt_submitted4'] && !$validatedData['dt_received4']) {
+                    // If dt_submitted4 is filled and dt_received4 is not, set status to ""
+                    $status = 'Ongoing';
+                } elseif ($validatedData['dt_received4']) {
+                    // If dt_received4 is filled, set status to "Pending"
+                    $status = 'Pending';
+                } elseif ($validatedData['dt_submitted2'] && !$validatedData['dt_received2']) {
+                    // If dt_submitted2 is filled and dt_received2 is not, set status to ""
+                    $status = 'Ongoing';
+                } elseif ($validatedData['dt_received2']) {
+                    // If dt_received2 is filled, set status to "Pending"
+                    $status = 'Pending';
+                } elseif ($validatedData['dt_submitted1'] && !$validatedData['dt_received1']) {
+                    // If dt_submitted1 is filled and dt_received1 is not, set status to ""
+                    $status = 'Ongoing';
+                } elseif ($validatedData['dt_received1']) {
+                    // If dt_received1 is filled, set status to "Pending"
+                    $status = 'Pending';
+                }
             }
-        }
 
-        // Handle status for Budget Unit
-        if ($unit === 'Budget Unit') {
-            if ($validatedData['dt_submitted3'] && !$validatedData['dt_received3']) {
-                $status = 'Ongoing';
-            } elseif ($validatedData['dt_received3']) {
-                $status = 'Pending';
+            // Handle status for Budget Unit
+            if ($unit === 'Budget Unit') {
+                if ($validatedData['dt_submitted3'] && !$validatedData['dt_received3']) {
+                    // If dt_submitted3 is filled and dt_received3 is not, set status to ""
+                    $status = 'Ongoing';
+                } elseif ($validatedData['dt_received3']) {
+                    // If dt_received3 is filled, set status to "Pending"
+                    $status = 'Pending';
+                }
             }
-        }
 
-        // Handle status for Accounting Unit
-        if ($unit === 'Accounting Unit') {
-            if ($validatedData['dt_submitted6'] && !$validatedData['dt_received6']) {
-                $status = 'Ongoing';
-            } elseif ($validatedData['dt_received6']) {
-                $status = 'Pending';
+            // Handle status for Accounting Unit
+            if ($unit === 'Accounting Unit') {
+                if ($validatedData['dt_submitted6'] && !$validatedData['dt_received6']) {
+                    // If dt_submitted6 is filled and dt_received6 is not, set status to "Pending"
+                    $status = 'Ongoing';
+                } elseif ($validatedData['dt_received6']) {
+                    // If dt_received6 is filled, set status to "Pending"
+                    $status = 'Pending';
+                }
             }
-        }
 
         // Handle status for when all fields are filled (Done)
         if ($validatedData['budget_spent']) {
