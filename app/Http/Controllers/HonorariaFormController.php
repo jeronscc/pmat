@@ -55,20 +55,20 @@ class HonorariaFormController extends Controller
             'dt_received'    => 'nullable|date',
             'budget_spent'   => 'nullable|numeric',
         ]);
-
+    
         try {
             Log::info("Received Data: ", $validatedData);
-
+    
             // Fetch existing record
             $record = DB::connection('ilcdb')->table('honoraria_form')
                         ->where('procurement_id', $validatedData['procurement_id'])
                         ->first();
-
+    
             $unit = $record->unit ?? '';
             if ($validatedData['dt_submitted']) {
                 $unit = 'Budget Unit';
             }
-
+    
             // Determine status
             $status = match (true) {
                 (!$validatedData['dt_submitted'] && !$validatedData['dt_received']) => null,
@@ -77,10 +77,11 @@ class HonorariaFormController extends Controller
                 ($validatedData['budget_spent']) => 'Done',
                 default => 'Done',
             };
-
+    
             Log::info("Calculated Status: " . $status);
-
-            DB::connection('ilcdb')->transaction(function () use ($validatedData, $unit, $status) {
+    
+            DB::connection('ilcdb')->transaction(function () use ($validatedData, $unit, $status, $record) {
+                // Update honoraria_form
                 DB::connection('ilcdb')->table('honoraria_form')
                     ->where('procurement_id', $validatedData['procurement_id'])
                     ->update([
@@ -90,19 +91,35 @@ class HonorariaFormController extends Controller
                         'unit'         => $unit,
                         'status'       => $status,
                     ]);
-
-                $record = DB::connection('ilcdb')->table('honoraria_form')
-                            ->where('procurement_id', $validatedData['procurement_id'])
-                            ->first();
-
+    
+                // Assuming that the honoraria_form record has a 'quarter' column and a 'saro_no' foreign key
+                $quarter = $record->quarter ?? null;
+                $saroNo  = $record->saro_no ?? null;
+                
+                if ($saroNo && $quarter && !empty($validatedData['budget_spent'])) {
+                    $column = match ($quarter) {
+                        'First Quarter'  => 'first_q',
+                        'Second Quarter' => 'second_q',
+                        'Third Quarter'  => 'third_q',
+                        'Fourth Quarter' => 'fourth_q',
+                        default          => null,
+                    };
+    
+                    if ($column) {
+                        // Deduct the budget_spent from the respective quarter column in the ntca table
+                        DB::connection('ilcdb')->table('ntca')
+                            ->where('saro_no', $saroNo)
+                            ->decrement($column, $validatedData['budget_spent']);
+                    }
+                }
             });
-
+    
             return response()->json([
                 'success' => true,
                 'message' => 'Honoraria form updated successfully!',
                 'status'  => $status . (($status === 'Ongoing' || $status === 'Pending') ? " at $unit" : ''),
             ]);
-
+    
         } catch (\Exception $e) {
             Log::error('Honoraria update error: ' . $e->getMessage());
             return response()->json([
