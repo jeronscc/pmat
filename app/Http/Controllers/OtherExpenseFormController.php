@@ -69,31 +69,32 @@ class OtherExpenseFormController extends Controller
             'dt_received'    => 'nullable|date',
             'budget_spent'   => 'nullable|numeric',
         ]);
-
+    
         try {
             Log::info("Received Data: ", $validatedData);
-
-            // Fetch existing record
+    
+            // Fetch the existing record from otherexpense_form
             $record = DB::connection('ilcdb')->table('otherexpense_form')
                         ->where('procurement_id', $validatedData['procurement_id'])
                         ->first();
-
+    
             $unit = $record->unit ?? '';
             if ($validatedData['dt_submitted']) {
                 $unit = 'Budget Unit';
             }
-
-            // Determine status
+    
+            // Determine status based on provided dates and budget_spent
             $status = match (true) {
                 ($validatedData['dt_submitted'] && !$validatedData['dt_received']) => 'Ongoing',
                 ($validatedData['dt_received'] && !$validatedData['budget_spent']) => 'Pending',
                 ($validatedData['budget_spent']) => 'Done',
                 default => 'Done',
             };
-
+    
             Log::info("Calculated Status: " . $status);
-
-            DB::connection('ilcdb')->transaction(function () use ($validatedData, $status, $unit) {
+    
+            DB::connection('ilcdb')->transaction(function () use ($validatedData, $status, $unit, $record) {
+                // Update the otherexpense_form record
                 DB::connection('ilcdb')->table('otherexpense_form')
                     ->where('procurement_id', $validatedData['procurement_id'])
                     ->update([
@@ -107,19 +108,36 @@ class OtherExpenseFormController extends Controller
                         'status'       => $status,
                         'unit'         => $unit,
                     ]);
-
-                $record = DB::connection('ilcdb')->table('honoraria_form')
-                            ->where('procurement_id', $validatedData['procurement_id'])
-                            ->first();
-
+    
+                // Retrieve quarter and saro_no from the record
+                $quarter = $record->quarter ?? null;
+                $saroNo  = $record->saro_no ?? null;
+                
+                if ($saroNo && $quarter && !empty($validatedData['budget_spent'])) {
+                    // Map quarter value to the corresponding column in the ntca table
+                    $column = match ($quarter) {
+                        'First Quarter'  => 'first_q',
+                        'Second Quarter' => 'second_q',
+                        'Third Quarter'  => 'third_q',
+                        'Fourth Quarter' => 'fourth_q',
+                        default          => null,
+                    };
+    
+                    if ($column) {
+                        // Deduct budget_spent from the corresponding quarter column in ntca
+                        DB::connection('ilcdb')->table('ntca')
+                            ->where('saro_no', $saroNo)
+                            ->decrement($column, $validatedData['budget_spent']);
+                    }
+                }
             });
-
+    
             return response()->json([
                 'success' => true,
                 'message' => 'Daily Travel Expense form updated successfully!',
                 'status'  => $status . (($status === 'Ongoing' || $status === 'Pending') ? " at $unit" : ''),
             ]);
-
+    
         } catch (\Exception $e) {
             Log::error('otherexpense update error: ' . $e->getMessage());
             return response()->json([
