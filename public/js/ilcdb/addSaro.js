@@ -146,6 +146,14 @@ function populateSARODropdown() {
     fetch('/api/fetch-saro-ilcdb')
         .then(response => response.json())
         .then(data => {
+            if (data.length === 0) {
+                const option = document.createElement('option');
+                option.value = '';
+                option.textContent = 'No SAROs available';
+                saroSelect.appendChild(option);
+                return;
+            }
+
             data.forEach(saro => {
                 const option = document.createElement('option');
                 option.value = saro.saro_no;
@@ -155,6 +163,12 @@ function populateSARODropdown() {
 
             // Trigger NTCA number generation when a SARO is selected
             saroSelect.addEventListener('change', generateNTCANumber);
+
+            // Automatically generate NTCA number for the first SARO
+            if (saroSelect.options.length > 0) {
+                saroSelect.selectedIndex = 0;
+                generateNTCANumber();
+            }
         })
         .catch(error => console.error('Error fetching SAROs:', error));
 }
