@@ -19,6 +19,8 @@
 
     </style>
 <body>
+<input type="hidden" id="loggedInUserId" value="{{ Auth::id() }}">
+
 <header class="d-flex align-items-center justify-content-between bg-black text-white p-3 shadow" id="stickyHeader">
                 <div class="logo d-flex align-items-center">
                     <img src="/assets/dict-logo.png" alt="DICT Logo" class="img-fluid" id="dictLogo">
@@ -103,9 +105,14 @@
                     </thead>
                     <tbody>
                     @foreach ($users as $user)
-                        <tr>
+                        <tr class="{{ Auth::id() == $user->user_id ? 'table-primary' : '' }}"> <!-- Highlight logged-in Admin -->
                             <td>{{ $loop->iteration }}</td>
-                            <td>{{ $user->username }}</td>
+                            <td>
+                                {{ $user->username }}
+                                @if (Auth::id() == $user->user_id)
+                                    <span class="badge bg-success">You</span> <!-- Add an indicator -->
+                                @endif
+                            </td>
                             <td>{{ $user->email }}</td>
                             <td>{{ $user->role }}</td>
                             <td>
@@ -120,20 +127,22 @@
                                     Edit
                                 </button>
 
-                                <!-- Delete Button -->
-                                <form action="{{ route('accounts.delete', $user->user_id) }}" method="POST" class="d-inline">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-danger btn-sm delete-btn"
-                                            onclick="return confirm('Are you sure you want to delete this user?');">
-                                        Delete
-                                    </button>
-                                </form>
-
+                                <!-- Delete Button (Hide for the logged-in Admin) -->
+                                @if (Auth::id() != $user->user_id)
+                                    <form action="{{ route('accounts.delete', $user->user_id) }}" method="POST" class="d-inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger btn-sm delete-btn"
+                                                onclick="return confirm('Are you sure you want to delete this user?');">
+                                            Delete
+                                        </button>
+                                    </form>
+                                @endif
                             </td>
                         </tr>
                     @endforeach
                 </tbody>
+
                 </table>
             </div>
         </div>
@@ -184,15 +193,29 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="editRole" class="form-label">Role</label>
-                        <select class="form-select @error('role') is-invalid @enderror" id="editRole" name="role" required>
-                            <option value="Admin" {{ old('role') == 'Admin' ? 'selected' : '' }}>Admin</option>
-                            <option value="User" {{ old('role') == 'User' ? 'selected' : '' }}>User</option>
-                        </select>
-                        @error('role')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
+                    <label for="editRole" class="form-label">Role</label>
+
+                    <!-- Locked role for logged-in user -->
+                    <div id="editRoleLockedContainer" class="form-control bg-light text-muted d-none">
+                        <span id="editRoleLocked"></span> 🔒
                     </div>
+
+                    <!-- Hidden input to store role when locked -->
+                    <input type="hidden" id="editRoleHidden" name="role">
+                        
+                    <!-- Select dropdown for other users -->
+                    <select class="form-select @error('role') is-invalid @enderror" id="editRole" name="role" required>
+                        <option value="Admin">Admin</option>
+                        <option value="User">User</option>
+                    </select>
+
+                    @error('role')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+
+                </div>
+
+
                     <div class="mb-3">
                         <label for="editPassword" class="form-label">New Password (Optional)</label>
                         <input type="password" class="form-control @error('password') is-invalid @enderror"
@@ -208,9 +231,6 @@
         </div>
     </div>
 </div>
-
-
-
 
 
     <!-- Add User Modal -->
@@ -274,55 +294,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 </script>
-
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-    document.querySelectorAll(".edit-btn").forEach(button => {
-        button.addEventListener("click", function () {
-            let userId = this.getAttribute("data-userid");
-            let username = this.getAttribute("data-username");
-            let email = this.getAttribute("data-email");
-            let role = this.getAttribute("data-role");
-
-            // Set values in the modal fields
-            document.getElementById("editUserId").value = userId;
-            document.getElementById("editUsername").value = username;
-            document.getElementById("editEmail").value = email;
-            document.getElementById("editRole").value = role;
-
-            // Update modal header with the current username
-            document.getElementById("currentUsername").textContent = username;
-
-            // Set form action dynamically
-            document.getElementById("editUserForm").setAttribute("action", `/accounts/${userId}/update`);
-        });
-    });
-    // Clear error messages when modal is closed
-    let editUserModal = document.getElementById("editUserModal");
-    editUserModal.addEventListener("hidden.bs.modal", function () {
-        // Remove validation error messages
-        document.querySelectorAll(".invalid-feedback").forEach(el => el.innerHTML = "");
-        document.querySelectorAll(".is-invalid").forEach(el => el.classList.remove("is-invalid"));
-
-        // Optional: Clear the form fields if needed
-        document.getElementById("editUserForm").reset();
-    });
-});
-</script>
-<script>
-    document.getElementById("saveChangesBtn").addEventListener("click", function() {
-    let userId = document.getElementById("editUserId").value;
-    let form = document.getElementById("editUserForm");
-    
-    if (userId) {
-        form.submit();
-    } else {
-        alert("User ID is missing.");
-    }
-});
-
-    </script>
-
+<script src="/js/editAccount.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
