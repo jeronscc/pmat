@@ -57,20 +57,27 @@ document.addEventListener('DOMContentLoaded', function () {
             headers: { 'X-CSRF-TOKEN': csrfToken },
             body: formData
         })
-        .then(response => response.json())
-        .then(data => {
-            console.log(`Server response for modal ${modalNumber}:`, data); 
-            if (data.success) {
-                alert(data.message);
-                fetchUploadedFiles(procurementId, modalNumber);
-            } else {
-                alert("Upload failed: " + (data.message || "Unknown error."));
-            }
-        })
-        .catch(error => {
-            console.error("Error during upload:", error);
-            alert("Upload failed. Check console for details.");
-        });
+            .then(response => response.json())
+            .then(data => {
+                console.log(`Server response for modal ${modalNumber}:`, data);
+                if (data.success) {
+                    alert(data.message);
+
+                    // Fetch uploaded files to update the UI dynamically
+                    fetchUploadedFiles(procurementId, modalNumber);
+
+                    // Refresh the entire page after a short delay
+                    setTimeout(() => {
+                        location.reload();
+                    }, 1000); // Delay to ensure fetch completes before reload
+                } else {
+                    alert("Upload failed: " + (data.message || "Unknown error."));
+                }
+            })
+            .catch(error => {
+                console.error("Error during upload:", error);
+                alert("Upload failed. Check console for details.");
+            });
     }
 
     function fetchUploadedFiles(procurementId, modalNumber) {
