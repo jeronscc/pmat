@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', function () {
         .then(response => response.json())
         .then(data => {
             alert(data.message);
-            location.reload(); // Refresh the page after saving
+            window.location.href = '/homepage-ilcdb'; // Refresh the page after saving
         })
         .catch(error => {
             console.error('Error saving data:', error);

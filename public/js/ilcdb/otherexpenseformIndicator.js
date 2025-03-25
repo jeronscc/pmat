@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (data.success) {
                 alert(data.message);
                 disableSaveButton();  // Disable the save button after success
-                location.reload();  // Refresh to reflect changes
+                window.location.href = '/homepage-ilcdb'   // Refresh to reflect changes
             } else {
                 alert('Error: ' + data.message);
             }

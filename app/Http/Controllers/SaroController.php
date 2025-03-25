@@ -179,21 +179,17 @@ class SaroController extends Controller
 
             // Determine the most recent quarter with a value
             $quarters = [
-                'fourth_q' => $ntca->fourth_q ?? 0,
-                'third_q' => $ntca->third_q ?? 0,
-                'second_q' => $ntca->second_q ?? 0,
-                'first_q' => $ntca->first_q ?? 0,
-            ];
+                '4th' => $ntca->fourth_q ?? 0,
+                '3rd' => $ntca->third_q ?? 0,
+                '2nd' => $ntca->second_q ?? 0,
+                '1st' => $ntca->first_q ?? 0,
+            ];            
 
-            foreach ($quarters as $quarter => $value) {
-                if ($value > 0) {
-                    return response()->json([
-                        'success' => true,
-                        'currentQuarter' => ucfirst(str_replace('_q', ' Quarter', $quarter)),
-                        'balance' => $value,
-                    ]);
-                }
-            }
+            return response()->json([
+                'success' => true,
+                'currentQuarter' => $quarter . ' Quarter',  // Use the updated ordinal format directly
+                'balance' => $value,
+            ]);            
 
             // If no quarter has a value, return a default response
             return response()->json([
