@@ -81,7 +81,7 @@
     <div class="d-flex align-items-center justify-content-between">
         <h6 class="text-white mb-0" id="ntcaLabel">NTCA:</h6> <!-- Updated label -->
         <button class="btn btn-primary btn-sm py-1" type="button" data-bs-toggle="modal" data-bs-target="#ntcaBreakdownModal">
-            Expand
+            View
         </button>
     </div>
     <h2 id="ntcaBalance">₱0</h2>
