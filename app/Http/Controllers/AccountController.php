@@ -9,10 +9,20 @@ use Illuminate\Support\Facades\Hash;
 class AccountController extends Controller
 {
     public function index()
-    {
-        $users = User::orderByRaw("CASE WHEN role = 'Admin' THEN 1 ELSE 2 END")->get();
-        return view('accounts', compact('users'));
-    }
+{
+    $loggedInUserId = auth()->user()->user_id; // Get the logged-in Admin's user_id
+
+    $users = User::orderByRaw("
+        CASE 
+            WHEN user_id = ? THEN 0  -- Logged-in Admin should be first
+            WHEN role = 'Admin' THEN 1 
+            ELSE 2 
+        END", [$loggedInUserId])
+        ->get();
+
+    return view('accounts', compact('users'));
+}
+
 
     public function store(Request $request)
     {
