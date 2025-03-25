@@ -125,13 +125,13 @@ function fetchSaroDataAndRequirements(year) {
 
 window.fetchSaroDataAndRequirements = fetchSaroDataAndRequirements;
 
-// Helper function to determine the current quarter
-function getCurrentQuarter() {
-    const month = new Date().getMonth() + 1; // Months are 0-based, so add 1
-    if (month <= 3) return 'first_q';
-    if (month <= 6) return 'second_q';
-    if (month <= 9) return 'third_q';
-    return 'fourth_q';
+// Helper function to determine the most recent quarter with a value
+function getCurrentQuarter(ntca) {
+    if (ntca.fourth_q > 0) return 'fourth_q';
+    if (ntca.third_q > 0) return 'third_q';
+    if (ntca.second_q > 0) return 'second_q';
+    if (ntca.first_q > 0) return 'first_q';
+    return null; // No quarter has a value
 }
 
 function fetchNTCAForSaro(saroNo) {
@@ -144,12 +144,13 @@ function fetchNTCAForSaro(saroNo) {
             ntcaList.innerHTML = ''; // Clear existing NTCA records
 
             if (data.success) {
-                const currentQuarter = getCurrentQuarter(); // Determine the current quarter dynamically
-
                 data.ntca.forEach((ntca) => {
+                    // Determine the current quarter dynamically
+                    const currentQuarter = getCurrentQuarter(ntca);
+
                     // Update NTCA container label and balance for the current quarter
-                    ntcaLabelElement.textContent = `NTCA (${ntca.ntca_no} - ${currentQuarter.replace('_q', ' Quarter')})`;
-                    const currentQuarterBalance = ntca[currentQuarter];
+                    ntcaLabelElement.textContent = `NTCA (${ntca.ntca_no} - ${currentQuarter ? currentQuarter.replace('_q', ' Quarter') : 'No Quarter'})`;
+                    const currentQuarterBalance = currentQuarter ? ntca[currentQuarter] : 0;
                     ntcaBalanceElement.textContent = currentQuarterBalance
                         ? `₱${currentQuarterBalance.toLocaleString()}`
                         : "₱0";
