@@ -45,4 +45,34 @@ function filterSaroByYear(year) {
 
     // Fetch procurement data for the selected year
     fetchProcurementForYear(year);
+
+    // Fetch NTCA data for the selected year
+    fetchNTCAForYear(year);
+}
+
+// Function to fetch NTCA data for a specific year
+function fetchNTCAForYear(year) {
+    const url = year === '' ? '/api/fetch-ntca' : `/api/fetch-ntca?year=${year}`;
+
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            const ntcaList = document.getElementById('ntcaBreakdownList');
+            ntcaList.innerHTML = ''; // Clear existing NTCA records
+
+            if (data.length > 0) {
+                data.forEach(ntca => {
+                    const listItem = document.createElement('li');
+                    listItem.classList.add('list-group-item');
+                    listItem.textContent = `NTCA No: ${ntca.ntca_no}, Budget: ₱${ntca.current_budget.toLocaleString()}`;
+                    ntcaList.appendChild(listItem);
+                });
+            } else {
+                const emptyMessage = document.createElement('li');
+                emptyMessage.classList.add('list-group-item');
+                emptyMessage.textContent = 'No NTCA records found for the selected year.';
+                ntcaList.appendChild(emptyMessage);
+            }
+        })
+        .catch(error => console.error('Error fetching NTCA data:', error));
 }
