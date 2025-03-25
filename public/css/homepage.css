@@ -35,12 +35,13 @@ body {
     text-align: center;
 }
 
-.table th, .table td {
+.table th,
+.table td {
     text-align: center;
 }
 
 .modal {
-  z-index: 9999 !important;
+    z-index: 9999 !important;
 }
 
 .modal-dialog-centered {
@@ -85,12 +86,11 @@ section {
 #procurementDetailsModal .modal-content {
     margin: 25vh auto 0 auto;
     max-width: 100%;
-    
 }
-#procurementTable tr:hover td:nth-child(-n+4),
-#procurementTableOngoing tr:hover td:nth-child(-n+4),
-#procurementTableDone tr:hover td:nth-child(-n+4),
-#procurementTableOverdue tr:hover td:nth-child(-n+4) {
+#procurementTable tr:hover td:nth-child(-n + 4),
+#procurementTableOngoing tr:hover td:nth-child(-n + 4),
+#procurementTableDone tr:hover td:nth-child(-n + 4),
+#procurementTableOverdue tr:hover td:nth-child(-n + 4) {
     background-color: #ddd;
 }
 
@@ -122,7 +122,8 @@ section {
     color: #ffffff;
 }
 
-.left-panel .saro-list, .right-panel .saro-list {
+.left-panel .saro-list,
+.right-panel .saro-list {
     margin-bottom: 20px;
 }
 
@@ -218,14 +219,15 @@ section {
     table-layout: fixed;
 }
 
-.record-box th, .record-box td {
+.record-box th,
+.record-box td {
     padding: 12px 15px; /* Added more padding for a cleaner look */
     text-align: center;
     word-wrap: break-word;
 }
 
 .record-box td {
-    background-color: #EEEEFF;
+    background-color: #eeeeff;
 }
 
 /* Custom scrollbar for tbody */
@@ -256,7 +258,9 @@ label {
     margin-top: 10px;
 }
 
-input, select, textarea {
+input,
+select,
+textarea {
     width: 100%;
     padding: 8px;
     margin-top: 5px;
@@ -276,7 +280,21 @@ input, select, textarea {
     border: none;
     cursor: pointer;
     font-size: 14px;
-    border-radius: 4px;
+    border-radius: 0; /* Removed rounded edges */
+}
+
+.btn-primary.btn-sm.py-1 {
+    background-color: #003366; /* Darker Blue */
+    color: white;
+    border: none;
+    padding: 6px 10px;
+    font-size: 14px;
+    border-radius: 0; /* Removed rounded edges */
+    transition: background 0.3s;
+}
+
+.btn-primary.btn-sm.py-1:hover {
+    background-color: #002244; /* Even darker blue on hover */
 }
 
 .btn-danger {
@@ -324,7 +342,8 @@ input, select, textarea {
     height: 35px;
 }
 
-@media (max-width: 768px) { /* For mobile devices */
+@media (max-width: 768px) {
+    /* For mobile devices */
     .saro-container {
         max-height: 210px;
     }
@@ -375,8 +394,8 @@ input, select, textarea {
     }
 }
 
-@media (max-width: 1001px) and (min-width: 768px) { 
+@media (max-width: 1001px) and (min-width: 768px) {
     #remainingBalance {
-      font-size: clamp(1.4rem, 2vw, 1.5rem);
+        font-size: clamp(1.4rem, 2vw, 1.5rem);
     }
-  }
+}
