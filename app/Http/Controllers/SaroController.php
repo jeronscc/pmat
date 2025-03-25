@@ -177,19 +177,29 @@ class SaroController extends Controller
                 ], 404);
             }
 
-            // Determine the current quarter
-            $currentMonth = date('n'); // Get the current month (1-12)
-            $currentQuarter = match (true) {
-                $currentMonth <= 3 => 'first_q',
-                $currentMonth <= 6 => 'second_q',
-                $currentMonth <= 9 => 'third_q',
-                default => 'fourth_q',
-            };
+            // Determine the most recent quarter with a value
+            $quarters = [
+                'fourth_q' => $ntca->fourth_q ?? 0,
+                'third_q' => $ntca->third_q ?? 0,
+                'second_q' => $ntca->second_q ?? 0,
+                'first_q' => $ntca->first_q ?? 0,
+            ];
 
+            foreach ($quarters as $quarter => $value) {
+                if ($value > 0) {
+                    return response()->json([
+                        'success' => true,
+                        'currentQuarter' => ucfirst(str_replace('_q', ' Quarter', $quarter)),
+                        'balance' => $value,
+                    ]);
+                }
+            }
+
+            // If no quarter has a value, return a default response
             return response()->json([
                 'success' => true,
-                'currentQuarter' => ucfirst(str_replace('_q', ' Quarter', $currentQuarter)),
-                'balance' => $ntca->$currentQuarter ?? 0,
+                'currentQuarter' => 'No Quarter',
+                'balance' => 0,
             ]);
         } catch (\Exception $e) {
             Log::error('Failed to fetch NTCA balance for current quarter: ' . $e->getMessage());

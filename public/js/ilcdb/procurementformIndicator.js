@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const procurementIdElement = document.getElementById('procurementId');
     
     if (!procurementIdElement) {
@@ -11,15 +11,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Initialize the status tracking after checking file uploads
     initializeFileUploadStatuses(procurementId);
-    
-    // Set up a polling mechanism to check for file uploads regularly
-    setUpFileUploadPolling(procurementId);
-    
+
     document.getElementById('saveChanges').addEventListener('click', function(e) {
         e.preventDefault();
 
         // Temporarily remove the 'disabled' attribute from all fields before submitting
-        // This ensures all field values are included in the form submission
         const allDateFields = document.querySelectorAll('input[id^="dateSubmitted"], input[id^="dateReturned"]');
         allDateFields.forEach(field => field.removeAttribute('disabled'));
 
@@ -50,8 +46,7 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(response => response.json())
         .then(data => {
             alert(data.message);
-            // Instead of reloading, update the UI state
-            updateUIAfterSave();
+            location.reload(); // Refresh the page after saving
         })
         .catch(error => {
             console.error('Error saving data:', error);
@@ -59,124 +54,10 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    function updateUIAfterSave() {
-        // Re-lock all appropriate fields
-        let activeStage = 1;
-        for (let i = 6; i >= 1; i--) {
-            if (document.getElementById(`dateSubmitted${i}`).value) {
-                activeStage = i;
-                break;
-            }
-        }
-        
-        lockPreviousStages(activeStage);
-        checkIfFormCompleted();
-        
-        // Then refresh file upload statuses
-        refreshFileUploadStatuses(procurementId);
-    }
-    
     document.getElementById('cancelChanges').addEventListener('click', function(e) {
         e.preventDefault();
         window.location.href = '/homepage-ilcdb';
     });
-
-    function setUpFileUploadPolling(procurementId) {
-        // Poll for file upload changes every 5 seconds
-        const pollingInterval = 5000; // 5 seconds
-        
-        setInterval(function() {
-            refreshFileUploadStatuses(procurementId);
-        }, pollingInterval);
-        
-        // Also set up listeners for file upload events if possible
-        // This depends on how your file upload system is implemented
-        const fileUploadForms = document.querySelectorAll('form[id^="fileUploadForm"]');
-        if (fileUploadForms.length > 0) {
-            fileUploadForms.forEach(form => {
-                form.addEventListener('submit', function() {
-                    // After a short delay to allow for server processing
-                    setTimeout(() => {
-                        refreshFileUploadStatuses(procurementId);
-                    }, 2000);
-                });
-            });
-        }
-    }
-
-    function refreshFileUploadStatuses(procurementId) {
-        console.log("Refreshing file upload statuses...");
-        
-        // Check all modals for updated file status
-        for (let i = 1; i <= 6; i++) {
-            checkUploadStatus(procurementId, i, function(allFilesUploaded, missingFiles) {
-                updateStageEnabledState(i, allFilesUploaded, missingFiles);
-            });
-        }
-    }
-
-    function updateStageEnabledState(stageNumber, allFilesUploaded, missingFiles) {
-        const dateSubmitted = document.getElementById(`dateSubmitted${stageNumber}`);
-        const dateReturned = document.getElementById(`dateReturned${stageNumber}`);
-        
-        if (!dateSubmitted || !dateReturned) return;
-        
-        // First check: If field is already marked as readonly, keep it locked
-        if (dateSubmitted.hasAttribute('readonly')) {
-            return; // Don't change the state of fields that are deliberately locked
-        }
-        
-        // Get current active stage
-        let activeStage = 1;
-        for (let i = 6; i >= 1; i--) {
-            if (document.getElementById(`dateSubmitted${i}`).value) {
-                activeStage = i;
-                break;
-            }
-        }
-    
-        // Handle stage 1 or stages where the previous stage is completed
-        const prevStageCompleted = stageNumber === 1 || 
-            (document.getElementById(`dateReturned${stageNumber-1}`) && 
-             document.getElementById(`dateReturned${stageNumber-1}`).value);
-             
-        // Enable fields if:
-        // 1. All files are uploaded for this stage
-        // 2. Either it's stage 1 OR the previous stage is completed
-        // 3. The stage is not locked (not a previous completed stage)
-        if (allFilesUploaded && prevStageCompleted && stageNumber >= activeStage) {
-            console.log(`Stage ${stageNumber} files complete and previous stage completed. Enabling fields.`);
-            dateSubmitted.removeAttribute('disabled');
-            dateSubmitted.removeAttribute('readonly');
-            
-            // Only enable return date if submission date exists
-            if (dateSubmitted.value) {
-                dateReturned.removeAttribute('disabled');
-                dateReturned.removeAttribute('readonly');
-            }
-            
-            // Update tooltip
-            dateSubmitted.title = "All files uploaded. Fields enabled.";
-            dateReturned.title = dateSubmitted.value ? "All files uploaded. Fields enabled." : "Enter submission date first";
-            
-            // Add a visual indicator that this field was just enabled
-            dateSubmitted.classList.add('field-just-enabled');
-            setTimeout(() => {
-                dateSubmitted.classList.remove('field-just-enabled');
-            }, 3000);
-        } else if (!allFilesUploaded) {
-            // Disable fields if files are missing
-            dateSubmitted.setAttribute('disabled', 'true');
-            dateReturned.setAttribute('disabled', 'true');
-            
-            // Update tooltip with missing files info
-            const missingFilesText = missingFiles && missingFiles.length > 0 
-                ? `Missing files: ${missingFiles.join(', ')}` 
-                : 'Missing required files';
-            dateSubmitted.title = missingFilesText;
-            dateReturned.title = missingFilesText;
-        }
-    }
 
     function initializeFileUploadStatuses(procurementId) {
         // Check all modals initially

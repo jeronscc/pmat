@@ -88,7 +88,7 @@ Route::middleware(['auth', PreventBackAfterLogout::class])->group(function () {
 Route::post('/accounts/add', [AccountController::class, 'store'])->name('accounts.add');
 Route::get('/procurementform', [ProcurementFormController::class, 'showForm'])->name('procurementform');
 Route::put('/accounts/update', [AccountController::class, 'update'])->name('accounts.update');
-Route::delete('/accounts/{id}/delete', [AccountController::class, 'destroy'])->name('accounts.delete'); // Delete user
+Route::delete('/accounts/delete/{user_id}', [AccountController::class, 'destroy'])->name('accounts.delete');
 
 Route::post('/procurementform/update', [ProcurementFormController::class, 'update'])->name('procurement.update');
 
