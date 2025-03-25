@@ -64,7 +64,7 @@ function fetchNTCAForYear(year) {
                 data.forEach(ntca => {
                     const listItem = document.createElement('li');
                     listItem.classList.add('list-group-item');
-                    listItem.textContent = `NTCA No: ${ntca.ntca_no}, Budget: ₱${ntca.current_budget.toLocaleString()}`;
+                    listItem.textContent = `NTCA No: ${ntca.ntca_no}, Budget: ₱${ntca.current_budget ? ntca.current_budget.toLocaleString() : '0'}`;
                     ntcaList.appendChild(listItem);
                 });
             } else {
@@ -75,4 +75,25 @@ function fetchNTCAForYear(year) {
             }
         })
         .catch(error => console.error('Error fetching NTCA data:', error));
+}
+
+// Function to display the remaining balance for the clicked SARO
+function displayCurrentBudget(saro) {
+    // Set the current SARO name in the container
+    document.getElementById('currentViewingSaro').textContent = `${saro.saro_no}`;
+    document.getElementById('currentSaroName').textContent = `${saro.saro_no}`;
+
+    // Check if current_budget exists and format it with comma separation
+    const currentBudget = saro.current_budget && !isNaN(saro.current_budget)
+        ? `₱${saro.current_budget.toLocaleString()}`
+        : "₱0";
+
+    // Display the current budget in the "remainingBalance" container
+    document.getElementById('remainingBalance').textContent = currentBudget;
+
+    // Fetch and display the requirements associated with the selected SARO
+    fetchProcurementForSaro(saro.saro_no);
+
+    // Fetch and display NTCA records for the selected SARO
+    fetchNTCAForSaro(saro.saro_no);
 }
