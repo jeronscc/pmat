@@ -205,3 +205,28 @@ function fetchNTCAForSaro(saroNo) {
         });
 }
 
+// Function to fetch and display NTCA breakdown for a specific NTCA number
+function fetchNTCABreakdown(ntcaNo) {
+    fetch(`/api/fetch-ntca-breakdown/${ntcaNo}`)
+        .then(response => response.json())
+        .then(data => {
+            const breakdownList = document.getElementById("ntcaBreakdownList");
+            breakdownList.innerHTML = ''; // Clear existing breakdown records
+
+            if (data.success) {
+                data.breakdown.forEach(item => {
+                    const listItem = document.createElement('li');
+                    listItem.classList.add('list-group-item');
+                    listItem.textContent = `${item.description}: ₱${item.amount.toLocaleString()}`;
+                    breakdownList.appendChild(listItem);
+                });
+            } else {
+                const emptyMessage = document.createElement('li');
+                emptyMessage.classList.add('list-group-item', 'text-danger');
+                emptyMessage.textContent = data.message || 'No breakdown data available.';
+                breakdownList.appendChild(emptyMessage);
+            }
+        })
+        .catch(error => console.error('Error fetching NTCA breakdown:', error));
+}
+
