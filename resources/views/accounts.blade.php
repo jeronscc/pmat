@@ -49,11 +49,19 @@
                         </form>
                     </li>
                     <li>
-                        <form action="">
-                            <button type="submit">
-                                <i class="fas fa-users"></i><img src="/assets/account_icon.png" alt=""> Accounts
+                        @if (Auth::user()->role === 'Admin')
+                            <!-- Admins can access the Accounts page -->
+                            <form action="{{ route('accounts') }}" method="get">
+                                <button type="submit">
+                                    <i class="fas fa-users"></i><img src="/assets/account_icon.png" alt=""> Accounts
+                                </button>
+                            </form>
+                        @else
+                            <!-- Users see a disabled Accounts button with a lock icon -->
+                            <button class="disabled-menu" disabled>
+                                <i class="fas fa-lock"></i><img src="/assets/account_icon.png" alt=""> Accounts <img src="/assets/lock_icon.png" alt="Locked" class="lock-icon">
                             </button>
-                        </form>
+                        @endif
                     </li>
                     <li>
                         <form action="">

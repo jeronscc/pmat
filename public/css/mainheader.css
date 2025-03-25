@@ -58,6 +58,23 @@ h1 {
   background-color: #002244; /* Darker background on hover */
 }
 
+.disabled-menu {
+  background: none;
+  color: #888; /* Gray color */
+  border: none;
+  cursor: not-allowed;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.lock-icon {
+  margin-left: auto; /* Pushes only the lock icon to the right */
+  position: absolute; /* Keeps it fixed */
+  right: 28px; /* Adjust the spacing from the right */
+}
+
 @media (max-width: 768px) {
   h1 {
     font-size: 16px;
