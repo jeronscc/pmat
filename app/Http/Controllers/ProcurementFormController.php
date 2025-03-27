@@ -254,8 +254,8 @@ public function update(Request $request)
                 }
             }
     
-            \Log::info('Uploaded Files:', $uploads);
-            \Log::info('Missing Files:', $missingFiles);
+            Log::info('Uploaded Files:', $uploads);
+            Log::info('Missing Files:', $missingFiles);
     
             if (empty($uploads)) {
                 return response()->json([

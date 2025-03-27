@@ -11,6 +11,9 @@ use App\Http\Controllers\ProcurementController;
 use App\Http\Controllers\AccountController;
 use App\Http\Middleware\AdminMiddleware;
 
+
+// ISOLATED PAGES
+
 Route::get('/', function () {
     return view('index');
 });
@@ -23,13 +26,16 @@ Route::get('/select-project', function () {
     return view('selection');
 })->name('select-project');
 
-Route::get('/homepage-ilcdb', function () {
-    return view('homepage'); 
-})->middleware('auth');
-
 Route::middleware(['auth', AdminMiddleware::class])->group(function () {
     Route::get('/accounts', [AccountController::class, 'index'])->name('accounts');
 });
+
+
+// PROJECT PAGES
+
+Route::get('/homepage-ilcdb', function () {
+    return view('homepage'); 
+})->middleware('auth');
 
 Route::get('/homepage-projectClick', function () {
     return view('projectClick'); 
@@ -42,22 +48,6 @@ Route::get('/homepage-dtc', function () {
 Route::get('/homepage-spark', function () {
     return view('spark');
 })->middleware('auth');
-
-Route::post('/login', [userController::class, 'login']);
-Route::post('/logout', [UserController::class, 'logout'])->name('logout');
-
-//REDIRECT TO FORM PAGES
-Route::get('/procurementform', function () {
-    return view('procurementform');
-});
-
-Route::get('/honorariaform', function () {
-    return view('honorariaform');
-});
-
-Route::get('/otherexpenseform', function () {
-    return view('otherexpenseform');
-});
 
 //PREVENT BACK AFTER LOGOUT
 Route::middleware(['auth', PreventBackAfterLogout::class])->group(function () {
@@ -84,8 +74,27 @@ Route::middleware(['auth', PreventBackAfterLogout::class])->group(function () {
     });
 });
 
+// LOGIN LOGOUT
+Route::post('/login', [userController::class, 'login']);
+Route::post('/logout', [UserController::class, 'logout'])->name('logout');
 
-// REDIRECTS TO FORMS (PR ID SPECIFIED)
+
+// FOR ILCDB
+//REDIRECT TO ILCDB FORM PAGES
+Route::get('/procurementform', function () {
+    return view('procurementform');
+});
+
+Route::get('/honorariaform', function () {
+    return view('honorariaform');
+});
+
+Route::get('/otherexpenseform', function () {
+    return view('otherexpenseform');
+});
+
+
+// REDIRECTS TO ILCDB APIs
 Route::post('/accounts/add', [AccountController::class, 'store'])->name('accounts.add');
 Route::get('/procurementform', [ProcurementFormController::class, 'showForm'])->name('procurementform');
 Route::put('/accounts/update', [AccountController::class, 'update'])->name('accounts.update');
@@ -100,3 +109,6 @@ Route::get('/otherexpenseform', [OtherExpenseFormController::class, 'showForm'])
 Route::post('/otherexpenseform/update', [OtherExpenseFormController::class, 'updateOtherExpense'])->name('otherexpense.update');
 
 Route::get('/api/requirements/{procurement_id}/files', [HonorariaFormController::class, 'getUploadedFiles']);
+
+
+// FOR DTC

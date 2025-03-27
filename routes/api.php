@@ -15,6 +15,7 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
+// FOR ILCDB
 //ILCDB FETCH SARO
 Route::get('/fetch-saro-ilcdb', function (Request $request) {
     $year = $request->query('year');
@@ -38,6 +39,8 @@ Route::get('/fetch-saro-ilcdb', function (Request $request) {
     // Return the data as JSON
     return response()->json($data);
 });
+
+
 // ILCDB FETCH SARO AND PROCUREMENT DATA
 Route::get('/fetch-saro-ilcdb', [SaroController::class, 'fetchSaroData'])->name('fetchSaroData');
 Route::get('/fetch-procurement-ilcdb', [ProcurementController::class, 'fetchProcurementData'])->name('fetchProcurementData');
@@ -130,7 +133,7 @@ Route::get('/fetch-procurement-ilcdb', function (Request $request) {
 
 
 
-//SEARCH PROCUREMENTS
+//ILCDB SEARCH PROCUREMENTS
 Route::get('/search-procurement-ilcdb', function (Request $request) {
     $query = $request->query('query');
 
@@ -205,3 +208,6 @@ Route::get('/ntca-breakdown/{ntcaNo}', [SaroController::class, 'getNTCABreakdown
 Route::get('/fetch-ntca-by-saro/{saroNo}', [SaroController::class, 'fetchNTCABySaro']);
 Route::get('/ntca-balance/{ntcaNo}', [SaroController::class, 'getNTCABalanceForCurrentQuarter']);
 Route::get('/check-overdue',[ProcurementController::class,'getOverdueProcurements']);
+
+
+//FOR DTC
