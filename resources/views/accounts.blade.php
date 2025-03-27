@@ -117,7 +117,7 @@
                             <td>{{ $user->role }}</td>
                             <td>
                                 <!-- Edit Button -->
-                                <button class="btn btn-warning btn-sm edit-btn"
+                                <button class="btn btn-warning btn-sm edit-btn me-0 mb-md-0 mb-2"
                                     data-bs-toggle="modal" 
                                     data-bs-target="#editUserModal"
                                     data-userid="{{ $user->user_id }}"
