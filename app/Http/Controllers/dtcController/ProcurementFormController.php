@@ -1,6 +1,7 @@
 <?php 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\dtcController;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -12,18 +13,18 @@ class ProcurementFormController extends Controller
     $prNumber = $request->query('pr_number');
 
     // Fetch procurement details (including description)
-    $procurement = DB::connection('ilcdb')
+    $procurement = DB::connection('dtc')
         ->table('procurement')
         ->where('procurement_id', $prNumber)
         ->first();
 
     // Fetch procurement_form details (without description since it's in procurement)
-    $record = DB::connection('ilcdb')
+    $record = DB::connection('dtc')
         ->table('procurement_form')
         ->where('procurement_id', $prNumber)
         ->first();
 
-    return view('procurementform', [
+    return view('dtcSVP', [
         'prNumber'     => $prNumber,
         'activityName' => $procurement->activity ?? 'N/A',
         'description'  => $procurement->description ?? 'No description available', // Get description from procurement
@@ -35,7 +36,7 @@ class ProcurementFormController extends Controller
 public function update(Request $request)
 {
     $validatedData = $request->validate([
-        'procurement_id' => 'required|exists:ilcdb.procurement_form,procurement_id',
+        'procurement_id' => 'required|exists:dtc.procurement_form,procurement_id',
         'dt_submitted1'  => 'nullable|date',
         'dt_received1'   => 'nullable|date',
         'dt_submitted2'  => 'nullable|date',
@@ -124,9 +125,9 @@ public function update(Request $request)
         }
 
         // Wrap the update and budget deduction in a transaction.
-        DB::connection('ilcdb')->transaction(function () use ($validatedData, $unit, $status) {
+        DB::connection('dtc')->transaction(function () use ($validatedData, $unit, $status) {
             // Update the procurement_form record.
-            DB::connection('ilcdb')->table('procurement_form')
+            DB::connection('dtc')->table('procurement_form')
                 ->where('procurement_id', $validatedData['procurement_id'])
                 ->update([
                     'dt_submitted1' => $validatedData['dt_submitted1'] ?? null,
@@ -147,7 +148,7 @@ public function update(Request $request)
                 ]);
 
             // Retrieve procurement form details for quarter and saro_no
-            $record = DB::connection('ilcdb')->table('procurement_form')
+            $record = DB::connection('dtc')->table('procurement_form')
                         ->where('procurement_id', $validatedData['procurement_id'])
                         ->first();
 
@@ -170,7 +171,7 @@ public function update(Request $request)
 
                 if ($column && $record->saro_no) {
                     // Deduct the budget from the respective quarter in ntca table
-                    DB::connection('ilcdb')->table('ntca')
+                    DB::connection('dtc')->table('ntca')
                         ->where('saro_no', $record->saro_no)
                         ->decrement($column, $record->budget_spent);
                 }
@@ -235,13 +236,13 @@ public function update(Request $request)
                     $fileSize = filesize($uploadDir . '/' . $fileName);
     
                     // Delete any existing record for this file
-                    DB::connection('ilcdb')->table('requirements')
+                    DB::connection('dtc')->table('requirements')
                         ->where('procurement_id', $request->procurement_id)
                         ->where('requirement_name', $file)
                         ->delete();
     
                     // Insert the new file record with size
-                    DB::connection('ilcdb')->table('requirements')->insert([
+                    DB::connection('dtc')->table('requirements')->insert([
                         'procurement_id'   => $request->procurement_id,
                         'requirement_name' => $file,
                         'file_path'        => $filePath,
@@ -283,7 +284,7 @@ public function update(Request $request)
     public function getUploadedFiles($procurement_id)
     {
         try {
-            $files = DB::connection('ilcdb')->table('requirements')
+            $files = DB::connection('dtc')->table('requirements')
                 ->where('procurement_id', $procurement_id)
                 ->select('requirement_name', 'file_path', 'size') // Include size in the query
                 ->get();
@@ -321,7 +322,7 @@ public function update(Request $request)
         $requiredFiles = $modalFiles[$modal] ?? [];
     
         // Fetch uploaded files for the specified modal from the database
-        $uploadedFiles = DB::connection('ilcdb')->table('requirements')
+        $uploadedFiles = DB::connection('dtc')->table('requirements')
             ->where('procurement_id', $procurement_id)
             ->pluck('file_path', 'requirement_name')
             ->toArray();

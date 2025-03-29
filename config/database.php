@@ -77,6 +77,21 @@ return [
             'engine' => null,
         ],
 
+        'dtc' => [
+            'driver' => 'mysql',
+            'host' => env('DTC_HOST', '127.0.0.1'),
+            'port' => env('DTC_PORT', '3306'),
+            'database' => env('DTC_DATABASE', 'dtc'),
+            'username' => env('DTC_USERNAME', 'root'),
+            'password' => env('DTC_PASSWORD', ''),
+            'unix_socket' => env('DTC_SOCKET', ''),
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+            'prefix' => '',
+            'strict' => true,
+            'engine' => null,
+        ],
+
         'requirements' => [
             'driver' => 'mysql',
             'host' => env('REQUIREMENTS_HOST', '127.0.0.1'),

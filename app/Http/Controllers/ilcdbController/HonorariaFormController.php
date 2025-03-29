@@ -1,32 +1,34 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\ilcdbController;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
+use Carbon\Carbon;
+use App\Models\Requirement;
 
-class OtherExpenseFormController extends Controller
+class HonorariaFormController extends Controller
 {
     public function showForm(Request $request)
-    {  
+    {
         $prNumber = $request->query('pr_number');
         $activity = $request->query('activity');
 
-        // Fetch or create record in otherexpense_form
+        // Fetch or create record in honoraria_form
         $record = DB::connection('ilcdb')
-                    ->table('otherexpense_form')
+                    ->table('honoraria_form')
                     ->where('procurement_id', $prNumber)
                     ->first();
 
         if (!$record) {
-            DB::connection('ilcdb')->table('otherexpense_form')->insert([
+            DB::connection('ilcdb')->table('honoraria_form')->insert([
                 'procurement_id' => $prNumber,
                 'activity'       => $activity,
             ]);
             $record = DB::connection('ilcdb')
-                        ->table('otherexpense_form')
+                        ->table('honoraria_form')
                         ->where('procurement_id', $prNumber)
                         ->first();
         }
@@ -37,22 +39,7 @@ class OtherExpenseFormController extends Controller
             ->where('procurement_id', $prNumber)
             ->first();
 
-
-        // If no record exists, insert a new one
-        if (!$record) {
-            DB::connection('ilcdb')->table('otherexpense_form')->insert([
-                'procurement_id' => $prNumber,
-                'activity'       => $activity,
-            ]);
-
-            // Re-fetch the record
-            $record = DB::connection('ilcdb')
-                        ->table('otherexpense_form')
-                        ->where('procurement_id', $prNumber)
-                        ->first();
-        }
-
-        return view('otherexpenseform', [
+        return view('honorariaform', [
             'prNumber'    => $prNumber,
             'activity'    => $activity,
             'description' => $procurement->description ?? 'No description available',
@@ -61,10 +48,10 @@ class OtherExpenseFormController extends Controller
         ]);
     }
 
-    public function updateotherexpense(Request $request)
+    public function updateHonoraria(Request $request)
     {
         $validatedData = $request->validate([
-            'procurement_id' => 'required|exists:ilcdb.otherexpense_form,procurement_id',
+            'procurement_id' => 'required|exists:ilcdb.honoraria_form,procurement_id',
             'dt_submitted'   => 'nullable|date',
             'dt_received'    => 'nullable|date',
             'budget_spent'   => 'nullable|numeric',
@@ -73,8 +60,8 @@ class OtherExpenseFormController extends Controller
         try {
             Log::info("Received Data: ", $validatedData);
     
-            // Fetch the existing record from otherexpense_form
-            $record = DB::connection('ilcdb')->table('otherexpense_form')
+            // Fetch existing record
+            $record = DB::connection('ilcdb')->table('honoraria_form')
                         ->where('procurement_id', $validatedData['procurement_id'])
                         ->first();
     
@@ -83,8 +70,9 @@ class OtherExpenseFormController extends Controller
                 $unit = 'Budget Unit';
             }
     
-            // Determine status based on provided dates and budget_spent
+            // Determine status
             $status = match (true) {
+                (!$validatedData['dt_submitted'] && !$validatedData['dt_received']) => null,
                 ($validatedData['dt_submitted'] && !$validatedData['dt_received']) => 'Ongoing',
                 ($validatedData['dt_received'] && !$validatedData['budget_spent']) => 'Pending',
                 ($validatedData['budget_spent']) => 'Done',
@@ -93,28 +81,23 @@ class OtherExpenseFormController extends Controller
     
             Log::info("Calculated Status: " . $status);
     
-            DB::connection('ilcdb')->transaction(function () use ($validatedData, $status, $unit, $record) {
-                // Update the otherexpense_form record
-                DB::connection('ilcdb')->table('otherexpense_form')
+            DB::connection('ilcdb')->transaction(function () use ($validatedData, $unit, $status, $record) {
+                // Update honoraria_form
+                DB::connection('ilcdb')->table('honoraria_form')
                     ->where('procurement_id', $validatedData['procurement_id'])
                     ->update([
-                        'dt_submitted' => $validatedData['dt_submitted']
-                            ? Carbon::parse($validatedData['dt_submitted'])->format('Y-m-d H:i:s')
-                            : null,
-                        'dt_received'  => $validatedData['dt_received']
-                            ? Carbon::parse($validatedData['dt_received'])->format('Y-m-d H:i:s')
-                            : null,
+                        'dt_submitted' => $validatedData['dt_submitted'] ? Carbon::parse($validatedData['dt_submitted'])->format('Y-m-d H:i:s') : null,
+                        'dt_received'  => $validatedData['dt_received'] ? Carbon::parse($validatedData['dt_received'])->format('Y-m-d H:i:s') : null,
                         'budget_spent' => $validatedData['budget_spent'] ?? null,
-                        'status'       => $status,
                         'unit'         => $unit,
+                        'status'       => $status,
                     ]);
     
-                // Retrieve quarter and saro_no from the record
+                // Assuming that the honoraria_form record has a 'quarter' column and a 'saro_no' foreign key
                 $quarter = $record->quarter ?? null;
                 $saroNo  = $record->saro_no ?? null;
                 
                 if ($saroNo && $quarter && !empty($validatedData['budget_spent'])) {
-                    // Map quarter value to the corresponding column in the ntca table
                     $column = match ($quarter) {
                         'First Quarter'  => 'first_q',
                         'Second Quarter' => 'second_q',
@@ -124,7 +107,7 @@ class OtherExpenseFormController extends Controller
                     };
     
                     if ($column) {
-                        // Deduct budget_spent from the corresponding quarter column in ntca
+                        // Deduct the budget_spent from the respective quarter column in the ntca table
                         DB::connection('ilcdb')->table('ntca')
                             ->where('saro_no', $saroNo)
                             ->decrement($column, $validatedData['budget_spent']);
@@ -134,49 +117,18 @@ class OtherExpenseFormController extends Controller
     
             return response()->json([
                 'success' => true,
-                'message' => 'Daily Travel Expense form updated successfully!',
+                'message' => 'Honoraria form updated successfully!',
                 'status'  => $status . (($status === 'Ongoing' || $status === 'Pending') ? " at $unit" : ''),
             ]);
     
         } catch (\Exception $e) {
-            Log::error('otherexpense update error: ' . $e->getMessage());
+            Log::error('Honoraria update error: ' . $e->getMessage());
             return response()->json([
                 'success' => false,
-                'message' => 'An error occurred while updating the otherexpense form.',
+                'message' => 'An error occurred while updating the honoraria form.',
                 'error'   => $e->getMessage(),
             ], 500);
         }
-    }
-
-    public function uploadedFilesCheck($procurement_id)
-    {
-        $requiredFiles = [
-            'orsFile', 
-            'dvFile', 
-            'travelOrderFile', 
-            'appearanceFile', 
-            'reportFile', 
-            'itineraryFile', 
-            'certFile', 
-        ];
-
-        $uploadedFiles = DB::connection('ilcdb')->table('requirements')
-            ->where('procurement_id', $procurement_id)
-            ->pluck('file_path','requirement_name')
-            ->toArray();
-        $missingFiles = array_diff($requiredFiles, array_keys($uploadedFiles));
-
-        $requirementsStatus = empty($missingFiles)? 1 : 0;
-
-        DB::connection('ilcdb')->table('otherexpense_form')
-            ->where('procurement_id', $procurement_id)
-            ->update(['requirements' => $requirementsStatus]);
-
-        return response()->json([
-            'success'=> true,
-            'missingFiles'=> $missingFiles,
-            'requirementsStatus'=> $requirementsStatus
-        ]);
     }
 
     public function upload(Request $request)
@@ -189,10 +141,7 @@ class OtherExpenseFormController extends Controller
                 ], 400);
             }
 
-            $requiredFiles = [
-                'orsFile', 'dvFile', 'travelOrderFile', 'appearanceFile', 'reportFile',
-                'itineraryFile', 'certFile'
-            ];
+            $requiredFiles = ['orsFile', 'dvFile', 'contractFile', 'classificationFile', 'reportFile', 'attendanceFile', 'resumeFile', 'govidFile', 'payslipFile', 'bankFile', 'certFile'];
 
             $uploads = [];
             $missingFiles = [];
@@ -284,4 +233,44 @@ class OtherExpenseFormController extends Controller
             ], 500);
         }
     }
+
+    public function uploadedFilesCheck($procurement_id)
+    {
+        $requiredFiles = [
+            'orsFile', 
+            'dvFile', 
+            'contractFile', 
+            'classificationFile', 
+            'reportFile', 
+            'attendanceFile', 
+            'resumeFile', 
+            'govidFile', 
+            'payslipFile', 
+            'bankFile', 
+            'certFile'
+        ];
+
+        $uploadedFiles = DB::connection('ilcdb')->table('requirements')
+            ->where('procurement_id', $procurement_id)
+            ->pluck('file_path','requirement_name')
+            ->toArray();
+        $missingFiles = array_diff($requiredFiles, array_keys($uploadedFiles));
+
+        $requirementsStatus = empty($missingFiles)? 1 : 0;
+
+        DB::connection('ilcdb')->table('honoraria_form')
+            ->where('procurement_id', $procurement_id)
+            ->update(['requirements' => $requirementsStatus]);
+
+        return response()->json([
+            'success'=> true,
+            'missingFiles'=> $missingFiles,
+            'requirementsStatus'=> $requirementsStatus
+        ]);
+
+
+
+    }
+
+    
 }
