@@ -99,7 +99,7 @@
                 <p>SARO 1</p>
             </div>
         </aside>
-            <div class="d-flex justify-content-between align-items-center mb-3">
+            
         <section class="records">
             <div class="header">
                 <h5>Currently Viewing: <span id="currentViewingSaro"></span></h5>
