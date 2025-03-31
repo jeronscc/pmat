@@ -96,6 +96,56 @@ section {
     color: #ffffff;
 }
 
+.btn {
+    padding: 8px 12px;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    border-radius: 0; /* Removed rounded edges */
+}
+
+.btn.btn-primary {
+    background-color: #003366; /* Darker Blue */
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    font-size: 14px;
+    border-radius: 0; /* Removed rounded edges */
+    transition: background 0.3s;
+}
+
+.btn.btn-primary:hover {
+    background-color: #002244; /* Even darker blue on hover */
+}
+
+.btn.btn-success {
+    background-color: #003366; /* Darker Blue */
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    font-size: 14px;
+    border-radius: 0; /* Removed rounded edges */
+    transition: background 0.3s;
+}
+
+.btn.btn-success:hover {
+    background-color: #002244; /* Even darker blue on hover */
+}
+
+.btn-primary.btn-sm.py-1 {
+    background-color: #003366; /* Darker Blue */
+    color: white;
+    border: none;
+    padding: 6px 10px;
+    font-size: 14px;
+    border-radius: 0; /* Removed rounded edges */
+    transition: background 0.3s;
+}
+
+.btn-primary.btn-sm.py-1:hover {
+    background-color: #002244; /* Even darker blue on hover */
+}
+
 .records {
     flex: 1;
     padding: 20px;
