@@ -3,7 +3,7 @@
 window.onload = function () {
     // Initially load all SAROs when the page loads (with no balance)
     fetchSaroData('');
-};S
+};
 
 // Function to fetch and display SARO list based on the selected year or "all"
 function filterSaroByYear(year) {
