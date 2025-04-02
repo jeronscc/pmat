@@ -23,42 +23,38 @@
 
     <main>
         <aside>
-            <div class="balance-box p-3 mb-3">
-    <h6 class="text-white">SARO Remaining Balance (<span id="currentSaroName"></span>):</h6>
-    <h2 id="remainingBalance">₱0</h2>
-    
-    <hr>
-    <!-- NTCA balance -->
-    <div class="d-flex align-items-center justify-content-between">
-        <h6 class="text-white mb-0" id="ntcaLabel">NTCA:</h6> <!-- Updated label -->
-        <button class="btn btn-primary btn-sm py-1" type="button" data-bs-toggle="modal" data-bs-target="#ntcaBreakdownModal">
-            View
-        </button>
-    </div>
-    <h2 id="ntcaBalance">₱0</h2>
-</div>
+            <div class="balance-box position-relative">
+                <span id="currentSaroNo">Remaining Balance:</span>
+                <p>₱0</p> <!-- Default value -->
 
-<!-- NTCA Breakdown Modal -->
-<div class="modal fade" id="ntcaBreakdownModal" tabindex="-1" aria-labelledby="ntcaBreakdownModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header" style="background-color:rgb(36, 36, 36); color: white;">
-                <h5 class="modal-title" id="ntcaBreakdownModalLabel">NTCA Balance Breakdown</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <ul class="list-group" id="ntcaBreakdownList">
-                    <!-- NTCA records will be dynamically populated here -->
-                </ul>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
+                <!-- NTCA Label and Button Inline -->
+                <div class="d-flex justify-content-between align-items-center">
+                    <span id="ntcaLabel">NTCA:</span>
+                    <button class="btn btn-primary btn-sm py-1 ntca-view-button" type="button" data-bs-toggle="modal" data-bs-target="#ntcaBreakdownModal">
+                        View
+                    </button>
+                </div>
 
-
+                <p id="ntcaBalance">₱0</p> <!-- Default value -->
+            </div>
+            <div class="modal fade" id="ntcaBreakdownModal" tabindex="-1" aria-labelledby="ntcaBreakdownModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header" style="background-color:rgb(36, 36, 36); color: white;">
+                            <h5 class="modal-title" id="ntcaBreakdownModalLabel">NTCA Balance Breakdown</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <ul class="list-group" id="ntcaBreakdownList">
+                                <!-- NTCA records will be dynamically populated here -->
+                            </ul>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="d-flex justify-content-end align-items-center mb-2">
                 <div class="dropdown me-2">
                     <button class="dropdown-toggle" type="button" id="yearDropdown" data-bs-toggle="dropdown" aria-expanded="false">
@@ -75,7 +71,6 @@
                     </ul>
                 </div>
             </div>
-            
             <button class="accordion">ILCDB <span class="dropdown-icon">&#x25BC;</span></button>
             <div class="panel ilcdb">
                 <!-- SARO data will be populated here -->
@@ -84,34 +79,33 @@
             <button class="accordion">DTC <span class="dropdown-icon">&#x25BC;</span></button>
             <div class="panel dtc">
                 <!-- Placeholder content -->
-                <p>SARO 1</p>
             </div>
 
             <button class="accordion">SPARK <span class="dropdown-icon">&#x25BC;</span></button>
             <div class="panel spark">
                 <!-- Placeholder content -->
-                <p>SARO 1</p>
             </div>
 
             <button class="accordion">PROJECT CLICK <span class="dropdown-icon">&#x25BC;</span></button>
             <div class="panel project-click">
                 <!-- Placeholder content -->
-                <p>SARO 1</p>
+                
             </div>
         </aside>
-            
         <section class="records">
             <div class="header">
-                <h5>Currently Viewing: <span id="currentViewingSaro"></span></h5>
-                <div class="d-flex">
-                    <div class="search-box">
-                        <input type="text" class="form-control me-2" id="searchBar" placeholder="Search...">
-                        <button type="submit" class="search-button">Search</button>
-                    </div>
+                <h5><span>Currently Viewing:</span></h5>
+                <div class="search">
+                    <form id="searchForm"> 
+                        <div class="search-box">
+                            <input type="text" class="form-control me-2" id="searchBar" placeholder="Search...">   
+                            <button type="submit" class="search-button">
+                                Search
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
-
-            <!-- Tabs Above Table -->
             <ul class="nav nav-tabs" id="procurementTabs">
                 <li class="nav-item">
                     <a class="nav-link active" style="color: black;" id="tabAll-tab" data-bs-toggle="tab" href="#tabAll">All</a>
@@ -129,314 +123,32 @@
                     <a class="nav-link" style="color: black;" id="tabDone-tab" data-bs-toggle="tab" href="#tabDone">Done</a>
                 </li>
             </ul>
-
-            <!-- Table Container -->
-            <div class="table-container tab-content">
-                <!-- All Tab (Default) -->
-                <div class="tab-pane fade show active" id="tabAll">
-                    <div class="record-box">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>PR NUMBER</th>
-                                    <th>CATEGORY</th>
-                                    <th>ACTIVITY/PERSON-IN-CHARGE</th>
-                                    <th>STATUS</th>
-                                </tr>
-                            </thead>
-                            <tbody id="procurementTable">
-                                <!-- Default content (All) -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                <!-- Pending Tab -->
-                <div class="tab-pane fade " id="tabPending">
-                    <div class="record-box">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>PR NUMBER</th>
-                                    <th>CATEGORY</th>
-                                    <th>ACTIVITY/PERSON-IN-CHARGE</th>
-                                    <th>STATUS</th>
-                                </tr>
-                            </thead>
-                            <tbody id="procurementTablePending">
-                            <!-- Pending content (All) -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                <!-- Ongoing Tab -->
-                <div class="tab-pane fade" id="tabOngoing">
-                    <div class="record-box">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>PR NUMBER</th>
-                                    <th>CATEGORY</th>
-                                    <th>ACTIVITY/PERSON-IN-CHARGE</th>
-                                    <th>STATUS</th>
-                                </tr>
-                            </thead>
-                            <tbody id="procurementTableOngoing">
-                                <!-- Ongoing data will be inserted here -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- Overdue Tab -->
-                <div class="tab-pane fade" id="tabOverdue">
-                    <div class="record-box">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>PR NUMBER</th>
-                                    <th>CATEGORY</th>
-                                    <th>ACTIVITY/PERSON-IN-CHARGE</th>
-                                    <th>STATUS</th>
-                                </tr>
-                            </thead>
-                            <tbody id="procurementTableOverdue">
-                                <!-- Overdue data will be inserted here -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- Done Tab -->
-                <div class="tab-pane fade" id="tabDone">
-                    <div class="record-box">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>PR NUMBER</th>
-                                    <th>CATEGORY</th>
-                                    <th>ACTIVITY/PERSON-IN-CHARGE</th>
-                                    <th>STATUS</th>
-                                </tr>
-                            </thead>
-                            <tbody id="procurementTableDone">
-                                <!-- Done data will be inserted here -->
-                            </tbody>
-                        </table>
-                    </div>
+            <!-- Scrollable table -->
+            <div class="table-container">
+                <div class="record-box">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>PR NUMBER</th>
+                                <th>CATEGORY</th>
+                                <th>ACTIVITY/PERSON-IN-CHARGE</th>
+                                <th>STATUS</th>
+                            </tr>
+                        </thead>      
+                        <tbody id="procurementTable"> 
+                            <!-- Procurement data will be populated here -->
+                        </tbody> 
+                    </table> 
                 </div>
             </div>
-
         </section>
-    </div>
-</div>
-<div class="modal fade" id="procurementDetailsModal" tabindex="-1" aria-labelledby="procurementDetailsModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="procurementDetailsModalLabel">Procurement Details</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <p><strong>Procurement Category:</strong> <span id="modalProcurementCategory"></span></p>
-                <p><strong>Procurement No:</strong> <span id="modalProcurementNo"></span></p>
-                <p><strong>SARO No:</strong> <span id="modalSaroNo"></span></p>
-                <p><strong>NTCA No:</strong> <span id="modalNTCANo"></span></p>
-                <p><strong>Current Quarter:</strong> <span id="modalQuarter"></span></p>
-                <p><strong>Purchase Request:</strong> <span id="modalPurchaseRequest"></span></p>
-                <p><strong>Year:</strong> <span id="modalYear"></span></p>
-                <p><strong>Description:</strong> <span id="modalDescription"></span></p>
-                <p><strong id="modalActivityLabel">Activity:</strong> <span id="modalActivity"></span></p>
-            </div>
-        </div>
-    </div>
-</div>
-</section>
-</div> 
     </main>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="/js/ilcdb/landingpage.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            fetch('/api/fetch-saro-ilcdb')
-                .then(response => response.json())
-                .then(data => {
-                    const ilcdbPanel = document.querySelector('.panel.ilcdb');
-                    const remainingBalance = document.querySelector('.balance-box p');
-                    ilcdbPanel.innerHTML = ''; // Clear any existing SARO entries
-
-                    if (data.length > 0) {
-                        data.forEach(saro => {
-                            const saroElement = document.createElement('p');
-                            saroElement.textContent = saro.saro_no;
-                            saroElement.style.margin = '5px 0'; // 10px space above & below
-                            saroElement.style.padding = '5px';  
-                            saroElement.setAttribute('data-bs-toggle', 'tooltip');
-                            saroElement.setAttribute('data-bs-placement', 'right');
-                            saroElement.setAttribute('title', `Description: ${saro.description}`);
-                            saroElement.addEventListener('click', function() {
-                                remainingBalance.textContent = `₱${Number(saro.current_budget).toLocaleString()}`;
-                                fetchProcurementData(saro.saro_no);
-                            });
-                            ilcdbPanel.appendChild(saroElement);
-                        });
-
-                        // Initialize Bootstrap tooltips
-                        initializeTooltips();
-                    } else {
-                        const emptyMessage = document.createElement('p');
-                        emptyMessage.textContent = 'No SARO records found.';
-                        emptyMessage.style.margin = "5px 0";
-                        emptyMessage.style.padding = "5px"
-                        ilcdbPanel.appendChild(emptyMessage);
-                    }
-                })
-                .catch(error => console.error('Error fetching SARO data:', error));
-        });
-
-        function filterSaroByYear(year) {
-            fetch(`/api/fetch-saro-ilcdb?year=${year}`)
-                .then(response => response.json())
-                .then(data => {
-                    const ilcdbPanel = document.querySelector('.panel.ilcdb');
-                    const remainingBalance = document.querySelector('.balance-box p');
-                    ilcdbPanel.innerHTML = ''; // Clear previous records
-
-                    if (data.length > 0) {
-                        data.forEach(saro => {
-                            const saroElement = document.createElement('p');
-                            saroElement.textContent = saro.saro_no;
-                            saroElement.style.margin = '5px 0'; 
-                            saroElement.style.padding = '5px';
-                            saroElement.setAttribute('data-bs-toggle', 'tooltip');
-                            saroElement.setAttribute('data-bs-placement', 'right');
-                            saroElement.setAttribute('title', `Description: ${saro.description}`);
-                            saroElement.addEventListener('click', function() {
-                                remainingBalance.textContent = `₱${Number(saro.current_budget).toLocaleString()}`;
-                                fetchProcurementData(saro.saro_no);
-                            });
-                            ilcdbPanel.appendChild(saroElement);
-                        });
-
-                        // Initialize Bootstrap tooltips
-                        initializeTooltips();
-                    } else {
-                        const emptyMessage = document.createElement('p');
-                        emptyMessage.textContent = 'No SARO records found.';
-                        ilcdbPanel.appendChild(emptyMessage);
-                    }
-                })
-                .catch(error => console.error('Error fetching SARO data:', error));
-        }
-
-        function initializeTooltips() {
-            // Dispose of existing tooltips
-            const existingTooltips = document.querySelectorAll('[data-bs-toggle="tooltip"]');
-            existingTooltips.forEach(tooltipTriggerEl => {
-                const tooltipInstance = bootstrap.Tooltip.getInstance(tooltipTriggerEl);
-                if (tooltipInstance) {
-                    tooltipInstance.dispose();
-                }
-            });
-
-            // Initialize new tooltips
-            const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-            tooltipTriggerList.map(function (tooltipTriggerEl) {
-                return new bootstrap.Tooltip(tooltipTriggerEl);
-            });
-        }
-
-        function fetchProcurementData(saroNo) {
-            fetch(`/api/fetch-procurement-ilcdb?saro_no=${saroNo}`)
-                .then(response => response.json())
-                .then(data => {
-                    const procurementTable = document.getElementById('procurementTable');
-                    procurementTable.innerHTML = ''; // Clear any existing rows
-
-                    if (data.length > 0) {
-                        data.forEach(procurement => {
-                            const row = document.createElement('tr');
-
-                            const prNumberCell = document.createElement('td');
-                            prNumberCell.textContent = procurement.procurement_id;
-                            prNumberCell.addEventListener('click', function() {
-                                window.location.href = `/procurementform/${procurement.id}`;
-                            });
-                            row.appendChild(prNumberCell);
-
-                            const activityCell = document.createElement('td');
-                            activityCell.textContent = procurement.activity;
-                            row.appendChild(activityCell);
-
-                            const statusCell = document.createElement('td');
-                            const badge = document.createElement('span');
-                            badge.classList.add('badge', 'bg-warning', 'text-dark');
-                            badge.textContent = 'Pending'; // Placeholder status
-                            statusCell.appendChild(badge);
-                            row.appendChild(statusCell);
-
-                            procurementTable.appendChild(row);
-                        });
-                    } else {
-                        const emptyMessage = document.createElement('tr');
-                        const emptyCell = document.createElement('td');
-                        emptyCell.setAttribute('colspan', '3');
-                        emptyCell.textContent = 'No procurement records found.';
-                        emptyMessage.appendChild(emptyCell);
-                        procurementTable.appendChild(emptyMessage);
-                    }
-                })
-                .catch(error => console.error('Error fetching procurement data:', error));
-        }
-
-        document.getElementById('searchForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const query = document.getElementById('searchBar').value;
-            searchProcurement(query);
-        });
-
-        function searchProcurement(query) {
-            fetch(`/api/search-procurement-ilcdb?query=${query}`)
-                .then(response => response.json())
-                .then(data => {
-                    const procurementTable = document.getElementById('procurementTable');
-                    procurementTable.innerHTML = ''; // Clear any existing rows
-
-                    if (data.length > 0) {
-                        data.forEach(procurement => {
-                            const row = document.createElement('tr');
-
-                            const prNumberCell = document.createElement('td');
-                            prNumberCell.textContent = procurement.procurement_id;
-                            prNumberCell.addEventListener('click', function() {
-                                window.location.href = `/procurementform/${procurement.id}`;
-                            });
-                            row.appendChild(prNumberCell);
-
-                            const activityCell = document.createElement('td');
-                            activityCell.textContent = procurement.activity;
-                            row.appendChild(activityCell);
-
-                            const statusCell = document.createElement('td');
-                            const badge = document.createElement('span');
-                            badge.classList.add('badge', 'bg-warning', 'text-dark');
-                            badge.textContent = 'Pending'; // Placeholder status
-                            statusCell.appendChild(badge);
-                            row.appendChild(statusCell);
-
-                            procurementTable.appendChild(row);
-                        });
-                    } else {
-                        const emptyMessage = document.createElement('tr');
-                        const emptyCell = document.createElement('td');
-                        emptyCell.setAttribute('colspan', '3');
-                        emptyCell.textContent = 'No procurement records found.';
-                        emptyMessage.appendChild(emptyCell);
-                        procurementTable.appendChild(emptyMessage);
-                    }
-                })
-                .catch(error => console.error('Error searching procurement data:', error));
-        }
-    </script>
-    
+    <script src="/js/indexLoadIlcdb.js"></script>
+    <script src="/js/indexLoadDtc.js"></script>
+    <script src="/js/indexLoadClick.js"></script>
+    <script src="/js/indexLoadSpark.js"></script>
+    <script src="/js/shared.js"></script>
 </body>
 </html>

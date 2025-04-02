@@ -1,33 +1,25 @@
 <?php
 
-require __DIR__ . '/api_dtc.php'; // Load DTC API routes
-require __DIR__ . '/api_click.php'; // Load CLICK API routes
-require __DIR__ . '/api_spark.php'; // Load SPARK API routes
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Log;
 
-//ILCDB API
-use App\Http\Controllers\ilcdbController\SaroController as IlcdbSaroController;
-use App\Http\Controllers\ilcdbController\ProcurementController as IlcdbProcurementController;
-use App\Http\Controllers\ilcdbController\HonorariaFormController as IlcdbHonorariaFormController;
-use App\Http\Controllers\ilcdbController\ProcurementFormController as IlcdbProcurementFormController;
-use App\Http\Controllers\ilcdbController\OtherExpenseFormController as IlcdbOtherExpenseFormController;
+use App\Http\Controllers\sparkController\SaroController as sparkSaroController;
+use App\Http\Controllers\sparkController\ProcurementController as sparkProcurementController;
+use App\Http\Controllers\sparkController\HonorariaFormController as sparkHonorariaFormController;
+use App\Http\Controllers\sparkController\ProcurementFormController as sparkProcurementFormController;
+use App\Http\Controllers\sparkController\OtherExpenseFormController as sparkOtherExpenseFormController;
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
-
-// FOR ILCDB
-//ILCDB FETCH SARO
-Route::get('/fetch-saro-ilcdb', function (Request $request) {
+//FOR spark
+Route::prefix('spark')->middleware('api')->group(function () {
+//spark FETCH SARO
+Route::get('/fetch-saro-spark', function (Request $request) {
     $year = $request->query('year');
 
     if ($year) {
         // Fetch SARO data for a specific year and order by saro_no in descending order
-        $data = DB::connection('ilcdb')
+        $data = DB::connection('spark')
                     ->table('saro')
                     ->whereYear('year', $year)
                     ->select('saro_no', 'current_budget', 'year')
@@ -35,7 +27,7 @@ Route::get('/fetch-saro-ilcdb', function (Request $request) {
                     ->get();
     } else {
         // Fetch all SARO data and order by saro_no in descending order
-        $data = DB::connection('ilcdb')
+        $data = DB::connection('spark')
                     ->table('saro')
                     ->select('saro_no', 'current_budget', 'year')  
                     ->orderBy('saro_no', 'desc')  
@@ -46,13 +38,13 @@ Route::get('/fetch-saro-ilcdb', function (Request $request) {
 });
 
 
-// ILCDB FETCH SARO AND PROCUREMENT DATA
-Route::get('/fetch-saro-ilcdb', [IlcdbSaroController::class, 'fetchSaroData'])->name('fetchSaroData');
-Route::get('/fetch-procurement-ilcdb', [IlcdbProcurementController::class, 'fetchProcurementData'])->name('fetchProcurementData');
-Route::get('/search-procurement-ilcdb', function (Request $request) {
+// spark FETCH SARO AND PROCUREMENT DATA
+Route::get('/fetch-saro-spark', [sparkSaroController::class, 'fetchSaroData'])->name('fetchSaroData');
+Route::get('/fetch-procurement-spark', [sparkProcurementController::class, 'fetchProcurementData'])->name('fetchProcurementData');
+Route::get('/search-procurement-spark', function (Request $request) {
     $query = $request->query('query');
 
-    $procurements = DB::connection('ilcdb')
+    $procurements = DB::connection('spark')
         ->table('procurement')
         ->select('procurement_id', 'activity', 'procurement_category')
         ->where('procurement_id', 'like', "%{$query}%")
@@ -64,9 +56,9 @@ Route::get('/search-procurement-ilcdb', function (Request $request) {
     return response()->json($procurements);
 });
 
-// ILCDB FETCH HONORARIACHECKLIST
+// spark FETCH HONORARIACHECKLIST
 Route::get('/fetch-honorariachecklist', function () {
-    // Fetch data from the honorariachecklist table in the ilcdb database
+    // Fetch data from the honorariachecklist table in the spark database
     $checklistItems = DB::connection('requirements')->table('honorariachecklist')->get();
 
     // Return data as JSON
@@ -74,12 +66,12 @@ Route::get('/fetch-honorariachecklist', function () {
 });
 
 // Fetch requirements for a specific SARO or all requirements if no saro_no is provided
-Route::get('/fetch-procurement-ilcdb', function (Request $request) {
+Route::get('/fetch-procurement-spark', function (Request $request) {
     $saroNo = $request->query('saro_no'); // Get the saro_no from the request
     $year = $request->query('year'); // Get the year from the request
 
     // Fetch procurement data from the 'procurement' table
-    $procurements = DB::connection('ilcdb')
+    $procurements = DB::connection('spark')
         ->table('procurement')
         ->select('procurement_id', 'activity', 'saro_no', 'year', 'procurement_category') // Include procurement_category
         ->orderBy('procurement_id', 'desc');
@@ -98,12 +90,12 @@ Route::get('/fetch-procurement-ilcdb', function (Request $request) {
     $procurements = $procurements->get();
 
     // Fetch procurement form data (status, unit) for regular procurement
-    $procurementForms = DB::connection('ilcdb')->table('procurement_form')->get();
+    $procurementForms = DB::connection('spark')->table('procurement_form')->get();
 
     // Fetch honoraria form data (status, unit) for honoraria category procurements
-    $honorariaForms = DB::connection('ilcdb')->table('honoraria_form')->get();
+    $honorariaForms = DB::connection('spark')->table('honoraria_form')->get();
 
-    $otherexpenseForms = DB::connection('ilcdb')->table('otherexpense_form')->get();
+    $otherexpenseForms = DB::connection('spark')->table('otherexpense_form')->get();
 
     // Merge procurement data with form data
     $mergedData = $procurements->map(function ($procurement) use ($procurementForms, $honorariaForms, $otherexpenseForms) {
@@ -138,8 +130,8 @@ Route::get('/fetch-procurement-ilcdb', function (Request $request) {
 
 
 
-//ILCDB SEARCH PROCUREMENTS
-Route::get('/search-procurement-ilcdb', function (Request $request) {
+//spark SEARCH PROCUREMENTS
+Route::get('/search-procurement-spark', function (Request $request) {
     $query = $request->query('query');
 
     // Check if query exists before proceeding
@@ -149,7 +141,7 @@ Route::get('/search-procurement-ilcdb', function (Request $request) {
 
     try {
         // Perform the search using the provided query parameter
-        $procurements = DB::connection('ilcdb')
+        $procurements = DB::connection('spark')
             ->table('procurement')
             ->select('procurement_id', 'activity')
             ->where('procurement_id', 'like', "%{$query}%")
@@ -158,13 +150,13 @@ Route::get('/search-procurement-ilcdb', function (Request $request) {
             ->get();
 
         // Fetch procurement form data (status, unit) for regular procurement
-        $procurementForms = DB::connection('ilcdb')->table('procurement_form')->get();
+        $procurementForms = DB::connection('spark')->table('procurement_form')->get();
 
         // Fetch honoraria form data (status, unit) for honoraria category procurements
-        $honorariaForms = DB::connection('ilcdb')->table('honoraria_form')->get();
+        $honorariaForms = DB::connection('spark')->table('honoraria_form')->get();
 
         // Fetch other expense form data (status, unit) for other expense category procurements
-        $otherexpenseForms = DB::connection('ilcdb')->table('otherexpense_form')->get();
+        $otherexpenseForms = DB::connection('spark')->table('otherexpense_form')->get();
 
         // Merge procurement data with form data
         $mergedData = $procurements->map(function ($procurement) use ($procurementForms, $honorariaForms, $otherexpenseForms) {
@@ -189,27 +181,28 @@ Route::get('/search-procurement-ilcdb', function (Request $request) {
     }
 });
 
-// ILCDB POST REQUESTS
-Route::any('/add-saro-ilcdb', [IlcdbSaroController::class, 'addSaro'])->name('add-saro-ilcdb');
-Route::any('/add-procurement-ilcdb', [IlcdbProcurementController::class, 'addProcurement'])->name('addProcurement');
-Route::get('/fetch-procurement-details', [IlcdbProcurementController::class, 'fetchProcurementDetails'])->name('fetchProcurementDetails');
-Route::post('/procurement/update', [IlcdbProcurementFormController::class, 'update']);
-Route::get('/fetch-combined-procurement', [IlcdbProcurementController::class, 'fetchCombinedProcurementData']);
-Route::post('/honoraria/update', [IlcdbHonorariaFormController::class, 'updateHonoraria']);
-Route::post('/otherexpense/update', [IlcdbOtherExpenseFormController::class, 'updateOtherExpense']);
-Route::get('/fetch-combined-procurement-data', [IlcdbProcurementController::class, 'fetchCombinedProcurementData']);
-Route::post('/requirements/upload', [IlcdbHonorariaFormController::class, 'upload'])->name('requirements.upload');
-Route::get('/overdue-procurements', [IlcdbProcurementController::class, 'getOverdueProcurements']);
-Route::get('/requirements/{procurement_id}', [IlcdbHonorariaFormController::class, 'getUploadedFiles']);
-Route::post('/otherexpense/upload', [IlcdbOtherExpenseFormController::class, 'upload'])->name('otherexpense.upload');
-Route::get('/otherexpense/requirements/{procurement_id}', [IlcdbOtherExpenseFormController::class, 'getUploadedFiles']);
-Route::post('/procurement/upload', [IlcdbProcurementFormController::class, 'upload'])->name('procurement.upload');
-Route::get('/procurement/requirements/{procurement_id}', [IlcdbProcurementFormController::class, 'getUploadedFiles']);
-Route::get('/uploadedHonorariaFilesCheck/{procurement_id}', [IlcdbHonorariaFormController::class, 'uploadedFilesCheck']);
-Route::get('/uploadedTravelExpenseFileCheck/{procurement_id}', [IlcdbOtherExpenseFormController::class, 'uploadedFilesCheck']);
-Route::get('/uploadedProcurementFilesCheck/{procurement_id}', [IlcdbProcurementFormController::class, 'uploadedFilesCheck']);
-Route::post('/save-ntca', [IlcdbSaroController::class, 'saveNTCA']);
-Route::get('/ntca-breakdown/{ntcaNo}', [IlcdbSaroController::class, 'getNTCABreakdown']);
-Route::get('/fetch-ntca-by-saro/{saroNo}', [IlcdbSaroController::class, 'fetchNTCABySaro']);
-Route::get('/ntca-balance/{ntcaNo}', [IlcdbSaroController::class, 'getNTCABalanceForCurrentQuarter']);
-Route::get('/check-overdue',[IlcdbProcurementController::class,'getOverdueProcurements']);
+// spark POST REQUESTS
+Route::any('/add-saro-spark', [sparkSaroController::class, 'addSaro'])->name('add-saro-spark');
+Route::any('/add-procurement-spark', [sparkProcurementController::class, 'addProcurement'])->name('addProcurement');
+Route::get('/fetch-procurement-details', [sparkProcurementController::class, 'fetchProcurementDetails'])->name('fetchProcurementDetails');
+Route::post('/procurement/update', [sparkProcurementFormController::class, 'update']);
+Route::get('/fetch-combined-procurement', [sparkProcurementController::class, 'fetchCombinedProcurementData']);
+Route::post('/honoraria/update', [sparkHonorariaFormController::class, 'updateHonoraria']);
+Route::post('/otherexpense/update', [sparkOtherExpenseFormController::class, 'updateOtherExpense']);
+Route::get('/fetch-combined-procurement-data', [sparkProcurementController::class, 'fetchCombinedProcurementData']);
+Route::post('/requirements/upload', [sparkHonorariaFormController::class, 'upload'])->name('requirements.upload');
+Route::get('/overdue-procurements', [sparkProcurementController::class, 'getOverdueProcurements']);
+Route::get('/requirements/{procurement_id}', [sparkHonorariaFormController::class, 'getUploadedFiles']);
+Route::post('/otherexpense/upload', [sparkOtherExpenseFormController::class, 'upload'])->name('otherexpense.upload');
+Route::get('/otherexpense/requirements/{procurement_id}', [sparkOtherExpenseFormController::class, 'getUploadedFiles']);
+Route::post('/procurement/upload', [sparkProcurementFormController::class, 'upload'])->name('procurement.upload');
+Route::get('/procurement/requirements/{procurement_id}', [sparkProcurementFormController::class, 'getUploadedFiles']);
+Route::get('/uploadedHonorariaFilesCheck/{procurement_id}', [sparkHonorariaFormController::class, 'uploadedFilesCheck']);
+Route::get('/uploadedTravelExpenseFileCheck/{procurement_id}', [sparkOtherExpenseFormController::class, 'uploadedFilesCheck']);
+Route::get('/uploadedProcurementFilesCheck/{procurement_id}', [sparkProcurementFormController::class, 'uploadedFilesCheck']);
+Route::post('/save-ntca', [sparkSaroController::class, 'saveNTCA']);
+Route::get('/ntca-breakdown/{ntcaNo}', [sparkSaroController::class, 'getNTCABreakdown']);
+Route::get('/fetch-ntca-by-saro/{saroNo}', [sparkSaroController::class, 'fetchNTCABySaro']);
+Route::get('/ntca-balance/{ntcaNo}', [sparkSaroController::class, 'getNTCABalanceForCurrentQuarter']);
+Route::get('/check-overdue',[sparkProcurementController::class,'getOverdueProcurements']);
+});

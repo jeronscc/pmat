@@ -1,33 +1,25 @@
 <?php
 
-require __DIR__ . '/api_dtc.php'; // Load DTC API routes
-require __DIR__ . '/api_click.php'; // Load CLICK API routes
-require __DIR__ . '/api_spark.php'; // Load SPARK API routes
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Log;
 
-//ILCDB API
-use App\Http\Controllers\ilcdbController\SaroController as IlcdbSaroController;
-use App\Http\Controllers\ilcdbController\ProcurementController as IlcdbProcurementController;
-use App\Http\Controllers\ilcdbController\HonorariaFormController as IlcdbHonorariaFormController;
-use App\Http\Controllers\ilcdbController\ProcurementFormController as IlcdbProcurementFormController;
-use App\Http\Controllers\ilcdbController\OtherExpenseFormController as IlcdbOtherExpenseFormController;
+use App\Http\Controllers\clickController\SaroController as clickSaroController;
+use App\Http\Controllers\clickController\ProcurementController as clickProcurementController;
+use App\Http\Controllers\clickController\HonorariaFormController as clickHonorariaFormController;
+use App\Http\Controllers\clickController\ProcurementFormController as clickProcurementFormController;
+use App\Http\Controllers\clickController\OtherExpenseFormController as clickOtherExpenseFormController;
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
-
-// FOR ILCDB
-//ILCDB FETCH SARO
-Route::get('/fetch-saro-ilcdb', function (Request $request) {
+//FOR click
+Route::prefix('click')->middleware('api')->group(function () {
+//click FETCH SARO
+Route::get('/fetch-saro-click', function (Request $request) {
     $year = $request->query('year');
 
     if ($year) {
         // Fetch SARO data for a specific year and order by saro_no in descending order
-        $data = DB::connection('ilcdb')
+        $data = DB::connection('click')
                     ->table('saro')
                     ->whereYear('year', $year)
                     ->select('saro_no', 'current_budget', 'year')
@@ -35,7 +27,7 @@ Route::get('/fetch-saro-ilcdb', function (Request $request) {
                     ->get();
     } else {
         // Fetch all SARO data and order by saro_no in descending order
-        $data = DB::connection('ilcdb')
+        $data = DB::connection('click')
                     ->table('saro')
                     ->select('saro_no', 'current_budget', 'year')  
                     ->orderBy('saro_no', 'desc')  
@@ -46,13 +38,13 @@ Route::get('/fetch-saro-ilcdb', function (Request $request) {
 });
 
 
-// ILCDB FETCH SARO AND PROCUREMENT DATA
-Route::get('/fetch-saro-ilcdb', [IlcdbSaroController::class, 'fetchSaroData'])->name('fetchSaroData');
-Route::get('/fetch-procurement-ilcdb', [IlcdbProcurementController::class, 'fetchProcurementData'])->name('fetchProcurementData');
-Route::get('/search-procurement-ilcdb', function (Request $request) {
+// click FETCH SARO AND PROCUREMENT DATA
+Route::get('/fetch-saro-click', [clickSaroController::class, 'fetchSaroData'])->name('fetchSaroData');
+Route::get('/fetch-procurement-click', [clickProcurementController::class, 'fetchProcurementData'])->name('fetchProcurementData');
+Route::get('/search-procurement-click', function (Request $request) {
     $query = $request->query('query');
 
-    $procurements = DB::connection('ilcdb')
+    $procurements = DB::connection('click')
         ->table('procurement')
         ->select('procurement_id', 'activity', 'procurement_category')
         ->where('procurement_id', 'like', "%{$query}%")
@@ -64,9 +56,9 @@ Route::get('/search-procurement-ilcdb', function (Request $request) {
     return response()->json($procurements);
 });
 
-// ILCDB FETCH HONORARIACHECKLIST
+// click FETCH HONORARIACHECKLIST
 Route::get('/fetch-honorariachecklist', function () {
-    // Fetch data from the honorariachecklist table in the ilcdb database
+    // Fetch data from the honorariachecklist table in the click database
     $checklistItems = DB::connection('requirements')->table('honorariachecklist')->get();
 
     // Return data as JSON
@@ -74,12 +66,12 @@ Route::get('/fetch-honorariachecklist', function () {
 });
 
 // Fetch requirements for a specific SARO or all requirements if no saro_no is provided
-Route::get('/fetch-procurement-ilcdb', function (Request $request) {
+Route::get('/fetch-procurement-click', function (Request $request) {
     $saroNo = $request->query('saro_no'); // Get the saro_no from the request
     $year = $request->query('year'); // Get the year from the request
 
     // Fetch procurement data from the 'procurement' table
-    $procurements = DB::connection('ilcdb')
+    $procurements = DB::connection('click')
         ->table('procurement')
         ->select('procurement_id', 'activity', 'saro_no', 'year', 'procurement_category') // Include procurement_category
         ->orderBy('procurement_id', 'desc');
@@ -98,12 +90,12 @@ Route::get('/fetch-procurement-ilcdb', function (Request $request) {
     $procurements = $procurements->get();
 
     // Fetch procurement form data (status, unit) for regular procurement
-    $procurementForms = DB::connection('ilcdb')->table('procurement_form')->get();
+    $procurementForms = DB::connection('click')->table('procurement_form')->get();
 
     // Fetch honoraria form data (status, unit) for honoraria category procurements
-    $honorariaForms = DB::connection('ilcdb')->table('honoraria_form')->get();
+    $honorariaForms = DB::connection('click')->table('honoraria_form')->get();
 
-    $otherexpenseForms = DB::connection('ilcdb')->table('otherexpense_form')->get();
+    $otherexpenseForms = DB::connection('click')->table('otherexpense_form')->get();
 
     // Merge procurement data with form data
     $mergedData = $procurements->map(function ($procurement) use ($procurementForms, $honorariaForms, $otherexpenseForms) {
@@ -138,8 +130,8 @@ Route::get('/fetch-procurement-ilcdb', function (Request $request) {
 
 
 
-//ILCDB SEARCH PROCUREMENTS
-Route::get('/search-procurement-ilcdb', function (Request $request) {
+//click SEARCH PROCUREMENTS
+Route::get('/search-procurement-click', function (Request $request) {
     $query = $request->query('query');
 
     // Check if query exists before proceeding
@@ -149,7 +141,7 @@ Route::get('/search-procurement-ilcdb', function (Request $request) {
 
     try {
         // Perform the search using the provided query parameter
-        $procurements = DB::connection('ilcdb')
+        $procurements = DB::connection('click')
             ->table('procurement')
             ->select('procurement_id', 'activity')
             ->where('procurement_id', 'like', "%{$query}%")
@@ -158,13 +150,13 @@ Route::get('/search-procurement-ilcdb', function (Request $request) {
             ->get();
 
         // Fetch procurement form data (status, unit) for regular procurement
-        $procurementForms = DB::connection('ilcdb')->table('procurement_form')->get();
+        $procurementForms = DB::connection('click')->table('procurement_form')->get();
 
         // Fetch honoraria form data (status, unit) for honoraria category procurements
-        $honorariaForms = DB::connection('ilcdb')->table('honoraria_form')->get();
+        $honorariaForms = DB::connection('click')->table('honoraria_form')->get();
 
         // Fetch other expense form data (status, unit) for other expense category procurements
-        $otherexpenseForms = DB::connection('ilcdb')->table('otherexpense_form')->get();
+        $otherexpenseForms = DB::connection('click')->table('otherexpense_form')->get();
 
         // Merge procurement data with form data
         $mergedData = $procurements->map(function ($procurement) use ($procurementForms, $honorariaForms, $otherexpenseForms) {
@@ -189,27 +181,28 @@ Route::get('/search-procurement-ilcdb', function (Request $request) {
     }
 });
 
-// ILCDB POST REQUESTS
-Route::any('/add-saro-ilcdb', [IlcdbSaroController::class, 'addSaro'])->name('add-saro-ilcdb');
-Route::any('/add-procurement-ilcdb', [IlcdbProcurementController::class, 'addProcurement'])->name('addProcurement');
-Route::get('/fetch-procurement-details', [IlcdbProcurementController::class, 'fetchProcurementDetails'])->name('fetchProcurementDetails');
-Route::post('/procurement/update', [IlcdbProcurementFormController::class, 'update']);
-Route::get('/fetch-combined-procurement', [IlcdbProcurementController::class, 'fetchCombinedProcurementData']);
-Route::post('/honoraria/update', [IlcdbHonorariaFormController::class, 'updateHonoraria']);
-Route::post('/otherexpense/update', [IlcdbOtherExpenseFormController::class, 'updateOtherExpense']);
-Route::get('/fetch-combined-procurement-data', [IlcdbProcurementController::class, 'fetchCombinedProcurementData']);
-Route::post('/requirements/upload', [IlcdbHonorariaFormController::class, 'upload'])->name('requirements.upload');
-Route::get('/overdue-procurements', [IlcdbProcurementController::class, 'getOverdueProcurements']);
-Route::get('/requirements/{procurement_id}', [IlcdbHonorariaFormController::class, 'getUploadedFiles']);
-Route::post('/otherexpense/upload', [IlcdbOtherExpenseFormController::class, 'upload'])->name('otherexpense.upload');
-Route::get('/otherexpense/requirements/{procurement_id}', [IlcdbOtherExpenseFormController::class, 'getUploadedFiles']);
-Route::post('/procurement/upload', [IlcdbProcurementFormController::class, 'upload'])->name('procurement.upload');
-Route::get('/procurement/requirements/{procurement_id}', [IlcdbProcurementFormController::class, 'getUploadedFiles']);
-Route::get('/uploadedHonorariaFilesCheck/{procurement_id}', [IlcdbHonorariaFormController::class, 'uploadedFilesCheck']);
-Route::get('/uploadedTravelExpenseFileCheck/{procurement_id}', [IlcdbOtherExpenseFormController::class, 'uploadedFilesCheck']);
-Route::get('/uploadedProcurementFilesCheck/{procurement_id}', [IlcdbProcurementFormController::class, 'uploadedFilesCheck']);
-Route::post('/save-ntca', [IlcdbSaroController::class, 'saveNTCA']);
-Route::get('/ntca-breakdown/{ntcaNo}', [IlcdbSaroController::class, 'getNTCABreakdown']);
-Route::get('/fetch-ntca-by-saro/{saroNo}', [IlcdbSaroController::class, 'fetchNTCABySaro']);
-Route::get('/ntca-balance/{ntcaNo}', [IlcdbSaroController::class, 'getNTCABalanceForCurrentQuarter']);
-Route::get('/check-overdue',[IlcdbProcurementController::class,'getOverdueProcurements']);
+// click POST REQUESTS
+Route::any('/add-saro-click', [clickSaroController::class, 'addSaro'])->name('add-saro-click');
+Route::any('/add-procurement-click', [clickProcurementController::class, 'addProcurement'])->name('addProcurement');
+Route::get('/fetch-procurement-details', [clickProcurementController::class, 'fetchProcurementDetails'])->name('fetchProcurementDetails');
+Route::post('/procurement/update', [clickProcurementFormController::class, 'update']);
+Route::get('/fetch-combined-procurement', [clickProcurementController::class, 'fetchCombinedProcurementData']);
+Route::post('/honoraria/update', [clickHonorariaFormController::class, 'updateHonoraria']);
+Route::post('/otherexpense/update', [clickOtherExpenseFormController::class, 'updateOtherExpense']);
+Route::get('/fetch-combined-procurement-data', [clickProcurementController::class, 'fetchCombinedProcurementData']);
+Route::post('/requirements/upload', [clickHonorariaFormController::class, 'upload'])->name('requirements.upload');
+Route::get('/overdue-procurements', [clickProcurementController::class, 'getOverdueProcurements']);
+Route::get('/requirements/{procurement_id}', [clickHonorariaFormController::class, 'getUploadedFiles']);
+Route::post('/otherexpense/upload', [clickOtherExpenseFormController::class, 'upload'])->name('otherexpense.upload');
+Route::get('/otherexpense/requirements/{procurement_id}', [clickOtherExpenseFormController::class, 'getUploadedFiles']);
+Route::post('/procurement/upload', [clickProcurementFormController::class, 'upload'])->name('procurement.upload');
+Route::get('/procurement/requirements/{procurement_id}', [clickProcurementFormController::class, 'getUploadedFiles']);
+Route::get('/uploadedHonorariaFilesCheck/{procurement_id}', [clickHonorariaFormController::class, 'uploadedFilesCheck']);
+Route::get('/uploadedTravelExpenseFileCheck/{procurement_id}', [clickOtherExpenseFormController::class, 'uploadedFilesCheck']);
+Route::get('/uploadedProcurementFilesCheck/{procurement_id}', [clickProcurementFormController::class, 'uploadedFilesCheck']);
+Route::post('/save-ntca', [clickSaroController::class, 'saveNTCA']);
+Route::get('/ntca-breakdown/{ntcaNo}', [clickSaroController::class, 'getNTCABreakdown']);
+Route::get('/fetch-ntca-by-saro/{saroNo}', [clickSaroController::class, 'fetchNTCABySaro']);
+Route::get('/ntca-balance/{ntcaNo}', [clickSaroController::class, 'getNTCABalanceForCurrentQuarter']);
+Route::get('/check-overdue',[clickProcurementController::class,'getOverdueProcurements']);
+});

@@ -92,6 +92,36 @@ return [
             'engine' => null,
         ],
 
+        'click' => [
+            'driver' => 'mysql',
+            'host' => env('CLICK_HOST', '127.0.0.1'),
+            'port' => env('CLICK_PORT', '3306'),
+            'database' => env('CLICK_DATABASE', 'click'),
+            'username' => env('CLICK_USERNAME', 'root'),
+            'password' => env('CLICK_PASSWORD', ''),
+            'unix_socket' => env('CLICK_SOCKET', ''),
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+            'prefix' => '',
+            'strict' => true,
+            'engine' => null,
+        ],
+
+        'spark' => [
+            'driver' => 'mysql',
+            'host' => env('SPARK_HOST', '127.0.0.1'),
+            'port' => env('SPARK_PORT', '3306'),
+            'database' => env('SPARK_DATABASE', 'spark'),
+            'username' => env('SPARK_USERNAME', 'root'),
+            'password' => env('SPARK_PASSWORD', ''),
+            'unix_socket' => env('SPARK_SOCKET', ''),
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+            'prefix' => '',
+            'strict' => true,
+            'engine' => null,
+        ],
+
         'requirements' => [
             'driver' => 'mysql',
             'host' => env('REQUIREMENTS_HOST', '127.0.0.1'),
