@@ -6,8 +6,11 @@ function getCurrentQuarter(ntca) {
     return null; // No quarter has a value
 }
 
-function fetchAndRenderSaroData(apiUrl, panelSelector, balanceSelector, procurementApiUrl, ntcaApiUrl) {
-    fetch(apiUrl)
+function fetchAndRenderSaroData(apiUrl, panelSelector, balanceSelector, procurementApiUrl, ntcaApiUrl, year = '') {
+    // Append the year as a query parameter if provided
+    const urlWithYear = year ? `${apiUrl}?year=${year}` : apiUrl;
+
+    fetch(urlWithYear)
         .then(response => response.json())
         .then(data => {
             const panel = document.querySelector(panelSelector);
@@ -20,13 +23,14 @@ function fetchAndRenderSaroData(apiUrl, panelSelector, balanceSelector, procurem
                     saroElement.textContent = saro.saro_no;
                     saroElement.style.margin = '5px 0';
                     saroElement.style.padding = '5px';
+                    saroElement.setAttribute('data-saro-no', saro.saro_no); // Attach SARO number
                     saroElement.setAttribute('data-bs-toggle', 'tooltip');
                     saroElement.setAttribute('data-bs-placement', 'right');
                     saroElement.setAttribute('title', `Description: ${saro.description}`);
-                    saroElement.addEventListener('click', function() {
+                    saroElement.addEventListener('click', function () {
                         remainingBalance.textContent = `₱${Number(saro.current_budget).toLocaleString()}`;
-                        fetchProcurementData(saro.saro_no, procurementApiUrl);
-                        fetchNTCAForSaro(saro.saro_no, ntcaApiUrl); // Pass the NTCA API URL
+                        fetchProcurementData(saro.saro_no, procurementApiUrl, 'all'); // Fetch procurement data for the selected SARO
+                        fetchNTCAForSaro(saro.saro_no, ntcaApiUrl); // Fetch NTCA data for the selected SARO
                     });
                     panel.appendChild(saroElement);
                 });
@@ -42,6 +46,45 @@ function fetchAndRenderSaroData(apiUrl, panelSelector, balanceSelector, procurem
             }
         })
         .catch(error => console.error('Error fetching SARO data:', error));
+}
+
+function filterSaroByYear(year) {
+    // Call fetchAndRenderSaroData for each module with the selected year
+    fetchAndRenderSaroData(
+        '/api/fetch-saro-ilcdb', // SARO API URL for ILCDB
+        '.panel.ilcdb',          // Panel selector for ILCDB
+        '.balance-box p',        // Balance selector
+        '/api/fetch-procurement-ilcdb', // Procurement API URL for ILCDB
+        '/api/fetch-ntca-by-saro', // NTCA API URL
+        year                     // Selected year
+    );
+
+    fetchAndRenderSaroData(
+        '/api/dtc/fetch-saro-dtc', // SARO API URL for DTC
+        '.panel.dtc',          // Panel selector for DTC
+        '.balance-box p',      // Balance selector
+        '/api/dtc/fetch-procurement-dtc', // Procurement API URL for DTC
+        '/api/dtc/fetch-ntca-by-saro', // NTCA API URL
+        year                   // Selected year
+    );
+
+    fetchAndRenderSaroData(
+        '/api/click/fetch-saro-click', // SARO API URL for CLICK
+        '.panel.project-click',  // Panel selector for CLICK
+        '.balance-box p',        // Balance selector
+        '/api/click/fetch-procurement-click', // Procurement API URL for CLICK
+        '/api/click/fetch-ntca-by-saro', // NTCA API URL
+        year                     // Selected year
+    );
+
+    fetchAndRenderSaroData(
+        '/api/spark/fetch-saro-spark', // SARO API URL for SPARK
+        '.panel.spark',          // Panel selector for SPARK
+        '.balance-box p',        // Balance selector
+        '/api/spark/fetch-procurement-spark', // Procurement API URL for SPARK
+        '/api/spark/fetch-ntca-by-saro', // NTCA API URL
+        year                     // Selected year
+    );
 }
 
 function fetchProcurementData(saroNo, baseApiUrl) {
