@@ -1,23 +1,34 @@
 // Fetch SARO data from the API
 // Wait for the window to load
-window.onload = function() {
+window.onload = function () {
     // Initially load all SAROs when the page loads (with no balance)
     fetchSaroData('');
-};
+};S
 
 // Function to fetch and display SARO list based on the selected year or "all"
 function filterSaroByYear(year) {
     // Reset the balance and SARO info
-    document.getElementById('remainingBalance').textContent = '₱0';
-    document.getElementById('currentViewingSaro').textContent = '';
+    const remainingBalance = document.getElementById('remainingBalance');
+    const currentViewingSaro = document.getElementById('currentViewingSaro');
+    const ntcaList = document.getElementById('ntcaBreakdownList');
+    const ntcaLabelElement = document.getElementById('ntcaLabel');
+    const ntcaBalanceElement = document.getElementById('ntcaBalance');
+
+    if (remainingBalance) remainingBalance.textContent = '₱0';
+    if (currentViewingSaro) currentViewingSaro.textContent = '';
+    if (ntcaList) ntcaList.innerHTML = '';
+    if (ntcaLabelElement) ntcaLabelElement.textContent = 'NTCA:';
+    if (ntcaBalanceElement) ntcaBalanceElement.textContent = '₱0';
 
     // URL for fetching SARO data (by year or all)
-    const url = year === '' ? '/api/dtc/fetch-saro-dtc' : `/api/dtc/fetch-saro-dtc?year=${year}`;
+    const url = year === '' ? '/api/fetch-saro-ilcdb' : `/api/fetch-saro-ilcdb?year=${year}`;
 
     fetch(url)
         .then(response => response.json())
         .then(data => {
             const saroList = document.querySelector('.saro-list');
+            if (!saroList) return;
+
             saroList.innerHTML = ''; // Clear previous entries
 
             if (data.length > 0) {
@@ -26,9 +37,10 @@ function filterSaroByYear(year) {
                     listItem.classList.add('list-group-item');
                     listItem.textContent = `${saro.saro_no}`;
 
-                    listItem.addEventListener('click', function() {
+                    listItem.addEventListener('click', function () {
                         displayCurrentBudget(saro);
                         fetchProcurementForSaro(saro.saro_no, year);
+                        fetchNTCAForSaro(saro.saro_no); // Fetch NTCA for the selected SARO
                         highlightSelectedItem(this);
                     });
 
@@ -45,4 +57,86 @@ function filterSaroByYear(year) {
 
     // Fetch procurement data for the selected year
     fetchProcurementForYear(year);
+}
+
+function fetchNTCAForSaro(saroNo) {
+    fetch(`/api/fetch-ntca-by-saro/${saroNo}`)
+        .then(response => response.json())
+        .then(data => {
+            const ntcaList = document.getElementById('ntcaBreakdownList');
+            const ntcaLabelElement = document.getElementById('ntcaLabel');
+            const ntcaBalanceElement = document.getElementById('ntcaBalance');
+            if (!ntcaList || !ntcaLabelElement || !ntcaBalanceElement) return;
+
+            ntcaList.innerHTML = ''; // Clear existing NTCA records
+
+            if (data.success) {
+                data.ntca.forEach(ntca => {
+                    // Determine the current quarter dynamically
+                    const currentQuarter = getCurrentQuarter(ntca);
+
+                    // Update NTCA container label and balance for the current quarter
+                    ntcaLabelElement.textContent = `NTCA (${ntca.ntca_no} - ${currentQuarter ? currentQuarter.replace('_q', ' Quarter') : 'No Quarter'})`;
+                    const currentQuarterBalance = currentQuarter ? ntca[currentQuarter] : 0;
+                    ntcaBalanceElement.textContent = currentQuarterBalance
+                        ? `₱${currentQuarterBalance.toLocaleString()}`
+                        : '₱0';
+
+                    // Add NTCA breakdown to the list
+                    ntcaList.innerHTML += `
+                    <li class="list-group-item d-flex justify-content-between">
+                        <strong>Unassigned Budget for NTCA (${ntca.ntca_no}):</strong>
+                        <span class="fw-bold">
+                            ${ntca.current_budget ? "₱" + ntca.current_budget.toLocaleString() : "<em style='color:#777;'>Not yet allocated</em>"}
+                        </span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between">
+                        First Quarter: 
+                        <span class="fw-bold">
+                            ${ntca.first_q ? "₱" + ntca.first_q.toLocaleString() : "<em style='color:#777;'>Not yet allocated</em>"}
+                        </span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between">
+                        Second Quarter: 
+                        <span class="fw-bold">
+                            ${ntca.second_q ? "₱" + ntca.second_q.toLocaleString() : "<em style='color:#777;'>Not yet allocated</em>"}
+                        </span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between">
+                        Third Quarter: 
+                        <span class="fw-bold">
+                            ${ntca.third_q ? "₱" + ntca.third_q.toLocaleString() : "<em style='color:#777;'>Not yet allocated</em>"}
+                        </span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between">
+                        Fourth Quarter: 
+                        <span class="fw-bold">
+                            ${ntca.fourth_q ? "₱" + ntca.fourth_q.toLocaleString() : "<em style='color:#777;'>Not yet allocated</em>"}
+                        </span>
+                    </li>
+                `;
+
+                    // Fetch breakdown for the NTCA
+                    fetchNTCABreakdown(ntca.ntca_no);
+                });
+            } else {
+                ntcaList.innerHTML = `
+                    <li class="list-group-item text-danger">${data.message}</li>
+                `;
+                ntcaLabelElement.textContent = 'NTCA:';
+                ntcaBalanceElement.textContent = '₱0';
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching NTCA records:', error);
+        });
+}
+
+// Helper function to determine the most recent quarter with a value
+function getCurrentQuarter(ntca) {
+    if (ntca.fourth_q > 0) return 'fourth_q';
+    if (ntca.third_q > 0) return 'third_q';
+    if (ntca.second_q > 0) return 'second_q';
+    if (ntca.first_q > 0) return 'first_q';
+    return null; // No quarter has a value
 }
