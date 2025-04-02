@@ -134,9 +134,9 @@ function fetchNTCAForSaro(saroNo) {
 
 // Helper function to determine the most recent quarter with a value
 function getCurrentQuarter(ntca) {
-    if (ntca.fourth_q > 0) return 'fourth_q';
-    if (ntca.third_q > 0) return 'third_q';
-    if (ntca.second_q > 0) return 'second_q';
-    if (ntca.first_q > 0) return 'first_q';
+    if (ntca.fourth_q > 0) return '4th Quarter';
+    if (ntca.third_q > 0) return '3rd Quarter';
+    if (ntca.second_q > 0) return '2nd Quarter';
+    if (ntca.first_q > 0) return '1st Quarter';
     return null; // No quarter has a value
 }
