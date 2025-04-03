@@ -31,7 +31,7 @@ main {
 
 aside {
     width: 23%;
-    background: #d9d9d9;
+    
     padding: 20px;
     min-width: 250px;
     flex-shrink: 0;
@@ -78,7 +78,7 @@ section {
     background-color: #000000;
     color: #ffffff;
     padding: 10px;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
     border: 1px solid #ddd;
     text-align: left;
 }
