@@ -328,6 +328,80 @@ function getStatusClass(status) {
     }
 }
 
+document.addEventListener('click', function (event) {
+    const row = event.target.closest('tr'); // Get the clicked row
+    if (row && row.dataset.procurementId) {
+        openProcurementModal({ procurement_id: row.dataset.procurementId });
+    }
+});
+
+let bootstrapModalInstance = null;
+
+// Function to open modal and display procurement details
+function openProcurementModal(item) {
+    const procurementId = item.procurement_id; // Get procurement ID from clicked item
+    const modal = document.getElementById('procurementDetailsModal');
+
+    if (!modal) {
+        console.error("Modal element not found.");
+        return;
+    }
+
+    // Fetch detailed data from the API using the procurement_id
+    const url = `/api/fetch-procurement-details?procurement_id=${procurementId}`;
+
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            if (data.message) {
+                alert(data.message); // Show error if procurement is not found
+            } else {
+                // Populate modal fields
+                document.getElementById('modalProcurementCategory').textContent = data.procurement_category || 'N/A';
+                document.getElementById('modalProcurementNo').textContent = data.procurement_id || 'N/A';
+                document.getElementById('modalSaroNo').textContent = data.saro_no || 'N/A';
+                document.getElementById('modalNTCANo').textContent = data.ntca_no || 'N/A';
+                document.getElementById('modalQuarter').textContent = data.quarter || 'N/A';
+                document.getElementById('modalPurchaseRequest').textContent = data.pr_amount || 'N/A';
+                document.getElementById('modalYear').textContent = data.year || 'N/A';
+                document.getElementById('modalDescription').textContent = data.description || 'N/A';
+                document.getElementById('modalActivity').textContent = data.activity || 'N/A';
+
+                // Change the label for "Activity" based on the procurement category
+                const activityLabel = document.getElementById('modalActivityLabel');
+                const category = data.procurement_category.toLowerCase();
+                console.log("Procurement category:", category); // Debugging log
+
+                if (category === 'honoraria') {
+                    activityLabel.textContent = 'Speaker:';
+                } else if (category === 'daily travel expense') {
+                    activityLabel.textContent = 'Traveller:';
+                } else {
+                    activityLabel.textContent = 'Activity:';
+                }
+
+                // Initialize Bootstrap modal only once
+                if (!bootstrapModalInstance) {
+                    bootstrapModalInstance = new bootstrap.Modal(modal);
+                }
+
+                // Show the modal
+                bootstrapModalInstance.show();
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching procurement details:', error);
+            alert('Failed to load procurement details.');
+        });
+}
+
+// Ensure modal closes when the close button is clicked
+document.getElementById('closeModalBtn').addEventListener('click', function () {
+    if (bootstrapModalInstance) {
+        bootstrapModalInstance.hide();
+    }
+});
+
 function initializeTooltips() {
     const existingTooltips = document.querySelectorAll('[data-bs-toggle="tooltip"]');
     existingTooltips.forEach(tooltipTriggerEl => {
