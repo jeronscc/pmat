@@ -28,6 +28,7 @@ function fetchAndRenderSaroData(apiUrl, panelSelector, balanceSelector, procurem
                     saroElement.setAttribute('data-bs-placement', 'right');
                     saroElement.setAttribute('title', `Description: ${saro.description}`);
                     saroElement.addEventListener('click', function () {
+                        document.getElementById("currentSaroNo").textContent = `${saro.saro_no}: `;
                         remainingBalance.textContent = `₱${Number(saro.current_budget).toLocaleString()}`;
                         fetchProcurementData(saro.saro_no, procurementApiUrl, 'all'); // Fetch procurement data for the selected SARO
                         fetchNTCAForSaro(saro.saro_no, ntcaApiUrl); // Fetch NTCA data for the selected SARO
@@ -253,7 +254,7 @@ function fetchNTCAForSaro(saroNo, ntcaApiUrl) {
                     const currentQuarter = getCurrentQuarter(ntca);
 
                     // Update NTCA container label and balance for the current quarter
-                    ntcaLabelElement.textContent = `NTCA (${ntca.ntca_no} - ${currentQuarter ? currentQuarter.replace('_q', ' Quarter') : 'No Quarter'})`;
+                    ntcaLabelElement.textContent = `NTCA (${ntca.ntca_no} - ${currentQuarter ? currentQuarter.replace('_q', ' Quarter') : 'No Quarter'}): `;
                     const currentQuarterBalance = currentQuarter ? ntca[currentQuarter] : 0;
                     ntcaBalanceElement.textContent = currentQuarterBalance
                         ? `₱${Number(currentQuarterBalance).toLocaleString()}`
