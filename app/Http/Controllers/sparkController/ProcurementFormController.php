@@ -179,7 +179,6 @@ public function update(Request $request)
         });
 
         return response()->json([
-            'message' => 'Procurement form updated successfully!',
             'unit'    => $unit,
             'status'  => $status
         ]);
@@ -267,7 +266,6 @@ public function update(Request $request)
     
             return response()->json([
                 'success' => true,
-                'message' => 'Files uploaded successfully: ' . implode(', ', $uploads),
             ]);
     
         } catch (\Exception $e) {

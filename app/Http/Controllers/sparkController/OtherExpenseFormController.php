@@ -135,7 +135,6 @@ class OtherExpenseFormController extends Controller
     
             return response()->json([
                 'success' => true,
-                'message' => 'Daily Travel Expense form updated successfully!',
                 'status'  => $status . (($status === 'Ongoing' || $status === 'Pending') ? " at $unit" : ''),
             ]);
     
@@ -250,7 +249,6 @@ class OtherExpenseFormController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => 'Files uploaded successfully: ' . implode(', ', $uploads),
                 'files'   => $uploadedFiles, // ✅ Return updated files
             ]);
 
