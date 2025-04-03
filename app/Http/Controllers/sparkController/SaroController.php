@@ -93,7 +93,6 @@ class SaroController extends Controller
                 'success' => true,
                 'message' => 'NTCA saved successfully.',
             ]);
-            
         } catch (\Exception $e) {
             Log::error('Failed to save NTCA: ' . $e->getMessage());
             return response()->json([

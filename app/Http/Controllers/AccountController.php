@@ -9,19 +9,19 @@ use Illuminate\Support\Facades\Hash;
 class AccountController extends Controller
 {
     public function index()
-{
-    $loggedInUserId = auth()->user()->user_id; // Get the logged-in Admin's user_id
+    {
+        $loggedInUserId = auth()->user()->user_id; // Get the logged-in Admin's user_id
 
-    $users = User::orderByRaw("
+        $users = User::orderByRaw("
         CASE 
             WHEN user_id = ? THEN 0  -- Logged-in Admin should be first
             WHEN role = 'Admin' THEN 1 
             ELSE 2 
         END", [$loggedInUserId])
-        ->get();
+            ->get();
 
-    return view('accounts', compact('users'));
-}
+        return view('accounts', compact('users'));
+    }
 
 
     public function store(Request $request)
@@ -52,29 +52,27 @@ class AccountController extends Controller
             'role' => 'required|string',
             'password' => 'nullable|string|min:6', // Password is optional but must be at least 6 characters
         ]);
-    
+
         $user = User::where('user_id', $request->user_id)->firstOrFail();
         $user->username = $request->username;
         $user->email = $request->email;
         $user->role = $request->role;
-    
+
         // Only update password if a new one is provided
         if ($request->filled('password')) {
             $user->password = Hash::make($request->password);
         }
-    
+
         $user->save();
-    
+
         return redirect()->back()->with('success', 'User updated successfully.');
     }
 
     public function destroy($user_id)
-{
-    $user = User::where('user_id', $user_id)->firstOrFail();
-    $user->delete();
+    {
+        $user = User::where('user_id', $user_id)->firstOrFail();
+        $user->delete();
 
-    return redirect()->back()->with('success', 'User deleted successfully.');
-}
-
-    
+        return redirect()->back()->with('success', 'User deleted successfully.');
+    }
 }

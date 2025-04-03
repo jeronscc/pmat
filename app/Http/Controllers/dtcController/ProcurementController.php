@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\dtcController;
 
 use App\Http\Controllers\Controller;
@@ -21,7 +22,7 @@ class ProcurementController extends Controller
                 'quarter'      => 'required',
                 'pr_year'      => 'required',
                 'activity'     => 'required',
-                'description'  => 'required',   
+                'description'  => 'required',
                 'pr_amount'    => 'required', // Add validation for pr_amount
             ]);
 
@@ -40,7 +41,7 @@ class ProcurementController extends Controller
 
             // Determine which table to insert into based on the category
             $category = strtolower(trim($request->input('category')));
-            
+
             if ($category === 'svp') {
                 // Insert into 'procurement_form' table
                 DB::connection('dtc')->table('procurement_form')->insert([
@@ -120,56 +121,55 @@ class ProcurementController extends Controller
     }
 
     public function fetchCombinedProcurementData(Request $request)
-{
-    try {
-        $year = $request->query('year');
-        $statusFilter = $request->query('status');
+    {
+        try {
+            $year = $request->query('year');
+            $statusFilter = $request->query('status');
 
-        // Fetch procurement data from the 'procurement' table (without status field)
-        $procurements = DB::connection('dtc')->table('procurement')
-            ->when($year, function ($query, $year) {
-                return $query->whereYear('created_at', $year);
-            })
-            ->get();
+            // Fetch procurement data from the 'procurement' table (without status field)
+            $procurements = DB::connection('dtc')->table('procurement')
+                ->when($year, function ($query, $year) {
+                    return $query->whereYear('created_at', $year);
+                })
+                ->get();
 
-        // Fetch procurement form data (status, unit) for regular procurement
-        $procurementForms = DB::connection('dtc')->table('procurement_form')->get();
+            // Fetch procurement form data (status, unit) for regular procurement
+            $procurementForms = DB::connection('dtc')->table('procurement_form')->get();
 
-        // Fetch honoraria form data (status, unit) for honoraria category procurements
-        $honorariaForms = DB::connection('dtc')->table('honoraria_form')->get();
+            // Fetch honoraria form data (status, unit) for honoraria category procurements
+            $honorariaForms = DB::connection('dtc')->table('honoraria_form')->get();
 
-        // Fetch other expense form data (status, unit) for other expense category procurements
-        $otherexpenseForms = DB::connection('dtc')->table('otherexpense_form')->get();
+            // Fetch other expense form data (status, unit) for other expense category procurements
+            $otherexpenseForms = DB::connection('dtc')->table('otherexpense_form')->get();
 
-        // Merge procurement data with form data
-        $mergedData = $procurements->map(function ($procurement) use ($procurementForms, $honorariaForms, $otherexpenseForms) {
-            // Try fetching the corresponding form for honoraria, procurement, or other expense
-            $form = $honorariaForms->firstWhere('procurement_id', $procurement->procurement_id) ??
+            // Merge procurement data with form data
+            $mergedData = $procurements->map(function ($procurement) use ($procurementForms, $honorariaForms, $otherexpenseForms) {
+                // Try fetching the corresponding form for honoraria, procurement, or other expense
+                $form = $honorariaForms->firstWhere('procurement_id', $procurement->procurement_id) ??
                     $procurementForms->firstWhere('procurement_id', $procurement->procurement_id) ??
                     $otherexpenseForms->firstWhere('procurement_id', $procurement->procurement_id);
 
-            return [
-                'procurement_id' => $procurement->procurement_id,
-                'activity' => $procurement->activity,
-                'status' => $form && !empty($form->status) ? $form->status : 'No Status', // ✅ Ensure "No Status" appears
-                'unit' => $form && !empty($form->unit) ? $form->unit : 'No Unit', // ✅ Ensure "No Unit" appears
-            ];
-        });
-
-        // ✅ Only apply status filter if a specific status is selected (not "all")
-        if (!empty($statusFilter) && strtolower($statusFilter) !== 'all') {
-            $mergedData = $mergedData->filter(function ($item) use ($statusFilter) {
-                return strtolower($item['status']) === strtolower($statusFilter);
+                return [
+                    'procurement_id' => $procurement->procurement_id,
+                    'activity' => $procurement->activity,
+                    'status' => $form && !empty($form->status) ? $form->status : 'No Status', // ✅ Ensure "No Status" appears
+                    'unit' => $form && !empty($form->unit) ? $form->unit : 'No Unit', // ✅ Ensure "No Unit" appears
+                ];
             });
+
+            // ✅ Only apply status filter if a specific status is selected (not "all")
+            if (!empty($statusFilter) && strtolower($statusFilter) !== 'all') {
+                $mergedData = $mergedData->filter(function ($item) use ($statusFilter) {
+                    return strtolower($item['status']) === strtolower($statusFilter);
+                });
+            }
+
+            // ✅ Ensure all procurements are returned if "all" is selected
+            return response()->json($mergedData->values()->all());
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error fetching procurement data: ' . $e->getMessage()], 500);
         }
-
-        // ✅ Ensure all procurements are returned if "all" is selected
-        return response()->json($mergedData->values()->all());
-
-    } catch (\Exception $e) {
-        return response()->json(['error' => 'Error fetching procurement data: ' . $e->getMessage()], 500);
     }
-}
 
     public function getOverdueProcurements()
     {
@@ -199,9 +199,7 @@ class ProcurementController extends Controller
             FROM otherexpense_form 
             WHERE status = 'Overdue'
         ");
-    
+
         return response()->json($overdueProcurements);
     }
 }
-
-

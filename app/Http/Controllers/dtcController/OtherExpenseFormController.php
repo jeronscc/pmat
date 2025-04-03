@@ -11,15 +11,15 @@ use Illuminate\Support\Facades\Log;
 class OtherExpenseFormController extends Controller
 {
     public function showForm(Request $request)
-    {  
+    {
         $prNumber = $request->query('pr_number');
         $activity = $request->query('activity');
 
         // Fetch or create record in otherexpense_form
         $record = DB::connection('dtc')
-                    ->table('otherexpense_form')
-                    ->where('procurement_id', $prNumber)
-                    ->first();
+            ->table('otherexpense_form')
+            ->where('procurement_id', $prNumber)
+            ->first();
 
         if (!$record) {
             DB::connection('dtc')->table('otherexpense_form')->insert([
@@ -27,9 +27,9 @@ class OtherExpenseFormController extends Controller
                 'activity'       => $activity,
             ]);
             $record = DB::connection('dtc')
-                        ->table('otherexpense_form')
-                        ->where('procurement_id', $prNumber)
-                        ->first();
+                ->table('otherexpense_form')
+                ->where('procurement_id', $prNumber)
+                ->first();
         }
 
         // Fetch procurement details
@@ -48,9 +48,9 @@ class OtherExpenseFormController extends Controller
 
             // Re-fetch the record
             $record = DB::connection('dtc')
-                        ->table('otherexpense_form')
-                        ->where('procurement_id', $prNumber)
-                        ->first();
+                ->table('otherexpense_form')
+                ->where('procurement_id', $prNumber)
+                ->first();
         }
 
         return view('dtcDTE', [
@@ -70,20 +70,20 @@ class OtherExpenseFormController extends Controller
             'dt_received'    => 'nullable|date',
             'budget_spent'   => 'nullable|numeric',
         ]);
-    
+
         try {
             Log::info("Received Data: ", $validatedData);
-    
+
             // Fetch the existing record from otherexpense_form
             $record = DB::connection('dtc')->table('otherexpense_form')
-                        ->where('procurement_id', $validatedData['procurement_id'])
-                        ->first();
-    
+                ->where('procurement_id', $validatedData['procurement_id'])
+                ->first();
+
             $unit = $record->unit ?? '';
             if ($validatedData['dt_submitted']) {
                 $unit = 'Budget Unit';
             }
-    
+
             // Determine status based on provided dates and budget_spent
             $status = match (true) {
                 ($validatedData['dt_submitted'] && !$validatedData['dt_received']) => 'Ongoing',
@@ -91,9 +91,9 @@ class OtherExpenseFormController extends Controller
                 ($validatedData['budget_spent']) => 'Done',
                 default => 'Done',
             };
-    
+
             Log::info("Calculated Status: " . $status);
-    
+
             DB::connection('dtc')->transaction(function () use ($validatedData, $status, $unit, $record) {
                 // Update the otherexpense_form record
                 DB::connection('dtc')->table('otherexpense_form')
@@ -109,11 +109,11 @@ class OtherExpenseFormController extends Controller
                         'status'       => $status,
                         'unit'         => $unit,
                     ]);
-    
+
                 // Retrieve quarter and saro_no from the record
                 $quarter = $record->quarter ?? null;
                 $saroNo  = $record->saro_no ?? null;
-                
+
                 if ($saroNo && $quarter && !empty($validatedData['budget_spent'])) {
                     // Map quarter value to the corresponding column in the ntca table
                     $column = match ($quarter) {
@@ -123,7 +123,7 @@ class OtherExpenseFormController extends Controller
                         'Fourth Quarter' => 'fourth_q',
                         default          => null,
                     };
-    
+
                     if ($column) {
                         // Deduct budget_spent from the corresponding quarter column in ntca
                         DB::connection('dtc')->table('ntca')
@@ -132,13 +132,12 @@ class OtherExpenseFormController extends Controller
                     }
                 }
             });
-    
+
             return response()->json([
                 'success' => true,
                 'message' => 'Daily Travel Expense form updated successfully!',
                 'status'  => $status . (($status === 'Ongoing' || $status === 'Pending') ? " at $unit" : ''),
             ]);
-    
         } catch (\Exception $e) {
             Log::error('otherexpense update error: ' . $e->getMessage());
             return response()->json([
@@ -152,31 +151,31 @@ class OtherExpenseFormController extends Controller
     public function uploadedFilesCheck($procurement_id)
     {
         $requiredFiles = [
-            'orsFile', 
-            'dvFile', 
-            'travelOrderFile', 
-            'appearanceFile', 
-            'reportFile', 
-            'itineraryFile', 
-            'certFile', 
+            'orsFile',
+            'dvFile',
+            'travelOrderFile',
+            'appearanceFile',
+            'reportFile',
+            'itineraryFile',
+            'certFile',
         ];
 
         $uploadedFiles = DB::connection('dtc')->table('requirements')
             ->where('procurement_id', $procurement_id)
-            ->pluck('file_path','requirement_name')
+            ->pluck('file_path', 'requirement_name')
             ->toArray();
         $missingFiles = array_diff($requiredFiles, array_keys($uploadedFiles));
 
-        $requirementsStatus = empty($missingFiles)? 1 : 0;
+        $requirementsStatus = empty($missingFiles) ? 1 : 0;
 
         DB::connection('dtc')->table('otherexpense_form')
             ->where('procurement_id', $procurement_id)
             ->update(['requirements' => $requirementsStatus]);
 
         return response()->json([
-            'success'=> true,
-            'missingFiles'=> $missingFiles,
-            'requirementsStatus'=> $requirementsStatus
+            'success' => true,
+            'missingFiles' => $missingFiles,
+            'requirementsStatus' => $requirementsStatus
         ]);
     }
 
@@ -191,8 +190,13 @@ class OtherExpenseFormController extends Controller
             }
 
             $requiredFiles = [
-                'orsFile', 'dvFile', 'travelOrderFile', 'appearanceFile', 'reportFile',
-                'itineraryFile', 'certFile'
+                'orsFile',
+                'dvFile',
+                'travelOrderFile',
+                'appearanceFile',
+                'reportFile',
+                'itineraryFile',
+                'certFile'
             ];
 
             $uploads = [];
@@ -213,7 +217,7 @@ class OtherExpenseFormController extends Controller
                     $filePath = "uploads/requirements/{$request->procurement_id}/" . $fileName;
                     $request->file($file)->move($uploadDir, $fileName);
 
-                     // Get the file size in bytes
+                    // Get the file size in bytes
                     $fileSize = filesize($uploadDir . '/' . $fileName);
                     // Delete existing file entry if it exists
                     DB::connection('dtc')->table('requirements')
@@ -253,7 +257,6 @@ class OtherExpenseFormController extends Controller
                 'message' => 'Files uploaded successfully: ' . implode(', ', $uploads),
                 'files'   => $uploadedFiles, // ✅ Return updated files
             ]);
-
         } catch (\Exception $e) {
             Log::error('File upload failed: ' . $e->getMessage());
 
@@ -275,7 +278,6 @@ class OtherExpenseFormController extends Controller
                 'success' => true,
                 'files' => $files,
             ]);
-
         } catch (\Exception $e) {
             Log::error('Failed to fetch uploaded files: ' . $e->getMessage());
 

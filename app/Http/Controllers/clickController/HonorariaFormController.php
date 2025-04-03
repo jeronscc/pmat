@@ -18,9 +18,9 @@ class HonorariaFormController extends Controller
 
         // Fetch or create record in honoraria_form
         $record = DB::connection('click')
-                    ->table('honoraria_form')
-                    ->where('procurement_id', $prNumber)
-                    ->first();
+            ->table('honoraria_form')
+            ->where('procurement_id', $prNumber)
+            ->first();
 
         if (!$record) {
             DB::connection('click')->table('honoraria_form')->insert([
@@ -28,9 +28,9 @@ class HonorariaFormController extends Controller
                 'activity'       => $activity,
             ]);
             $record = DB::connection('click')
-                        ->table('honoraria_form')
-                        ->where('procurement_id', $prNumber)
-                        ->first();
+                ->table('honoraria_form')
+                ->where('procurement_id', $prNumber)
+                ->first();
         }
 
         // Fetch procurement details
@@ -56,20 +56,20 @@ class HonorariaFormController extends Controller
             'dt_received'    => 'nullable|date',
             'budget_spent'   => 'nullable|numeric',
         ]);
-    
+
         try {
             Log::info("Received Data: ", $validatedData);
-    
+
             // Fetch existing record
             $record = DB::connection('click')->table('honoraria_form')
-                        ->where('procurement_id', $validatedData['procurement_id'])
-                        ->first();
-    
+                ->where('procurement_id', $validatedData['procurement_id'])
+                ->first();
+
             $unit = $record->unit ?? '';
             if ($validatedData['dt_submitted']) {
                 $unit = 'Budget Unit';
             }
-    
+
             // Determine status
             $status = match (true) {
                 (!$validatedData['dt_submitted'] && !$validatedData['dt_received']) => null,
@@ -78,9 +78,9 @@ class HonorariaFormController extends Controller
                 ($validatedData['budget_spent']) => 'Done',
                 default => 'Done',
             };
-    
+
             Log::info("Calculated Status: " . $status);
-    
+
             DB::connection('click')->transaction(function () use ($validatedData, $unit, $status, $record) {
                 // Update honoraria_form
                 DB::connection('click')->table('honoraria_form')
@@ -92,11 +92,11 @@ class HonorariaFormController extends Controller
                         'unit'         => $unit,
                         'status'       => $status,
                     ]);
-    
+
                 // Assuming that the honoraria_form record has a 'quarter' column and a 'saro_no' foreign key
                 $quarter = $record->quarter ?? null;
                 $saroNo  = $record->saro_no ?? null;
-                
+
                 if ($saroNo && $quarter && !empty($validatedData['budget_spent'])) {
                     $column = match ($quarter) {
                         'First Quarter'  => 'first_q',
@@ -105,7 +105,7 @@ class HonorariaFormController extends Controller
                         'Fourth Quarter' => 'fourth_q',
                         default          => null,
                     };
-    
+
                     if ($column) {
                         // Deduct the budget_spent from the respective quarter column in the ntca table
                         DB::connection('click')->table('ntca')
@@ -114,13 +114,12 @@ class HonorariaFormController extends Controller
                     }
                 }
             });
-    
+
             return response()->json([
                 'success' => true,
                 'message' => 'Honoraria form updated successfully!',
                 'status'  => $status . (($status === 'Ongoing' || $status === 'Pending') ? " at $unit" : ''),
             ]);
-    
         } catch (\Exception $e) {
             Log::error('Honoraria update error: ' . $e->getMessage());
             return response()->json([
@@ -161,7 +160,7 @@ class HonorariaFormController extends Controller
                     $filePath = "uploads/requirements/{$request->procurement_id}/" . $fileName;
                     $request->file($file)->move($uploadDir, $fileName);
 
-                     // Get the file size in bytes
+                    // Get the file size in bytes
                     $fileSize = filesize($uploadDir . '/' . $fileName);
                     // Delete existing file entry if it exists
                     DB::connection('click')->table('requirements')
@@ -201,7 +200,6 @@ class HonorariaFormController extends Controller
                 'message' => 'Files uploaded successfully: ' . implode(', ', $uploads),
                 'files'   => $uploadedFiles, // ✅ Return updated files
             ]);
-
         } catch (\Exception $e) {
             Log::error('File upload failed: ' . $e->getMessage());
 
@@ -223,7 +221,6 @@ class HonorariaFormController extends Controller
                 'success' => true,
                 'files' => $files,
             ]);
-
         } catch (\Exception $e) {
             Log::error('Failed to fetch uploaded files: ' . $e->getMessage());
 
@@ -237,40 +234,35 @@ class HonorariaFormController extends Controller
     public function uploadedFilesCheck($procurement_id)
     {
         $requiredFiles = [
-            'orsFile', 
-            'dvFile', 
-            'contractFile', 
-            'classificationFile', 
-            'reportFile', 
-            'attendanceFile', 
-            'resumeFile', 
-            'govidFile', 
-            'payslipFile', 
-            'bankFile', 
+            'orsFile',
+            'dvFile',
+            'contractFile',
+            'classificationFile',
+            'reportFile',
+            'attendanceFile',
+            'resumeFile',
+            'govidFile',
+            'payslipFile',
+            'bankFile',
             'certFile'
         ];
 
         $uploadedFiles = DB::connection('click')->table('requirements')
             ->where('procurement_id', $procurement_id)
-            ->pluck('file_path','requirement_name')
+            ->pluck('file_path', 'requirement_name')
             ->toArray();
         $missingFiles = array_diff($requiredFiles, array_keys($uploadedFiles));
 
-        $requirementsStatus = empty($missingFiles)? 1 : 0;
+        $requirementsStatus = empty($missingFiles) ? 1 : 0;
 
         DB::connection('click')->table('honoraria_form')
             ->where('procurement_id', $procurement_id)
             ->update(['requirements' => $requirementsStatus]);
 
         return response()->json([
-            'success'=> true,
-            'missingFiles'=> $missingFiles,
-            'requirementsStatus'=> $requirementsStatus
+            'success' => true,
+            'missingFiles' => $missingFiles,
+            'requirementsStatus' => $requirementsStatus
         ]);
-
-
-
     }
-
-    
 }
