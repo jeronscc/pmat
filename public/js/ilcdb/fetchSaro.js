@@ -84,7 +84,7 @@ function displayCurrentBudget(saro) {
     // Fetch NTCA balance and breakdown for the current quarter
     if (saro.ntca_no && saro.current_quarter) {
         fetchNTCABalance(saro.ntca_no, saro.current_quarter);
-       // fetchNTCABreakdown(saro.ntca_no);
+        fetchNTCABreakdown(saro.ntca_no);
     }
 }
 
