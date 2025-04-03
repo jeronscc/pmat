@@ -267,31 +267,31 @@ function fetchNTCAForSaro(saroNo, ntcaApiUrl) {
                     <li class="list-group-item d-flex justify-content-between">
                         <strong>Unassigned Budget for NTCA (${ntca.ntca_no}):</strong>
                         <span class="fw-bold">
-                            ${ntca.current_budget ? "₱" + ntca.current_budget.toLocaleString() : "<em style='color:#777;'>Not yet allocated</em>"}
+                            ${ntca.current_budget ? "₱" + Number(ntca.current_budget).toLocaleString() : "<em style='color:#777;'>Not yet allocated</em>"}
                         </span>
                     </li>
                     <li class="list-group-item d-flex justify-content-between">
                         First Quarter: 
                         <span class="fw-bold">
-                            ${ntca.first_q ? "₱" + ntca.first_q.toLocaleString() : "<em style='color:#777;'>Not yet allocated</em>"}
+                            ${ntca.first_q ? "₱" + Number(ntca.first_q).toLocaleString() : "<em style='color:#777;'>Not yet allocated</em>"}
                         </span>
                     </li>
                     <li class="list-group-item d-flex justify-content-between">
                         Second Quarter: 
                         <span class="fw-bold">
-                            ${ntca.second_q ? "₱" + ntca.second_q.toLocaleString() : "<em style='color:#777;'>Not yet allocated</em>"}
+                            ${ntca.second_q ? "₱" + Number(ntca.second_q).toLocaleString() : "<em style='color:#777;'>Not yet allocated</em>"}
                         </span>
                     </li>
                     <li class="list-group-item d-flex justify-content-between">
                         Third Quarter: 
                         <span class="fw-bold">
-                            ${ntca.third_q ? "₱" + ntca.third_q.toLocaleString() : "<em style='color:#777;'>Not yet allocated</em>"}
+                            ${ntca.third_q ? "₱" + Number(ntca.third_q).toLocaleString() : "<em style='color:#777;'>Not yet allocated</em>"}
                         </span>
                     </li>
                     <li class="list-group-item d-flex justify-content-between">
                         Fourth Quarter: 
                         <span class="fw-bold">
-                            ${ntca.fourth_q ? "₱" + ntca.fourth_q.toLocaleString() : "<em style='color:#777;'>Not yet allocated</em>"}
+                            ${ntca.fourth_q ? "₱" + Number(ntca.fourth_q).toLocaleString() : "<em style='color:#777;'>Not yet allocated</em>"}
                         </span>
                     </li>
                 `;
@@ -313,17 +313,18 @@ function fetchNTCAForSaro(saroNo, ntcaApiUrl) {
 }
 
 function getStatusClass(status) {
+    const baseClass = "custom-font-size"
     switch (status.toLowerCase()) {
         case 'pending':
-            return 'badge bg-secondary text-white p-2 fs-6'; // Gray for pending
+            return `badge bg-secondary text-white p-2 ${baseClass}`; // Gray for pending
         case 'ongoing':
-            return 'badge bg-warning text-dark p-2 fs-6'; // Orangeish yellow for ongoing
+            return `badge bg-warning text-dark p-2  ${baseClass}`; // Orangeish yellow for ongoing
         case 'done':
-            return 'badge bg-success text-white p-2 fs-6'; // Green for done
+            return `badge bg-success text-white p-2  ${baseClass}`; // Green for done
         case 'overdue':
-            return 'badge bg-danger text-white p-2 fs-6'; // Red for overdue
+            return `badge bg-danger text-white p-2 ${baseClass}`; // Red for overdue
         default:
-            return 'badge bg-light text-dark p-2 fs-6'; // Default for unknown status
+            return `badge bg-light text-dark p-2 ${baseClass}`; // Default for unknown status
     }
 }
 

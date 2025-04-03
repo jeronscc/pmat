@@ -369,6 +369,10 @@ button {
     }
 }
 
+.custom-font-size {
+    font-size: 14px; /* Adjust as needed */
+}
+
 /* responsive on height */
 @media (min-height: 784px) {
     aside {
