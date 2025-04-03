@@ -1,0 +1,13 @@
+.btn.btn-primary {
+    background-color: #003366; /* Darker Blue */
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    font-size: 14px;
+    border-radius: 0; /* Removed rounded edges */
+    transition: background 0.3s;
+}
+
+.btn.btn-primary:hover {
+    background-color: #002244; /* Even darker blue on hover */
+}
