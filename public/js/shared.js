@@ -254,7 +254,7 @@ function fetchNTCAForSaro(saroNo, ntcaApiUrl) {
                     const currentQuarter = getCurrentQuarter(ntca);
 
                     // Update NTCA container label and balance for the current quarter
-                    ntcaLabelElement.textContent = `NTCA (${ntca.ntca_no} - ${currentQuarter ? currentQuarter.replace('_q', ' Quarter') : 'No Quarter'})`;
+                    ntcaLabelElement.textContent = `NTCA (${ntca.ntca_no} - ${currentQuarter ? currentQuarter.replace('_q', ' Quarter') : 'No Quarter'}): `;
                     const currentQuarterBalance = currentQuarter ? ntca[currentQuarter] : 0;
                     ntcaBalanceElement.textContent = currentQuarterBalance
                         ? `₱${Number(currentQuarterBalance).toLocaleString()}`
