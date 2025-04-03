@@ -436,8 +436,7 @@
                                 <select class="form-select" id="category">
                                     <option value="" disabled selected>Select Category</option>
                                     <option value="SVP">SVP</option>
-                                    <option value="Honoraria">Honoraria</option>
-                                    <option value="Daily travel expense">Daily travel expense</option>
+                                    <option value="Daily travel expense">Daily Travel Expense</option>
                                 </select>
                             </div>
                             <div class="mb-3">
