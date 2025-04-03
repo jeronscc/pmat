@@ -1,7 +1,6 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,33 +11,34 @@
 </head>
 <style>
     .error-message {
-    color: red;
-    font-weight: bold;
-    text-align: center;
-    margin-top: 10px;
-    background-color: #ffe6e6;
-    padding: 10px;
-    border-radius: 5px;
-    width: 100%;
-}
+        color: red;
+        font-weight: bold;
+        text-align: center;
+        margin-top: 10px;
+        background-color: #ffe6e6;
+        padding: 10px;
+        border-radius: 5px;
+        width: 100%;
+    }
 </style>
+
 <body>
 
     <!-- Display error pop-up alert if there is an error message in session -->
     @if(session('error'))
-        <script>
-            window.onload = function() {
-                alert("{{ session('error') }}"); // Show the alert with the error message
-            }
-        </script>
+    <script>
+        window.onload = function() {
+            alert("{{ session('error') }}"); // Show the alert with the error message
+        }
+    </script>
     @endif
 
     <header class="d-flex align-items-center justify-content-between bg-black text-white p-3 shadow">
         <div class="logo">
             <img src="/assets/dict-logo.png" alt="DICT Logo" class="img-fluid" id="dictLogo">
         </div>
-        <h1 class="text-center flex-grow-1 fs-4 m-0">Procurement Tracking and Monitoring System</h1> 
-        
+        <h1 class="text-center flex-grow-1 fs-4 m-0">Procurement Tracking and Monitoring System</h1>
+
         <a href="/login">
             <button class="btn custom-btn">Log In</button>
         </a>
@@ -54,7 +54,7 @@
                         </button>
                     </a>
                 </div>
-                <form class="login-form" action="/login" method="POST"> 
+                <form class="login-form" action="/login" method="POST">
                     @csrf
                     <div class="form-group">
                         <label for="username" class="form-label">Username:</label>
@@ -90,4 +90,5 @@
         }
     });
 </script>
+
 </html>

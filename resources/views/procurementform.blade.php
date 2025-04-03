@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,16 +12,17 @@
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
     <link rel="stylesheet" href="/css/forms.css">
-    <link rel="stylesheet" href="/css/mainheader.css"> 
+    <link rel="stylesheet" href="/css/mainheader.css">
     <link rel="stylesheet" href="/css/sidenav.css">
 </head>
+
 <body>
     <header class="d-flex align-items-center justify-content-between bg-black text-white p-3 shadow" id="stickyHeader">
         <div class="logo d-flex align-items-center">
             <img src="/assets/dict-logo.png" alt="DICT Logo" class="img-fluid" id="dictLogo">
-            <img src="/assets/ilcdb-logo-2.png" alt="DTC Logo" class="img-fluid ms-2"> 
+            <img src="/assets/ilcdb-logo-2.png" alt="DTC Logo" class="img-fluid ms-2">
         </div>
-        <h1 class="text-center flex-grow-1 fs-4 m-0">Procurement Tracking and Monitoring System</h1> 
+        <h1 class="text-center flex-grow-1 fs-4 m-0">Procurement Tracking and Monitoring System</h1>
         <button class="btn custom-btn" id="menu-icon">
             <i class="bi bi-list"></i> <!-- Hamburger icon -->
         </button>
@@ -51,7 +53,7 @@
                 </form>
             </li>
             <li>
-                <form action="" >
+                <form action="">
                     <button type="submit">
                         <i class="fas fa-clock"></i><img src="/assets/report_icon.png" alt=""> Reports
                     </button>
@@ -69,305 +71,305 @@
     </div>
 
     @if(session('success'))
-      <div class="alert alert-success">{{ session('success') }}</div>
+    <div class="alert alert-success">{{ session('success') }}</div>
     @endif
     @if(session('error'))
-      <div class="alert alert-danger">{{ session('error') }}</div>
+    <div class="alert alert-danger">{{ session('error') }}</div>
     @endif
     <div class="container my-5">
         <div class="row justify-content-center">
-        <div class="container-fluid my-0"> 
+            <div class="container-fluid my-0">
                 <div class="card shadow-lg p-4">
-    <div class="container mt-5">
-        <div class="activity-info">
-            <h3><b>PR Number: </b><span id="prNumber">{{ $prNumber }}</span></h3>
-            <h3><b>Activity Name: </b><span id="activityName">{{ $activityName }}</span></h3>
-            <h3><b>Description: </b><span id="procurement-description">{{ $description }}</span></h3>
+                    <div class="container mt-5">
+                        <div class="activity-info">
+                            <h3><b>PR Number: </b><span id="prNumber">{{ $prNumber }}</span></h3>
+                            <h3><b>Activity Name: </b><span id="activityName">{{ $activityName }}</span></h3>
+                            <h3><b>Description: </b><span id="procurement-description">{{ $description }}</span></h3>
 
-        </div>
-        <hr class="my-4" style="border-top: 2px solid rgba(0, 0, 0, 0.6);">
-        <!-- Hidden fields to pass along the procurement id and activity -->
-        <input type="hidden" id="procurementId" name="procurement_id" value="{{ $prNumber }}">
+                        </div>
+                        <hr class="my-4" style="border-top: 2px solid rgba(0, 0, 0, 0.6);">
+                        <!-- Hidden fields to pass along the procurement id and activity -->
+                        <input type="hidden" id="procurementId" name="procurement_id" value="{{ $prNumber }}">
 
-        <!-- The form (no <form> tag is required if we use AJAX, but wrapping it helps) -->
-        <form id="procurementForm">
-        @csrf
-        <!-- Hidden fields to pass along the procurement id and activity -->
-        <input type="hidden" id="procurementId" name="procurement_id" value="{{ $prNumber }}">
-        <h2 class="fw-bold">Pre-Procurement Requirements</h2>
-            <h3>Supply Unit</h3> 
-            <div class="table-responsive">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Requirements</th>
-                        <th>Date Submitted</th>
-                        <th>Date Returned</th>
-                        <th>Indicator</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>
-                            <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#requirementsModal1">
-                                Upload Requirements
-                            </button>
-                        </td>
-                        <td>
-                            <input type="datetime-local" class="form-control" id="dateSubmitted1" name="dt_submitted1" value="{{ $record->dt_submitted1 ?? '' }}">
-                        </td>
-                        <td>
-                            <input type="datetime-local" class="form-control" id="dateReturned1" name="dt_received1" value="{{ $record->dt_received1 ?? '' }}">
-                        </td>
-                        <td><span class="indicator" id="indicator1" style="display: inline-block; width: 80px; padding: 5px; border-radius: 5px; text-align: center;"></span></td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#requirementsModal2">
-                                Upload Requirements
-                            </button>
-                        </td>
-                        <td>
-                            <input type="datetime-local" class="form-control" id="dateSubmitted2" name="dt_submitted2" value="{{ $record->dt_submitted2 ?? '' }}">
-                        </td>
-                        <td>
-                            <input type="datetime-local" class="form-control" id="dateReturned2" name="dt_received2" value="{{ $record->dt_received2 ?? '' }}">
-                        </td>
-                        <td><span class="indicator" id="indicator2"  style="display: inline-block; width: 80px; padding: 5px; border-radius: 5px; text-align: center;"></span></td>
-                    </tr>
-                </tbody>
-            </table>
-</div>
+                        <!-- The form (no <form> tag is required if we use AJAX, but wrapping it helps) -->
+                        <form id="procurementForm">
+                            @csrf
+                            <!-- Hidden fields to pass along the procurement id and activity -->
+                            <input type="hidden" id="procurementId" name="procurement_id" value="{{ $prNumber }}">
+                            <h2 class="fw-bold">Pre-Procurement Requirements</h2>
+                            <h3>Supply Unit</h3>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Requirements</th>
+                                            <th>Date Submitted</th>
+                                            <th>Date Returned</th>
+                                            <th>Indicator</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#requirementsModal1">
+                                                    Upload Requirements
+                                                </button>
+                                            </td>
+                                            <td>
+                                                <input type="datetime-local" class="form-control" id="dateSubmitted1" name="dt_submitted1" value="{{ $record->dt_submitted1 ?? '' }}">
+                                            </td>
+                                            <td>
+                                                <input type="datetime-local" class="form-control" id="dateReturned1" name="dt_received1" value="{{ $record->dt_received1 ?? '' }}">
+                                            </td>
+                                            <td><span class="indicator" id="indicator1" style="display: inline-block; width: 80px; padding: 5px; border-radius: 5px; text-align: center;"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#requirementsModal2">
+                                                    Upload Requirements
+                                                </button>
+                                            </td>
+                                            <td>
+                                                <input type="datetime-local" class="form-control" id="dateSubmitted2" name="dt_submitted2" value="{{ $record->dt_submitted2 ?? '' }}">
+                                            </td>
+                                            <td>
+                                                <input type="datetime-local" class="form-control" id="dateReturned2" name="dt_received2" value="{{ $record->dt_received2 ?? '' }}">
+                                            </td>
+                                            <td><span class="indicator" id="indicator2" style="display: inline-block; width: 80px; padding: 5px; border-radius: 5px; text-align: center;"></span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
 
-            <h3>Budget Unit</h3>
-            <div class="table-responsive">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Requirements</th>
-                        <th>Date Submitted</th>
-                        <th>Date Returned</th>
-                        <th>Indicator</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>
-                            <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#requirementsModal3">
-                                Upload Requirements
-                            </button>
-                        </td>
-                        <td>
-                            <input type="datetime-local" class="form-control" id="dateSubmitted3" name="dt_submitted3" value="{{ $record->dt_submitted3 ?? '' }}">
-                        </td>
-                        <td>
-                            <input type="datetime-local" class="form-control" id="dateReturned3" name="dt_received3" value="{{ $record->dt_received3 ?? '' }}">
-                        </td>
-                        <td><span class="indicator" id="indicator3"  style="display: inline-block; width: 80px; padding: 5px; border-radius: 5px; text-align: center;"></span></td>
-                    </tr>
-                </tbody>
-            </table>
-</div>
+                            <h3>Budget Unit</h3>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Requirements</th>
+                                            <th>Date Submitted</th>
+                                            <th>Date Returned</th>
+                                            <th>Indicator</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#requirementsModal3">
+                                                    Upload Requirements
+                                                </button>
+                                            </td>
+                                            <td>
+                                                <input type="datetime-local" class="form-control" id="dateSubmitted3" name="dt_submitted3" value="{{ $record->dt_submitted3 ?? '' }}">
+                                            </td>
+                                            <td>
+                                                <input type="datetime-local" class="form-control" id="dateReturned3" name="dt_received3" value="{{ $record->dt_received3 ?? '' }}">
+                                            </td>
+                                            <td><span class="indicator" id="indicator3" style="display: inline-block; width: 80px; padding: 5px; border-radius: 5px; text-align: center;"></span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
 
-            <h2 class="fw-bold">Post-Procurement Requirements</h2>
-            <h3>Supply Unit</h3>
-            <div class="table-responsive">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Requirements</th>
-                        <th>Date Submitted</th>
-                        <th>Date Returned</th>
-                        <th>Indicator</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>
-                            <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#requirementsModal4">
-                                Upload Requirements
-                            </button>
-                        </td>
-                        <td>
-                            <input type="datetime-local" class="form-control" id="dateSubmitted4" name="dt_submitted4" value="{{ $record->dt_submitted4 ?? '' }}">
-                        </td>
-                        <td>
-                            <input type="datetime-local" class="form-control" id="dateReturned4" name="dt_received4" value="{{ $record->dt_received4 ?? '' }}">
-                        </td>
-                        <td><span class="indicator" id="indicator4" style="display: inline-block; width: 80px; padding: 5px; border-radius: 5px; text-align: center;"></span></td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#requirementsModal5">
-                                Upload Requirements
-                            </button>
-                        </td>
-                        <td>
-                            <input type="datetime-local" class="form-control" id="dateSubmitted5" name="dt_submitted5" value="{{ $record->dt_submitted5 ?? '' }}">
-                        </td>
-                        <td>
-                            <input type="datetime-local" class="form-control" id="dateReturned5" name="dt_received5" value="{{ $record->dt_received5 ?? '' }}">
-                        </td>
-                        <td><span class="indicator" id="indicator5" style="display: inline-block; width: 80px; padding: 5px; border-radius: 5px; text-align: center;"></span></td>
-                    </tr>
-                </tbody>
-            </table>
-</div>
+                            <h2 class="fw-bold">Post-Procurement Requirements</h2>
+                            <h3>Supply Unit</h3>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Requirements</th>
+                                            <th>Date Submitted</th>
+                                            <th>Date Returned</th>
+                                            <th>Indicator</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#requirementsModal4">
+                                                    Upload Requirements
+                                                </button>
+                                            </td>
+                                            <td>
+                                                <input type="datetime-local" class="form-control" id="dateSubmitted4" name="dt_submitted4" value="{{ $record->dt_submitted4 ?? '' }}">
+                                            </td>
+                                            <td>
+                                                <input type="datetime-local" class="form-control" id="dateReturned4" name="dt_received4" value="{{ $record->dt_received4 ?? '' }}">
+                                            </td>
+                                            <td><span class="indicator" id="indicator4" style="display: inline-block; width: 80px; padding: 5px; border-radius: 5px; text-align: center;"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#requirementsModal5">
+                                                    Upload Requirements
+                                                </button>
+                                            </td>
+                                            <td>
+                                                <input type="datetime-local" class="form-control" id="dateSubmitted5" name="dt_submitted5" value="{{ $record->dt_submitted5 ?? '' }}">
+                                            </td>
+                                            <td>
+                                                <input type="datetime-local" class="form-control" id="dateReturned5" name="dt_received5" value="{{ $record->dt_received5 ?? '' }}">
+                                            </td>
+                                            <td><span class="indicator" id="indicator5" style="display: inline-block; width: 80px; padding: 5px; border-radius: 5px; text-align: center;"></span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
 
-            <h3>Accounting Unit</h3>
-            <div class="table-responsive">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Requirements</th>
-                        <th>Date Submitted</th>
-                        <th>Date Returned</th>
-                        <th>Indicator</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>
-                            <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#requirementsModal6">
-                                Upload Requirements
-                            </button>
-                        </td>
-                        <td>
-                            <input type="datetime-local" class="form-control" id="dateSubmitted6" name="dt_submitted6" value="{{ $record->dt_submitted6 ?? '' }}">
-                        </td>
-                        <td>
-                            <input type="datetime-local" class="form-control" id="dateReturned6" name="dt_received6" value="{{ $record->dt_received6 ?? '' }}">
-                        </td>
-                        <td><span class="indicator" id="indicator6" style="display: inline-block; width: 80px; padding: 5px; border-radius: 5px; text-align: center;"></span></td>
-                    </tr>
-                </tbody>
-            </table>
-</div>
+                            <h3>Accounting Unit</h3>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Requirements</th>
+                                            <th>Date Submitted</th>
+                                            <th>Date Returned</th>
+                                            <th>Indicator</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#requirementsModal6">
+                                                    Upload Requirements
+                                                </button>
+                                            </td>
+                                            <td>
+                                                <input type="datetime-local" class="form-control" id="dateSubmitted6" name="dt_submitted6" value="{{ $record->dt_submitted6 ?? '' }}">
+                                            </td>
+                                            <td>
+                                                <input type="datetime-local" class="form-control" id="dateReturned6" name="dt_received6" value="{{ $record->dt_received6 ?? '' }}">
+                                            </td>
+                                            <td><span class="indicator" id="indicator6" style="display: inline-block; width: 80px; padding: 5px; border-radius: 5px; text-align: center;"></span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
 
-            <div class="row">
-            <div class="col-12 col-md-6 col-lg-4">
-            <div class="table-responsive">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Budget Spent</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>
-                                <input type="number" step="0.01" class="form-control" id="budgetSpent" name="budget_spent" 
-                                value="{{ $record->budget_spent ?? '' }}" readonly>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                            <div class="row">
+                                <div class="col-12 col-md-6 col-lg-4">
+                                    <div class="table-responsive">
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Budget Spent</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>
+                                                        <input type="number" step="0.01" class="form-control" id="budgetSpent" name="budget_spent"
+                                                            value="{{ $record->budget_spent ?? '' }}" readonly>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="table-buttons">
+                                <button type="button" class="btn btn-secondary" id="cancelChanges">Cancel</button>
+                                <button type="button" class="btn btn-primary" id="saveChanges">Save</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-            </div>
-        </div>
-
-            <div class="table-buttons">
-                <button type="button" class="btn btn-secondary" id="cancelChanges">Cancel</button>
-                <button type="button" class="btn btn-primary" id="saveChanges">Save</button>
-            </div>
-        </form>
-    </div>
-    </div>
             </div>
         </div>
     </div>
 
     <!-- Modals -->
     <!-- Modal 1 -->
-<div class="modal fade" id="requirementsModal1" tabindex="-1" aria-labelledby="modalTitle1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header bg-dark text-white">
-                <h5 class="modal-title" id="modalTitle1">UPLOAD REQUIREMENTS</h5>
-            </div>
-            <div class="modal-body">
-                <form id="requirementsForm1" enctype="multipart/form-data">
-                    @csrf
-                    <!-- Reminder about file requirements -->
-                    <div class="alert alert-info">
-                        Only PDF files are accepted. The file size must not exceed 5 MB.
-                    </div>
-                    <div class="mb-3">
-                        <label for="appFile1" class="form-label">APP / PPMP</label>
-                        <input class="form-control" type="file" id="appFile1" name="appFile">
-                        <div id="appFile1Link"></div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="saroFile1" class="form-label">SARO</label>
-                        <input class="form-control" type="file" id="saroFile1" name="saroFile">
-                        <div id="saroFile1Link"></div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="budgetFile1" class="form-label">Budget Breakdown</label>
-                        <input class="form-control" type="file" id="budgetFile1" name="budgetFile">
-                        <div id="budgetFile1Link"></div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="distributionFile1" class="form-label">Distribution List</label>
-                        <input class="form-control" type="file" id="distributionFile1" name="distributionFile">
-                        <div id="distributionFile1Link"></div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="poiFile1" class="form-label">POI / Activity Design</label>
-                        <input class="form-control" type="file" id="poiFile1" name="poiFile">
-                        <div id="poiFile1Link"></div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="researchFile1" class="form-label">Market Research</label>
-                        <input class="form-control" type="file" id="researchFile1" name="researchFile">
-                        <div id="researchFile1Link"></div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="purchaseFile1" class="form-label">Purchase Request</label>
-                        <input class="form-control" type="file" id="purchaseFile1" name="purchaseFile">
-                        <div id="purchaseFile1Link"></div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="quotationsFile1" class="form-label">Quotations</label>
-                        <input class="form-control" type="file" id="quotationsFile1" name="quotationsFile">
-                        <div id="quotationsFile1Link"></div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary" id="saveBtn1">Save</button>
+    <div class="modal fade" id="requirementsModal1" tabindex="-1" aria-labelledby="modalTitle1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-dark text-white">
+                    <h5 class="modal-title" id="modalTitle1">UPLOAD REQUIREMENTS</h5>
+                </div>
+                <div class="modal-body">
+                    <form id="requirementsForm1" enctype="multipart/form-data">
+                        @csrf
+                        <!-- Reminder about file requirements -->
+                        <div class="alert alert-info">
+                            Only PDF files are accepted. The file size must not exceed 5 MB.
+                        </div>
+                        <div class="mb-3">
+                            <label for="appFile1" class="form-label">APP / PPMP</label>
+                            <input class="form-control" type="file" id="appFile1" name="appFile">
+                            <div id="appFile1Link"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="saroFile1" class="form-label">SARO</label>
+                            <input class="form-control" type="file" id="saroFile1" name="saroFile">
+                            <div id="saroFile1Link"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="budgetFile1" class="form-label">Budget Breakdown</label>
+                            <input class="form-control" type="file" id="budgetFile1" name="budgetFile">
+                            <div id="budgetFile1Link"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="distributionFile1" class="form-label">Distribution List</label>
+                            <input class="form-control" type="file" id="distributionFile1" name="distributionFile">
+                            <div id="distributionFile1Link"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="poiFile1" class="form-label">POI / Activity Design</label>
+                            <input class="form-control" type="file" id="poiFile1" name="poiFile">
+                            <div id="poiFile1Link"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="researchFile1" class="form-label">Market Research</label>
+                            <input class="form-control" type="file" id="researchFile1" name="researchFile">
+                            <div id="researchFile1Link"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="purchaseFile1" class="form-label">Purchase Request</label>
+                            <input class="form-control" type="file" id="purchaseFile1" name="purchaseFile">
+                            <div id="purchaseFile1Link"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="quotationsFile1" class="form-label">Quotations</label>
+                            <input class="form-control" type="file" id="quotationsFile1" name="quotationsFile">
+                            <div id="quotationsFile1Link"></div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="saveBtn1">Save</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<!-- Modal 2 -->
-<div class="modal fade" id="requirementsModal2" tabindex="-1" aria-labelledby="modalTitle2" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header bg-dark text-white">
-                <h5 class="modal-title" id="modalTitle2">REQUIREMENTS DETAILS</h5>
-            </div>
-            <div class="modal-body">
-                <form id="requirementsForm2" enctype="multipart/form-data">
-                    @csrf
-                    <!-- Reminder about file requirements -->
-                    <div class="alert alert-info">
-                        Only PDF files are accepted. The file size must not exceed 5 MB.
-                    </div>
-                    <div class="mb-3">
-                        <label for="poFile2" class="form-label">Purchase Order</label>
-                        <input class="form-control" type="file" id="poFile2" name="poFile">
-                        <div id="poFile2Link"></div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="absFile2" class="form-label">Abstract / Philgeps Posting*</label>
-                        <input class="form-control" type="file" id="absFile2" name="absFile">
-                        <div id="absFile2Link"></div>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Previously Submitted Requirements</label>
+    <!-- Modal 2 -->
+    <div class="modal fade" id="requirementsModal2" tabindex="-1" aria-labelledby="modalTitle2" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-dark text-white">
+                    <h5 class="modal-title" id="modalTitle2">REQUIREMENTS DETAILS</h5>
+                </div>
+                <div class="modal-body">
+                    <form id="requirementsForm2" enctype="multipart/form-data">
+                        @csrf
+                        <!-- Reminder about file requirements -->
+                        <div class="alert alert-info">
+                            Only PDF files are accepted. The file size must not exceed 5 MB.
+                        </div>
+                        <div class="mb-3">
+                            <label for="poFile2" class="form-label">Purchase Order</label>
+                            <input class="form-control" type="file" id="poFile2" name="poFile">
+                            <div id="poFile2Link"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="absFile2" class="form-label">Abstract / Philgeps Posting*</label>
+                            <input class="form-control" type="file" id="absFile2" name="absFile">
+                            <div id="absFile2Link"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Previously Submitted Requirements</label>
                             <div class="mb-3">
                                 <label for="purchaseFile2" class="form-label" id="purchaseFileLabel2">Purchase Request</label>
                                 <div id="purchaseFile2Link"></div>
@@ -400,37 +402,37 @@
                                 <label for="researchFile2" class="form-label" id="researchFileLabel2">Market Research</label>
                                 <div id="researchFile2Link"></div>
                             </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary" id="saveBtn2">Save</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="saveBtn2">Save</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<!-- Modal 3 -->
-<div class="modal fade" id="requirementsModal3" tabindex="-1" aria-labelledby="modalTitle3" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header bg-dark text-white">
-                <h5 class="modal-title" id="modalTitle3">REQUIREMENTS DETAILS</h5>
-            </div>
-            <div class="modal-body">
-                <form id="requirementsForm3" enctype="multipart/form-data">
-                    @csrf
-                    <!-- Reminder about file requirements -->
-                    <div class="alert alert-info">
-                        Only PDF files are accepted. The file size must not exceed 5 MB.
-                    </div>
-                    <div class="mb-3">
-                        <label for="orsFile3" class="form-label">ORS (Obligation Request and Status)</label>
-                        <input class="form-control" type="file" id="orsFile3" name="orsFile">
-                        <div id="orsFile3Link"></div>
-                    </div>
-                    <!--
+    <!-- Modal 3 -->
+    <div class="modal fade" id="requirementsModal3" tabindex="-1" aria-labelledby="modalTitle3" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-dark text-white">
+                    <h5 class="modal-title" id="modalTitle3">REQUIREMENTS DETAILS</h5>
+                </div>
+                <div class="modal-body">
+                    <form id="requirementsForm3" enctype="multipart/form-data">
+                        @csrf
+                        <!-- Reminder about file requirements -->
+                        <div class="alert alert-info">
+                            Only PDF files are accepted. The file size must not exceed 5 MB.
+                        </div>
+                        <div class="mb-3">
+                            <label for="orsFile3" class="form-label">ORS (Obligation Request and Status)</label>
+                            <input class="form-control" type="file" id="orsFile3" name="orsFile">
+                            <div id="orsFile3Link"></div>
+                        </div>
+                        <!--
                     <div class="mb-3">
                         <label for="poFile3" class="form-label">Purchase Order</label>
                         <input class="form-control" type="file" id="poFile3" name="poFile">
@@ -442,8 +444,8 @@
                         <div id="absFile3Link"></div>
                     </div>
                 -->
-                    <div class="mb-3">
-                        <label class="form-label">Previously Submitted Requirements (For Reference)</label>
+                        <div class="mb-3">
+                            <label class="form-label">Previously Submitted Requirements (For Reference)</label>
                             <div class="mb-3">
                                 <label for="poFile3" class="form-label" id="poFile3">Purchase Order</label>
                                 <div id="poFile3Link"></div>
@@ -484,215 +486,215 @@
                                 <label for="researchFile3" class="form-label" id="researchFileLabel3">Market Research</label>
                                 <div id="researchFile3Link"></div>
                             </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary" id="saveBtn3">Save</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="saveBtn3">Save</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<!-- Modal 4 -->
-<div class="modal fade" id="requirementsModal4" tabindex="-1" aria-labelledby="modalTitle4" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header bg-dark text-white">
-                <h5 class="modal-title" id="modalTitle4">REQUIREMENTS DETAILS</h5>
-            </div>
-            <div class="modal-body">
-                <form id="requirementsForm4" enctype="multipart/form-data">
-                    @csrf
-                    <!-- Reminder about file requirements -->
-                    <div class="alert alert-info">
-                        Only PDF files are accepted. The file size must not exceed 5 MB.
-                    </div>
-                    <div class="mb-3">
-                        <label for="attendanceFile4" class="form-label">Attendance Sheet</label>
-                        <input class="form-control" type="file" id="attendanceFile4" name="attendanceFile">
-                        <div id="attendanceFile4Link"></div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="cocFile4" class="form-label">Certificate of Completion/Satisfaction for Supplier</label>
-                        <input class="form-control" type="file" id="cocFile4" name="cocFile">
-                        <div id="cocFile4Link"></div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="photoFile4" class="form-label">Photo</label>
-                        <input class="form-control" type="file" id="photoFile4" name="photoFile">
-                        <div id="photoFile4Link"></div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="soaFile4" class="form-label">SOA / Billing Statement</label>
-                        <input class="form-control" type="file" id="soaFile4" name="soaFile">
-                        <div id="soaFile4Link"></div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="drFile4" class="form-label">Delivery Receipt</label>
-                        <input class="form-control" type="file" id="drFile4" name="drFile">
-                        <div id="drFile4Link"></div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="dlFile4" class="form-label">Distribution List (Receiving Copy)</label>
-                        <input class="form-control" type="file" id="dlFile4" name="dlFile">
-                        <div id="dlFile4Link"></div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary" id="saveBtn4">Save</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Modal 5 -->
-<div class="modal fade" id="requirementsModal5" tabindex="-1" aria-labelledby="modalTitle5" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header bg-dark text-white">
-                <h5 class="modal-title" id="modalTitle5">REQUIREMENTS DETAILS</h5>
-            </div>
-            <div class="modal-body">
-                <form id="requirementsForm5" enctype="multipart/form-data">
-                    @csrf
-                    <div class="mb-3">
-                        <label class="form-label">Previously Uploaded Documents (ORS, PO, Abstract, Philgeps Posting, IAR, ICS/PAR, Request for Inspection)</label>
-                        <div id="budgetAllFilePreview5">
-                            <p class="text-muted">Loading files...</p>
+    <!-- Modal 4 -->
+    <div class="modal fade" id="requirementsModal4" tabindex="-1" aria-labelledby="modalTitle4" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-dark text-white">
+                    <h5 class="modal-title" id="modalTitle4">REQUIREMENTS DETAILS</h5>
+                </div>
+                <div class="modal-body">
+                    <form id="requirementsForm4" enctype="multipart/form-data">
+                        @csrf
+                        <!-- Reminder about file requirements -->
+                        <div class="alert alert-info">
+                            Only PDF files are accepted. The file size must not exceed 5 MB.
                         </div>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Previously Uploaded Documents (Attendance, Certificate, Photos, SOA, DR, Distribution List)</label>
-                        <div id="supplyAllFilePreview5">
-                            <p class="text-muted">Loading files...</p>
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Previously Uploaded Documents (PR, Quotations, APP/PPMP, SARO, Budget Breakdown, Distribution List, POI/Activity Design, Market Research)</label>
-                        <div id="allReqsFilePreview5">
                         <div class="mb-3">
-                                <label for="purchaseFile4" class="form-label" id="purchaseFileLabel4">Purchase Request</label>
-                                <div id="purchaseFile4Link"></div>
-                            </div>
-                            <div class="mb-3">
-                                <label for="quotationsFile4" class="form-label" id="quotationsFileLabel4">Quotations</label>
-                                <div id="quotationsFile4Link"></div>
-                            </div>
-                            <div class="mb-3">
-                                <label for="appFile4" class="form-label" id="appFileLabel4">APP/PPMP</label>
-                                <div id="appFile4Link"></div>
-                            </div>
-                            <div class="mb-3">
-                                <label for="saroFile4" class="form-label" id="saroFileLabel4">SARO</label>
-                                <div id="saroFile4Link"></div>
-                            </div>
-                            <div class="mb-3">
-                                <label for="budgetFile4" class="form-label" id="budgetFileLabel4">Budget Breakdown</label>
-                                <div id="budgetFile4Link"></div>
-                            </div>
-                            <div class="mb-3">
-                                <label for="distributionFile4" class="form-label" id="distributionFileLabel4">Distribution List</label>
-                                <div id="distributionFile4Link"></div>
-                            </div>
-                            <div class="mb-3">
-                                <label for="poiFile4" class="form-label" id="poiFileLabel4">POI / Activity Design</label>
-                                <div id="poiFile4Link"></div>
-                            </div>
-                            <div class="mb-3">
-                                <label for="researchFile4" class="form-label" id="researchFileLabel4">Market Research</label>
-                                <div id="researchFile4Link"></div>
-                            </div>
+                            <label for="attendanceFile4" class="form-label">Attendance Sheet</label>
+                            <input class="form-control" type="file" id="attendanceFile4" name="attendanceFile">
+                            <div id="attendanceFile4Link"></div>
                         </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Modal 6 -->
-<div class="modal fade" id="requirementsModal6" tabindex="-1" aria-labelledby="modalTitle6" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header bg-dark text-white">
-                <h5 class="modal-title" id="modalTitle6">REQUIREMENTS DETAILS</h5>
-            </div>
-            <div class="modal-body">
-                <form id="requirementsForm6" enctype="multipart/form-data">
-                    @csrf
-                    <div class="alert alert-info">
-                        Only PDF files are accepted. The file size must not exceed 5 MB.
-                    </div>
-                    <div class="mb-3">
-                        <label for="dvFile1" class="form-label">Disbursement Voucher</label>
-                        <input class="form-control" type="file" id="dvFile1" name="dvFile">
-                        <div id="dvFile1Link"></div>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Uploaded Documents (ORS, PO, Abstract, Philgeps Posting, IAR, ICS/PAR, Request for Inspection)</label>
-                        <div id="budgetAllFilePreview6">
-                            <p class="text-muted">Loading files...</p>
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Uploaded Documents (Attendance, Certificate, Photos, SOA, DR, Distribution List)</label>
-                        <div id="supplyAllFilePreview6">
-                            <p class="text-muted">Loading files...</p>
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Uploaded Documents (PR, Quotations, APP/PPMP, SARO, Budget Breakdown, Distribution List, POI/Activity Design, Market Research)</label>
-                        <div id="allReqsFilePreview6">
                         <div class="mb-3">
-                                <label for="purchaseFile5" class="form-label" id="purchaseFileLabel5">Purchase Request</label>
-                                <div id="purchaseFile5Link"></div>
-                            </div>
-                            <div class="mb-3">
-                                <label for="quotationsFile5" class="form-label" id="quotationsFileLabel5">Quotations</label>
-                                <div id="quotationsFile5Link"></div>
-                            </div>
-                            <div class="mb-3">
-                                <label for="appFile5" class="form-label" id="appFileLabel5">APP/PPMP</label>
-                                <div id="appFile5Link"></div>
-                            </div>
-                            <div class="mb-3">
-                                <label for="saroFile5" class="form-label" id="saroFileLabel5">SARO</label>
-                                <div id="saroFile5Link"></div>
-                            </div>
-                            <div class="mb-3">
-                                <label for="budgetFile5" class="form-label" id="budgetFileLabel2">Budget Breakdown</label>
-                                <div id="budgetFile5Link"></div>
-                            </div>
-                            <div class="mb-3">
-                                <label for="distributionFile5" class="form-label" id="distributionFileLabel5">Distribution List</label>
-                                <div id="distributionFile5Link"></div>
-                            </div>
-                            <div class="mb-3">
-                                <label for="poiFile5" class="form-label" id="poiFileLabel5">POI / Activity Design</label>
-                                <div id="poiFile5Link"></div>
-                            </div>
-                            <div class="mb-3">
-                                <label for="researchFile5" class="form-label" id="researchFileLabel5">Market Research</label>
-                                <div id="researchFile5Link"></div>
-                            </div>
+                            <label for="cocFile4" class="form-label">Certificate of Completion/Satisfaction for Supplier</label>
+                            <input class="form-control" type="file" id="cocFile4" name="cocFile">
+                            <div id="cocFile4Link"></div>
                         </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary" id="saveBtn6">Save</button>
+                        <div class="mb-3">
+                            <label for="photoFile4" class="form-label">Photo</label>
+                            <input class="form-control" type="file" id="photoFile4" name="photoFile">
+                            <div id="photoFile4Link"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="soaFile4" class="form-label">SOA / Billing Statement</label>
+                            <input class="form-control" type="file" id="soaFile4" name="soaFile">
+                            <div id="soaFile4Link"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="drFile4" class="form-label">Delivery Receipt</label>
+                            <input class="form-control" type="file" id="drFile4" name="drFile">
+                            <div id="drFile4Link"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="dlFile4" class="form-label">Distribution List (Receiving Copy)</label>
+                            <input class="form-control" type="file" id="dlFile4" name="dlFile">
+                            <div id="dlFile4Link"></div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="saveBtn4">Save</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
+
+    <!-- Modal 5 -->
+    <div class="modal fade" id="requirementsModal5" tabindex="-1" aria-labelledby="modalTitle5" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-dark text-white">
+                    <h5 class="modal-title" id="modalTitle5">REQUIREMENTS DETAILS</h5>
+                </div>
+                <div class="modal-body">
+                    <form id="requirementsForm5" enctype="multipart/form-data">
+                        @csrf
+                        <div class="mb-3">
+                            <label class="form-label">Previously Uploaded Documents (ORS, PO, Abstract, Philgeps Posting, IAR, ICS/PAR, Request for Inspection)</label>
+                            <div id="budgetAllFilePreview5">
+                                <p class="text-muted">Loading files...</p>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Previously Uploaded Documents (Attendance, Certificate, Photos, SOA, DR, Distribution List)</label>
+                            <div id="supplyAllFilePreview5">
+                                <p class="text-muted">Loading files...</p>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Previously Uploaded Documents (PR, Quotations, APP/PPMP, SARO, Budget Breakdown, Distribution List, POI/Activity Design, Market Research)</label>
+                            <div id="allReqsFilePreview5">
+                                <div class="mb-3">
+                                    <label for="purchaseFile4" class="form-label" id="purchaseFileLabel4">Purchase Request</label>
+                                    <div id="purchaseFile4Link"></div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="quotationsFile4" class="form-label" id="quotationsFileLabel4">Quotations</label>
+                                    <div id="quotationsFile4Link"></div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="appFile4" class="form-label" id="appFileLabel4">APP/PPMP</label>
+                                    <div id="appFile4Link"></div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="saroFile4" class="form-label" id="saroFileLabel4">SARO</label>
+                                    <div id="saroFile4Link"></div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="budgetFile4" class="form-label" id="budgetFileLabel4">Budget Breakdown</label>
+                                    <div id="budgetFile4Link"></div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="distributionFile4" class="form-label" id="distributionFileLabel4">Distribution List</label>
+                                    <div id="distributionFile4Link"></div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="poiFile4" class="form-label" id="poiFileLabel4">POI / Activity Design</label>
+                                    <div id="poiFile4Link"></div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="researchFile4" class="form-label" id="researchFileLabel4">Market Research</label>
+                                    <div id="researchFile4Link"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 6 -->
+    <div class="modal fade" id="requirementsModal6" tabindex="-1" aria-labelledby="modalTitle6" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-dark text-white">
+                    <h5 class="modal-title" id="modalTitle6">REQUIREMENTS DETAILS</h5>
+                </div>
+                <div class="modal-body">
+                    <form id="requirementsForm6" enctype="multipart/form-data">
+                        @csrf
+                        <div class="alert alert-info">
+                            Only PDF files are accepted. The file size must not exceed 5 MB.
+                        </div>
+                        <div class="mb-3">
+                            <label for="dvFile1" class="form-label">Disbursement Voucher</label>
+                            <input class="form-control" type="file" id="dvFile1" name="dvFile">
+                            <div id="dvFile1Link"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Uploaded Documents (ORS, PO, Abstract, Philgeps Posting, IAR, ICS/PAR, Request for Inspection)</label>
+                            <div id="budgetAllFilePreview6">
+                                <p class="text-muted">Loading files...</p>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Uploaded Documents (Attendance, Certificate, Photos, SOA, DR, Distribution List)</label>
+                            <div id="supplyAllFilePreview6">
+                                <p class="text-muted">Loading files...</p>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Uploaded Documents (PR, Quotations, APP/PPMP, SARO, Budget Breakdown, Distribution List, POI/Activity Design, Market Research)</label>
+                            <div id="allReqsFilePreview6">
+                                <div class="mb-3">
+                                    <label for="purchaseFile5" class="form-label" id="purchaseFileLabel5">Purchase Request</label>
+                                    <div id="purchaseFile5Link"></div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="quotationsFile5" class="form-label" id="quotationsFileLabel5">Quotations</label>
+                                    <div id="quotationsFile5Link"></div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="appFile5" class="form-label" id="appFileLabel5">APP/PPMP</label>
+                                    <div id="appFile5Link"></div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="saroFile5" class="form-label" id="saroFileLabel5">SARO</label>
+                                    <div id="saroFile5Link"></div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="budgetFile5" class="form-label" id="budgetFileLabel2">Budget Breakdown</label>
+                                    <div id="budgetFile5Link"></div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="distributionFile5" class="form-label" id="distributionFileLabel5">Distribution List</label>
+                                    <div id="distributionFile5Link"></div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="poiFile5" class="form-label" id="poiFileLabel5">POI / Activity Design</label>
+                                    <div id="poiFile5Link"></div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="researchFile5" class="form-label" id="researchFileLabel5">Market Research</label>
+                                    <div id="researchFile5Link"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="saveBtn6">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Include jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -803,6 +805,7 @@ if (!dateReturned5.value) {
     dateReturned6.setAttribute('readonly', 'true');
 }
 */
-</script>
+    </script>
 </body>
+
 </html>

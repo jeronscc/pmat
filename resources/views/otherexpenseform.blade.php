@@ -69,11 +69,11 @@
     </div>
 
     @if(session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
+    <div class="alert alert-success">{{ session('success') }}</div>
     @elseif(session('error'))
-        <div class="alert alert-danger">{{ session('error') }}</div>
+    <div class="alert alert-danger">{{ session('error') }}</div>
     @elseif(session('warning'))
-        <div class="alert alert-warning">{{ session('warning') }}</div>
+    <div class="alert alert-warning">{{ session('warning') }}</div>
     @endif
 
     <div class="container my-5">
@@ -231,7 +231,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary" id="saveBtn1">Save</button>
+                    <button type="button" class="btn btn-success" id="saveBtn1">Save</button>
                 </div>
             </div>
         </div>

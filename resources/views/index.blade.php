@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,12 +11,13 @@
     <link rel="stylesheet" href="/css/landingheader.css">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
+
 <body>
     <header class="d-flex align-items-center justify-content-between bg-black text-white p-3 shadow">
         <div class="logo">
             <img src="/assets/dict-logo.png" alt="DICT Logo" class="img-fluid" id="dictLogo">
         </div>
-        <h1 class="text-center flex-grow-1 fs-4 m-0">Procurement Tracking and Monitoring System</h1> 
+        <h1 class="text-center flex-grow-1 fs-4 m-0">Procurement Tracking and Monitoring System</h1>
         <a href="/login">
             <button class="btn custom-btn">Log In</button>
         </a>
@@ -63,11 +65,11 @@
                     <ul class="dropdown-menu" aria-labelledby="yearDropdown">
                         <li><a class="dropdown-item" href="#" onclick="filterSaroByYear('')">Show All</a></li> <!-- Show All option -->
                         <?php
-                            $startYear = max(2026, date("Y")); // Start from 2026, or the current year if it's later
-                            for ($year = $startYear; $year >= $startYear - 10; $year--) {
+                        $startYear = max(2026, date("Y")); // Start from 2026, or the current year if it's later
+                        for ($year = $startYear; $year >= $startYear - 10; $year--) {
                             echo "<li><a class='dropdown-item' href='#' onclick='filterSaroByYear(\"$year\")'>$year</a></li>";
                         }
-                        ?>                
+                        ?>
                     </ul>
                 </div>
             </div>
@@ -89,16 +91,16 @@
             <button class="accordion">PROJECT CLICK <span class="dropdown-icon">&#x25BC;</span></button>
             <div class="panel project-click">
                 <!-- Placeholder content -->
-                
+
             </div>
         </aside>
         <section class="records">
             <div class="header">
                 <h5><span>Currently Viewing:</span></h5>
                 <div class="search">
-                    <form id="searchForm"> 
+                    <form id="searchForm">
                         <div class="search-box">
-                            <input type="text" class="form-control me-2" id="searchBar" placeholder="Search...">   
+                            <input type="text" class="form-control me-2" id="searchBar" placeholder="Search...">
                             <button type="submit" class="search-button">
                                 Search
                             </button>
@@ -134,11 +136,11 @@
                                 <th>ACTIVITY/PERSON-IN-CHARGE</th>
                                 <th>STATUS</th>
                             </tr>
-                        </thead>      
-                        <tbody id="procurementTable"> 
+                        </thead>
+                        <tbody id="procurementTable">
                             <!-- Procurement data will be populated here -->
-                        </tbody> 
-                    </table> 
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </section>
@@ -151,4 +153,5 @@
     <script src="/js/indexLoadSpark.js"></script>
     <script src="/js/shared.js"></script>
 </body>
+
 </html>
