@@ -267,8 +267,8 @@
         </div>
 
             <div class="table-buttons">
-                <button type="button" class="btn btn-danger" id="cancelChanges">Cancel</button>
-                <button type="button" class="btn btn-success" id="saveChanges">Save</button>
+                <button type="button" class="btn btn-secondary" id="cancelChanges">Cancel</button>
+                <button type="button" class="btn btn-primary" id="saveChanges">Save</button>
             </div>
         </form>
     </div>
@@ -335,8 +335,8 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-success" id="saveBtn1">Save</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="saveBtn1">Save</button>
             </div>
         </div>
     </div>
@@ -404,8 +404,8 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-success" id="saveBtn2">Save</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="saveBtn2">Save</button>
             </div>
         </div>
     </div>
@@ -488,8 +488,8 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-success" id="saveBtn3">Save</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="saveBtn3">Save</button>
             </div>
         </div>
     </div>
@@ -542,8 +542,8 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-success" id="saveBtn4">Save</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="saveBtn4">Save</button>
             </div>
         </div>
     </div>
@@ -611,7 +611,7 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
             </div>
         </div>
     </div>
@@ -687,8 +687,8 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-success" id="saveBtn6">Save</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="saveBtn6">Save</button>
             </div>
         </div>
     </div>
@@ -699,9 +699,9 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Custom JS -->
     <script src="/js/menu.js"></script>
-    <script src="/js/dtc/procurementformIndicator.js"></script>
-    <script src="/js/dtc/addProcurementForm.js"></script>
-    <script src="/js/dtc/requirementsUploadProcurement.js"></script>
+    <script src="/js/spark/procurementformIndicator.js"></script>
+    <script src="/js/spark/addProcurementForm.js"></script>
+    <script src="/js/spark/requirementsUploadProcurement.js"></script>
     <script>
         /*
 // Get references to the date fields

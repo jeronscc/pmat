@@ -151,8 +151,8 @@
                                 </div>
                             </div>
                             <div class="table-buttons">
-                                <button type="button" class="btn btn-danger" id="cancelChanges">Cancel</button>
-                                <button type="button" class="btn btn-success" id="saveChanges">Save</button>
+                                <button type="button" class="btn btn-secondary" id="cancelChanges">Cancel</button>
+                                <button type="button" class="btn btn-primary" id="saveChanges">Save</button>
                             </div>
                         </form>
                     </div>
@@ -251,8 +251,8 @@
                                     </form>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
-                                    <button type="button" class="btn btn-success" id="saveBtn">Save</button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                    <button type="button" class="btn btn-primary" id="saveBtn">Save</button>
                                 </div>
                             </div>
                         </div>
@@ -266,8 +266,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Custom JS -->
     <script src="/js/menu.js"></script>
-    <script src="/js/dtc/honorariaUploadCheck.js"></script>
-    <script src="/js/dtc/honorariaformIndicator.js"></script>
-    <script src="/js/dtc/requirementsUpload.js"></script>
+    <script src="/js/spark/honorariaUploadCheck.js"></script>
+    <script src="/js/spark/honorariaformIndicator.js"></script>
+    <script src="/js/spark/requirementsUpload.js"></script>
 </body>
 </html>
