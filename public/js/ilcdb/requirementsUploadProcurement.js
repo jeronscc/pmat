@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(data => {
                 console.log(`Server response for modal ${modalNumber}:`, data);
                 if (data.success) {
-                    alert(data.message);
+                    //alert(data.message);
 
                     // Fetch uploaded files to update the UI dynamically
                     fetchUploadedFiles(procurementId, modalNumber);
