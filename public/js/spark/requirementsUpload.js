@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 console.log("Server response:", data); // Log response
 
                 if (data.success) {
-                    alert(data.message);
+                    //alert(data.message);
                     // Important: Fetch files again after successful upload
                     fetchUploadedFiles(procurementId);
                 } else {

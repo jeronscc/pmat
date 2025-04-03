@@ -33,7 +33,7 @@ document.getElementById('saveSaro').addEventListener('click', function () {
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    alert(data.message);
+                    //alert(data.message);
     
                     // Close modal and reset form
                     const addSaroModal = bootstrap.Modal.getInstance(document.getElementById('addSaroModal'));

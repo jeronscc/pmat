@@ -61,7 +61,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 })
                 .then((data) => {
                     if (data.message === "Procurement added successfully") {
-                        alert("New Procurement added successfully");
+                        //alert("New Procurement added successfully");
                         const procurementModal = bootstrap.Modal.getInstance(
                             document.getElementById("procurementModal")
                         );
