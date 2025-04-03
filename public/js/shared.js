@@ -256,7 +256,7 @@ function fetchNTCAForSaro(saroNo, ntcaApiUrl) {
                     ntcaLabelElement.textContent = `NTCA (${ntca.ntca_no} - ${currentQuarter ? currentQuarter.replace('_q', ' Quarter') : 'No Quarter'})`;
                     const currentQuarterBalance = currentQuarter ? ntca[currentQuarter] : 0;
                     ntcaBalanceElement.textContent = currentQuarterBalance
-                        ? `₱${currentQuarterBalance.toLocaleString()}`
+                        ? `₱${Number(currentQuarterBalance).toLocaleString()}`
                         : "₱0";
                     console.log(`Updated NTCA Balance: ${ntcaBalanceElement.textContent}`); // Debugging
 
@@ -313,15 +313,15 @@ function fetchNTCAForSaro(saroNo, ntcaApiUrl) {
 function getStatusClass(status) {
     switch (status.toLowerCase()) {
         case 'pending':
-            return 'badge bg-secondary text-white'; // Gray for pending
+            return 'badge bg-secondary text-white p-2 fs-6'; // Gray for pending
         case 'ongoing':
-            return 'badge bg-warning text-dark'; // Orangeish yellow for ongoing
+            return 'badge bg-warning text-dark p-2 fs-6'; // Orangeish yellow for ongoing
         case 'done':
-            return 'badge bg-success text-white'; // Green for done
+            return 'badge bg-success text-white p-2 fs-6'; // Green for done
         case 'overdue':
-            return 'badge bg-danger text-white'; // Red for overdue
+            return 'badge bg-danger text-white p-2 fs-6'; // Red for overdue
         default:
-            return 'badge bg-light text-dark'; // Default for unknown status
+            return 'badge bg-light text-dark p-2 fs-6'; // Default for unknown status
     }
 }
 

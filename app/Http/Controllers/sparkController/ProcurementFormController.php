@@ -179,6 +179,7 @@ public function update(Request $request)
         });
 
         return response()->json([
+            'message' => 'Procurement form updated successfully!',
             'unit'    => $unit,
             'status'  => $status
         ]);
@@ -263,6 +264,11 @@ public function update(Request $request)
                     'message' => 'No files uploaded. Missing: ' . implode(', ', $missingFiles),
                 ], 400);
             }
+    
+            return response()->json([
+                'success' => true,
+                'message' => 'Files uploaded successfully: ' . implode(', ', $uploads),
+            ]);
     
         } catch (\Exception $e) {
             Log::error('File upload failed: ' . $e->getMessage());

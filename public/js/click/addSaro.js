@@ -90,7 +90,7 @@ document.getElementById('saveSaro').addEventListener('click', function () {
                     .then(response => response.json())
                     .then(data => {
                         if (data.success) {
-                            alert(data.message);
+                            //alert(data.message);
                             const addSaroModal = bootstrap.Modal.getInstance(document.getElementById('addSaroModal'));
                             addSaroModal.hide();
                             document.getElementById('saroForm').reset();
