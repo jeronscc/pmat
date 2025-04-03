@@ -264,10 +264,6 @@ public function update(Request $request)
                 ], 400);
             }
     
-            return response()->json([
-                'success' => true,
-            ]);
-    
         } catch (\Exception $e) {
             Log::error('File upload failed: ' . $e->getMessage());
     

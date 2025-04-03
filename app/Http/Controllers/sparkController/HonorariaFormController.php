@@ -116,7 +116,6 @@ class HonorariaFormController extends Controller
             });
     
             return response()->json([
-                'success' => true,
                 'status'  => $status . (($status === 'Ongoing' || $status === 'Pending') ? " at $unit" : ''),
             ]);
     

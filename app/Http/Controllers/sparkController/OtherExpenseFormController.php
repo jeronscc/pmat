@@ -134,7 +134,6 @@ class OtherExpenseFormController extends Controller
             });
     
             return response()->json([
-                'success' => true,
                 'status'  => $status . (($status === 'Ongoing' || $status === 'Pending') ? " at $unit" : ''),
             ]);
     
@@ -248,7 +247,6 @@ class OtherExpenseFormController extends Controller
                 ->get();
 
             return response()->json([
-                'success' => true,
                 'files'   => $uploadedFiles, // ✅ Return updated files
             ]);
 
