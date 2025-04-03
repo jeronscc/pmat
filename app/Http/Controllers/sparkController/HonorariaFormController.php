@@ -116,6 +116,8 @@ class HonorariaFormController extends Controller
             });
     
             return response()->json([
+                'success' => true,
+                'message' => 'Honoraria form updated successfully!',
                 'status'  => $status . (($status === 'Ongoing' || $status === 'Pending') ? " at $unit" : ''),
             ]);
     
@@ -196,6 +198,7 @@ class HonorariaFormController extends Controller
 
             return response()->json([
                 'success' => true,
+                'message' => 'Files uploaded successfully: ' . implode(', ', $uploads),
                 'files'   => $uploadedFiles, // ✅ Return updated files
             ]);
 
