@@ -164,16 +164,18 @@ button {
     border: 1px solid #ddd;
 }
 .record-box {
-    max-height: 600px; /* Limit table height */
-    overflow-y: auto; /* Enable vertical scrolling */
+    max-height: 475px; /* Limit table height */
+    overflow-y: hidden; /* Hide the natural scrollbar */
     overflow-x: auto; /* Enable horizontal scrolling if needed */
     position: relative; /* Required for sticky positioning */
+    width: 100%; /* Ensure full width */
 }
 
 /* Make the table take full width */
 .record-box table {
     width: 100%;
     border-collapse: collapse;
+    font-style: normal;
 }
 
 /* Keep <thead> sticky at the top */
@@ -182,13 +184,16 @@ button {
     top: 0;
     background: white; /* Ensure it stays visible */
     z-index: 10; /* Ensure it stays above tbody */
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1); /* Add slight shadow for better visibility */
 }
 
 /* Ensure only <tbody> scrolls */
 .record-box tbody {
     display: block;
-    max-height: 405px; /* Adjust based on container height */
+    max-height: 430px; /* Adjust based on container height */
     overflow-y: auto;
+    overflow-x: auto; /* Prevent horizontal scroll */
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on touch devices */
 }
 
 /* Make sure table rows display properly */
@@ -196,6 +201,17 @@ button {
     display: table;
     width: 100%;
     table-layout: fixed;
+}
+
+.record-box th,
+.record-box td {
+    padding: 15px 18px; /* Added more padding for a cleaner look */
+    text-align: center;
+    word-wrap: break-word;
+}
+
+.record-box td {
+    background-color: #eeeeff;
 }
 
 /* Custom scrollbar for tbody */
@@ -211,34 +227,6 @@ button {
 
 .record-box tbody::-webkit-scrollbar-thumb:hover {
     background: #555;
-}
-
-.record-box {
-    width: 100%;
-    max-width: 100%;
-    display: block;
-    position: relative;
-}
-
-.record-box table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 20px;
-    background: #eef;
-}
-
-.record-box thead {
-    position: sticky;
-    top: 0;
-    background: white;
-    z-index: 10;
-}
-
-.record-box th, .record-box td {
-    padding: 8px;
-    text-align: center;
-    word-wrap: break-word;
-    font-size: 17px;
 }
 
 #procurementTable tr:hover td:nth-child(-n+4) {
