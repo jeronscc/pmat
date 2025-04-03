@@ -69,7 +69,7 @@ function displayCurrentBudget(saro) {
 
     // Check if current_budget exists and format it with comma separation
     const currentBudget = saro.current_budget
-        ? `₱${formatNumberWithCommas(saro.current_budget)}`
+        ? `₱${Number(saro.current_budget).toLocaleString()}`
         : "₱0";
 
     // Display the current budget in the "remainingBalance" container
@@ -84,7 +84,7 @@ function displayCurrentBudget(saro) {
     // Fetch NTCA balance and breakdown for the current quarter
     if (saro.ntca_no && saro.current_quarter) {
         fetchNTCABalance(saro.ntca_no, saro.current_quarter);
-        fetchNTCABreakdown(saro.ntca_no);
+       // fetchNTCABreakdown(saro.ntca_no);
     }
 }
 

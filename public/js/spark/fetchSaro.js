@@ -69,7 +69,7 @@ function displayCurrentBudget(saro) {
 
     // Check if current_budget exists and format it with comma separation
     const currentBudget = saro.current_budget
-        ? `₱${formatNumberWithCommas(saro.current_budget)}`
+        ? `₱${Number(saro.current_budget).toLocaleString()}`
         : "₱0";
 
     // Display the current budget in the "remainingBalance" container
@@ -152,7 +152,7 @@ function fetchNTCAForSaro(saroNo) {
                     ntcaLabelElement.textContent = `NTCA (${ntca.ntca_no} | ${currentQuarter ? currentQuarter : 'No Quarter'})`;
                     const currentQuarterBalance = currentQuarter ? ntca[currentQuarter] : 0;
                     ntcaBalanceElement.textContent = currentQuarterBalance
-                        ? `₱${currentQuarterBalance.toLocaleString()}`
+                        ? `₱${Number(currentQuarterBalance).toLocaleString()}`
                         : "₱0";
 
                     // Add NTCA breakdown to the list

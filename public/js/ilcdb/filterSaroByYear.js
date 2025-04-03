@@ -79,7 +79,7 @@ function fetchNTCAForSaro(saroNo) {
                     ntcaLabelElement.textContent = `NTCA (${ntca.ntca_no} | ${currentQuarter ? currentQuarter : 'No Quarter'})`;
                     const currentQuarterBalance = currentQuarter ? ntca[currentQuarter] : 0;
                     ntcaBalanceElement.textContent = currentQuarterBalance
-                        ? `₱${currentQuarterBalance.toLocaleString()}`
+                        ? `₱${Number(currentQuarterBalance).toLocaleString()}`
                         : '₱0';
 
                     // Add NTCA breakdown to the list
@@ -87,31 +87,31 @@ function fetchNTCAForSaro(saroNo) {
                     <li class="list-group-item d-flex justify-content-between">
                         <strong>Unassigned Budget for NTCA (${ntca.ntca_no}):</strong>
                         <span class="fw-bold">
-                            ${ntca.current_budget ? "₱" + ntca.current_budget.toLocaleString() : "<em style='color:#777;'>Not yet allocated</em>"}
+                            ${ntca.current_budget ? "₱" + Number(ntca.current_budget).toLocaleString() : "<em style='color:#777;'>Not yet allocated</em>"}
                         </span>
                     </li>
                     <li class="list-group-item d-flex justify-content-between">
                         First Quarter: 
                         <span class="fw-bold">
-                            ${ntca.first_q ? "₱" + ntca.first_q.toLocaleString() : "<em style='color:#777;'>Not yet allocated</em>"}
+                            ${ntca.first_q ? "₱" + Number(ntca.first_q).toLocaleString() : "<em style='color:#777;'>Not yet allocated</em>"}
                         </span>
                     </li>
                     <li class="list-group-item d-flex justify-content-between">
                         Second Quarter: 
                         <span class="fw-bold">
-                            ${ntca.second_q ? "₱" + ntca.second_q.toLocaleString() : "<em style='color:#777;'>Not yet allocated</em>"}
+                            ${ntca.second_q ? "₱" + Number(ntca.second_q).toLocaleString() : "<em style='color:#777;'>Not yet allocated</em>"}
                         </span>
                     </li>
                     <li class="list-group-item d-flex justify-content-between">
                         Third Quarter: 
                         <span class="fw-bold">
-                            ${ntca.third_q ? "₱" + ntca.third_q.toLocaleString() : "<em style='color:#777;'>Not yet allocated</em>"}
+                            ${ntca.third_q ? "₱" + Number(ntca.third_q).toLocaleString() : "<em style='color:#777;'>Not yet allocated</em>"}
                         </span>
                     </li>
                     <li class="list-group-item d-flex justify-content-between">
                         Fourth Quarter: 
                         <span class="fw-bold">
-                            ${ntca.fourth_q ? "₱" + ntca.fourth_q.toLocaleString() : "<em style='color:#777;'>Not yet allocated</em>"}
+                            ${ntca.fourth_q ? "₱" + Number(ntca.fourth_q).toLocaleString() : "<em style='color:#777;'>Not yet allocated</em>"}
                         </span>
                     </li>
                 `;
