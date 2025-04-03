@@ -96,7 +96,7 @@
         </aside>
         <section class="records">
             <div class="header">
-                <h5><span>Currently Viewing:</span></h5>
+                <h5><span id="viewingSaroNo">Currently Viewing:</span></h5>
                 <div class="search">
                     <form id="searchForm">
                         <div class="search-box">

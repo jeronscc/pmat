@@ -101,6 +101,7 @@ section {
     min-width: 300px;
     display: flex;
     flex-direction: column;
+    margin-left: 20px;
 }
 
 .dropdown-toggle::after {

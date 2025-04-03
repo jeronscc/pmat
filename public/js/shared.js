@@ -28,7 +28,8 @@ function fetchAndRenderSaroData(apiUrl, panelSelector, balanceSelector, procurem
                     saroElement.setAttribute('data-bs-placement', 'right');
                     saroElement.setAttribute('title', `Description: ${saro.description}`);
                     saroElement.addEventListener('click', function () {
-                        document.getElementById("currentSaroNo").textContent = `${saro.saro_no}: `;
+                        document.getElementById("currentSaroNo").textContent = `${saro.saro_no} Remaining Balance: `;
+                        document.getElementById("viewingSaroNo").textContent = `Currently Viewing: ${saro.saro_no}`;
                         remainingBalance.textContent = `₱${Number(saro.current_budget).toLocaleString()}`;
                         fetchProcurementData(saro.saro_no, procurementApiUrl, 'all'); // Fetch procurement data for the selected SARO
                         fetchNTCAForSaro(saro.saro_no, ntcaApiUrl); // Fetch NTCA data for the selected SARO
