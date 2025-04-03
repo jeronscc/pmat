@@ -51,11 +51,11 @@ Route::middleware(['auth', AdminMiddleware::class])->group(function () {
 // PROJECT PAGES
 
 Route::get('/homepage-ilcdb', function () {
-    return view('homepage'); 
+    return view('homepage');
 })->middleware('auth');
 
 Route::get('/homepage-projectClick', function () {
-    return view('projectClick'); 
+    return view('projectClick');
 })->middleware('auth');
 
 Route::get('/homepage-dtc', function () {
@@ -152,7 +152,7 @@ Route::post('/dtcSVP/update', [dtcProcurementFormController::class, 'update'])->
 Route::get('/dtcHonoraria', [dtcHonorariaFormController::class, 'showForm'])->name('honoraria.form');
 Route::post('/dtcHonoraria/update', [dtcHonorariaFormController::class, 'updateHonoraria'])->name('honoraria.update');
 
-Route::get('/dtcDTE', [dtcOtherExpenseFormController::class, 'showForm'])->name('otherexpense.form');  
+Route::get('/dtcDTE', [dtcOtherExpenseFormController::class, 'showForm'])->name('otherexpense.form');
 Route::post('/dtcDTE/update', [dtcOtherExpenseFormController::class, 'updateOtherExpense'])->name('otherexpense.update');
 
 Route::get('/clickSVP', [clickProcurementFormController::class, 'showForm'])->name('procurementform');
@@ -161,7 +161,7 @@ Route::post('/clickSVP/update', [clickProcurementFormController::class, 'update'
 Route::get('/clickHonoraria', [clickHonorariaFormController::class, 'showForm'])->name('honoraria.form');
 Route::post('/clickHonoraria/update', [clickHonorariaFormController::class, 'updateHonoraria'])->name('honoraria.update');
 
-Route::get('/clickDTE', [clickOtherExpenseFormController::class, 'showForm'])->name('otherexpense.form');  
+Route::get('/clickDTE', [clickOtherExpenseFormController::class, 'showForm'])->name('otherexpense.form');
 Route::post('/clickDTE/update', [clickOtherExpenseFormController::class, 'updateOtherExpense'])->name('otherexpense.update');
 
 Route::get('/sparkSVP', [sparkProcurementFormController::class, 'showForm'])->name('procurementform');
@@ -170,7 +170,7 @@ Route::post('/sparkSVP/update', [sparkProcurementFormController::class, 'update'
 Route::get('/sparkHonoraria', [sparkHonorariaFormController::class, 'showForm'])->name('honoraria.form');
 Route::post('/sparkHonoraria/update', [sparkHonorariaFormController::class, 'updateHonoraria'])->name('honoraria.update');
 
-Route::get('/sparkDTE', [sparkOtherExpenseFormController::class, 'showForm'])->name('otherexpense.form');  
+Route::get('/sparkDTE', [sparkOtherExpenseFormController::class, 'showForm'])->name('otherexpense.form');
 Route::post('/sparkDTE/update', [sparkOtherExpenseFormController::class, 'updateOtherExpense'])->name('otherexpense.update');
 // REDIRECTS TO ILCDB APIs
 
@@ -184,9 +184,7 @@ Route::post('/procurementform/update', [IlcdbProcurementFormController::class, '
 Route::get('/honorariaform', [IlcdbHonorariaFormController::class, 'showForm'])->name('honoraria.form');
 Route::post('/honorariaform/update', [IlcdbHonorariaFormController::class, 'updateHonoraria'])->name('honoraria.update');
 
-Route::get('/otherexpenseform', [IlcdbOtherExpenseFormController::class, 'showForm'])->name('otherexpense.form');  
+Route::get('/otherexpenseform', [IlcdbOtherExpenseFormController::class, 'showForm'])->name('otherexpense.form');
 Route::post('/otherexpenseform/update', [IlcdbOtherExpenseFormController::class, 'updateOtherExpense'])->name('otherexpense.update');
 
 Route::get('/api/requirements/{procurement_id}/files', [IlcdbHonorariaFormController::class, 'getUploadedFiles']);
-
-

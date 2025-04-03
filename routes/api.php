@@ -28,18 +28,18 @@ Route::get('/fetch-saro-ilcdb', function (Request $request) {
     if ($year) {
         // Fetch SARO data for a specific year and order by saro_no in descending order
         $data = DB::connection('ilcdb')
-                    ->table('saro')
-                    ->whereYear('year', $year)
-                    ->select('saro_no', 'current_budget', 'year')
-                    ->orderBy('saro_no', 'desc')  
-                    ->get();
+            ->table('saro')
+            ->whereYear('year', $year)
+            ->select('saro_no', 'current_budget', 'year')
+            ->orderBy('saro_no', 'desc')
+            ->get();
     } else {
         // Fetch all SARO data and order by saro_no in descending order
         $data = DB::connection('ilcdb')
-                    ->table('saro')
-                    ->select('saro_no', 'current_budget', 'year')  
-                    ->orderBy('saro_no', 'desc')  
-                    ->get();
+            ->table('saro')
+            ->select('saro_no', 'current_budget', 'year')
+            ->orderBy('saro_no', 'desc')
+            ->get();
     }
     // Return the data as JSON
     return response()->json($data);
@@ -110,19 +110,19 @@ Route::get('/fetch-procurement-ilcdb', function (Request $request) {
 
         // Debug: Check procurement data
         Log::info("Procurement Data: " . json_encode($procurement));
-    
+
         // Try fetching the corresponding form for honoraria or procurement
-        $form = $honorariaForms->firstWhere(function($item) use ($procurement) {
+        $form = $honorariaForms->firstWhere(function ($item) use ($procurement) {
             return (string)$item->procurement_id === (string)$procurement->procurement_id;
-        }) ?? $procurementForms->firstWhere(function($item) use ($procurement) {
+        }) ?? $procurementForms->firstWhere(function ($item) use ($procurement) {
             return (string)$item->procurement_id === (string)$procurement->procurement_id;
-        }) ?? $otherexpenseForms->firstWhere(function($item) use ($procurement) {
+        }) ?? $otherexpenseForms->firstWhere(function ($item) use ($procurement) {
             return (string)$item->procurement_id === (string)$procurement->procurement_id;
         });
-    
+
         // Log form data to debug
         Log::info("Form Data: " . json_encode($form));
-    
+
         // Return the merged data (procurement info + form info)
         return [
             'procurement_id' => $procurement->procurement_id,
@@ -170,8 +170,8 @@ Route::get('/search-procurement-ilcdb', function (Request $request) {
         $mergedData = $procurements->map(function ($procurement) use ($procurementForms, $honorariaForms, $otherexpenseForms) {
             // Try fetching the corresponding form for honoraria, procurement, or other expense
             $form = $honorariaForms->firstWhere('procurement_id', $procurement->procurement_id) ??
-                    $procurementForms->firstWhere('procurement_id', $procurement->procurement_id) ??
-                    $otherexpenseForms->firstWhere('procurement_id', $procurement->procurement_id);
+                $procurementForms->firstWhere('procurement_id', $procurement->procurement_id) ??
+                $otherexpenseForms->firstWhere('procurement_id', $procurement->procurement_id);
 
             return [
                 'procurement_id' => $procurement->procurement_id,
@@ -182,7 +182,6 @@ Route::get('/search-procurement-ilcdb', function (Request $request) {
         });
 
         return response()->json($mergedData->values()->all());
-
     } catch (\Exception $e) {
         Log::error('Error searching procurement: ' . $e->getMessage());
         return response()->json(['error' => 'Error searching procurement data: ' . $e->getMessage()], 500);
@@ -212,4 +211,4 @@ Route::post('/save-ntca', [IlcdbSaroController::class, 'saveNTCA']);
 Route::get('/ntca-breakdown/{ntcaNo}', [IlcdbSaroController::class, 'getNTCABreakdown']);
 Route::get('/fetch-ntca-by-saro/{saroNo}', [IlcdbSaroController::class, 'fetchNTCABySaro']);
 Route::get('/ntca-balance/{ntcaNo}', [IlcdbSaroController::class, 'getNTCABalanceForCurrentQuarter']);
-Route::get('/check-overdue',[IlcdbProcurementController::class,'getOverdueProcurements']);
+Route::get('/check-overdue', [IlcdbProcurementController::class, 'getOverdueProcurements']);
