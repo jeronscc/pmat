@@ -151,8 +151,8 @@
                                 </div>
                             </div>
                             <div class="table-buttons">
-                                <button type="button" class="btn btn-danger" id="cancelChanges">Cancel</button>
-                                <button type="button" class="btn btn-success" id="saveChanges">Save</button>
+                                <button type="button" class="btn btn-secondary" id="cancelChanges">Cancel</button>
+                                <button type="button" class="btn btn-primary" id="saveChanges">Save</button>
                             </div>
                         </form>
                     </div>
@@ -230,8 +230,8 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-success" id="saveBtn1">Save</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="saveBtn1">Save</button>
                 </div>
             </div>
         </div>
