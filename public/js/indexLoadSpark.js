@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     fetchAndRenderSaroData(
         '/api/spark/fetch-saro-spark',
         '.panel.spark',

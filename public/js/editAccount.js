@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", function () {
             console.log("Username:", username);  // ✅ Added to check if username is being passed
 
             // ✅ Make sure `currentUsername` is updated
-            document.getElementById("currentUsername").textContent = username; 
+            document.getElementById("currentUsername").textContent = username;
 
             // Set values in the modal fields
             document.getElementById("editUserId").value = userId;
@@ -36,10 +36,10 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
-    document.getElementById("saveChangesBtn").addEventListener("click", function() {
+    document.getElementById("saveChangesBtn").addEventListener("click", function () {
         let userId = document.getElementById("editUserId").value;
         let form = document.getElementById("editUserForm");
-        
+
         if (userId) {
             form.submit();
         } else {

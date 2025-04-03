@@ -94,10 +94,10 @@ function fetchProcurementData(saroNo, baseApiUrl) {
         .then(data => {
             // Store the data globally so we can use it for filtering
             window.procurementData = data;
-            
+
             // Initialize tabs
             initializeTabs();
-            
+
             // Initially display all data
             displayProcurementData('all');
         })
@@ -107,21 +107,21 @@ function fetchProcurementData(saroNo, baseApiUrl) {
 function initializeTabs() {
     // Add event listeners to tabs
     document.querySelectorAll('.nav-link').forEach(tab => {
-        tab.addEventListener('click', function(e) {
+        tab.addEventListener('click', function (e) {
             e.preventDefault();
-            
+
             // Remove active class from all tabs
             document.querySelectorAll('.nav-link').forEach(t => t.classList.remove('active'));
-            
+
             // Add active class to clicked tab
             this.classList.add('active');
-            
+
             // Get the target tab ID
             const targetId = this.getAttribute('href').substring(1);
-            
+
             // Determine filter based on tab ID
             let filter = 'all';
-            switch(targetId) {
+            switch (targetId) {
                 case 'tabPending':
                     filter = 'pending';
                     break;
@@ -137,7 +137,7 @@ function initializeTabs() {
                 default:
                     filter = 'all';
             }
-            
+
             // Display filtered data
             displayProcurementData(filter);
         });
@@ -147,7 +147,7 @@ function initializeTabs() {
 function displayProcurementData(filter) {
     const procurementTable = document.getElementById('procurementTable');
     procurementTable.innerHTML = ''; // Clear any existing rows
-    
+
     if (!window.procurementData || window.procurementData.length === 0) {
         const emptyMessage = document.createElement('tr');
         const emptyCell = document.createElement('td');
@@ -157,17 +157,17 @@ function displayProcurementData(filter) {
         procurementTable.appendChild(emptyMessage);
         return;
     }
-    
+
     // Filter the data based on selected tab
     const filteredData = window.procurementData.filter(item => {
         const status = (item.status || '').toLowerCase();
         const honorariaStatus = (item.honoraria_status || '').toLowerCase();
-        
+
         // Use honoraria status if available and not "no status"
-        const effectiveStatus = (honorariaStatus !== 'no status' && honorariaStatus !== '') 
-            ? honorariaStatus.toLowerCase() 
+        const effectiveStatus = (honorariaStatus !== 'no status' && honorariaStatus !== '')
+            ? honorariaStatus.toLowerCase()
             : status.toLowerCase();
-        
+
         if (filter === 'all') {
             return true;
         } else if (filter === 'pending') {
@@ -181,7 +181,7 @@ function displayProcurementData(filter) {
         }
         return false;
     });
-    
+
     if (filteredData.length > 0) {
         filteredData.forEach(item => {
             const row = document.createElement('tr');

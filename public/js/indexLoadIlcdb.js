@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     fetchAndRenderSaroData(
         '/api/fetch-saro-ilcdb',
         '.panel.ilcdb',

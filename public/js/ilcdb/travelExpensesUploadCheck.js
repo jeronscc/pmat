@@ -26,16 +26,16 @@ function uploadCompleteCheck() {
                 if (requirementsStatus === 1) {
                     dateSubmitted.disabled = false;
                     dateReturned.disabled = false;
-                } 
+                }
                 else if (requirementsStatus === 0) {
                     dateSubmitted.disabled = true;
                     dateReturned.disabled = true;
-                } 
+                }
                 else {
                     console.error('Error fetching missing files:', result.message);
                     alert('An error occurred while checking the upload status.');
                 }
-            } 
+            }
             else {
                 console.error('Error fetching missing files:', result.message);
                 alert('An error occurred while checking the upload status.');
@@ -70,7 +70,7 @@ function incompFilesDisable() {
         save.disabled = true; // Disable the save button if any file input is empty
     } else {
         save.disabled = false; // Enable the save button if all file inputs have files
-        
+
         // Call the upload complete check after all files are selected
         uploadCompleteCheck();
     }
@@ -79,7 +79,7 @@ function incompFilesDisable() {
 document.addEventListener('DOMContentLoaded', () => {
     // Initial check on page load
     uploadCompleteCheck();
-    
+
     // Add event listeners to file inputs
     const fileInputs = document.querySelectorAll(
         '#orsFile, #dvFile, #travelOrderFile, #appearanceFile, #appearanceFile, #reportFile, #itineraryFile, #certFile'

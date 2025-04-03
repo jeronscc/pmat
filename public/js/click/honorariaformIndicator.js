@@ -26,27 +26,27 @@ document.addEventListener('DOMContentLoaded', function () {
             },
             body: formData
         })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert(data.message);
-                disableSaveButton();  // Disable the save button after success
-                window.location.href = '/homepage-projectClick' // Refresh to reflect changes
-            } else {
-                alert('Error: ' + data.message);
-            }
-        })
-        .catch(error => {
-            console.error('Error saving data:', error);
-            alert('Error saving data. Check console for details.');
-        });
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(data.message);
+                    disableSaveButton();  // Disable the save button after success
+                    window.location.href = '/homepage-projectClick' // Refresh to reflect changes
+                } else {
+                    alert('Error: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error saving data:', error);
+                alert('Error saving data. Check console for details.');
+            });
     });
 
-    document.getElementById('cancelChanges').addEventListener('click', function(e) {
+    document.getElementById('cancelChanges').addEventListener('click', function (e) {
         e.preventDefault();
         window.location.href = '/homepage-projectClick';
     });
-    
+
     function initializeStatusTracking() {
         const dateSubmitted = document.getElementById('dateSubmitted');
         const dateReturned = document.getElementById('dateReturned');

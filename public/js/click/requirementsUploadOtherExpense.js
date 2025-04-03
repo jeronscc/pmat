@@ -34,22 +34,22 @@ document.addEventListener('DOMContentLoaded', function () {
                 headers: { 'X-CSRF-TOKEN': csrfToken },
                 body: formData
             })
-            .then(response => response.json())
-            .then(data => {
-                console.log("Server response:", data); // Log response
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Server response:", data); // Log response
 
-                if (data.success) {
-                    //alert(data.message);
-                    // Important: Fetch files again after successful upload
-                    fetchUploadedFiles(procurementId);
-                } else {
-                    alert("Upload failed: " + (data.message || "Unknown error."));
-                }
-            })
-            .catch(error => {
-                console.error("Error during upload:", error);
-                alert("Upload failed. Check console for details.");
-            });
+                    if (data.success) {
+                        //alert(data.message);
+                        // Important: Fetch files again after successful upload
+                        fetchUploadedFiles(procurementId);
+                    } else {
+                        alert("Upload failed: " + (data.message || "Unknown error."));
+                    }
+                })
+                .catch(error => {
+                    console.error("Error during upload:", error);
+                    alert("Upload failed. Check console for details.");
+                });
         });
     }
 
@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     // Ensure files is an array
                     const files = Array.isArray(data.files) ? data.files : Object.values(data.files);
                     console.log("Processing files:", files); // Log processed files array
-                    
+
                     // Display each file type
                     displayFilesForRequirement('ORS', files);
                     displayFilesForRequirement('DV', files);
@@ -102,16 +102,16 @@ document.addEventListener('DOMContentLoaded', function () {
         // Find files for this requirement type - consider multiple possible formats
         const matchingFiles = files.filter(file => {
             if (!file.requirement_name) return false;
-            
+
             // Check for various formats of the requirement name
             const reqName = file.requirement_name.toLowerCase();
             const searchType = requirementType.toLowerCase();
-            
-            return reqName.includes(searchType) || 
-                  reqName.includes(searchType.replace(/([A-Z])/g, ' $1').trim().toLowerCase()) ||  // Check with spaces
-                  reqName.includes(searchType.replace(/([A-Z])/g, '_$1').trim().toLowerCase());    // Check with underscores
+
+            return reqName.includes(searchType) ||
+                reqName.includes(searchType.replace(/([A-Z])/g, ' $1').trim().toLowerCase()) ||  // Check with spaces
+                reqName.includes(searchType.replace(/([A-Z])/g, '_$1').trim().toLowerCase());    // Check with underscores
         });
-        
+
         console.log(`Files matching ${requirementType}:`, matchingFiles);
 
         // If we have matching files, show them and hide the file input
@@ -135,20 +135,20 @@ document.addEventListener('DOMContentLoaded', function () {
                 fileLink.textContent = file.original_filename || `View ${requirementType} (${formattedFileSize})`;
                 fileLink.target = '_blank';
                 fileLink.classList.add('text-primary', 'fw-bold');
-                
+
                 // Create a container for the link
                 const linkContainer = document.createElement('div');
                 linkContainer.classList.add('mt-2', 'mb-2');
                 linkContainer.appendChild(fileLink);
-                
+
                 // Add the link to the file list container
                 fileListContainer.appendChild(linkContainer);
-                
+
                 if (fileInput) {
                     // Hide the file input since we already have a file
                     fileInput.style.display = 'none';
                     fileInput.disabled = true;
-                    
+
                     // Explicitly log when we're hiding an input
                     console.log(`Hiding input for ${requirementType} (ID: ${fileInputId})`);
                 }
@@ -158,7 +158,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (fileInput) {
                 fileInput.style.display = '';
                 fileInput.disabled = false;
-                
+
                 // Explicitly log when we're showing an input
                 console.log(`Showing input for ${requirementType} (ID: ${fileInputId})`);
             }

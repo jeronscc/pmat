@@ -1,19 +1,19 @@
 // Add event listener for the search input to reset when empty
-document.getElementById('searchBar').addEventListener('input', function(event) {
+document.getElementById('searchBar').addEventListener('input', function (event) {
     if (!event.target.value.trim()) {
         console.log("Search bar cleared, resetting table...");
         fetchProcurementData(''); // Call your function to reload default data
     }
 });
 //Add eventlistener for the search button
-document.getElementById('searchBar').addEventListener('keypress', function(event) {
+document.getElementById('searchBar').addEventListener('keypress', function (event) {
     if (event.key === 'Enter') {
         event.preventDefault();
         searchProcurement();
     }
 });
 
-document.querySelector('.search-button').addEventListener('click', function() {
+document.querySelector('.search-button').addEventListener('click', function () {
     searchProcurement();
 });
 
@@ -25,7 +25,7 @@ function getStatusClass(status) {
             return 'badge bg-warning text-dark';  // Orangeish yellow for ongoing
         case 'done':
             return 'badge bg-success text-white';  // Green for done
-        case'overdue':
+        case 'overdue':
             return 'badge bg-danger text-white';
         default:
             return 'badge bg-light text-dark';  // Default for no status or unknown status

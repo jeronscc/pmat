@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     fetchAndRenderSaroData(
         '/api/dtc/fetch-saro-dtc',
         '.panel.dtc',

@@ -101,14 +101,14 @@ document.addEventListener('DOMContentLoaded', function () {
             const fileLinkContainer = document.getElementById(`${file.requirement_name}${modalNumber}Link`);
             if (fileInput && fileLinkContainer) {
                 fileInput.style.display = 'none'; // Hide the file input
-    
+
                 // Create the file link
                 const fileLink = document.createElement('a');
                 fileLink.href = `/${file.file_path}`;
-                
+
                 // Get the file size (assuming it's in bytes)
                 const fileSize = file.size || 0; // Default to 0 if size is missing or invalid
-                
+
                 // Format the file size to KB or MB
                 let formattedFileSize = '';
                 if (fileSize < 1024) {
@@ -118,16 +118,16 @@ document.addEventListener('DOMContentLoaded', function () {
                 } else {
                     formattedFileSize = `${(fileSize / 1048576).toFixed(2)} MB`;
                 }
-    
+
                 // Set the link text content (including requirement name and file size)
                 fileLink.textContent = `View ${file.requirement_name} (${formattedFileSize})`;
                 fileLink.target = '_blank';
                 fileLink.style.fontWeight = 'bold';
-    
+
                 // Clear existing content and append the new file link
-                fileLinkContainer.innerHTML = ''; 
+                fileLinkContainer.innerHTML = '';
                 fileLinkContainer.appendChild(fileLink);
-    
+
                 // Show the uploaded file link in other modals that need it
                 modals.forEach(otherModalNumber => {
                     if (otherModalNumber !== modalNumber) {

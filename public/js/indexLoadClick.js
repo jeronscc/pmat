@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     fetchAndRenderSaroData(
         '/api/click/fetch-saro-click',
         '.panel.project-click',

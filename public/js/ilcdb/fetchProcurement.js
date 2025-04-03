@@ -7,7 +7,7 @@ function getStatusClass(status) {
             return 'badge bg-warning text-dark';  // Orangeish yellow for ongoing
         case 'done':
             return 'badge bg-success text-white';  // Green for done
-        case'overdue':
+        case 'overdue':
             return 'badge bg-danger text-white';
         default:
             return 'badge bg-light text-dark';  // Default for no status or unknown status
@@ -40,18 +40,18 @@ function fetchProcurementForSaro(saroNo) {
             if (data.length > 0) {
                 // Sort data by status order and maintain original order for FIFO
                 const statusOrder = { 'overdue': 1, 'ongoing': 2, 'pending': 3, 'done': 4 };
-            
+
                 data.sort((a, b) => {
                     const statusA = (a.status || 'unknown').toLowerCase();
                     const statusB = (b.status || 'unknown').toLowerCase();
-            
+
                     // Sort by status first
                     const statusComparison = (statusOrder[statusA] || 5) - (statusOrder[statusB] || 5);
-            
+
                     // If statuses are the same, maintain original FIFO order
                     return statusComparison !== 0 ? statusComparison : data.indexOf(a) - data.indexOf(b);
                 });
-            
+
                 data.forEach(item => {
                     const row = document.createElement('tr');
                     row.setAttribute('data-procurement-id', item.procurement_id); // ✅ Trackable row ID
@@ -75,8 +75,8 @@ function fetchProcurementForSaro(saroNo) {
                     const statusCell = document.createElement('td');
                     const badge = document.createElement('span');
 
-                    let statusMessage = item.status || ''; 
-                    let unitMessage = item.unit? ` at ${item.unit}` : ''; 
+                    let statusMessage = item.status || '';
+                    let unitMessage = item.unit ? ` at ${item.unit}` : '';
 
                     // Use honoraria status if available
                     if (item.honoraria_status && item.honoraria_status.toLowerCase() !== 'no status') {
@@ -89,7 +89,7 @@ function fetchProcurementForSaro(saroNo) {
                     }
 
                     badge.className = getStatusClass(statusMessage || '');
-                    badge.textContent = statusMessage + unitMessage; 
+                    badge.textContent = statusMessage + unitMessage;
 
                     statusCell.appendChild(badge);
                     row.appendChild(statusCell);
@@ -123,7 +123,7 @@ function fetchProcurementForSaro(saroNo) {
 // Fetch procurement data by year filter
 function fetchProcurementForYear(year) {
     const url = year === '' ? '/api/fetch-procurement-ilcdb' : `/api/fetch-procurement-ilcdb?year=${year}`;
-    
+
     console.log("Fetching procurement data from:", url); // Debugging log
 
     fetch(url)
@@ -183,7 +183,7 @@ function fetchProcurementForYear(year) {
                     }
 
                     if (statusMessage.toLowerCase() === 'done') {
-                        unitMessage = ''; 
+                        unitMessage = '';
                     }
 
                     badge.className = getStatusClass(statusMessage || '');
@@ -208,7 +208,7 @@ function fetchProcurementForYear(year) {
 
                 // Add event listener for row click
                 document.querySelectorAll('#procurementTable tr').forEach(row => {
-                    row.addEventListener('click', function(event) {
+                    row.addEventListener('click', function (event) {
                         const prNumberCell = event.target.closest('td');
                         if (prNumberCell && prNumberCell.parentElement) {
                             const procurementId = prNumberCell.textContent;
@@ -249,18 +249,18 @@ function fetchProcurementRequirements(saroNo) {
             if (data.length > 0) {
                 // Sort data by status order and maintain original order for FIFO
                 const statusOrder = { 'overdue': 1, 'ongoing': 2, 'pending': 3, 'done': 4 };
-            
+
                 data.sort((a, b) => {
                     const statusA = (a.status || 'unknown').toLowerCase();
                     const statusB = (b.status || 'unknown').toLowerCase();
-            
+
                     // Sort by status first
                     const statusComparison = (statusOrder[statusA] || 5) - (statusOrder[statusB] || 5);
-            
+
                     // If statuses are the same, maintain original FIFO order
                     return statusComparison !== 0 ? statusComparison : data.indexOf(a) - data.indexOf(b);
                 });
-            
+
                 data.forEach(item => {
                     const row = document.createElement('tr');
 
@@ -312,7 +312,7 @@ function fetchProcurementRequirements(saroNo) {
                         tableBodies.ongoing.appendChild(row.cloneNode(true));
                     } else if (statusMessage.toLowerCase() === 'overdue') {
                         tableBodies.overdue.appendChild(row.cloneNode(true));
-                    } else if (statusMessage.toLowerCase() === 'pending') { 
+                    } else if (statusMessage.toLowerCase() === 'pending') {
                         tableBodies.pending.appendChild(row.cloneNode(true));
                     }
 
@@ -321,7 +321,7 @@ function fetchProcurementRequirements(saroNo) {
 
                 // Add event listener to each table body for delegation
                 Object.values(tableBodies).forEach(tableBody => {
-                    tableBody.addEventListener('click', function(event) {
+                    tableBody.addEventListener('click', function (event) {
                         const prNumberCell = event.target.closest('td');
                         if (prNumberCell && prNumberCell.parentElement) {
                             const procurementId = prNumberCell.textContent;
@@ -448,7 +448,7 @@ function fetchProcurementData(year = '', status = 'all') {
             data.forEach(item => {
                 const row = document.createElement('tr');
                 row.setAttribute('data-procurement-id', item.procurement_id); // ✅ Ensure each row has a unique identifier
-            
+
                 const prNumberCell = document.createElement('td');
                 prNumberCell.textContent = item.procurement_id;
                 row.appendChild(prNumberCell);
@@ -456,14 +456,14 @@ function fetchProcurementData(year = '', status = 'all') {
                 const categoryCell = document.createElement('td');
                 categoryCell.textContent = item.procurement_category || 'N/A'; // Add category cell
                 row.appendChild(categoryCell);
-            
+
                 const activityCell = document.createElement('td');
                 activityCell.textContent = item.activity;
                 row.appendChild(activityCell);
-            
+
                 const statusCell = document.createElement('td');
                 const badge = document.createElement('span');
-            
+
                 let statusMessage = item.status || '';
                 let unitMessage = item.unit ? ` at ${item.unit}` : '';
                 if (statusMessage.toLowerCase() === 'done') unitMessage = '';
@@ -473,7 +473,7 @@ function fetchProcurementData(year = '', status = 'all') {
 
                 statusCell.appendChild(badge);
                 row.appendChild(statusCell);
-            
+
                 tableBodies.all.appendChild(row);
                 if (statusMessage.toLowerCase() === 'done') tableBodies.done.appendChild(row);
                 else if (statusMessage.toLowerCase() === 'pending') tableBodies.pending.appendChild(row);
@@ -558,18 +558,18 @@ function updateProcurementTable(data) {
     if (data.length > 0) {
         // Sort data by status order and maintain original order for FIFO
         const statusOrder = { 'overdue': 1, 'ongoing': 2, 'pending': 3, 'done': 4 };
-    
+
         data.sort((a, b) => {
             const statusA = (a.status || 'unknown').toLowerCase();
             const statusB = (b.status || 'unknown').toLowerCase();
-    
+
             // Sort by status first
             const statusComparison = (statusOrder[statusA] || 5) - (statusOrder[statusB] || 5);
-    
+
             // If statuses are the same, maintain original FIFO order
             return statusComparison !== 0 ? statusComparison : data.indexOf(a) - data.indexOf(b);
         });
-    
+
         data.forEach(item => {
             const row = document.createElement('tr');
 
@@ -618,7 +618,7 @@ function updateProcurementTable(data) {
 
         // Add event listener to each table body for delegation
         Object.values(tableBodies).forEach(tableBody => {
-            tableBody.addEventListener('click', function(event) {
+            tableBody.addEventListener('click', function (event) {
                 const prNumberCell = event.target.closest('td');
                 if (prNumberCell && prNumberCell.parentElement) {
                     const procurementId = prNumberCell.textContent;
