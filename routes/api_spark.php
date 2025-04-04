@@ -143,7 +143,7 @@ Route::prefix('spark')->middleware('api')->group(function () {
             // Perform the search using the provided query parameter
             $procurements = DB::connection('spark')
                 ->table('procurement')
-                ->select('procurement_id', 'activity')
+                ->select('procurement_id', 'activity', 'procurement_category')
                 ->where('procurement_id', 'like', "%{$query}%")
                 ->orWhere('activity', 'like', "%{$query}%")
                 ->orderBy('procurement_id', 'desc')
@@ -167,6 +167,7 @@ Route::prefix('spark')->middleware('api')->group(function () {
 
                 return [
                     'procurement_id' => $procurement->procurement_id,
+                    'category' => $procurement->procurement_category,
                     'activity' => $procurement->activity,
                     'status' => $form && !empty($form->status) ? $form->status : '',
                     'unit' => $form && !empty($form->unit) ? $form->unit : '',

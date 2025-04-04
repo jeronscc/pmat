@@ -73,6 +73,11 @@ function searchProcurement() {
                     prNumberCell.textContent = item.procurement_id;
                     row.appendChild(prNumberCell);
 
+                    // CATEGORY cell
+                    const categoryCell = document.createElement('td');
+                    categoryCell.textContent = item.category || 'N/A'; // Add category cell
+                    row.appendChild(categoryCell);
+
                     // ACTIVITY cell
                     const activityCell = document.createElement('td');
                     activityCell.textContent = item.activity;
@@ -133,6 +138,11 @@ function updateProcurementTable(data) {
             const prNumberCell = document.createElement('td');
             prNumberCell.textContent = item.procurement_id;
             row.appendChild(prNumberCell);
+            
+            // CATEGORY cell
+            const categoryCell = document.createElement('td');
+            categoryCell.textContent = item.category || 'N/A'; // Add category cell
+            row.appendChild(categoryCell);
 
             // ACTIVITY cell
             const activityCell = document.createElement('td');

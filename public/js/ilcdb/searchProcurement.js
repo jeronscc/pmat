@@ -73,6 +73,10 @@ function searchProcurement() {
                     prNumberCell.textContent = item.procurement_id;
                     row.appendChild(prNumberCell);
 
+                    const categoryCell = document.createElement('td');
+                    categoryCell.textContent = item.category || 'N/A'; // Add category cell
+                    row.appendChild(categoryCell);
+
                     // ACTIVITY cell
                     const activityCell = document.createElement('td');
                     activityCell.textContent = item.activity;
@@ -108,7 +112,7 @@ function searchProcurement() {
                 Object.values(tableBodies).forEach(tableBody => {
                     const emptyMessage = document.createElement('tr');
                     const emptyCell = document.createElement('td');
-                    emptyCell.setAttribute('colspan', '3');
+                    emptyCell.setAttribute('colspan', '4');
                     emptyCell.textContent = 'No procurement records found for the search term.';
                     emptyMessage.appendChild(emptyCell);
                     tableBody.appendChild(emptyMessage);
@@ -133,6 +137,10 @@ function updateProcurementTable(data) {
             const prNumberCell = document.createElement('td');
             prNumberCell.textContent = item.procurement_id;
             row.appendChild(prNumberCell);
+
+            const categoryCell = document.createElement('td');
+            categoryCell.textContent = item.procurement_category || 'N/A'; // Add category cell
+            row.appendChild(categoryCell);
 
             // ACTIVITY cell
             const activityCell = document.createElement('td');
@@ -161,7 +169,7 @@ function updateProcurementTable(data) {
     } else {
         const emptyMessage = document.createElement('tr');
         const emptyCell = document.createElement('td');
-        emptyCell.setAttribute('colspan', '3');
+        emptyCell.setAttribute('colspan', '4');
         emptyCell.textContent = 'No procurement records found.';
         emptyMessage.appendChild(emptyCell);
         tableBody.appendChild(emptyMessage);

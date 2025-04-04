@@ -151,8 +151,9 @@ Route::get('/search-procurement-ilcdb', function (Request $request) {
         // Perform the search using the provided query parameter
         $procurements = DB::connection('ilcdb')
             ->table('procurement')
-            ->select('procurement_id', 'activity')
+            ->select('procurement_id', 'activity', 'procurement_category')
             ->where('procurement_id', 'like', "%{$query}%")
+            ->orWhere('procurement_category', 'like', "%{$query}%")
             ->orWhere('activity', 'like', "%{$query}%")
             ->orderBy('procurement_id', 'desc')
             ->get();
@@ -175,6 +176,7 @@ Route::get('/search-procurement-ilcdb', function (Request $request) {
 
             return [
                 'procurement_id' => $procurement->procurement_id,
+                'category' => $procurement->procurement_category,
                 'activity' => $procurement->activity,
                 'status' => $form && !empty($form->status) ? $form->status : '',
                 'unit' => $form && !empty($form->unit) ? $form->unit : '',
