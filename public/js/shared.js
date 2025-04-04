@@ -26,7 +26,7 @@ function fetchAndRenderSaroData(apiUrl, panelSelector, balanceSelector, procurem
                     saroElement.setAttribute('data-saro-no', saro.saro_no); // Attach SARO number
                     saroElement.setAttribute('data-bs-toggle', 'tooltip');
                     saroElement.setAttribute('data-bs-placement', 'right');
-                    saroElement.setAttribute('title', `Description: ${saro.description}`);
+                    saroElement.setAttribute('title', `Description: ${saro.description}, Budget Allocated: ₱${Number(saro.current_budget).toLocaleString()}`);
                     saroElement.addEventListener('click', function () {
                         document.getElementById("currentSaroNo").textContent = `${saro.saro_no} Remaining Balance: `;
                         document.getElementById("viewingSaroNo").textContent = `Currently Viewing: ${saro.saro_no}`;
