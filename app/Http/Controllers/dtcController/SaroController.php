@@ -154,7 +154,6 @@ class SaroController extends Controller
             }
 
             foreach ($ntcaRecords as $ntca) {
-                $ntca->saro_budget = DB::connection('ilcdb')->table('saro')->where('saro_no', $ntca->saro_no)->value('budget_allocated'); // From saro table
                 $ntca->ntca_budget = DB::connection('ilcdb')->table('ntca')->where('ntca_no', $ntca->ntca_no)->value('budget_allocated'); // From ntca table
             }
 

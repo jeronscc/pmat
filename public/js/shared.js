@@ -269,12 +269,6 @@ function fetchNTCAForSaro(saroNo, ntcaApiUrl) {
                     // Add NTCA breakdown to the list
                     ntcaList.innerHTML += `
                     <li class="list-group-item d-flex justify-content-between">
-                        <strong>SARO Budget Allocated:</strong>
-                        <span class="fw-bold">
-                            ${ntca.saro_budget ? "₱" + ntca.saro_budget.toLocaleString() : "<em style='color:#777;'>Not yet allocated</em>"}
-                        </span>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between">
                         <strong>NTCA Budget Allocated:</strong>
                         <span class="fw-bold">
                             ${ntca.ntca_budget ? "₱" + ntca.ntca_budget.toLocaleString() : "<em style='color:#777;'>Not yet allocated</em>"}
@@ -431,5 +425,89 @@ function initializeTooltips() {
     const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
     tooltipTriggerList.map(function (tooltipTriggerEl) {
         return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+}
+
+// Update the searchProcurement function to handle multiple modules
+function searchProcurement() {
+    const query = document.getElementById('searchBar').value;
+    console.log("Search query: ", query); // Debugging log to check the query value
+
+    if (!query.trim()) {
+        console.log("No query entered. Exiting search.");
+        return;
+    }
+
+    const modules = [
+        { apiUrl: '/api/dtc/search-procurement-dtc', tableId: 'procurementTableDTC' },
+        { apiUrl: '/api/click/search-procurement-click', tableId: 'procurementTableCLICK' },
+        { apiUrl: '/api/spark/search-procurement-spark', tableId: 'procurementTableSPARK' },
+        { apiUrl: '/api/ilcdb/search-procurement-ilcdb', tableId: 'procurementTableILCDB' }
+    ];
+
+    modules.forEach(module => {
+        fetch(`${module.apiUrl}?query=${query}`)
+            .then(response => {
+                if (!response.ok) {
+                    console.error(`Failed to fetch data from ${module.apiUrl}:`, response.status);
+                    return [];
+                }
+                return response.json();
+            })
+            .then(data => {
+                const tableBody = document.getElementById(module.tableId);
+                tableBody.innerHTML = ''; // Clear any existing rows
+
+                if (data.length > 0) {
+                    data.forEach(item => {
+                        const row = document.createElement('tr');
+                        row.setAttribute('data-procurement-id', item.procurement_id);
+
+                        // PR NUMBER cell
+                        const prNumberCell = document.createElement('td');
+                        prNumberCell.textContent = item.procurement_id;
+                        row.appendChild(prNumberCell);
+
+                        // CATEGORY cell
+                        const categoryCell = document.createElement('td');
+                        categoryCell.textContent = item.category || 'N/A';
+                        row.appendChild(categoryCell);
+
+                        // ACTIVITY cell
+                        const activityCell = document.createElement('td');
+                        activityCell.textContent = item.activity;
+                        row.appendChild(activityCell);
+
+                        // STATUS & UNIT cell
+                        const statusCell = document.createElement('td');
+                        const badge = document.createElement('span');
+
+                        let statusMessage = item.status || '';
+                        let unitMessage = item.unit ? ` at ${item.unit}` : '';
+
+                        if (statusMessage.toLowerCase() === 'done') {
+                            unitMessage = '';
+                        }
+
+                        badge.className = getStatusClass(item.status || '');
+                        badge.textContent = statusMessage + unitMessage;
+
+                        statusCell.appendChild(badge);
+                        row.appendChild(statusCell);
+
+                        tableBody.appendChild(row);
+                    });
+                } else {
+                    const emptyMessage = document.createElement('tr');
+                    const emptyCell = document.createElement('td');
+                    emptyCell.setAttribute('colspan', '4');
+                    emptyCell.textContent = 'No procurement records found for the search term.';
+                    emptyMessage.appendChild(emptyCell);
+                    tableBody.appendChild(emptyMessage);
+                }
+            })
+            .catch(error => {
+                console.error(`Error fetching procurement data from ${module.apiUrl}:`, error);
+            });
     });
 }
