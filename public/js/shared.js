@@ -276,9 +276,9 @@ function fetchNTCAForSaro(saroNo, ntcaApiUrl) {
                     // Add NTCA breakdown to the list
                     ntcaList.innerHTML += `
                     <li class="list-group-item d-flex justify-content-between">
-                        <strong>NTCA No::</strong>
+                        <strong>NTCA No:</strong>
                         <span class="fw-bold">
-                            ${ntca.ntca_no} : "<em style='color:#777;'>Not yet allocated</em>"
+                            ${ntca.ntca_no}
                         </span>
                     </li>
                     <li class="list-group-item d-flex justify-content-between">

@@ -158,13 +158,19 @@ function fetchNTCAForSaro(saroNo) {
                     // Add NTCA breakdown to the list
                     ntcaList.innerHTML += `
                     <li class="list-group-item d-flex justify-content-between">
+                        <strong>NTCA No:</strong>
+                        <span class="fw-bold">
+                            ${ntca.ntca_no}
+                        </span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between">
                         <strong>NTCA Budget Allocated:</strong>
                         <span class="fw-bold">
                             ${ntca.ntca_budget ? "₱" + ntca.ntca_budget.toLocaleString() : "<em style='color:#777;'>Not yet allocated</em>"}
                         </span>
                     </li>
                     <li class="list-group-item d-flex justify-content-between">
-                        <strong>Unassigned Budget for NTCA (${ntca.ntca_no}):</strong>
+                        <strong>Unassigned NTCA Budget:</strong>
                         <span class="fw-bold">
                             ${ntca.current_budget ? "₱" + ntca.current_budget.toLocaleString() : "<em style='color:#777;'>Not yet allocated</em>"}
                         </span>
