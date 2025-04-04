@@ -21,7 +21,7 @@ function filterSaroByYear(year) {
     if (ntcaBalanceElement) ntcaBalanceElement.textContent = '₱0';
 
     // URL for fetching SARO data (by year or all)
-    const url = year === '' ? '/api/fetch-saro-click' : `/api/fetch-saro-click?year=${year}`;
+    const url = year === '' ? '/api/click/fetch-saro-click' : `/api/click/fetch-saro-click?year=${year}`;
 
     fetch(url)
         .then(response => response.json())
