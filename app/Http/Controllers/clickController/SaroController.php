@@ -153,6 +153,11 @@ class SaroController extends Controller
                 ], 404);
             }
 
+            foreach ($ntcaRecords as $ntca) {
+                $ntca->saro_budget = DB::connection('click')->table('saro')->where('saro_no', $ntca->saro_no)->value('budget_allocated');
+                $ntca->ntca_budget = $ntca->budget_allocated;
+            }
+
             return response()->json([
                 'success' => true,
                 'ntca' => $ntcaRecords,
