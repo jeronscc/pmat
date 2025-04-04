@@ -6,7 +6,7 @@ function getCurrentQuarter(ntca) {
     return null; // No quarter has a value
 }
 
-function fetchAndRenderSaroData(apiUrl, panelSelector, balanceSelector, procurementApiUrl, ntcaApiUrl, procurementDetailsApiUrl, year = '') {
+function fetchAndRenderSaroData(apiUrl, panelSelector, balanceSelector, procurementApiUrl, ntcaApiUrl, year = '') {
     // Append the year as a query parameter if provided
     const urlWithYear = year ? `${apiUrl}?year=${year}` : apiUrl;
 
@@ -37,10 +37,6 @@ function fetchAndRenderSaroData(apiUrl, panelSelector, balanceSelector, procurem
                         document.getElementById("currentSaroNo").textContent = `${saro.saro_no} Remaining Balance: `;
                         document.getElementById("viewingSaroNo").textContent = `Currently Viewing: ${saro.saro_no}`;
                         remainingBalance.textContent = `₱${Number(saro.current_budget).toLocaleString()}`;
-
-                        // Store the procurement details API URL for later use
-                        window.currentProcurementDetailsApiUrl = procurementDetailsApiUrl;
-                        
                         fetchProcurementData(saro.saro_no, procurementApiUrl, 'all'); // Fetch procurement data for the selected SARO
                         fetchNTCAForSaro(saro.saro_no, ntcaApiUrl); // Fetch NTCA data for the selected SARO
                     });
@@ -355,7 +351,7 @@ let bootstrapModalInstance = null;
 
 // Function to open modal and display procurement details
 function openProcurementModal(item) {
-    const procurementId = item.procurement_id;
+    const procurementId = item.procurement_id; // Get procurement ID from clicked item
     const modal = document.getElementById('procurementDetailsModal');
 
     if (!modal) {
@@ -363,9 +359,8 @@ function openProcurementModal(item) {
         return;
     }
 
-    // Use the stored API URL
-    const detailsApiUrl = window.currentProcurementDetailsApiUrl;
-    const url = `${detailsApiUrl}?procurement_id=${procurementId}`;
+    // Fetch detailed data from the API using the procurement_id
+    const url = `/api/fetch-procurement-details?procurement_id=${procurementId}`;
 
     fetch(url)
         .then(response => response.json())
@@ -445,10 +440,10 @@ function searchProcurement() {
     }
 
     const modules = [
-        { apiUrl: '/api/dtc/search-procurement-dtc', tableId: 'procurementTableDTC' },
-        { apiUrl: '/api/click/search-procurement-click', tableId: 'procurementTableCLICK' },
-        { apiUrl: '/api/spark/search-procurement-spark', tableId: 'procurementTableSPARK' },
-        { apiUrl: '/api/ilcdb/search-procurement-ilcdb', tableId: 'procurementTableILCDB' }
+        { apiUrl: '/search-procurement-dtc', tableId: 'procurementTableDTC' },
+        { apiUrl: '/search-procurement-click', tableId: 'procurementTableCLICK' },
+        { apiUrl: '/search-procurement-spark', tableId: 'procurementTableSPARK' },
+        { apiUrl: '/search-procurement-ilcdb', tableId: 'procurementTableILCDB' }
     ];
 
     modules.forEach(module => {
