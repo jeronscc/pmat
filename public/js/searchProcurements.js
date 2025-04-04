@@ -18,17 +18,18 @@ document.querySelector('.search-button').addEventListener('click', function () {
 });
 
 function getStatusClass(status) {
+    const baseClass = "custom-font-size"
     switch (status.toLowerCase()) {
         case 'pending':
-            return 'badge bg-secondary text-white';  // Gray for pending
+            return `badge bg-secondary text-white p-2 ${baseClass}`;  // Gray for pending
         case 'ongoing':
-            return 'badge bg-warning text-dark';  // Orangeish yellow for ongoing
+            return `badge bg-warning text-dark p-2 ${baseClass}`;  // Orangeish yellow for ongoing
         case 'done':
-            return 'badge bg-success text-white';  // Green for done
+            return `badge bg-success text-white p-2 ${baseClass}`;  // Green for done
         case 'overdue':
-            return 'badge bg-danger text-white';
+            return `badge bg-danger text-white p-2 ${baseClass}`;
         default:
-            return 'badge bg-light text-dark';  // Default for no status or unknown status
+            return `badge bg-light text-dark p-2 ${baseClass}`;  // Default for no status or unknown status
     }
 }
 
