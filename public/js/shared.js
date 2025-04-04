@@ -15,6 +15,12 @@ function fetchAndRenderSaroData(apiUrl, panelSelector, balanceSelector, procurem
         .then(data => {
             const panel = document.querySelector(panelSelector);
             const remainingBalance = document.querySelector(balanceSelector);
+
+                document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(el => {
+                    const tooltip = bootstrap.Tooltip.getInstance(el);
+                    if (tooltip) tooltip.dispose();
+                });
+
             panel.innerHTML = ''; // Clear any existing SARO entries
 
             if (data.length > 0) {
