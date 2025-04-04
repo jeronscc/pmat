@@ -6,7 +6,7 @@ function getCurrentQuarter(ntca) {
     return null; // No quarter has a value
 }
 
-function fetchAndRenderSaroData(apiUrl, panelSelector, balanceSelector, procurementApiUrl, ntcaApiUrl, year = '') {
+function fetchAndRenderSaroData(apiUrl, panelSelector, balanceSelector, procurementApiUrl, ntcaApiUrl, procurementDetailsApiUrl, year = '') {
     // Append the year as a query parameter if provided
     const urlWithYear = year ? `${apiUrl}?year=${year}` : apiUrl;
 
@@ -37,6 +37,10 @@ function fetchAndRenderSaroData(apiUrl, panelSelector, balanceSelector, procurem
                         document.getElementById("currentSaroNo").textContent = `${saro.saro_no} Remaining Balance: `;
                         document.getElementById("viewingSaroNo").textContent = `Currently Viewing: ${saro.saro_no}`;
                         remainingBalance.textContent = `₱${Number(saro.current_budget).toLocaleString()}`;
+
+                        // Store the procurement details API URL for later use
+                        window.currentProcurementDetailsApiUrl = procurementDetailsApiUrl;
+                        
                         fetchProcurementData(saro.saro_no, procurementApiUrl, 'all'); // Fetch procurement data for the selected SARO
                         fetchNTCAForSaro(saro.saro_no, ntcaApiUrl); // Fetch NTCA data for the selected SARO
                     });
@@ -351,7 +355,7 @@ let bootstrapModalInstance = null;
 
 // Function to open modal and display procurement details
 function openProcurementModal(item) {
-    const procurementId = item.procurement_id; // Get procurement ID from clicked item
+    const procurementId = item.procurement_id;
     const modal = document.getElementById('procurementDetailsModal');
 
     if (!modal) {
@@ -359,8 +363,9 @@ function openProcurementModal(item) {
         return;
     }
 
-    // Fetch detailed data from the API using the procurement_id
-    const url = `/api/fetch-procurement-details?procurement_id=${procurementId}`;
+    // Use the stored API URL
+    const detailsApiUrl = window.currentProcurementDetailsApiUrl;
+    const url = `${detailsApiUrl}?procurement_id=${procurementId}`;
 
     fetch(url)
         .then(response => response.json())
@@ -426,5 +431,89 @@ function initializeTooltips() {
     const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
     tooltipTriggerList.map(function (tooltipTriggerEl) {
         return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+}
+
+// Update the searchProcurement function to handle multiple modules
+function searchProcurement() {
+    const query = document.getElementById('searchBar').value;
+    console.log("Search query: ", query); // Debugging log to check the query value
+
+    if (!query.trim()) {
+        console.log("No query entered. Exiting search.");
+        return;
+    }
+
+    const modules = [
+        { apiUrl: '/api/dtc/search-procurement-dtc', tableId: 'procurementTableDTC' },
+        { apiUrl: '/api/click/search-procurement-click', tableId: 'procurementTableCLICK' },
+        { apiUrl: '/api/spark/search-procurement-spark', tableId: 'procurementTableSPARK' },
+        { apiUrl: '/api/ilcdb/search-procurement-ilcdb', tableId: 'procurementTableILCDB' }
+    ];
+
+    modules.forEach(module => {
+        fetch(`${module.apiUrl}?query=${query}`)
+            .then(response => {
+                if (!response.ok) {
+                    console.error(`Failed to fetch data from ${module.apiUrl}:`, response.status);
+                    return [];
+                }
+                return response.json();
+            })
+            .then(data => {
+                const tableBody = document.getElementById(module.tableId);
+                tableBody.innerHTML = ''; // Clear any existing rows
+
+                if (data.length > 0) {
+                    data.forEach(item => {
+                        const row = document.createElement('tr');
+                        row.setAttribute('data-procurement-id', item.procurement_id);
+
+                        // PR NUMBER cell
+                        const prNumberCell = document.createElement('td');
+                        prNumberCell.textContent = item.procurement_id;
+                        row.appendChild(prNumberCell);
+
+                        // CATEGORY cell
+                        const categoryCell = document.createElement('td');
+                        categoryCell.textContent = item.category || 'N/A';
+                        row.appendChild(categoryCell);
+
+                        // ACTIVITY cell
+                        const activityCell = document.createElement('td');
+                        activityCell.textContent = item.activity;
+                        row.appendChild(activityCell);
+
+                        // STATUS & UNIT cell
+                        const statusCell = document.createElement('td');
+                        const badge = document.createElement('span');
+
+                        let statusMessage = item.status || '';
+                        let unitMessage = item.unit ? ` at ${item.unit}` : '';
+
+                        if (statusMessage.toLowerCase() === 'done') {
+                            unitMessage = '';
+                        }
+
+                        badge.className = getStatusClass(item.status || '');
+                        badge.textContent = statusMessage + unitMessage;
+
+                        statusCell.appendChild(badge);
+                        row.appendChild(statusCell);
+
+                        tableBody.appendChild(row);
+                    });
+                } else {
+                    const emptyMessage = document.createElement('tr');
+                    const emptyCell = document.createElement('td');
+                    emptyCell.setAttribute('colspan', '4');
+                    emptyCell.textContent = 'No procurement records found for the search term.';
+                    emptyMessage.appendChild(emptyCell);
+                    tableBody.appendChild(emptyMessage);
+                }
+            })
+            .catch(error => {
+                console.error(`Error fetching procurement data from ${module.apiUrl}:`, error);
+            });
     });
 }

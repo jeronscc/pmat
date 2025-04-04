@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', function () {
         '.panel.spark',
         '.balance-box p',
         '/api/spark/fetch-procurement-spark',
-        ' /api/spark/fetch-ntca-by-saro'
+        ' /api/spark/fetch-ntca-by-saro',
+        '/api/spark/fetch-procurement-details'
     );
 });

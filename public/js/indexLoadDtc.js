@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', function () {
         '.panel.dtc',
         '.balance-box p',
         '/api/dtc/fetch-procurement-dtc',
-        ' /api/dtc/fetch-ntca-by-saro'
+        '/api/dtc/fetch-ntca-by-saro',
+        '/api/dtc/fetch-procurement-details'
     );
 });

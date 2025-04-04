@@ -5,5 +5,6 @@ document.addEventListener('DOMContentLoaded', function () {
         '.balance-box p',
         '/api/fetch-procurement-ilcdb',
         '/api/fetch-ntca-by-saro',
+        '/api/fetch-procurement-details'
     );
 });
