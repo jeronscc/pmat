@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', function () {
         '.panel.project-click',
         '.balance-box p',
         '/api/click/fetch-procurement-click',
-        '/api/click/fetch-ntca-by-saro'
+        '/api/click/fetch-ntca-by-saro',
+        '/api/click/fetch-procurement-details'
     );
 });
