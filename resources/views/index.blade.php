@@ -177,6 +177,7 @@
     <script src="/js/indexLoadClick.js"></script>
     <script src="/js/indexLoadSpark.js"></script>
     <script src="/js/shared.js"></script>
+    <script src="/js/searchProcurements.js"></script>
 </body>
 
 </html>
