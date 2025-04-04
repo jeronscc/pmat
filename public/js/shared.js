@@ -26,7 +26,7 @@ function fetchAndRenderSaroData(apiUrl, panelSelector, balanceSelector, procurem
                     saroElement.setAttribute('data-saro-no', saro.saro_no); // Attach SARO number
                     saroElement.setAttribute('data-bs-toggle', 'tooltip');
                     saroElement.setAttribute('data-bs-placement', 'right');
-                    saroElement.setAttribute('title', `Description: ${saro.description}`);
+                    saroElement.setAttribute('title', `Description: ${saro.description}, Budget Allocated: ₱${Number(saro.current_budget).toLocaleString()}`);
                     saroElement.addEventListener('click', function () {
                         document.getElementById("currentSaroNo").textContent = `${saro.saro_no} Remaining Balance: `;
                         document.getElementById("viewingSaroNo").textContent = `Currently Viewing: ${saro.saro_no}`;
@@ -255,7 +255,7 @@ function fetchNTCAForSaro(saroNo, ntcaApiUrl) {
                     const currentQuarter = getCurrentQuarter(ntca);
 
                     // Update NTCA container label and balance for the current quarter
-                    ntcaLabelElement.textContent = `NTCA (${ntca.ntca_no} - ${currentQuarter ? currentQuarter.replace('_q', ' Quarter') : 'No Quarter'}): `;
+                    ntcaLabelElement.textContent = `NTCA (${ntca.ntca_no} - ${currentQuarter ? currentQuarter : 'No Quarter'}): `;
                     const currentQuarterBalance = currentQuarter ? ntca[currentQuarter] : 0;
                     ntcaBalanceElement.textContent = currentQuarterBalance
                         ? `₱${Number(currentQuarterBalance).toLocaleString()}`
@@ -265,9 +265,21 @@ function fetchNTCAForSaro(saroNo, ntcaApiUrl) {
                     // Add NTCA breakdown to the list
                     ntcaList.innerHTML += `
                     <li class="list-group-item d-flex justify-content-between">
+                        <strong>SARO Budget Allocated:</strong>
+                        <span class="fw-bold">
+                            ${ntca.saro_budget ? "₱" + ntca.saro_budget.toLocaleString() : "<em style='color:#777;'>Not yet allocated</em>"}
+                        </span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between">
+                        <strong>NTCA Budget Allocated:</strong>
+                        <span class="fw-bold">
+                            ${ntca.ntca_budget ? "₱" + ntca.ntca_budget.toLocaleString() : "<em style='color:#777;'>Not yet allocated</em>"}
+                        </span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between">
                         <strong>Unassigned Budget for NTCA (${ntca.ntca_no}):</strong>
                         <span class="fw-bold">
-                            ${ntca.current_budget ? "₱" + Number(ntca.current_budget).toLocaleString() : "<em style='color:#777;'>Not yet allocated</em>"}
+                            ${ntca.current_budget ? "₱" + ntca.current_budget.toLocaleString() : "<em style='color:#777;'>Not yet allocated</em>"}
                         </span>
                     </li>
                     <li class="list-group-item d-flex justify-content-between">
