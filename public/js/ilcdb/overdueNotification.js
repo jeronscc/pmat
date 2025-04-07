@@ -4,53 +4,48 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
     }
 
-    fetch('/api/overdue-procurements')
-        .then(response => response.json())
-        .then(data => {
+    fetch("/api/overdue-procurements")
+        .then((response) => response.json())
+        .then((data) => {
             if (data.length > 0) {
-                let modalBody = document.getElementById('overdueProcurementList');
-                modalBody.innerHTML = `
-                    <div style="max-height: 400px; overflow-y: auto;"> <!-- Scrollable table -->
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>PR No</th>
-                                    <th>Activity</th>
-                                    <th>Date Submitted</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            ${data.map(procurement => {
-                                let displayDate = "N/A";
+                let container = document.getElementById(
+                    "overdueProcurementList"
+                );
+                container.innerHTML = data
+                    .map((procurement) => {
+                        let displayDate = "N/A";
+                        if (procurement.dt_submitted) {
+                            let dateObj = new Date(procurement.dt_submitted);
+                            if (!isNaN(dateObj.getTime())) {
+                                displayDate = dateObj
+                                    .toISOString()
+                                    .split("T")[0];
+                            }
+                        }
 
-                                if (procurement.dt_submitted) {
-                                    let dateObj = new Date(procurement.dt_submitted);
-                                    if (!isNaN(dateObj.getTime())) {
-                                        displayDate = dateObj.toISOString().split('T')[0];
-                                    }
-                                }
-
-                                return `
-                                    <tr>
-                                        <td>${procurement.procurement_id}</td>
-                                        <td>${procurement.activity}</td>
-                                        <td>${displayDate}</td>  
-                                    </tr>
-                                `;
-                            }).join('')}
-                            </tbody>
-                        </table>
+                        return `
+                    <div class="alert alert-warning d-flex align-items-center justify-content-between shadow-sm" role="alert">
+                        <div>
+                            <h6 class="mb-1"><strong>PR No:</strong> ${procurement.procurement_id}</h6>
+                            <p class="mb-0"><strong>Activity:</strong> ${procurement.activity}</p>
+                            <small><strong>Date Submitted:</strong> ${displayDate}</small>
+                        </div>
+                        <i class="bi bi-exclamation-circle-fill fs-2 text-danger"></i>
                     </div>
                 `;
+                    })
+                    .join("");
 
-                let overdueModal = new bootstrap.Modal(document.getElementById('overdueModal'));
+                let overdueModal = new bootstrap.Modal(
+                    document.getElementById("overdueModal")
+                );
                 overdueModal.show();
-
-                // Set sessionStorage to prevent repeated modal pop-ups
                 sessionStorage.setItem("overdueModalShown", "true");
             }
         })
-        .catch(error => console.error('Error fetching overdue procurements:', error));
+        .catch((error) =>
+            console.error("Error fetching overdue procurements:", error)
+        );
 });
 
 // Select logout form dynamically and reset session storage when user logs out
