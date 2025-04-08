@@ -59,8 +59,6 @@ function searchProcurement() {
         return;
     }
 
-    tableBody.innerHTML = ''; // Clear any existing rows
-
     const fetchPromises = modules.map(module => {
         return fetch(`${module.apiUrl}?query=${encodeURIComponent(query)}`) // Ensure the query is properly encoded
             .then(response => {
@@ -90,6 +88,8 @@ function searchProcurement() {
     });
 
     Promise.all(fetchPromises).then(() => {
+        tableBody.innerHTML = ''; // Clear the table only after all fetches are complete
+
         if (unifiedResults.length > 0) {
             unifiedResults.forEach(item => {
                 const row = document.createElement('tr');
