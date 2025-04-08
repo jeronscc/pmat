@@ -399,29 +399,26 @@
         </div>
         <!-- Overdue Modal -->
         <div class="modal fade" id="overdueModal" tabindex="-1" aria-labelledby="overdueModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg"> <!-- Added 'modal-lg' for better space -->
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="overdueModalLabel">Overdue Procurements</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content border-danger">
+                    <div class="modal-header bg-danger text-white">
+                        <h5 class="modal-title" id="overdueModalLabel">
+                            <i class="bi bi-exclamation-triangle-fill me-2"></i> Overdue Procurements
+                        </h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
-                            <!-- Scrollable Table -->
-                            <table class="table table-bordered">
-
-                                <tbody id="overdueProcurementList">
-                                    <!-- Overdue procurements will be loaded here -->
-                                </tbody>
-                            </table>
+                        <div id="overdueProcurementList" class="d-flex flex-column gap-3">
+                            <!-- Alerts will be loaded here -->
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Acknowledge</button>
                     </div>
                 </div>
             </div>
         </div>
+
         <!-- Procurement Modal -->
         <div class="modal fade" id="procurementModal" tabindex="-1" aria-labelledby="procurementTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
