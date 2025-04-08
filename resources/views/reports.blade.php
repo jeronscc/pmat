@@ -128,6 +128,7 @@
                             <div class="card-body">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <h6 class="card-title text-dark mb-0">Distribution of Category</h6>
+                                    <!-- Dropdown to filter by project -->
                                     <select id="categoryFilter" class="form-select mb-0" style="width: 200px;">
                                         <option value="ILCDB">ILCDB</option>
                                         <option value="DTC">DTC</option>
@@ -174,40 +175,14 @@
     </div>
 </div>
 
-<div class="row mt-3">
-    <div class="col-md-6">
-        <div class="card shadow-sm">
-            <div class="card-body">
-                <h6 class="card-title text-dark">Average Budget Spent (ILCDB)</h6>
-                <p id="averageBudgetSpentILCDB" class="fs-5 text-navy">₱0.00</p>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-6">
-        <div class="card shadow-sm">
-            <div class="card-body">
-                <h6 class="card-title text-dark">Average Budget Spent (DTC)</h6>
-                <p id="averageBudgetSpentDTC" class="fs-5 text-navy">₱0.00</p>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-6">
-        <div class="card shadow-sm">
-            <div class="card-body">
-                <h6 class="card-title text-dark">Average Budget Spent (SPARK)</h6>
-                <p id="averageBudgetSpentSPARK" class="fs-5 text-navy">₱0.00</p>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-6">
-        <div class="card shadow-sm">
-            <div class="card-body">
-                <h6 class="card-title text-dark">Average Budget Spent (PROJECT CLICK)</h6>
-                <p id="averageBudgetSpentCLICK" class="fs-5 text-navy">₱0.00</p>
-            </div>
-        </div>
-    </div>
-</div>
+    <footer class="bg-dark text-white text-center py-3">
+        <p class="mb-0">© 2024 Procurement Monitoring and Tracking System. All rights reserved.</p>
+    </footer>
+
+    <!-- Bootstrap JS (Optional, only needed for dropdowns, modals, etc.) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/menu.js"></script>
+    <script src="/js/charts.js"></script>
 
 <!-- Bootstrap JS (Optional, only needed for dropdowns, modals, etc.) -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
