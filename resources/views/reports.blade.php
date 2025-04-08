@@ -174,82 +174,40 @@
     </div>
 </div>
 
-<script>
-function selectProject(project) {
-    console.log(`Selected project: ${project}`);  // Check the project being selected
-
-    document.getElementById('projectDropdown').textContent = project;
-    document.getElementById('projectName').textContent = project;
-
-    const content = document.getElementById('reportData');
-    
-    // Clear previous content
-    content.innerHTML = '';
-
-    // Insert project-specific data dynamically
-    content.innerHTML = `
-        <!-- Average Budget Spend (with filter) -->
-        <div class="col-md-4">
-            <div class="card h-100 shadow-sm">
-                <div class="card-body d-flex justify-content-between align-items-center">
-                    <div>
-                        <h6 class="card-title text-dark">Average Budget Spend</h6>
-                        <p class="card-text fs-5 text-navy">₱0.00</p> <!-- Change color to navy -->
-                    </div>
-                    <img src="assets/filter.png" alt="Filter" width="20">
-                </div>
+<div class="row mt-3">
+    <div class="col-md-6">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h6 class="card-title text-dark">Average Budget Spent (ILCDB)</h6>
+                <p id="averageBudgetSpentILCDB" class="fs-5 text-navy">₱0.00</p>
             </div>
         </div>
-
-        <!-- Average Allocated Budget (SARO) -->
-        <div class="col-md-4">
-            <div class="card h-100 shadow-sm">
-                <div class="card-body">
-                    <h6 class="card-title text-dark">Average Allocated Budget (SARO)</h6>
-                    <p class="card-text fs-5 text-navy">₱0.00</p> <!-- Change color to navy -->
-                </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h6 class="card-title text-dark">Average Budget Spent (DTC)</h6>
+                <p id="averageBudgetSpentDTC" class="fs-5 text-navy">₱0.00</p>
             </div>
         </div>
-
-        <!-- Average Approved Budget (NTCA) -->
-        <div class="col-md-4">
-            <div class="card h-100 shadow-sm">
-                <div class="card-body">
-                    <h6 class="card-title text-dark">Average Approved Budget (NTCA)</h6>
-                    <p class="card-text fs-5 text-navy">₱0.00</p> <!-- Change color to navy -->
-                </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h6 class="card-title text-dark">Average Budget Spent (SPARK)</h6>
+                <p id="averageBudgetSpentSPARK" class="fs-5 text-navy">₱0.00</p>
             </div>
         </div>
-
-        <!-- Processing Rate (Per Unit) -->
-        <div class="col-md-4">
-            <div class="card h-100 shadow-sm">
-                <div class="card-body">
-                    <h6 class="card-title text-dark">Processing Rate (Per Unit)</h6>
-                    <p class="card-text fs-5 text-success">0%</p>
-                </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h6 class="card-title text-dark">Average Budget Spent (PROJECT CLICK)</h6>
+                <p id="averageBudgetSpentCLICK" class="fs-5 text-navy">₱0.00</p>
             </div>
         </div>
-
-        <!-- Overdue Counter (with filter) -->
-        <div class="col-md-4">
-            <div class="card h-100 shadow-sm">
-                <div class="card-body d-flex justify-content-between align-items-center">
-                    <div>
-                        <h6 class="card-title text-dark">Overdue Counter</h6>
-                        <p class="card-text fs-5 text-danger">0</p>
-                    </div>
-                    <img src="assets/filter.png" alt="Filter" width="20">
-                </div>
-            </div>
-        </div>
-    `;
-}
-
-window.addEventListener('DOMContentLoaded', () => {
-    selectProject('ILCDB');  // Default project on page load
-});
-</script>
+    </div>
+</div>
 
 <!-- Bootstrap JS (Optional, only needed for dropdowns, modals, etc.) -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

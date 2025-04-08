@@ -27,6 +27,7 @@ use App\Http\Controllers\sparkController\OtherExpenseFormController as sparkOthe
 
 use App\Http\Controllers\AccountController;
 use App\Http\Middleware\AdminMiddleware;
+use App\Http\Controllers\ReportController;
 
 
 // ISOLATED PAGES
@@ -193,3 +194,4 @@ Route::get('/otherexpenseform', [IlcdbOtherExpenseFormController::class, 'showFo
 Route::post('/otherexpenseform/update', [IlcdbOtherExpenseFormController::class, 'updateOtherExpense'])->name('otherexpense.update');
 
 Route::get('/api/requirements/{procurement_id}/files', [IlcdbHonorariaFormController::class, 'getUploadedFiles']);
+Route::get('/api/average-budget-spent', [ReportController::class, 'getAverageBudgetSpent']);

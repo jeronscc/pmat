@@ -182,4 +182,126 @@ function updateCostSavingsChart() {
     costSavingsChart.update();
 }
 
+async function updateCharts() {
+    try {
+        const response = await fetch('/api/average-budget-spent');
+        const result = await response.json();
+
+        if (result.success) {
+            const averages = result.data;
+
+            // Update the charts with the fetched data
+            costSavingsChart.data.datasets[0].data = [
+                averages.ilcdb,
+                averages.dtc,
+                averages.spark,
+                averages.click,
+            ];
+            costSavingsChart.update();
+        }
+    } catch (error) {
+        console.error('Error updating charts:', error);
+    }
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+    updateCharts(); // Update charts on page load
+    setInterval(updateCharts, 60000); // Refresh every 60 seconds
+});
+});
+
+function selectProject(project) {
+    console.log(`Selected project: ${project}`);  // Check the project being selected
+
+    document.getElementById('projectDropdown').textContent = project;
+    document.getElementById('projectName').textContent = project;
+
+    const content = document.getElementById('reportData');
+    
+    // Clear previous content
+    content.innerHTML = '';
+
+    // Insert project-specific data dynamically
+    content.innerHTML = `
+        <!-- Average Budget Spend (with filter) -->
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="card-title text-dark">Average Budget Spend</h6>
+                        <p class="card-text fs-5 text-navy">₱0.00</p> <!-- Change color to navy -->
+                    </div>
+                    <img src="assets/filter.png" alt="Filter" width="20">
+                </div>
+            </div>
+        </div>
+
+        <!-- Average Allocated Budget (SARO) -->
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h6 class="card-title text-dark">Average Allocated Budget (SARO)</h6>
+                    <p class="card-text fs-5 text-navy">₱0.00</p> <!-- Change color to navy -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Average Approved Budget (NTCA) -->
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h6 class="card-title text-dark">Average Approved Budget (NTCA)</h6>
+                    <p class="card-text fs-5 text-navy">₱0.00</p> <!-- Change color to navy -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Processing Rate (Per Unit) -->
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h6 class="card-title text-dark">Processing Rate (Per Unit)</h6>
+                    <p class="card-text fs-5 text-success">0%</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Overdue Counter (with filter) -->
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="card-title text-dark">Overdue Counter</h6>
+                        <p class="card-text fs-5 text-danger">0</p>
+                    </div>
+                    <img src="assets/filter.png" alt="Filter" width="20">
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+async function fetchAverageBudgetSpent() {
+    try {
+        const response = await fetch('/api/average-budget-spent');
+        const result = await response.json();
+
+        if (result.success) {
+            const averages = result.data;
+
+            // Update the average budget spent in the UI
+            document.querySelector('#averageBudgetSpentILCDB').textContent = `₱${averages.ilcdb.toLocaleString()}`;
+            document.querySelector('#averageBudgetSpentDTC').textContent = `₱${averages.dtc.toLocaleString()}`;
+            document.querySelector('#averageBudgetSpentSPARK').textContent = `₱${averages.spark.toLocaleString()}`;
+            document.querySelector('#averageBudgetSpentCLICK').textContent = `₱${averages.click.toLocaleString()}`;
+        }
+    } catch (error) {
+        console.error('Error fetching average budget spent:', error);
+    }
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+    fetchAverageBudgetSpent(); // Fetch data on page load
+    setInterval(fetchAverageBudgetSpent, 60000); // Refresh every 60 seconds
+    selectProject('ILCDB');  // Default project on page load
 });
