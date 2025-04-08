@@ -28,10 +28,10 @@ window.addEventListener('DOMContentLoaded', () => {
     const categoryChart = new Chart(categoryCtx, {
         type: 'bar',
         data: {
-            labels: ['SVP', 'Honoraria', 'Daily Travel Expense'], 
+            labels: ['SVP', 'Honoraria', 'Daily Travel Expense'],
             datasets: [{
                 label: 'Category Distribution',
-                data: [50, 70, 90], // Example data
+                data: [0, 0, 0], // Initial empty data
                 backgroundColor: 'rgba(40, 167, 69, 0.5)',
                 borderColor: 'rgba(40, 167, 69, 1)',
                 borderWidth: 1
@@ -47,23 +47,41 @@ window.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Event listener for filter change
-    document.getElementById('categoryFilter').addEventListener('change', function() {
-        const filterValue = this.value;
+    // Function to fetch and update category data
+    async function updateCategoryChart(project) {
+        try {
+            const response = await fetch(`/api/procurement-category-count?project=${project}`);
+            const result = await response.json();
 
-        // Update the chart based on filter value
-        if (filterValue === 'all') {
-            categoryChart.data.datasets[0].data = [50, 70, 90]; // Data for all categories
-        } else if (filterValue === 'category1') {
-            categoryChart.data.datasets[0].data = [100, 0, 0]; // Data for Category 1 only
-        } else if (filterValue === 'category2') {
-            categoryChart.data.datasets[0].data = [0, 100, 0]; // Data for Category 2 only
-        } else if (filterValue === 'category3') {
-            categoryChart.data.datasets[0].data = [0, 0, 100]; // Data for Category 3 only
+            if (result.success) {
+                const counts = result.data;
+
+                // Update the chart with fetched data
+                categoryChart.data.datasets[0].data = [
+                    counts.svp || 0,
+                    counts.honoraria || 0,
+                    counts.dte || 0
+                ];
+                categoryChart.update();
+            } else {
+                console.error('Failed to fetch category data:', result.message);
+            }
+        } catch (error) {
+            console.error('Error fetching category data:', error);
         }
+    }
 
-        // Re-render the chart with updated data
-        categoryChart.update();
+    // Event listener for filter change
+    document.getElementById('categoryFilter').addEventListener('change', function () {
+        const selectedProject = this.value;
+
+        // Fetch and update the chart based on the selected project
+        if (selectedProject === 'all') {
+            categoryChart.data.datasets[0].data = [0, 0, 0]; // Reset data for "all"
+            categoryChart.update();
+        } else {
+            updateCategoryChart(selectedProject);
+        }
     });
 
     // Highest Expenditure by Quarter
