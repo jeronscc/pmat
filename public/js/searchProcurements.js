@@ -20,6 +20,12 @@ document.querySelector('.search-button').addEventListener('click', function () {
     searchProcurement();
 });
 
+// Add event listener for the search form submission
+document.getElementById('searchForm').addEventListener('submit', function (event) {
+    event.preventDefault(); // Prevent default form submission
+    searchProcurement(); // Trigger the search function
+});
+
 // Trigger search on page load if there is a query in localStorage
 document.addEventListener('DOMContentLoaded', function () {
     const searchBar = document.getElementById('searchBar');
