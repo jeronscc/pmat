@@ -400,8 +400,8 @@
         <!-- Overdue Modal -->
         <div class="modal fade" id="overdueModal" tabindex="-1" aria-labelledby="overdueModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg">
-                <div class="modal-content border-warning">
-                    <div class="modal-header bg-warning text-dark">
+                <div class="modal-content border-danger">
+                    <div class="modal-header bg-danger text-white">
                         <h5 class="modal-title" id="overdueModalLabel">
                             <i class="bi bi-exclamation-triangle-fill me-2"></i> Overdue Procurements
                         </h5>
@@ -413,7 +413,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Acknowledge</button>
                     </div>
                 </div>
             </div>
