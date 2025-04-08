@@ -146,6 +146,10 @@ Route::get('/sparkDTE', function () {
     return view('sparkDTE');
 });
 
+Route::get('/reports', function () {
+    return view('reports');
+});
+
 Route::get('/dtcSVP', [dtcProcurementFormController::class, 'showForm'])->name('procurementform');
 Route::post('/dtcSVP/update', [dtcProcurementFormController::class, 'update'])->name('procurement.update');
 
