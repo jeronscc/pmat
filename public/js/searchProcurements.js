@@ -1,7 +1,9 @@
 // Add event listener for the search input to reset when empty
 document.getElementById('searchBar').addEventListener('input', function (event) {
     const query = event.target.value.trim();
+    localStorage.setItem('searchQuery', query); // Save query to localStorage
     if (!query) {
+        localStorage.removeItem('searchQuery'); // Remove query if empty
         console.log("Search bar cleared, resetting table...");
         fetchProcurementData(''); // Ensure the correct function is called to reload default data
     }
@@ -18,11 +20,12 @@ document.querySelector('.search-button').addEventListener('click', function () {
     searchProcurement();
 });
 
-// Trigger search on page load if there is a query in the search bar
+// Trigger search on page load if there is a query in localStorage
 document.addEventListener('DOMContentLoaded', function () {
     const searchBar = document.getElementById('searchBar');
-    const query = searchBar.value.trim();
-    if (query) {
+    const savedQuery = localStorage.getItem('searchQuery'); // Retrieve query from localStorage
+    if (savedQuery) {
+        searchBar.value = savedQuery; // Set the search bar value
         searchProcurement(); // Perform search if query exists
     }
 });
