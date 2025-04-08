@@ -208,36 +208,6 @@ window.addEventListener('DOMContentLoaded', () => {
     updateCharts(); // Update charts on page load
     setInterval(updateCharts, 60000); // Refresh every 60 seconds
 });
-
-// Function to fetch and update the category chart based on the selected project
-async function updateCategoryChart(project) {
-    try {
-        const response = await fetch(`/api/procurement-category-count?project=${project}`);
-        const result = await response.json();
-
-        if (result.success) {
-            const data = result.data;
-
-            // Update the chart data
-            categoryChart.data.datasets[0].data = [data.svp, data.honoraria, data.dte];
-            categoryChart.update();
-        } else {
-            console.error('Failed to fetch category data:', result.message);
-        }
-    } catch (error) {
-        console.error('Error fetching category data:', error);
-    }
-}
-
-// Event listener for category filter dropdown
-document.getElementById('categoryFilter').addEventListener('change', function () {
-    const selectedProject = this.value;
-    updateCategoryChart(selectedProject); // Update the chart based on the selected project
-});
-
-// Initialize the chart with the default project (ILCDB)
-window.addEventListener('DOMContentLoaded', () => {
-    updateCategoryChart('ILCDB'); // Default project
 });
 
 function selectProject(project) {
@@ -334,6 +304,4 @@ window.addEventListener('DOMContentLoaded', () => {
     fetchAverageBudgetSpent(); // Fetch data on page load
     setInterval(fetchAverageBudgetSpent, 60000); // Refresh every 60 seconds
     selectProject('ILCDB');  // Default project on page load
-});
-
 });
