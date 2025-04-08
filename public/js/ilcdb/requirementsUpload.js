@@ -42,6 +42,10 @@ document.addEventListener('DOMContentLoaded', function () {
                         //alert(data.message);
                         // Important: Fetch files again after successful upload
                         fetchUploadedFiles(procurementId);
+                    
+                        setTimeout(() => {
+                            location.reload();
+                        }, 1000); // Delay to ensure fetch completes before reload
                     } else {
                         alert("Upload failed: " + (data.message || "Unknown error."));
                     }
