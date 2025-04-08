@@ -196,3 +196,8 @@ Route::post('/otherexpenseform/update', [IlcdbOtherExpenseFormController::class,
 Route::get('/api/requirements/{procurement_id}/files', [IlcdbHonorariaFormController::class, 'getUploadedFiles']);
 Route::get('/api/average-budget-spent', [ReportController::class, 'getAverageBudgetSpent']);
 Route::get('/api/procurement-category-count', [ReportController::class, 'getProcurementCategoryCount']);
+Route::get('/api/procurement-distribution', [ReportController::class, 'getProcurementDistribution']);
+Route::get('/api/expenditure-by-quarter', [ReportController::class, 'getExpenditureByQuarter']);
+Route::get('/api/cost-savings', [ReportController::class, 'getCostSavings']);
+Route::get('/api/project-report', [ReportController::class, 'getProjectReport']);
+
