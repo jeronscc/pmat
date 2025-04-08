@@ -18,6 +18,15 @@ document.querySelector('.search-button').addEventListener('click', function () {
     searchProcurement();
 });
 
+// Trigger search on page load if there is a query in the search bar
+document.addEventListener('DOMContentLoaded', function () {
+    const searchBar = document.getElementById('searchBar');
+    const query = searchBar.value.trim();
+    if (query) {
+        searchProcurement(); // Perform search if query exists
+    }
+});
+
 function getStatusClass(status) {
     const baseClass = "custom-font-size"
     switch (status.toLowerCase()) {
