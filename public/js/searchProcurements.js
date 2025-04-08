@@ -1,6 +1,7 @@
 // Add event listener for the search input to reset when empty
 document.getElementById('searchBar').addEventListener('input', function (event) {
-    if (!event.target.value.trim()) {
+    const query = event.target.value.trim();
+    if (!query) {
         console.log("Search bar cleared, resetting table...");
         fetchProcurementData(''); // Ensure the correct function is called to reload default data
     }
