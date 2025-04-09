@@ -187,14 +187,10 @@
         <p class="mb-0">© 2024 Procurement Monitoring and Tracking System. All rights reserved.</p>
     </footer>
 
-    <!-- Bootstrap JS (Optional, only needed for dropdowns, modals, etc.) -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="/js/menu.js"></script>
-    <script src="/js/charts.js"></script>
-
 <!-- Bootstrap JS (Optional, only needed for dropdowns, modals, etc.) -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="/js/menu.js"></script>
 <script src="/js/charts.js"></script>
 
 </body>
