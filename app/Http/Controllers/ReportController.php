@@ -76,7 +76,7 @@ class ReportController extends Controller
             ->selectRaw("
                 SUM(CASE WHEN procurement_category = 'SVP' THEN 1 ELSE 0 END) AS svp,
                 SUM(CASE WHEN procurement_category = 'Honoraria' THEN 1 ELSE 0 END) AS honoraria,
-                SUM(CASE WHEN procurement_category = 'Daily Travel Expense' THEN 1 ELSE 0 END) AS daily_travel_expense
+                SUM(CASE WHEN procurement_category = 'Daily travel expense' THEN 1 ELSE 0 END) AS daily_travel_expense
             ")
             ->first();
 
