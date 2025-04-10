@@ -350,9 +350,8 @@ async function selectProject(project) {
                         <div class="card-body d-flex justify-content-between align-items-center">
                             <div>
                                 <h6 class="card-title text-dark">Average Budget Spend</h6>
-                                <p class="card-text fs-5 text-navy">₱${data.avgBudgetSpent ? Number(data.avgBudgetSpent).toFixed(2).toLocaleString() : 'N/A'}</p>
+                                <p class="card-text fs-5 text-navy">₱${data.avgBudgetSpent ? Number(data.avgBudgetSpent).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') : 'N/A'}</p>
                             </div>
-                            <img src="assets/filter.png" alt="Filter" width="20">
                         </div>
                     </div>
                 </div>
@@ -360,7 +359,7 @@ async function selectProject(project) {
                     <div class="card h-100 shadow-sm">
                         <div class="card-body">
                             <h6 class="card-title text-dark">Average Allocated Budget (SARO)</h6>
-                            <p class="card-text fs-5 text-navy">₱${data.avgAllocatedBudget ? Number(data.avgAllocatedBudget).toFixed(2).toLocaleString() : 'N/A'}</p>
+                            <p class="card-text fs-5 text-navy">₱${data.avgAllocatedBudget ? Number(data.avgAllocatedBudget).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') : 'N/A'}</p>
                         </div>
                     </div>
                 </div>
@@ -368,7 +367,7 @@ async function selectProject(project) {
                     <div class="card h-100 shadow-sm">
                         <div class="card-body">
                             <h6 class="card-title text-dark">Average Approved Budget (NTCA)</h6>
-                            <p class="card-text fs-5 text-navy">₱${data.avgApprovedBudget ? Number(data.avgApprovedBudget).toFixed(2).toLocaleString() : 'N/A'}</p>
+                            <p class="card-text fs-5 text-navy">₱${data.avgApprovedBudget ? Number(data.avgApprovedBudget).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') : 'N/A'}</p>
                         </div>
                     </div>
                 </div>
