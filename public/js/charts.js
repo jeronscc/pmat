@@ -149,7 +149,7 @@ async function updateCategoryChart(project) {
             categoryChart.data.datasets[0].data = [
                 counts.svp || 0,
                 counts.honoraria || 0,
-                counts.dte || 0
+                counts.daily_travel_expense || 0
             ];
             categoryChart.update();
         } else {
