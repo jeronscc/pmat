@@ -115,9 +115,9 @@
                         </div>
                         <div class="row mt-3">
                             <div class="col-md-6">
-                                <div class="card shadow-sm">
+                                <div class="card shadow-sm mb-4">
                                     <div class="card-body">
-                                        <h6 class="card-title text-dark">Distribution of Procurement</h6>
+                                        <h6 class="card-title text-dark mb-3">Distribution of Procurement</h6>
                                         <canvas id="procurementChart"></canvas>
                                     </div>
                                 </div>
