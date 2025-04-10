@@ -309,12 +309,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Set up event listeners for each dropdown item
     dropdownItems.forEach(item => {
-        item.addEventListener('click', function () {
+        item.addEventListener('click', function(event) {
+            // Prevent default anchor behavior
+            event.preventDefault();
+            
             const selectedProject = this.textContent; // Get the project name from the clicked item
-
-            // Update the button text with the selected project
-            projectDropdown.textContent = selectedProject;
-
+            
             // Call the selectProject function to load data for the selected project
             selectProject(selectedProject);
         });
@@ -409,5 +409,24 @@ async function selectProject(project) {
         alert("Error fetching project data. Please try again later.");
     }
 }
+
+// Add event listeners for all dropdown items
+document.querySelectorAll('.project-option').forEach(item => {
+    item.addEventListener('click', async (e) => {
+        e.preventDefault();
+        const project = item.getAttribute('data-project');
+
+        // Update project dropdown label
+        document.getElementById('projectDropdown').textContent = project;
+
+        // Call project-specific update functions
+        await selectProject(project);
+        updateCategoryChart(project);
+        updateExpenditureChart(project);
+        document.getElementById('projectFilter').value = project; // sync other filters
+        updateCostSavingsChart();
+    });
+});
+
 
 });

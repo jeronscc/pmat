@@ -93,11 +93,13 @@
                         <button class="btn btn-outline-light dropdown-toggle" type="button" id="projectDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="min-width: 170px;">
                             ILCDB
                         </button>
+                        
+                        <!-- Dropdown list of projects -->
                         <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end" aria-labelledby="projectDropdown">
-                            <li><a class="dropdown-item" href="#" onclick="selectProject('ILCDB')">ILCDB</a></li>
-                            <li><a class="dropdown-item" href="#" onclick="selectProject('DTC')">DTC</a></li>
-                            <li><a class="dropdown-item" href="#" onclick="selectProject('SPARK')">SPARK</a></li>
-                            <li><a class="dropdown-item" href="#" onclick="selectProject('PROJECT CLICK')">PROJECT CLICK</a></li>
+                            <li><a class="dropdown-item project-option" href="#" data-project="ILCDB">ILCDB</a></li>
+                            <li><a class="dropdown-item project-option" href="#" data-project="DTC">DTC</a></li>
+                            <li><a class="dropdown-item project-option" href="#" data-project="SPARK">SPARK</a></li>
+                            <li><a class="dropdown-item project-option" href="#" data-project="PROJECT CLICK">PROJECT CLICK</a></li>
                         </ul>
                     </div>
                 </div>
