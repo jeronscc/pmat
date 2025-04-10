@@ -144,8 +144,9 @@
                         </div>
 
                         <div class="col-md-6">
-                            <div class="card shadow-sm">
+                            <div class="card shadow-sm mb-4">
                                 <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center">
                                     <h6 class="card-title text-dark">Quarter Expenditure</h6>
                                     <!-- Dropdown to filter by project -->
                                     <select id="quarterFilter" class="form-select mb-3" style="width: 200px;">
@@ -155,6 +156,7 @@
                                         <option value="SPARK">SPARK</option>
                                         <option value="PROJECT CLICK">PROJECT CLICK</option>
                                     </select>
+                                    </div>
                                     <canvas id="quarterChart"></canvas>
                                 </div>
                             </div>
