@@ -9,13 +9,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
     <link rel="stylesheet" href="/css/mainheader.css">
     <link rel="stylesheet" href="/css/sidenav.css">
+    <link rel="stylesheet" href="/css/reports.css">
 </head>
-<style>
-    .text-navy {
-    color:rgb(7, 85, 163); /* Navy blue color */
-}
-
-</style>
 
 <body>
     <input type="hidden" id="loggedInUserId" value="{{ Auth::id() }}">
@@ -83,122 +78,122 @@
     </div>
 
     <div class="container-fluid mt-3">
-    <div class="row">
-        <div class="col-12 col-md-10 mx-auto">
-            <div class="card shadow border-0 mb-4">
-                <!-- Dark header -->
-                <div class="card-header bg-secondary text-white d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0"><i class="bi bi-bar-chart-line-fill me-2"></i>Reports Panel</h5>
-                    <div class="dropdown">
-                        <button class="btn btn-outline-light dropdown-toggle" type="button" id="projectDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="min-width: 170px;">
-                            ILCDB
-                        </button>
-                        
-                        <!-- Dropdown list of projects -->
-                        <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end" aria-labelledby="projectDropdown">
-                            <li><a class="dropdown-item project-option" href="#" data-project="ILCDB">ILCDB</a></li>
-                            <li><a class="dropdown-item project-option" href="#" data-project="DTC">DTC</a></li>
-                            <li><a class="dropdown-item project-option" href="#" data-project="SPARK">SPARK</a></li>
-                            <li><a class="dropdown-item project-option" href="#" data-project="PROJECT CLICK">PROJECT CLICK</a></li>
-                        </ul>
-                    </div>
-                </div>
+        <div class="row">
+            <div class="col-12 col-md-10 mx-auto">
+                <div class="card shadow border-0 mb-4">
+                    <!-- Dark header -->
+                    <div class="card-header custom-header text-white d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0"><i class="bi bi-bar-chart-line-fill me-2"></i>Reports Panel</h5>
+                        <div class="dropdown">
+                            <button class="btn btn-outline-light dropdown-toggle" type="button" id="projectDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="min-width: 170px;">
+                                ILCDB
+                            </button>
 
-                <!-- Light body content with Charts -->
-                <div class="card-body bg-light" id="reportContent">
-                    <h6 class="mb-3 text-dark">Report for <strong id="projectName">ILCDB</strong></h6>
-                    
-                    <!-- Dynamic Report Data Section -->
-                    <div class="row g-3" id="reportData"></div>
-
-                    <!-- Static Charts Section (Always visible, won't be overwritten) -->
-                     <hr>
-                     <div class="row">
-                        <div class="col-12 text-end">
-                            <p id="reportDate" class="text-muted"></p>
+                            <!-- Dropdown list of projects -->
+                            <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end" aria-labelledby="projectDropdown">
+                                <li><a class="dropdown-item project-option" href="#" data-project="ILCDB">ILCDB</a></li>
+                                <li><a class="dropdown-item project-option" href="#" data-project="DTC">DTC</a></li>
+                                <li><a class="dropdown-item project-option" href="#" data-project="SPARK">SPARK</a></li>
+                                <li><a class="dropdown-item project-option" href="#" data-project="PROJECT CLICK">PROJECT CLICK</a></li>
+                            </ul>
                         </div>
                     </div>
-                    <div class="row mt-3">
-                        <div class="col-md-6">
-                            <div class="card shadow-sm">
-                                <div class="card-body">
-                                    <h6 class="card-title text-dark">Distribution of Procurement</h6>
-                                    <canvas id="procurementChart"></canvas>
-                                </div>
+
+                    <!-- Light body content with Charts -->
+                    <div class="card-body bg-light" id="reportContent">
+                        <h6 class="mb-3 text-dark">Report for <strong id="projectName">ILCDB</strong></h6>
+
+                        <!-- Dynamic Report Data Section -->
+                        <div class="row g-3" id="reportData"></div>
+
+                        <!-- Static Charts Section (Always visible, won't be overwritten) -->
+                        <hr>
+                        <div class="row">
+                            <div class="col-12 text-end">
+                                <p id="reportDate" class="text-muted"></p>
                             </div>
                         </div>
-
-                        <div class="col-md-6">
-                        <!-- Distribution of Category (Bar Graph with Project Filter) -->
-                        <div class="card shadow-sm mb-4">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <h6 class="card-title text-dark mb-0">Distribution of Category</h6>
-                                    <!-- Dropdown to filter by project -->
-                                    <select id="categoryFilter" class="form-select mb-0" style="width: 200px;">
-                                        <option value="ILCDB">ILCDB</option>
-                                        <option value="DTC">DTC</option>
-                                        <option value="SPARK">SPARK</option>
-                                        <option value="PROJECT CLICK">PROJECT CLICK</option>
-                                    </select>
-                                </div>
-                                <canvas id="categoryChart"></canvas>
-                            </div>
-                        </div>
-
-                        </div>
-
-                        <div class="col-md-6">
-                            <div class="card shadow-sm mb-4">
-                                <div class="card-body">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <h6 class="card-title text-dark">Quarter Expenditure</h6>
-                                    <!-- Dropdown to filter by project -->
-                                    <select id="quarterFilter" class="form-select mb-3" style="width: 200px;">
-                                        <option value="ALL">All Projects</option>
-                                        <option value="ILCDB">ILCDB</option>
-                                        <option value="DTC">DTC</option>
-                                        <option value="SPARK">SPARK</option>
-                                        <option value="PROJECT CLICK">PROJECT CLICK</option>
-                                    </select>
+                        <div class="row mt-3">
+                            <div class="col-md-6">
+                                <div class="card shadow-sm">
+                                    <div class="card-body">
+                                        <h6 class="card-title text-dark">Distribution of Procurement</h6>
+                                        <canvas id="procurementChart"></canvas>
                                     </div>
-                                    <canvas id="quarterChart"></canvas>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="col-md-6">
-                        <div class="card shadow-sm mb-4">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <h6 class="card-title text-dark mb-0">Cost Savings</h6>
-                                    <select id="projectFilter" class="form-select mb-0" style="width: 200px;" onchange="updateCostSavingsChart()">
-                                        <option value="ILCDB">ILCDB</option>
-                                        <option value="DTC">DTC</option>
-                                        <option value="SPARK">SPARK</option>
-                                        <option value="PROJECT CLICK">PROJECT CLICK</option>
-                                    </select>
+                            <div class="col-md-6">
+                                <!-- Distribution of Category (Bar Graph with Project Filter) -->
+                                <div class="card shadow-sm mb-4">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <h6 class="card-title text-dark mb-0">Distribution of Category</h6>
+                                            <!-- Dropdown to filter by project -->
+                                            <select id="categoryFilter" class="form-select mb-0" style="width: 200px;">
+                                                <option value="ILCDB">ILCDB</option>
+                                                <option value="DTC">DTC</option>
+                                                <option value="SPARK">SPARK</option>
+                                                <option value="PROJECT CLICK">PROJECT CLICK</option>
+                                            </select>
+                                        </div>
+                                        <canvas id="categoryChart"></canvas>
+                                    </div>
                                 </div>
-                                <canvas id="costSavingsChart"></canvas>
-                            </div>
-                        </div>
-                    </div>
 
-                    </div>
-                </div> <!-- End of Card Body -->
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="card shadow-sm mb-4">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <h6 class="card-title text-dark">Quarter Expenditure</h6>
+                                            <!-- Dropdown to filter by project -->
+                                            <select id="quarterFilter" class="form-select mb-3" style="width: 200px;">
+                                                <option value="ALL">All Projects</option>
+                                                <option value="ILCDB">ILCDB</option>
+                                                <option value="DTC">DTC</option>
+                                                <option value="SPARK">SPARK</option>
+                                                <option value="PROJECT CLICK">PROJECT CLICK</option>
+                                            </select>
+                                        </div>
+                                        <canvas id="quarterChart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="card shadow-sm mb-4">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <h6 class="card-title text-dark mb-0">Cost Savings</h6>
+                                            <select id="projectFilter" class="form-select mb-0" style="width: 200px;" onchange="updateCostSavingsChart()">
+                                                <option value="ILCDB">ILCDB</option>
+                                                <option value="DTC">DTC</option>
+                                                <option value="SPARK">SPARK</option>
+                                                <option value="PROJECT CLICK">PROJECT CLICK</option>
+                                            </select>
+                                        </div>
+                                        <canvas id="costSavingsChart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div> <!-- End of Card Body -->
+                </div>
             </div>
         </div>
     </div>
-</div>
     <footer class="bg-dark text-white text-center py-3">
         <p class="mb-0">© 2024 Procurement Monitoring and Tracking System. All rights reserved.</p>
     </footer>
 
-<!-- Bootstrap JS (Optional, only needed for dropdowns, modals, etc.) -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="/js/menu.js"></script>
-<script src="/js/charts.js"></script>
+    <!-- Bootstrap JS (Optional, only needed for dropdowns, modals, etc.) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="/js/menu.js"></script>
+    <script src="/js/charts.js"></script>
 
 </body>
 

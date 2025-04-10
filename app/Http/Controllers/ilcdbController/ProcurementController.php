@@ -105,18 +105,41 @@ class ProcurementController extends Controller
     {
         $procurementId = $request->query('procurement_id');
 
-        // Fetch procurement details from the database
+        // Fetch procurement details from the procurement table
         $procurement = DB::connection('ilcdb')
             ->table('procurement')
             ->where('procurement_id', $procurementId)
-            ->first(); // Use first() to get a single record
+            ->first();
 
         if ($procurement) {
-            // Return procurement data as JSON response
+            // Try to get budget_spent from procurement_form
+            $budgetSpent = DB::connection('ilcdb')
+                ->table('procurement_form')
+                ->where('procurement_id', $procurementId)
+                ->value('budget_spent');
+
+            // If null, try honoraria_form
+            if (is_null($budgetSpent)) {
+                $budgetSpent = DB::connection('ilcdb')
+                    ->table('honoraria_form')
+                    ->where('procurement_id', $procurementId)
+                    ->value('budget_spent');
+            }
+
+            // If still null, try otherexpense_form
+            if (is_null($budgetSpent)) {
+                $budgetSpent = DB::connection('ilcdb')
+                    ->table('otherexpense_form')
+                    ->where('procurement_id', $procurementId)
+                    ->value('budget_spent');
+            }
+
+            // Attach the final non-null budget_spent value to the procurement object
+            $procurement->budget_spent = $budgetSpent;
+
             return response()->json($procurement);
         }
 
-        // If procurement not found, return an error message
         return response()->json(['message' => 'Procurement not found.'], 404);
     }
 
