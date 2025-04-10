@@ -381,36 +381,8 @@ async function selectProject(project) {
 }
 
 // Default project on page load
-document.addEventListener('DOMContentLoaded', () => {
-    // Default load
-    selectProject('ILCDB');
-    updateCategoryChart('ILCDB');
-    updateExpenditureChart('all');
-    updateCostSavingsChart();
-
-    // Attach event listeners to dropdown items
-    document.querySelectorAll('.project-option').forEach(item => {
-        item.addEventListener('click', async (e) => {
-            e.preventDefault();
-            const project = item.getAttribute('data-project');
-
-            // Update dropdown label
-            document.getElementById('projectDropdown').textContent = project;
-
-            // Update all sections
-            await selectProject(project);
-            updateCategoryChart(project);
-            updateExpenditureChart(project);
-
-            // Update filter dropdown if it exists
-            const projectFilter = document.getElementById('projectFilter');
-            if (projectFilter) {
-                projectFilter.value = project;
-            }
-            updateCostSavingsChart();
-        });
-    });
+window.addEventListener('DOMContentLoaded', () => {
+    selectProject('ILCDB');  // Default project on page load
 });
-
 
 });
