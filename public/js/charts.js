@@ -349,6 +349,16 @@ async function selectProject(project) {
                     <div class="card h-100 shadow-sm">
                         <div class="card-body d-flex justify-content-between align-items-center">
                             <div>
+                                <h6 class="card-title text-dark">Total Budget Spent</h6>
+                                <p class="card-text fs-5 text-navy">₱${data.totalBudgetSpent ? Number(data.totalBudgetSpent).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') : 'N/A'}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body d-flex justify-content-between align-items-center">
+                            <div>
                                 <h6 class="card-title text-dark">Average Budget Spent</h6>
                                 <p class="card-text fs-5 text-navy">₱${data.avgBudgetSpent ? Number(data.avgBudgetSpent).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') : 'N/A'}</p>
                             </div>

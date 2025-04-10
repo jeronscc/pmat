@@ -322,7 +322,7 @@ public function getProjectReport(Request $request)
             throw new \Exception("No valid tables found for the selected project.");
         }
 
-        // Average Budget Spend
+        // Average Budget Spent
         $avgBudgetSpent = $connection->table(function ($query) use ($existingTables) {
             if (isset($existingTables['procurement_form'])) {
                 $query->select('budget_spent')
@@ -340,6 +340,25 @@ public function getProjectReport(Request $request)
             }
         }, 'combined')
         ->avg('budget_spent');
+
+        // Total Budget Spent
+        $totalBudgetSpent = $connection->table(function ($query) use ($existingTables) {
+            if (isset($existingTables['procurement_form'])) {
+                $query->select('budget_spent')
+                    ->from($existingTables['procurement_form']);
+            }
+            if (isset($existingTables['honoraria_form'])) {
+                $query->unionAll(
+                    DB::table($existingTables['honoraria_form'])->select('budget_spent')
+                );
+            }
+            if (isset($existingTables['otherexpense_form'])) {
+                $query->unionAll(
+                    DB::table($existingTables['otherexpense_form'])->select('budget_spent')
+                );
+            }
+        }, 'combined')
+        ->sum('budget_spent');
 
         // Average Allocated Budget (SARO)
         $avgAllocatedBudget = isset($existingTables['saro'])
@@ -398,6 +417,7 @@ public function getProjectReport(Request $request)
         return response()->json([
             'success' => true,
             'data' => [
+                'totalBudgetSpent' => $totalBudgetSpent ?: 0,
                 'avgBudgetSpent' => $avgBudgetSpent ?: 0,
                 'avgAllocatedBudget' => $avgAllocatedBudget ?: 0,
                 'avgApprovedBudget' => $avgApprovedBudget ?: 0,
