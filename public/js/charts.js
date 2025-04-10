@@ -1,5 +1,37 @@
-window.addEventListener('DOMContentLoaded', () => {
-    // Procurement Distribution Chart
+window.addEventListener('DOMContentLoaded', async () => {
+    try {
+        // Set default filter values
+        const projectDropdown = document.getElementById('projectDropdown');
+        if (projectDropdown) {
+            projectDropdown.textContent = 'ILCDB'; // Default dropdown text
+        }
+
+        const projectFilter = document.getElementById('projectFilter');
+        if (projectFilter) {
+            projectFilter.value = 'ILCDB'; // Default project
+        }
+
+        const quarterFilter = document.getElementById('quarterFilter');
+        if (quarterFilter) {
+            quarterFilter.value = 'ALL'; // Default quarter
+        }
+
+        // Load all data synchronously
+        await Promise.all([
+            selectProject('ILCDB'),
+            updateProcurementChart(),
+            updateCategoryChart('ILCDB'),
+            updateExpenditureChart('ALL'),
+            updateCostSavingsChart()
+        ]);
+
+        console.log('All default data loaded successfully.');
+    } catch (error) {
+        console.error('Error loading default data:', error);
+    }
+});
+
+// Procurement Distribution Chart
 const procurementCtx = document.getElementById('procurementChart').getContext('2d');
 const procurementChart = new Chart(procurementCtx, {
     type: 'bar',
@@ -53,11 +85,7 @@ async function updateProcurementChart() {
     }
 }
 
-// Call the function to load the procurement distribution data when the page loads
-updateProcurementChart();
-
-
-    // Category Distribution Chart with Filter
+// Category Distribution Chart with Filter
 const categoryCtx = document.getElementById('categoryChart').getContext('2d');
 const categoryChart = new Chart(categoryCtx, {
     type: 'bar',
@@ -122,9 +150,6 @@ document.getElementById('categoryFilter').addEventListener('change', function ()
     }
 });
 
-// Default: Show 'ILCDB' data when the page loads
-updateCategoryChart('ILCDB');
-
 // Quarter Expenditure Distribution Chart
 const quarterCtx = document.getElementById('quarterChart').getContext('2d');
 const quarterChart = new Chart(quarterCtx, {
@@ -180,25 +205,12 @@ async function updateExpenditureChart(project) {
     }
 }
 
-// Call the function to load the expenditure data for 'all' projects when the page loads
-document.addEventListener('DOMContentLoaded', function () {
-    // Set "all" as the default value for the project filter
-    const filterElement = document.getElementById('quarterFilter');
-    if (filterElement) {
-        filterElement.value = 'ALL'; // Set the default filter to 'all'
-    }
-
-});
-
-    // Load the data for 'all' projects after setting the filter
-    updateExpenditureChart('ALL');
-
 // Event listener for filter change
 document.getElementById('quarterFilter').addEventListener('change', function () {
     const selectedQuarter = this.value; // Get the selected quarter from the filter
     updateExpenditureChart(selectedQuarter);
-
 });
+
 // Cost Savings Chart
 const costSavingsCtx = document.getElementById('costSavingsChart').getContext('2d');
 const costSavingsChart = new Chart(costSavingsCtx, {
@@ -280,24 +292,6 @@ async function updateCostSavingsChart() {
     }
 }
 
-// Call the function to load the cost savings data for ILCDB when the page loads
-document.addEventListener('DOMContentLoaded', function () {
-    // Set ILCDB as the default value for the project filter
-    const projectFilter = document.getElementById('projectFilter');
-    if (projectFilter) {
-        projectFilter.value = 'ILCDB'; // Set default project to ILCDB
-    }
-
-});
-    // Load the data for ILCDB
-    updateCostSavingsChart('ILCDB'); 
-
-// Event listener for filter change
-document.getElementById('projectFilter').addEventListener('change', function () {
-    const selectedProject = this.value; // Get the selected project from the filter
-    updateCostSavingsChart(selectedProject); // Pass the selected project to the function
-});
-
 // Report Data
 document.addEventListener('DOMContentLoaded', () => {
     // Set up event listeners for each dropdown item
@@ -320,8 +314,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Initialize the default project data on page load
-    selectProject('ILCDB');
 });
 
 // The selectProject function to fetch project data and update the UI
@@ -426,7 +418,4 @@ document.querySelectorAll('.project-option').forEach(item => {
         document.getElementById('projectFilter').value = project; // sync other filters
         updateCostSavingsChart();
     });
-});
-
-
 });
