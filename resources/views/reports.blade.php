@@ -113,6 +113,11 @@
 
                     <!-- Static Charts Section (Always visible, won't be overwritten) -->
                      <hr>
+                     <div class="row">
+                        <div class="col-12 text-end">
+                            <p id="reportDate" class="text-muted"></p>
+                        </div>
+                    </div>
                     <div class="row mt-3">
                         <div class="col-md-6">
                             <div class="card shadow-sm">
@@ -185,7 +190,6 @@
         </div>
     </div>
 </div>
-
     <footer class="bg-dark text-white text-center py-3">
         <p class="mb-0">© 2024 Procurement Monitoring and Tracking System. All rights reserved.</p>
     </footer>

@@ -1,5 +1,28 @@
 window.addEventListener('DOMContentLoaded', async () => {
     try {
+        // Set the refresh date
+        const reportDateElement = document.getElementById('reportDate');
+            if (reportDateElement) {
+                const currentDate = new Date();
+                
+                // Format the date and time
+                const formattedDate = currentDate.toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+                
+                const formattedTime = currentDate.toLocaleTimeString('en-US', {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit',
+                    hour12: true
+                });
+
+                // Set the content with italic style
+                reportDateElement.innerHTML = `Report as of <i>${formattedDate} ${formattedTime}</i>`;
+            }
+
         // Set default filter values
         const projectDropdown = document.getElementById('projectDropdown');
         if (projectDropdown) {
