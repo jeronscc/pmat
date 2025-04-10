@@ -408,7 +408,7 @@ async function selectProject(project) {
                     <div class="card h-100 shadow-sm">
                         <div class="card-body">
                             <h6 class="card-title text-dark">Processing Rate (Per Unit)</h6>
-                            <p class="card-text fs-5 text-success">${data.processingRate ? Number(data.processingRate).toFixed(2) + '%' : 'N/A'}</p>
+                            <p class="card-text fs-5 text-success">${data.processingRate ? `${Math.round(data.processingRate)} hrs` : 'N/A'}</p>
                         </div>
                     </div>
                 </div>

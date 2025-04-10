@@ -381,25 +381,25 @@ public function getProjectReport(Request $request)
         $avgProcessingTime = $connection->table(function ($query) use ($existingTables) {
             if (isset($existingTables['procurement_form'])) {
                 $query->selectRaw('
-                    AVG(DATEDIFF(dt_received1, dt_submitted1)) +
-                    AVG(DATEDIFF(dt_received2, dt_submitted2)) +
-                    AVG(DATEDIFF(dt_received3, dt_submitted3)) +
-                    AVG(DATEDIFF(dt_received4, dt_submitted4)) +
-                    AVG(DATEDIFF(dt_received5, dt_submitted5)) +
-                    AVG(DATEDIFF(dt_received6, dt_submitted6)) AS average_processing_time
+                    AVG(TIMESTAMPDIFF(HOUR, dt_submitted1, dt_received1)) +
+                    AVG(TIMESTAMPDIFF(HOUR, dt_submitted2, dt_received2)) +
+                    AVG(TIMESTAMPDIFF(HOUR, dt_submitted3, dt_received3)) +
+                    AVG(TIMESTAMPDIFF(HOUR, dt_submitted4, dt_received4)) +
+                    AVG(TIMESTAMPDIFF(HOUR, dt_submitted5, dt_received5)) +
+                    AVG(TIMESTAMPDIFF(HOUR, dt_submitted6, dt_received6)) AS average_processing_time
                 ')
                 ->from($existingTables['procurement_form']);
             }
             if (isset($existingTables['honoraria_form'])) {
                 $query->unionAll(
                     DB::table($existingTables['honoraria_form'])
-                        ->selectRaw('AVG(DATEDIFF(dt_received, dt_submitted)) AS average_processing_time')
+                        ->selectRaw('AVG(TIMESTAMPDIFF(HOUR, dt_submitted, dt_received)) AS average_processing_time')
                 );
             }
             if (isset($existingTables['otherexpense_form'])) {
                 $query->unionAll(
                     DB::table($existingTables['otherexpense_form'])
-                        ->selectRaw('AVG(DATEDIFF(dt_received, dt_submitted)) AS average_processing_time')
+                        ->selectRaw('AVG(TIMESTAMPDIFF(HOUR, dt_submitted, dt_received)) AS average_processing_time')
                 );
             }
         }, 'combined')
