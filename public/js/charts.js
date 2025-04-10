@@ -387,7 +387,6 @@ async function selectProject(project) {
                                 <h6 class="card-title text-dark">Overdue Counter</h6>
                                 <p class="card-text fs-5 text-danger">${data.overdueCount !== undefined ? data.overdueCount : 'N/A'}</p>
                             </div>
-                            <img src="assets/filter.png" alt="Filter" width="20">
                         </div>
                     </div>
                 </div>
