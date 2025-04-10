@@ -563,50 +563,80 @@
                         @csrf
                         <div class="mb-3">
                             <label class="form-label">Previously Uploaded Documents (ORS, PO, Abstract, Philgeps Posting, IAR, ICS/PAR, Request for Inspection)</label>
-                            <div id="budgetAllFilePreview5">
-                                <p class="text-muted">Loading files...</p>
+                            <div class="mb-3">
+                                <label for="orsFile5" class="form-label">ORS (Obligation Request and Status)</label>
+                                <div id="orsFile5Link"></div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="poFile5" class="form-label">Purchase Order</label>
+                                <div id="poFile5Link"></div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="absFile5" class="form-label">Abstract / Philgeps Posting*</label>
+                                <div id="absFile5Link"></div>
                             </div>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Previously Uploaded Documents (Attendance, Certificate, Photos, SOA, DR, Distribution List)</label>
-                            <div id="supplyAllFilePreview5">
-                                <p class="text-muted">Loading files...</p>
+                            <div class="mb-3">
+                                <label for="attendanceFile5" class="form-label">Attendance Sheet</label>
+                                <div id="attendanceFile5Link"></div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="cocFile5" class="form-label">Certificate of Completion/Satisfaction for Supplier</label>
+                                <div id="cocFile5Link"></div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="photoFile5" class="form-label">Photo</label>
+                                <div id="photoFile5Link"></div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="soaFile5" class="form-label">SOA / Billing Statement</label>
+                                <div id="soaFile5Link"></div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="drFile5" class="form-label">Delivery Receipt</label>
+                                <div id="drFile5Link"></div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="dlFile5" class="form-label">Distribution List (Receiving Copy)</label>
+                                <div id="dlFile5Link"></div>
                             </div>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Previously Uploaded Documents (PR, Quotations, APP/PPMP, SARO, Budget Breakdown, Distribution List, POI/Activity Design, Market Research)</label>
                             <div id="allReqsFilePreview5">
                                 <div class="mb-3">
-                                    <label for="purchaseFile4" class="form-label" id="purchaseFileLabel4">Purchase Request</label>
-                                    <div id="purchaseFile4Link"></div>
+                                    <label for="purchaseFile5" class="form-label" id="purchaseFileLabel5">Purchase Request</label>
+                                    <div id="purchaseFile5Link"></div>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="quotationsFile4" class="form-label" id="quotationsFileLabel4">Quotations</label>
-                                    <div id="quotationsFile4Link"></div>
+                                    <label for="quotationsFile5" class="form-label" id="quotationsFileLabel5">Quotations</label>
+                                    <div id="quotationsFile5Link"></div>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="appFile4" class="form-label" id="appFileLabel4">APP/PPMP</label>
-                                    <div id="appFile4Link"></div>
+                                    <label for="appFile5" class="form-label" id="appFileLabel5">APP/PPMP</label>
+                                    <div id="appFile5Link"></div>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="saroFile4" class="form-label" id="saroFileLabel4">SARO</label>
-                                    <div id="saroFile4Link"></div>
+                                    <label for="saroFile5" class="form-label" id="saroFileLabel5">SARO</label>
+                                    <div id="saroFile5Link"></div>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="budgetFile4" class="form-label" id="budgetFileLabel4">Budget Breakdown</label>
-                                    <div id="budgetFile4Link"></div>
+                                    <label for="budgetFile5" class="form-label" id="budgetFileLabel5">Budget Breakdown</label>
+                                    <div id="budgetFile5Link"></div>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="distributionFile4" class="form-label" id="distributionFileLabel4">Distribution List</label>
-                                    <div id="distributionFile4Link"></div>
+                                    <label for="distributionFile5" class="form-label" id="distributionFileLabel5">Distribution List</label>
+                                    <div id="distributionFile5Link"></div>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="poiFile4" class="form-label" id="poiFileLabel4">POI / Activity Design</label>
-                                    <div id="poiFile4Link"></div>
+                                    <label for="poiFile5" class="form-label" id="poiFileLabel5">POI / Activity Design</label>
+                                    <div id="poiFile5Link"></div>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="researchFile4" class="form-label" id="researchFileLabel4">Market Research</label>
-                                    <div id="researchFile4Link"></div>
+                                    <label for="researchFile5" class="form-label" id="researchFileLabel5">Market Research</label>
+                                    <div id="researchFile5Link"></div>
                                 </div>
                             </div>
                         </div>
@@ -639,50 +669,80 @@
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Uploaded Documents (ORS, PO, Abstract, Philgeps Posting, IAR, ICS/PAR, Request for Inspection)</label>
-                            <div id="budgetAllFilePreview6">
-                                <p class="text-muted">Loading files...</p>
+                            <div class="mb-3">
+                                <label for="orsFile6" class="form-label">ORS (Obligation Request and Status)</label>
+                                <div id="orsFile6Link"></div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="poFile6" class="form-label">Purchase Order</label>
+                                <div id="poFile6Link"></div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="absFile6" class="form-label">Abstract / Philgeps Posting</label>
+                                <div id="absFile6Link"></div>
                             </div>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Uploaded Documents (Attendance, Certificate, Photos, SOA, DR, Distribution List)</label>
-                            <div id="supplyAllFilePreview6">
-                                <p class="text-muted">Loading files...</p>
+                            <div class="mb-3">
+                                <label for="attendanceFile6" class="form-label">Attendance Sheet</label>
+                                <div id="attendanceFile6Link"></div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="cocFile6" class="form-label">Certificate of Completion/Satisfaction for Supplier</label>
+                                <div id="cocFile6Link"></div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="photoFile6" class="form-label">Photo</label>
+                                <div id="photoFile6Link"></div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="soaFile6" class="form-label">SOA / Billing Statement</label>
+                                <div id="soaFile6Link"></div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="drFile6" class="form-label">Delivery Receipt</label>
+                                <div id="drFile6Link"></div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="dlFile6" class="form-label">Distribution List (Receiving Copy)</label>
+                                <div id="dlFile6Link"></div>
                             </div>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Uploaded Documents (PR, Quotations, APP/PPMP, SARO, Budget Breakdown, Distribution List, POI/Activity Design, Market Research)</label>
                             <div id="allReqsFilePreview6">
                                 <div class="mb-3">
-                                    <label for="purchaseFile5" class="form-label" id="purchaseFileLabel5">Purchase Request</label>
-                                    <div id="purchaseFile5Link"></div>
+                                    <label for="purchaseFile6" class="form-label" id="purchaseFileLabel6">Purchase Request</label>
+                                    <div id="purchaseFile6Link"></div>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="quotationsFile5" class="form-label" id="quotationsFileLabel5">Quotations</label>
-                                    <div id="quotationsFile5Link"></div>
+                                    <label for="quotationsFile6" class="form-label" id="quotationsFileLabel6">Quotations</label>
+                                    <div id="quotationsFile6Link"></div>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="appFile5" class="form-label" id="appFileLabel5">APP/PPMP</label>
-                                    <div id="appFile5Link"></div>
+                                    <label for="appFile6" class="form-label" id="appFileLabel6">APP/PPMP</label>
+                                    <div id="appFile6Link"></div>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="saroFile5" class="form-label" id="saroFileLabel5">SARO</label>
-                                    <div id="saroFile5Link"></div>
+                                    <label for="saroFile6" class="form-label" id="saroFileLabel6">SARO</label>
+                                    <div id="saroFile6Link"></div>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="budgetFile5" class="form-label" id="budgetFileLabel2">Budget Breakdown</label>
-                                    <div id="budgetFile5Link"></div>
+                                    <label for="budgetFile6" class="form-label" id="budgetFileLabel2">Budget Breakdown</label>
+                                    <div id="budgetFile6Link"></div>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="distributionFile5" class="form-label" id="distributionFileLabel5">Distribution List</label>
-                                    <div id="distributionFile5Link"></div>
+                                    <label for="distributionFile6" class="form-label" id="distributionFileLabel6">Distribution List</label>
+                                    <div id="distributionFile6Link"></div>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="poiFile5" class="form-label" id="poiFileLabel5">POI / Activity Design</label>
-                                    <div id="poiFile5Link"></div>
+                                    <label for="poiFile6" class="form-label" id="poiFileLabel6">POI / Activity Design</label>
+                                    <div id="poiFile6Link"></div>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="researchFile5" class="form-label" id="researchFileLabel5">Market Research</label>
-                                    <div id="researchFile5Link"></div>
+                                    <label for="researchFile6" class="form-label" id="researchFileLabel6">Market Research</label>
+                                    <div id="researchFile6Link"></div>
                                 </div>
                             </div>
                         </div>
