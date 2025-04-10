@@ -185,21 +185,20 @@ document.addEventListener('DOMContentLoaded', function () {
     // Set "all" as the default value for the project filter
     const filterElement = document.getElementById('quarterFilter');
     if (filterElement) {
-        filterElement.value = 'all'; // Set the default filter to 'all'
+        filterElement.value = 'ALL'; // Set the default filter to 'all'
     }
 
-    // Load the data for all projects
-    updateExpenditureChart('all'); // Trigger the data load for 'all' projects
 });
+
+    // Load the data for 'all' projects after setting the filter
+    updateExpenditureChart('ALL');
 
 // Event listener for filter change
 document.getElementById('quarterFilter').addEventListener('change', function () {
-    const selectedProject = this.value;
+    const selectedQuarter = this.value; // Get the selected quarter from the filter
+    updateExpenditureChart(selectedQuarter);
 
-    // Fetch and update the chart based on the selected project
-    updateExpenditureChart(selectedProject);
 });
-
 // Cost Savings Chart
 const costSavingsCtx = document.getElementById('costSavingsChart').getContext('2d');
 const costSavingsChart = new Chart(costSavingsCtx, {
@@ -284,27 +283,52 @@ async function updateCostSavingsChart() {
 // Call the function to load the cost savings data for ILCDB when the page loads
 document.addEventListener('DOMContentLoaded', function () {
     // Set ILCDB as the default value for the project filter
-    document.getElementById('projectFilter').value = 'ILCDB';
+    const projectFilter = document.getElementById('projectFilter');
+    if (projectFilter) {
+        projectFilter.value = 'ILCDB'; // Set default project to ILCDB
+    }
 
+});
     // Load the data for ILCDB
-    updateCostSavingsChart();
-});
+    updateCostSavingsChart('ILCDB'); 
 
 // Event listener for filter change
 document.getElementById('projectFilter').addEventListener('change', function () {
-    updateCostSavingsChart();
+    const selectedProject = this.value; // Get the selected project from the filter
+    updateCostSavingsChart(selectedProject); // Pass the selected project to the function
 });
 
-// Event listener for filter change
-document.getElementById('projectFilter').addEventListener('change', function () {
-    const selectedProject = this.value; // Get the selected project from filter
-    selectProject(selectedProject); // Update project data based on filter
+// Report Data
+document.addEventListener('DOMContentLoaded', () => {
+    // Set up event listeners for each dropdown item
+    const projectDropdown = document.getElementById('projectDropdown');
+    const dropdownItems = document.querySelectorAll('.dropdown-item');
+
+    // Initialize with the default project name in the button
+    projectDropdown.textContent = 'ILCDB'; // Default text
+
+    // Set up event listeners for each dropdown item
+    dropdownItems.forEach(item => {
+        item.addEventListener('click', function () {
+            const selectedProject = this.textContent; // Get the project name from the clicked item
+
+            // Update the button text with the selected project
+            projectDropdown.textContent = selectedProject;
+
+            // Call the selectProject function to load data for the selected project
+            selectProject(selectedProject);
+        });
+    });
+
+    // Initialize the default project data on page load
+    selectProject('ILCDB');
 });
 
+// The selectProject function to fetch project data and update the UI
 async function selectProject(project) {
-    console.log(`Selected project: ${project}`);  // Check the project being selected
-    document.getElementById('projectDropdown').textContent = project;
-    document.getElementById('projectName').textContent = project;
+    console.log(`Selected project: ${project}`);  // Log the selected project for debugging
+    document.getElementById('projectDropdown').textContent = project;  // Update dropdown button text
+    document.getElementById('projectName').textContent = project;  // Update project name display
     const content = document.getElementById('reportData');
     
     // Clear previous content
@@ -313,59 +337,63 @@ async function selectProject(project) {
     try {
         // Fetch the project-specific data from the backend
         const response = await fetch(`/api/project-report?project=${project}`);
+        
+        // Check for successful response
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
         const result = await response.json();
 
-        if (result.success) {
+        // Log the API response for debugging
+        console.log(result);
+
+        if (result.success && result.data) {
             const data = result.data;
 
             // Insert project-specific data dynamically
             content.innerHTML = `
-                <!-- Average Budget Spend (with filter) -->
                 <div class="col-md-4">
                     <div class="card h-100 shadow-sm">
                         <div class="card-body d-flex justify-content-between align-items-center">
                             <div>
                                 <h6 class="card-title text-dark">Average Budget Spend</h6>
-                                <p class="card-text fs-5 text-navy">₱${data.avgBudgetSpent.toLocaleString()}</p> <!-- Change color to navy -->
+                                <p class="card-text fs-5 text-navy">₱${data.avgBudgetSpent ? data.avgBudgetSpent.toLocaleString() : 'N/A'}</p>
                             </div>
                             <img src="assets/filter.png" alt="Filter" width="20">
                         </div>
                     </div>
                 </div>
-                <!-- Average Allocated Budget (SARO) -->
                 <div class="col-md-4">
                     <div class="card h-100 shadow-sm">
                         <div class="card-body">
                             <h6 class="card-title text-dark">Average Allocated Budget (SARO)</h6>
-                            <p class="card-text fs-5 text-navy">₱${data.avgAllocatedBudget.toLocaleString()}</p> <!-- Change color to navy -->
+                            <p class="card-text fs-5 text-navy">₱${data.avgAllocatedBudget ? data.avgAllocatedBudget.toLocaleString() : 'N/A'}</p>
                         </div>
                     </div>
                 </div>
-                <!-- Average Approved Budget (NTCA) -->
                 <div class="col-md-4">
                     <div class="card h-100 shadow-sm">
                         <div class="card-body">
                             <h6 class="card-title text-dark">Average Approved Budget (NTCA)</h6>
-                            <p class="card-text fs-5 text-navy">₱${data.avgApprovedBudget.toLocaleString()}</p> <!-- Change color to navy -->
+                            <p class="card-text fs-5 text-navy">₱${data.avgApprovedBudget ? data.avgApprovedBudget.toLocaleString() : 'N/A'}</p>
                         </div>
                     </div>
                 </div>
-                <!-- Processing Rate (Per Unit) -->
                 <div class="col-md-4">
                     <div class="card h-100 shadow-sm">
                         <div class="card-body">
                             <h6 class="card-title text-dark">Processing Rate (Per Unit)</h6>
-                            <p class="card-text fs-5 text-success">${data.processingRate}%</p>
+                            <p class="card-text fs-5 text-success">${data.processingRate ? data.processingRate + '%' : 'N/A'}</p>
                         </div>
                     </div>
                 </div>
-                <!-- Overdue Counter (with filter) -->
                 <div class="col-md-4">
                     <div class="card h-100 shadow-sm">
                         <div class="card-body d-flex justify-content-between align-items-center">
                             <div>
                                 <h6 class="card-title text-dark">Overdue Counter</h6>
-                                <p class="card-text fs-5 text-danger">${data.overdueCount}</p>
+                                <p class="card-text fs-5 text-danger">${data.overdueCount !== undefined ? data.overdueCount : 'N/A'}</p>
                             </div>
                             <img src="assets/filter.png" alt="Filter" width="20">
                         </div>
@@ -374,15 +402,12 @@ async function selectProject(project) {
             `;
         } else {
             console.error("Failed to fetch project data:", result.message);
+            alert(result.message || "Failed to fetch project data.");
         }
     } catch (error) {
         console.error('Error fetching project data:', error);
+        alert("Error fetching project data. Please try again later.");
     }
 }
-
-// Default project on page load
-window.addEventListener('DOMContentLoaded', () => {
-    selectProject('ILCDB');  // Default project on page load
-});
 
 });
