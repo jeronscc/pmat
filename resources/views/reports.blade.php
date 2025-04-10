@@ -146,7 +146,7 @@
                         <div class="col-md-6">
                             <div class="card shadow-sm">
                                 <div class="card-body">
-                                    <h6 class="card-title text-dark">Which Quarter Has the Highest Expenditure?</h6>
+                                    <h6 class="card-title text-dark">Quarter Expenditure</h6>
                                     <!-- Dropdown to filter by project -->
                                     <select id="quarterFilter" class="form-select mb-3" style="width: 200px;">
                                         <option value="ALL">All Projects</option>
