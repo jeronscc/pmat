@@ -172,64 +172,71 @@ public function getCostSavings(Request $request)
             'DTC' => 'dtc',
             'SPARK' => 'spark',
             'PROJECT CLICK' => 'click',
-            'ALL' => null,  // 'ALL' will be used to fetch total for all projects
         ];
 
         $costSavingsData = [];
 
-        // If 'ALL' is selected, sum up for all projects
-        if ($request->query('project') == 'ALL') {
-            foreach ($connections as $project => $connection) {
-                if ($project === 'ALL') continue;
+        // Fetch data for a specific project
+        $project = $request->query('project');
+        if (isset($connections[$project])) {
+            $connection = $connections[$project];
 
-                // Fetch data grouped by saro_no
-                $costData = DB::connection($connection)
-                    ->table('procurement_form')
-                    ->select('saro_no', DB::raw('SUM(pr_amount) as pr_amount'), DB::raw('SUM(budget_spent) as budget_spent'))
-                    ->groupBy('saro_no')
-                    ->get();
-
-                // Repeat for other tables (otherexpense_form, honoraria_form)
-                $otherCostData = DB::connection($connection)
-                    ->table('otherexpense_form')
-                    ->select('saro_no', DB::raw('SUM(pr_amount) as pr_amount'), DB::raw('SUM(budget_spent) as budget_spent'))
-                    ->groupBy('saro_no')
-                    ->get();
-
-                $honorariaCostData = DB::connection($connection)
-                    ->table('honoraria_form')
-                    ->select('saro_no', DB::raw('SUM(pr_amount) as pr_amount'), DB::raw('SUM(budget_spent) as budget_spent'))
-                    ->groupBy('saro_no')
-                    ->get();
-
-                // Merge the results from each table
-                $costSavingsData = array_merge($costSavingsData, $costData->toArray(), $otherCostData->toArray(), $honorariaCostData->toArray());
-            }
-        } else {
-            // Fetch data for a specific project grouped by saro_no
-            $connection = $connections[$request->query('project')];
-
+            // Fetch data for procurement_form
             $costData = DB::connection($connection)
                 ->table('procurement_form')
-                ->select('saro_no', DB::raw('SUM(pr_amount) as pr_amount'), DB::raw('SUM(budget_spent) as budget_spent'))
+                ->select('saro_no', 
+                    DB::raw('SUM(pr_amount) as total_pr_amount'), 
+                    DB::raw('SUM(budget_spent) as total_budget_spent'))
                 ->groupBy('saro_no')
                 ->get();
 
             // Repeat for other tables (otherexpense_form, honoraria_form)
             $otherCostData = DB::connection($connection)
                 ->table('otherexpense_form')
-                ->select('saro_no', DB::raw('SUM(pr_amount) as pr_amount'), DB::raw('SUM(budget_spent) as budget_spent'))
+                ->select('saro_no', 
+                    DB::raw('SUM(pr_amount) as total_pr_amount'), 
+                    DB::raw('SUM(budget_spent) as total_budget_spent'))
                 ->groupBy('saro_no')
                 ->get();
 
             $honorariaCostData = DB::connection($connection)
                 ->table('honoraria_form')
-                ->select('saro_no', DB::raw('SUM(pr_amount) as pr_amount'), DB::raw('SUM(budget_spent) as budget_spent'))
+                ->select('saro_no', 
+                    DB::raw('SUM(pr_amount) as total_pr_amount'), 
+                    DB::raw('SUM(budget_spent) as total_budget_spent'))
                 ->groupBy('saro_no')
                 ->get();
 
             // Merge the results from each table
-            $costSavingsData = array_merge($costSavingsData, $costData->toArray(), $otherCostData->toArray(), $honorariaCostData->toArray());
+            $allData = array_merge(
+                $costData->toArray(), 
+                $otherCostData->toArray(), 
+                $honorariaCostData->toArray()
+            );
+
+            // Aggregate per saro_no (sum the amounts for each saro_no)
+            $aggregatedData = [];
+            foreach ($allData as $data) {
+                if (!isset($aggregatedData[$data->saro_no])) {
+                    $aggregatedData[$data->saro_no] = [
+                        'saro_no' => $data->saro_no,
+                        'total_pr_amount' => 0,
+                        'total_budget_spent' => 0,
+                    ];
+                }
+
+                $aggregatedData[$data->saro_no]['total_pr_amount'] += $data->total_pr_amount;
+                $aggregatedData[$data->saro_no]['total_budget_spent'] += $data->total_budget_spent;
+            }
+
+            // Reindex the array to return a simple array of data
+            $costSavingsData = array_values($aggregatedData);
+
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid project selected.',
+            ], 400);
         }
 
         return response()->json([

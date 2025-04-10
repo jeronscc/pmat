@@ -239,18 +239,18 @@ const costSavingsCtx = document.getElementById('costSavingsChart').getContext('2
 const costSavingsChart = new Chart(costSavingsCtx, {
     type: 'bar',
     data: {
-        labels: [], // Empty initially, will be populated with saro_no
+        labels: [], // Labels for each saro_no
         datasets: [
             {
                 label: 'Purchase Request',
-                data: [], // Empty initially, will be populated with purchase request values
+                data: [], // Total PR amount for each saro_no
                 backgroundColor: 'rgba(54, 162, 235, 0.5)', // Blue color for Purchase Request
                 borderColor: 'rgba(54, 162, 235, 1)',
                 borderWidth: 1
             },
             {
                 label: 'Budget Spent',
-                data: [], // Empty initially, will be populated with budget spent values
+                data: [], // Total Budget Spent for each saro_no
                 backgroundColor: 'rgba(255, 99, 132, 0.5)', // Red color for Budget Spent
                 borderColor: 'rgba(255, 99, 132, 1)',
                 borderWidth: 1
@@ -297,8 +297,8 @@ async function updateCostSavingsChart() {
 
             // Prepare labels (saro_no) and data for the chart
             const labels = data.map(item => item.saro_no); // Extract saro_no
-            const purchaseRequestData = data.map(item => item.pr_amount); // Extract purchase request amounts
-            const budgetSpentData = data.map(item => item.budget_spent); // Extract budget spent amounts
+            const purchaseRequestData = data.map(item => item.total_pr_amount); // Extract total PR amounts per saro_no
+            const budgetSpentData = data.map(item => item.total_budget_spent); // Extract total budget spent per saro_no
 
             // Update the chart with the new data for the selected project
             costSavingsChart.data.labels = labels;
