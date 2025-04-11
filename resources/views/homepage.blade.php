@@ -19,7 +19,7 @@
     <header class="d-flex align-items-center justify-content-between bg-black text-white p-3 shadow" id="stickyHeader">
         <div class="logo d-flex align-items-center">
             <img src="/assets/dict-logo.png" alt="DICT Logo" class="img-fluid" id="dictLogo">
-            <img src="/assets/ilcdb-logo-2.png" alt="DTC Logo" class="img-fluid ms-2">
+            <img src="/assets/ilcdb-logo-3.png" alt="ILCDB Logo" class="img-fluid ms-2">
         </div>
         <h1 class="text-center flex-grow-1 fs-4 m-0">Procurement Tracking and Monitoring System</h1>
 
