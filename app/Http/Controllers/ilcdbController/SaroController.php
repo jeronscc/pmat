@@ -16,6 +16,7 @@ class SaroController extends Controller
             'budget' => 'required|numeric|min:0',
             'saro_year' => 'required|integer',
             'saroDesc' => 'required|string',
+            'date_released' => 'required|date', // Validate the new field
         ]);
 
         try {
@@ -25,6 +26,7 @@ class SaroController extends Controller
                 'current_budget' => $request->input('budget'),
                 'description' => $request->input('saroDesc'),
                 'year' => $request->input('saro_year'),
+                'date_released' => $request->input('date_released'), // Save the new field
             ]);
 
             return response()->json(['success' => true, 'message' => 'SARO added successfully.']);
@@ -54,6 +56,7 @@ class SaroController extends Controller
             'budget' => 'required|numeric|min:0',
             'quarter' => 'required|string|in:first_q,second_q,third_q,fourth_q',
             'saro_no' => 'required|string|max:64',
+            'date_released' => 'required|date', // Validate the new field
         ]);
 
         try {
@@ -67,6 +70,7 @@ class SaroController extends Controller
                     ->update([
                         $validatedData['quarter'] => DB::raw("COALESCE({$validatedData['quarter']}, 0) + {$validatedData['budget']}"),
                         'current_budget' => DB::raw("budget_allocated - (COALESCE(first_q, 0) + COALESCE(second_q, 0) + COALESCE(third_q, 0) + COALESCE(fourth_q, 0))"),
+                        'ntca_date_released' => $validatedData['date_released'], // Update the date released
                     ]);
             } else {
                 // Fetch the SARO's budget
@@ -86,6 +90,7 @@ class SaroController extends Controller
                     'current_budget' => $saro->budget_allocated - $validatedData['budget'],
                     $validatedData['quarter'] => $validatedData['budget'], // Save the budget in the selected quarter
                     'saro_no' => $validatedData['saro_no'],
+                    'date_released' => $validatedData['date_released'], // Save the new field
                 ]);
             }
 

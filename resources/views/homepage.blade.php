@@ -359,6 +359,10 @@
                                     <label for="saro_budget" class="form-label">BUDGET</label>
                                     <input type="number" class="form-control" id="saro_budget" name="saro_budget" required>
                                 </div>
+                                <div class="mb-3">
+                                    <label for="date_released" class="form-label">DATE RELEASED</label>
+                                    <input type="date" class="form-control" id="date_released" name="date_released" required>
+                                </div>
                             </div>
 
                             <!-- NTCA Specific Fields -->
@@ -373,7 +377,7 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="ntca_number" class="form-label">NTCA NUMBER</label>
-                                    <input type="text" class="form-control" id="ntca_number" name="ntca_number" readonly>
+                                    <input type="text" class="form-control" id="ntca_number" name="ntca_number" placeholder="Enter NTCA Number" required>
                                 </div>
                                 <div class="mb-3">
                                     <label for="quarter" class="form-label">SELECT QUARTER</label>
@@ -388,6 +392,10 @@
                                 <div class="mb-3">
                                     <label for="budget" class="form-label">BUDGET</label>
                                     <input type="number" class="form-control" id="budget" name="budget" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="ntca_date_released" class="form-label">DATE RELEASED</label>
+                                    <input type="date" class="form-control" id="ntca_date_released" name="ntca_date_released" required>
                                 </div>
                             </div>
                         </form>
