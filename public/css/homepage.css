@@ -247,15 +247,26 @@ section {
 
 /* Badge styling */
 .badge {
-    padding: 8px; /* Reduce padding for compactness */
-    font-size: 0.9rem; /* Keep the font size consistent */
-    font-weight: bold; /* Bold text for emphasis */
-    max-width: 200px; /* Limit maximum width */
-    white-space: normal; /* Allow text wrapping onto new lines */
-    word-break: break-word; /* Break words at boundaries */
-    overflow-wrap: break-word; /* Ensure long words wrap properly */
-    display: inline-block; /* Behave like an inline-block for layout purposes */ 
+    padding: 8px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    max-width: 200px; 
+    white-space: nowrap; 
+    overflow: hidden; 
+    text-overflow: ellipsis; 
+    display: inline-block; 
 }
+
+.badge:hover {
+    max-width: 400px; 
+    white-space: normal; 
+    overflow: visible; 
+    background-color: #f8f9fa; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+    transition: max-width 0.8s ease-in-out, background-color 0.8s ease-in-out; 
+}
+
+
 
 
 label {
