@@ -445,7 +445,7 @@ function openProcurementModal(item) {
                 document.getElementById("modalPurchaseRequest").textContent =
                     data.pr_amount || "N/A";
                 document.getElementById("modalApprovedBudget").textContent =
-                    data.budget_spent || "Not yet approved";
+                    data.approved_budget || "Not yet approved";
                 document.getElementById("modalYear").textContent =
                     data.year || "N/A";
                 document.getElementById("modalDescription").textContent =

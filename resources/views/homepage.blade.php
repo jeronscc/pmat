@@ -294,8 +294,8 @@
                             <p><strong>SARO No:</strong> <span id="modalSaroNo"></span></p>
                             <p><strong>NTCA No:</strong> <span id="modalNTCANo"></span></p>
                             <p><strong>Current Quarter:</strong> <span id="modalQuarter"></span></p>
-                            <p><strong>Purchase Request:</strong> <span id="modalPurchaseRequest"></span></p>
-                            <p><strong>Approved Budget Spent:</strong> <span id="modalApprovedBudget"></span></p>
+                            <p><strong>Approved Budget (Purchase Request):</strong> <span id="modalApprovedBudget"></span></p>
+                            <p><strong>Actual Amount (Purchase Order):</strong> <span id="modalPurchaseRequest"></span></p>
                             <p><strong>Year:</strong> <span id="modalYear"></span></p>
                             <p><strong>Description:</strong> <span id="modalDescription"></span></p>
                             <p><strong id="modalActivityLabel">Activity:</strong> <span id="modalActivity"></span></p>
