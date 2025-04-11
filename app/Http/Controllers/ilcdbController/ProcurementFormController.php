@@ -73,28 +73,28 @@ class ProcurementFormController extends Controller
             if ($unit === 'Supply Unit') {
                 if ($validatedData['dt_submitted5'] && !$validatedData['dt_received5']) {
                     // If dt_submitted5 is filled and dt_received5 is not, set status to "Pending"
-                    $status = 'Ongoing';
+                    $status = 'For DV Creation';
                 } elseif ($validatedData['dt_received5']) {
                     // If dt_received5 is filled, set status to "Pending"
-                    $status = 'Pending';
+                    $status = 'Returned to Uer';
                 } elseif ($validatedData['dt_submitted4'] && !$validatedData['dt_received4']) {
                     // If dt_submitted4 is filled and dt_received4 is not, set status to ""
-                    $status = 'Ongoing';
+                    $status = 'For IAR / PAR / ICS / RFI creation';
                 } elseif ($validatedData['dt_received4']) {
-                    // If dt_received4 is filled, set status to "Pending"
-                    $status = 'Pending';
+                    // If dt_received4 is filled, set status to "Returned to Uer"
+                    $status = 'Returned to User';
                 } elseif ($validatedData['dt_submitted2'] && !$validatedData['dt_received2']) {
                     // If dt_submitted2 is filled and dt_received2 is not, set status to ""
-                    $status = 'Ongoing';
+                    $status = 'For ORS creation';
                 } elseif ($validatedData['dt_received2']) {
-                    // If dt_received2 is filled, set status to "Pending"
-                    $status = 'Pending';
+                    // If dt_received2 is filled, set status to "Returned to Uer"
+                    $status = 'Returned to User';
                 } elseif ($validatedData['dt_submitted1'] && !$validatedData['dt_received1']) {
                     // If dt_submitted1 is filled and dt_received1 is not, set status to ""
-                    $status = 'Ongoing';
+                    $status = 'Request for Abstract, Philgeps posting (if applicable)';
                 } elseif ($validatedData['dt_received1']) {
                     // If dt_received1 is filled, set status to "Pending"
-                    $status = 'Pending';
+                    $status = 'Returned to User';
                 }
             }
 
@@ -102,10 +102,10 @@ class ProcurementFormController extends Controller
             if ($unit === 'Budget Unit') {
                 if ($validatedData['dt_submitted3'] && !$validatedData['dt_received3']) {
                     // If dt_submitted3 is filled and dt_received3 is not, set status to ""
-                    $status = 'Ongoing';
+                    $status = 'For Obligation';
                 } elseif ($validatedData['dt_received3']) {
                     // If dt_received3 is filled, set status to "Pending"
-                    $status = 'Pending';
+                    $status = 'Returned to User';
                 }
             }
 
@@ -113,10 +113,10 @@ class ProcurementFormController extends Controller
             if ($unit === 'Accounting Unit') {
                 if ($validatedData['dt_submitted6'] && !$validatedData['dt_received6']) {
                     // If dt_submitted6 is filled and dt_received6 is not, set status to "Pending"
-                    $status = 'Ongoing';
+                    $status = 'For payment processing';
                 } elseif ($validatedData['dt_received6']) {
                     // If dt_received6 is filled, set status to "Pending"
-                    $status = 'Pending';
+                    $status = 'Waiting for Budget';
                 }
             }
 

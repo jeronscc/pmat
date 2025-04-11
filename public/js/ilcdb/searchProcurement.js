@@ -19,18 +19,31 @@ document.querySelector('.search-button').addEventListener('click', function () {
 
 function getStatusClass(status) {
     switch (status.toLowerCase()) {
-        case 'pending':
-            return 'badge bg-secondary text-white';  // Gray for pending
-        case 'ongoing':
-            return 'badge bg-warning text-dark';  // Orangeish yellow for ongoing
-        case 'done':
-            return 'badge bg-success text-white';  // Green for done
-        case 'overdue':
-            return 'badge bg-danger text-white';
+        case "for dv creation":
+            return "badge bg-primary text-white"; // Blue for this specific status
+        case "returned to user": // Corrected and added possible typo from the controller
+            return "badge bg-pink text-white"; // Gray for returned
+        case "for iar / par / ics / rfi creation":
+            return "badge bg-primary text-white"; // Light blue for ongoing documentation
+        case "for ors creation":
+            return "badge bg-primary text-dark"; // Yellow for pre-obligation steps
+        case "for obligation":
+            return "badge bg-primary text-white"; // Green for budget obligation
+        case "for payment processing":
+            return "badge bg-primary text-white"; // Darker style for accounting status
+        case "waiting for budget":
+            return "badge bg-pink text-dark"; // Light for pending budget
+        case "done":
+            return "badge bg-success text-white"; // Green for completion
+        case "request for abstract, philgeps posting (if applicable)":
+            return "badge bg-primary text-white"; // Yellow for initial processing steps
+        case "overdue":
+            return "badge bg-danger text-white"; // Red for overdue
         default:
-            return 'badge bg-light text-dark';  // Default for no status or unknown status
+            return "badge bg-light text-dark"; // Default for unknown or no status
     }
 }
+
 
 // Function to search for procurement based on the search term
 function searchProcurement() {
@@ -87,7 +100,7 @@ function searchProcurement() {
                     const badge = document.createElement('span');
 
                     let statusMessage = item.status || ''; // If no status, it will be empty
-                    let unitMessage = item.unit ? ` at ${item.unit}` : ''; // If unit exists, append it
+                     // If unit exists, append it
 
                     // If status is "done", do not append the unit
                     if (statusMessage.toLowerCase() === 'done') {
@@ -96,7 +109,7 @@ function searchProcurement() {
 
                     // Combine status and unit
                     badge.className = getStatusClass(item.status || ''); // Apply appropriate badge class
-                    badge.textContent = statusMessage + unitMessage; // Status and Unit
+                    badge.textContent = statusMessage; // Status and Unit
 
                     statusCell.appendChild(badge);
                     row.appendChild(statusCell);
@@ -152,14 +165,14 @@ function updateProcurementTable(data) {
             const badge = document.createElement('span');
 
             let statusMessage = item.status || '';
-            let unitMessage = item.unit ? ` at ${item.unit}` : '';
+            
 
             if (statusMessage.toLowerCase() === 'done') {
                 unitMessage = ''; // Don't append unit when status is "done"
             }
 
             badge.className = getStatusClass(item.status || '');
-            badge.textContent = statusMessage + unitMessage;
+            badge.textContent = statusMessage;
 
             statusCell.appendChild(badge);
             row.appendChild(statusCell);

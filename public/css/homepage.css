@@ -247,10 +247,16 @@ section {
 
 /* Badge styling */
 .badge {
-    padding: 8px;
-    font-size: 0.9rem;
-    font-weight: bold;
+    padding: 8px; /* Reduce padding for compactness */
+    font-size: 0.9rem; /* Keep the font size consistent */
+    font-weight: bold; /* Bold text for emphasis */
+    max-width: 200px; /* Limit maximum width */
+    white-space: normal; /* Allow text wrapping onto new lines */
+    word-break: break-word; /* Break words at boundaries */
+    overflow-wrap: break-word; /* Ensure long words wrap properly */
+    display: inline-block; /* Behave like an inline-block for layout purposes */ 
 }
+
 
 label {
     display: block;
@@ -369,6 +375,12 @@ textarea {
 .search-box button {
     height: 35px;
 }
+
+.bg-pink {
+    background-color: #ffc0cb !important; /* Light pink color */
+    color: #000 !important; /* White text for contrast */
+}
+
 
 @media (max-width: 768px) {
     /* For mobile devices */
