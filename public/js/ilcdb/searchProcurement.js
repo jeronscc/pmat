@@ -21,23 +21,22 @@ function getStatusClass(status) {
     switch (status.toLowerCase()) {
         case "for dv creation":
             return "badge bg-primary text-white"; // Blue for this specific status
-        case "returned to user":
-        case "returned to uer": // Corrected and added possible typo from the controller
-            return "badge bg-secondary text-white"; // Gray for returned
+        case "returned to user": // Corrected and added possible typo from the controller
+            return "badge bg-pink text-white"; // Gray for returned
         case "for iar / par / ics / rfi creation":
-            return "badge bg-info text-white"; // Light blue for ongoing documentation
+            return "badge bg-primary text-white"; // Light blue for ongoing documentation
         case "for ors creation":
-            return "badge bg-warning text-dark"; // Yellow for pre-obligation steps
+            return "badge bg-primary text-dark"; // Yellow for pre-obligation steps
         case "for obligation":
-            return "badge bg-success text-white"; // Green for budget obligation
+            return "badge bg-primary text-white"; // Green for budget obligation
         case "for payment processing":
-            return "badge bg-dark text-white"; // Darker style for accounting status
+            return "badge bg-primary text-white"; // Darker style for accounting status
         case "waiting for budget":
-            return "badge bg-light text-dark"; // Light for pending budget
+            return "badge bg-pink text-dark"; // Light for pending budget
         case "done":
             return "badge bg-success text-white"; // Green for completion
         case "request for abstract, philgeps posting (if applicable)":
-            return "badge bg-warning text-dark"; // Yellow for initial processing steps
+            return "badge bg-primary text-white"; // Yellow for initial processing steps
         case "overdue":
             return "badge bg-danger text-white"; // Red for overdue
         default:

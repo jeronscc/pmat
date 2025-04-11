@@ -376,6 +376,12 @@ textarea {
     height: 35px;
 }
 
+.bg-pink {
+    background-color: #ffc0cb !important; /* Light pink color */
+    color: #000 !important; /* White text for contrast */
+}
+
+
 @media (max-width: 768px) {
     /* For mobile devices */
     .saro-container {
