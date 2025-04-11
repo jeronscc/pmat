@@ -26,7 +26,7 @@ function getStatusClass(status) {
         case "for iar / par / ics / rfi creation":
             return "badge bg-primary text-white"; // Light blue for ongoing documentation
         case "for ors creation":
-            return "badge bg-primary text-dark"; // Yellow for pre-obligation steps
+            return "badge bg-primary text-white"; // Yellow for pre-obligation steps
         case "for obligation":
             return "badge bg-primary text-white"; // Green for budget obligation
         case "for payment processing":
