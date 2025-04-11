@@ -104,11 +104,14 @@ function searchProcurement() {
                     statusCell.appendChild(badge);
                     row.appendChild(statusCell);
 
+                    
                     // Append row to the appropriate table body
                     if (statusMessage === "done") {
                         tableBodies.done.appendChild(row);
+                        tableBodies.all.appendChild(row.cloneNode(true)); // Clone the row for the all table
                     } else if (statusMessage === "overdue") {
                         tableBodies.overdue.appendChild(row);
+                        tableBodies.all.appendChild(row.cloneNode(true)); // Clone the row for the all table
                     } else {
                         tableBodies.all.appendChild(row);
                     }
