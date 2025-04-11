@@ -87,6 +87,7 @@
                             <h3><b>PR/Transaction Number: </b><span id="prtrNumber">{{ $prNumber }}</span></h3>
                             <h3><b>Name of Speaker: </b><span id="activityName">{{ $activity }}</span></h3>
                             <h3><b>Description: </b><span id="procurement-description">{{ $description }}</span></h3>
+                            <h3><b>Actual Amount: </b><span id="procurement-pr-amount">{{ number_format($pr_amount, 2) }}</span></h3>
                         </div>
 
                         <!-- Update Honoraria Form -->

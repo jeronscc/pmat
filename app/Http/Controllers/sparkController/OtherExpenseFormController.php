@@ -57,6 +57,7 @@ class OtherExpenseFormController extends Controller
             'prNumber'    => $prNumber,
             'activity'    => $activity,
             'description' => $procurement->description ?? 'No description available',
+            'pr_amount' => $procurement->pr_amount,
             'record'      => $record,
             'procurement' => $procurement
         ]);
