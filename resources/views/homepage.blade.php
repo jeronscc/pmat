@@ -168,12 +168,14 @@
                             <li class="nav-item">
                                 <a class="nav-link active" style="color: black;" id="tabAll-tab" data-bs-toggle="tab" href="#tabAll">All</a>
                             </li>
+                            <!--
                             <li class="nav-item">
                                 <a class="nav-link" style="color: black;" id="tabOngoing-tab" data-bs-toggle="tab" href="#tabPending">Pending</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" style="color: black;" id="tabOngoing-tab" data-bs-toggle="tab" href="#tabOngoing">Ongoing</a>
                             </li>
+                            -->
                             <li class="nav-item">
                                 <a class="nav-link" style="color: black;" id="tabOverdue-tab" data-bs-toggle="tab" href="#tabOverdue">Overdue</a>
                             </li>
