@@ -29,6 +29,7 @@ class ProcurementFormController extends Controller
             'prNumber'     => $prNumber,
             'activityName' => $procurement->activity ?? 'N/A',
             'description'  => $procurement->description ?? 'No description available', // Get description from procurement
+            'pr_amount' => $procurement->pr_amount,
             'record'       => $record,
             'procurement'  => $procurement
         ]);

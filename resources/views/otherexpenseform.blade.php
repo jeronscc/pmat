@@ -84,9 +84,10 @@
 
                         <!-- Display PR number and Activity (retrieved from URL) -->
                         <div class="activity-info">
-                            <h3><b>PR/Transaction Number: </b><span id="prtrNumber">{{ $prNumber }}</span></h3>
+                            <h3><b>PR Number: </b><span id="prtrNumber">{{ $prNumber }}</span></h3>
                             <h3><b>Name of Traveller: </b><span id="activityName">{{ $activity }}</span></h3>
                             <h3><b>Description: </b><span id="procurement-description">{{ $description }}</span></h3>
+                            <h3><b>Actual Amount: </b><span id="procurement-pr-amount">{{ number_format($pr_amount, 2) }}</span></h3>
                         </div>
 
                         <!-- Update Other Expense Form -->

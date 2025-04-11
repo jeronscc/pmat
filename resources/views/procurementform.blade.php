@@ -85,6 +85,7 @@
                             <h3><b>PR Number: </b><span id="prNumber">{{ $prNumber }}</span></h3>
                             <h3><b>Activity Name: </b><span id="activityName">{{ $activityName }}</span></h3>
                             <h3><b>Description: </b><span id="procurement-description">{{ $description }}</span></h3>
+                            <h3><b>Actual Amount: </b><span id="procurement-pr-amount">{{ number_format($pr_amount, 2) }}</span></h3>
 
                         </div>
                         <hr class="my-4" style="border-top: 2px solid rgba(0, 0, 0, 0.6);">
