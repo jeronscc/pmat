@@ -5,14 +5,15 @@ document.addEventListener("DOMContentLoaded", function () {
             const category = document.getElementById("category").value;
             const prNumber = document.getElementById("pr-number").value;
             const saroNumber = document.getElementById("saro-number").value;
-            const ntcaNumber = document.getElementById("ntca-number").value;
-            const quarter = document.getElementById("quarter-pr").value;
             const prYear = document.getElementById("pr-year").value;
             const activity = document.getElementById("activity").value;
             const description = document.getElementById("description").value;
             const prAmount = parseFloat(
                 document.getElementById("pr-amount").value
-            ); // Add pr_amount
+            );
+            const approvedBudget = parseFloat(
+                document.getElementById("approved-budget").value
+            );  
 
             if (
                 !category ||
@@ -22,7 +23,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 !activity ||
                 !description ||
                 !prAmount ||
-                !ntcaNumber
+                !approvedBudget
+
             ) {
                 alert("All fields must be filled out.");
                 return;
@@ -41,12 +43,11 @@ document.addEventListener("DOMContentLoaded", function () {
                     category: category,
                     pr_number: prNumber,
                     saro_number: saroNumber,
-                    ntca_number: ntcaNumber,
-                    quarter: quarter,
                     pr_year: prYear,
                     activity: activity,
                     description: description,
-                    pr_amount: prAmount, // Add pr_amount to the request payload
+                    pr_amount: prAmount, 
+                    approved_budget: approvedBudget,
                 }),
             })
                 .then((response) => {
@@ -95,22 +96,6 @@ document.addEventListener("DOMContentLoaded", function () {
                     console.error("Error:", error);
                     alert("An error occurred while adding procurement");
                 });
-        });
-
-    // Listen for SARO number selection change
-    document
-        .getElementById("saro-number")
-        .addEventListener("change", function () {
-            const saroNumber = this.value;
-            const ntcaNumberField = document.getElementById("ntca-number");
-
-            if (saroNumber) {
-                const saroParts = saroNumber.split("-");
-                const ntcaDigits = saroParts[saroParts.length - 1];
-                ntcaNumberField.value = `NTCA-${ntcaDigits}`;
-            } else {
-                ntcaNumberField.value = "";
-            }
         });
 
     // OPTIONS FOR EXISTING SARO IN PROC MODAL
@@ -252,7 +237,6 @@ function resetForm() {
     document.getElementById("pr-number").value = ""; // Clear PR Number
     document.getElementById("pr-year").value = "";
     document.getElementById("saro-number").value = "";
-    document.getElementById("ntca-number").value = ""; // Clear NTCA Number
     document.getElementById("pr-amount").value = ""; // Reset PR Amount
-    document.getElementById("quarter-pr").value = ""; // Reset Quarter
+    document.getElementById("approved-budget").value = ""; // Reset Approved Budget
 }
