@@ -53,7 +53,7 @@
                 </form>
             </li>
             <li>
-                <form action="">
+                <form action="{{ url('/reports') }}">
                     <button type="submit">
                         <i class="fas fa-clock"></i><img src="/assets/report_icon.png" alt=""> Reports
                     </button>

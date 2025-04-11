@@ -28,7 +28,6 @@
     <header class="d-flex align-items-center justify-content-between bg-black text-white p-3 shadow" id="stickyHeader">
         <div class="logo d-flex align-items-center">
             <img src="/assets/dict-logo.png" alt="DICT Logo" class="img-fluid" id="dictLogo">
-            <img src="/assets/ilcdb-logo-2.png" alt="DTC Logo" class="img-fluid ms-2">
         </div>
         <h1 class="text-center flex-grow-1 fs-4 m-0">Procurement Tracking and Monitoring System</h1>
 
@@ -70,7 +69,7 @@
                 @endif
             </li>
             <li>
-                <form action="">
+                <form action="{{ url('/reports') }}">
                     <button type="submit">
                         <i class="fas fa-clock"></i><img src="/assets/report_icon.png" alt=""> Reports
                     </button>
@@ -86,7 +85,7 @@
             </li>
         </ul>
     </div>
-    <script src="/js/menu.js"></script>
+    
 
     <div class="container mt-5">
         <div class="card shadow-lg">
@@ -324,7 +323,7 @@
             });
         });
     </script>
-
+    <script src="/js/menu.js"></script>
     <script src="/js/editAccount.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
