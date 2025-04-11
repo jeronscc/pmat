@@ -159,43 +159,51 @@ function initializeTabs() {
 function displayProcurementData(filter) {
     const procurementTable = document.getElementById('procurementTable');
     procurementTable.innerHTML = ''; // Clear any existing rows
-    
+
     if (!window.procurementData || window.procurementData.length === 0) {
         const emptyMessage = document.createElement('tr');
         const emptyCell = document.createElement('td');
-        emptyCell.setAttribute('colspan', '4');
+        emptyCell.setAttribute('colspan', '5'); // Adjusted for additional description column
         emptyCell.textContent = 'No procurement records found.';
         emptyMessage.appendChild(emptyCell);
         procurementTable.appendChild(emptyMessage);
         return;
     }
-    
+
     // Filter the data based on selected tab
-    const filteredData = window.procurementData.filter(item => {
+    const filteredData = window.procurementData.filter((item) => {
         const status = (item.status || '').toLowerCase();
         const honorariaStatus = (item.honoraria_status || '').toLowerCase();
-        
+
         // Use honoraria status if available and not "no status"
-        const effectiveStatus = (honorariaStatus !== 'no status' && honorariaStatus !== '') 
-            ? honorariaStatus.toLowerCase() 
-            : status.toLowerCase();
-        
+        const effectiveStatus =
+            honorariaStatus !== 'no status' && honorariaStatus !== ''
+                ? honorariaStatus
+                : status;
+
         if (filter === 'all') {
             return true;
-        } else if (filter === 'pending') {
-            return effectiveStatus.includes('pending');
-        } else if (filter === 'ongoing') {
-            return effectiveStatus.includes('ongoing');
         } else if (filter === 'overdue') {
             return effectiveStatus.includes('overdue');
         } else if (filter === 'done') {
             return effectiveStatus === 'done';
+        } else if (
+            [
+                'for dv creation',
+                'for iar / par / ics / rfi creation',
+                'for ors creation',
+                'for obligation',
+                'for payment processing',
+                'waiting for budget',
+            ].includes(effectiveStatus)
+        ) {
+            return filter === 'all'; // Keep all grouped statuses under "all"
         }
         return false;
     });
-    
+
     if (filteredData.length > 0) {
-        filteredData.forEach(item => {
+        filteredData.forEach((item) => {
             const row = document.createElement('tr');
             row.setAttribute('data-procurement-id', item.procurement_id);
 
@@ -206,12 +214,12 @@ function displayProcurementData(filter) {
 
             // CATEGORY cell
             const categoryCell = document.createElement('td');
-            categoryCell.textContent = item.procurement_category;
+            categoryCell.textContent = item.procurement_category || 'N/A';
             row.appendChild(categoryCell);
 
-            // ACTIVITY cell
+            // ACTIVITY NAME cell
             const activityCell = document.createElement('td');
-            activityCell.textContent = item.activity;
+            activityCell.textContent = item.activity || 'N/A';
             row.appendChild(activityCell);
 
             // STATUS & UNIT cell
@@ -219,10 +227,13 @@ function displayProcurementData(filter) {
             const badge = document.createElement('span');
 
             let statusMessage = item.status || '';
-            let unitMessage = item.unit ? ` at ${item.unit}` : '';
+            
 
             // Use honoraria status if available
-            if (item.honoraria_status && item.honoraria_status.toLowerCase() !== 'no status') {
+            if (
+                item.honoraria_status &&
+                item.honoraria_status.toLowerCase() !== 'no status'
+            ) {
                 statusMessage = item.honoraria_status;
             }
 
@@ -232,7 +243,7 @@ function displayProcurementData(filter) {
             }
 
             badge.className = getStatusClass(statusMessage || '');
-            badge.textContent = statusMessage + unitMessage;
+            badge.textContent = statusMessage ;
 
             statusCell.appendChild(badge);
             row.appendChild(statusCell);
@@ -242,12 +253,13 @@ function displayProcurementData(filter) {
     } else {
         const emptyMessage = document.createElement('tr');
         const emptyCell = document.createElement('td');
-        emptyCell.setAttribute('colspan', '4');
+        emptyCell.setAttribute('colspan', '4'); // Adjusted for additional description column
         emptyCell.textContent = 'No records found.';
         emptyMessage.appendChild(emptyCell);
         procurementTable.appendChild(emptyMessage);
     }
 }
+
 
 function fetchNTCAForSaro(saroNo, ntcaApiUrl) {
     console.log(`Fetching NTCA for SARO: ${saroNo}`); // Debugging
@@ -338,16 +350,28 @@ function fetchNTCAForSaro(saroNo, ntcaApiUrl) {
 function getStatusClass(status) {
     const baseClass = "custom-font-size"
     switch (status.toLowerCase()) {
-        case 'pending':
-            return `badge bg-secondary text-white p-2 ${baseClass}`; // Gray for pending
-        case 'ongoing':
-            return `badge bg-warning text-dark p-2  ${baseClass}`; // Orangeish yellow for ongoing
-        case 'done':
-            return `badge bg-success text-white p-2  ${baseClass}`; // Green for done
-        case 'overdue':
-            return `badge bg-danger text-white p-2 ${baseClass}`; // Red for overdue
+        case "for dv creation":
+            return `badge bg-primary text-white ${baseClass}`; // Blue for this specific status
+        case "returned to user": // Corrected and added possible typo from the controller
+            return `badge bg-pink text-white ${baseClass}`; // Gray for returned
+        case "for iar / par / ics / rfi creation":
+            return `badge bg-primary text-white ${baseClass}`; // Light blue for ongoing documentation
+        case "for ors creation":
+            return `badge bg-primary text-white ${baseClass}`; // Yellow for pre-obligation steps
+        case "for obligation":
+            return `badge bg-primary text-white ${baseClass}`; // Green for budget obligation
+        case "for payment processing":
+            return `badge bg-primary text-white ${baseClass}`; // Darker style for accounting status
+        case "waiting for budget":
+            return `badge bg-pink text-dark ${baseClass}`; // Light for pending budget
+        case "done":
+            return `badge bg-success text-white ${baseClass}`; // Green for completion
+        case "request for abstract, philgeps posting (if applicable)":
+            return `badge bg-primary text-white ${baseClass}`; // Yellow for initial processing steps
+        case "overdue":
+            return `badge bg-danger text-white ${baseClass}`; // Red for overdue
         default:
-            return `badge bg-light text-dark p-2 ${baseClass}`; // Default for unknown status
+            return `badge bg-light text-dark ${baseClass}`; // Default for unknown or no status
     }
 }
 
