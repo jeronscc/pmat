@@ -82,7 +82,7 @@ class ProcurementFormController extends Controller
                     $status = 'For IAR / PAR / ICS / RFI creation';
                 } elseif ($validatedData['dt_received4']) {
                     // If dt_received4 is filled, set status to "Returned to Uer"
-                    $status = 'Returned to Uer';
+                    $status = 'Returned to User';
                 } elseif ($validatedData['dt_submitted2'] && !$validatedData['dt_received2']) {
                     // If dt_submitted2 is filled and dt_received2 is not, set status to ""
                     $status = 'For ORS creation';
