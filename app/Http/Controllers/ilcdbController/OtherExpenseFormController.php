@@ -87,8 +87,8 @@ class OtherExpenseFormController extends Controller
 
             // Determine status based on provided dates and budget_spent
             $status = match (true) {
-                ($validatedData['dt_submitted'] && !$validatedData['dt_received']) => 'Ongoing',
-                ($validatedData['dt_received'] && !$validatedData['budget_spent']) => 'Pending',
+                ($validatedData['dt_submitted'] && !$validatedData['dt_received']) => 'For Obligation',
+                ($validatedData['dt_received'] && !$validatedData['budget_spent']) => 'Waiting for Budget',
                 ($validatedData['budget_spent']) => 'Done',
                 default => 'Done',
             };
