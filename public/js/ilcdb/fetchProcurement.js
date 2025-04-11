@@ -1,16 +1,23 @@
-// Consistent status class function
 function getStatusClass(status) {
     switch (status.toLowerCase()) {
-        case "pending":
-            return "badge bg-secondary text-white"; // Gray for pending
-        case "ongoing":
-            return "badge bg-warning text-dark"; // Orangeish yellow for ongoing
         case "done":
             return "badge bg-success text-white"; // Green for done
         case "overdue":
-            return "badge bg-danger text-white";
+            return "badge bg-danger text-white"; // Red for overdue
+        case "for dv creation":
+            return "badge bg-primary text-white"; // Blue for DV creation
+        case "for iar / par / ics / rfi creation":
+            return "badge bg-info text-white"; // Light blue for documentation steps
+        case "for ors creation":
+            return "badge bg-warning text-dark"; // Yellow for ORS creation
+        case "for obligation":
+            return "badge bg-dark text-white"; // Dark for budget obligation
+        case "for payment processing":
+            return "badge bg-secondary text-white"; // Gray for payment processing
+        case "waiting for budget":
+            return "badge bg-light text-dark"; // Light for budget wait
         default:
-            return "badge bg-light text-dark"; // Default for no status or unknown status
+            return "badge bg-light text-dark"; // Default for unknown or no status
     }
 }
 
@@ -32,23 +39,26 @@ function fetchProcurementForSaro(saroNo) {
         .then((data) => {
             const tableBodies = {
                 all: document.getElementById("procurementTable"),
-                pending: document.getElementById("procurementTablePending"),
-                ongoing: document.getElementById("procurementTableOngoing"),
                 overdue: document.getElementById("procurementTableOverdue"),
                 done: document.getElementById("procurementTableDone"),
             };
 
+            // Clear old rows in the table bodies
             Object.values(tableBodies).forEach(
                 (tableBody) => (tableBody.innerHTML = "")
-            ); // ✅ Clear old rows
+            );
 
             if (data.length > 0) {
-                // Sort data by status order and maintain original order for FIFO
+                // Sort data by status order and maintain original order (FIFO)
                 const statusOrder = {
                     overdue: 1,
-                    ongoing: 2,
-                    pending: 3,
-                    done: 4,
+                    "for dv creation": 2,
+                    "for iar / par / ics / rfi creation": 3,
+                    "for ors creation": 4,
+                    "for obligation": 5,
+                    "for payment processing": 6,
+                    "waiting for budget": 7,
+                    done: 8,
                 };
 
                 data.sort((a, b) => {
@@ -57,10 +67,10 @@ function fetchProcurementForSaro(saroNo) {
 
                     // Sort by status first
                     const statusComparison =
-                        (statusOrder[statusA] || 5) -
-                        (statusOrder[statusB] || 5);
+                        (statusOrder[statusA] || 9) -
+                        (statusOrder[statusB] || 9);
 
-                    // If statuses are the same, maintain original FIFO order
+                    // Maintain original FIFO order if statuses are the same
                     return statusComparison !== 0
                         ? statusComparison
                         : data.indexOf(a) - data.indexOf(b);
@@ -68,10 +78,7 @@ function fetchProcurementForSaro(saroNo) {
 
                 data.forEach((item) => {
                     const row = document.createElement("tr");
-                    row.setAttribute(
-                        "data-procurement-id",
-                        item.procurement_id
-                    ); // ✅ Trackable row ID
+                    row.setAttribute("data-procurement-id", item.procurement_id);
 
                     // PR NUMBER cell
                     const prNumberCell = document.createElement("td");
@@ -81,56 +88,44 @@ function fetchProcurementForSaro(saroNo) {
                     // CATEGORY cell
                     const categoryCell = document.createElement("td");
                     categoryCell.textContent =
-                        item.procurement_category || "N/A"; // Add category cell
+                        item.procurement_category || "N/A";
                     row.appendChild(categoryCell);
 
-                    // ACTIVITY cell
+                    // ACTIVITY NAME cell
                     const activityCell = document.createElement("td");
-                    activityCell.textContent = item.activity;
+                    activityCell.textContent = item.activity || "N/A";
                     row.appendChild(activityCell);
 
-                    // STATUS & UNIT cell
+                    // STATUS cell
                     const statusCell = document.createElement("td");
                     const badge = document.createElement("span");
 
-                    let statusMessage = item.status || "";
-                    let unitMessage = item.unit ? ` at ${item.unit}` : "";
-
-                    // Use honoraria status if available
-                    if (
-                        item.honoraria_status &&
-                        item.honoraria_status.toLowerCase() !== "no status"
-                    ) {
-                        statusMessage = item.honoraria_status;
-                    }
-
-                    // If status is "done", remove the unit part
-                    if (statusMessage.toLowerCase() === "done") {
-                        unitMessage = "";
-                    }
-
-                    badge.className = getStatusClass(statusMessage || "");
-                    badge.textContent = statusMessage + unitMessage;
-
+                    const statusMessage = (item.status || "").toLowerCase();
+                    badge.className = getStatusClass(statusMessage);
+                    badge.textContent = item.status || "Unknown Status";
                     statusCell.appendChild(badge);
                     row.appendChild(statusCell);
 
-                    tableBodies.all.appendChild(row); // Append the original row to "All" only
+                    // Append row to the "all" table
+                    tableBodies.all.appendChild(row);
 
-                    if (statusMessage.toLowerCase() === "done") {
+                    // Append row to specific table based on status
+                    if (statusMessage === "done") {
                         tableBodies.done.appendChild(row.cloneNode(true));
-                    } else if (statusMessage.toLowerCase() === "ongoing") {
-                        tableBodies.ongoing.appendChild(row.cloneNode(true));
-                    } else if (statusMessage.toLowerCase() === "overdue") {
+                    } else if (statusMessage === "overdue") {
                         tableBodies.overdue.appendChild(row.cloneNode(true));
-                    } else if (statusMessage.toLowerCase() === "pending") {
-                        tableBodies.pending.appendChild(row.cloneNode(true));
+                    } else if (
+                        ["for dv creation", "for iar / par / ics / rfi creation", "for ors creation", 
+                         "for obligation", "for payment processing", "waiting for budget"]
+                        .includes(statusMessage)
+                    ) {
+                        tableBodies.all.appendChild(row.cloneNode(true)); // All grouped statuses added under "all"
                     }
                 });
             } else {
                 const emptyMessage = document.createElement("tr");
                 const emptyCell = document.createElement("td");
-                emptyCell.setAttribute("colspan", "3");
+                emptyCell.setAttribute("colspan", "4"); // Adjust column span based on the table structure
                 emptyCell.textContent =
                     "No procurement records found for the selected SARO.";
                 emptyMessage.appendChild(emptyCell);
@@ -141,6 +136,7 @@ function fetchProcurementForSaro(saroNo) {
             console.error("Error fetching procurement requirements:", error)
         );
 }
+
 
 // Fetch procurement data by year filter
 function fetchProcurementForYear(year) {
@@ -154,156 +150,28 @@ function fetchProcurementForYear(year) {
     fetch(url)
         .then((response) => response.json())
         .then((data) => {
-            console.log("Fetched procurement data:", data); // Debugging log
-
             const tableBodies = {
                 all: document.getElementById("procurementTable"),
-                pending: document.getElementById("procurementTablePending"),
-                ongoing: document.getElementById("procurementTableOngoing"),
                 overdue: document.getElementById("procurementTableOverdue"),
                 done: document.getElementById("procurementTableDone"),
             };
 
-            // Clear all table bodies
+            // Clear old rows in the table bodies
             Object.values(tableBodies).forEach(
                 (tableBody) => (tableBody.innerHTML = "")
             );
 
             if (data.length > 0) {
-                // Sort data by status
+                // Sort data by status order and maintain original order (FIFO)
                 const statusOrder = {
                     overdue: 1,
-                    ongoing: 2,
-                    pending: 3,
-                    done: 4,
-                };
-
-                data.sort((a, b) => {
-                    const statusA = (a.status || "unknown").toLowerCase();
-                    const statusB = (b.status || "unknown").toLowerCase();
-
-                    return (
-                        (statusOrder[statusA] || 5) -
-                        (statusOrder[statusB] || 5)
-                    );
-                });
-
-                data.forEach((item) => {
-                    const row = document.createElement("tr");
-
-                    // PR NUMBER cell (procurement_id)
-                    const prNumberCell = document.createElement("td");
-                    prNumberCell.textContent = item.procurement_id;
-                    row.appendChild(prNumberCell);
-
-                    // CATEGORY cell
-                    const categoryCell = document.createElement("td");
-                    categoryCell.textContent =
-                        item.procurement_category || "N/A"; // Add category cell
-                    row.appendChild(categoryCell);
-
-                    // ACTIVITY cell
-                    const activityCell = document.createElement("td");
-                    activityCell.textContent = item.activity;
-                    row.appendChild(activityCell);
-
-                    // STATUS & UNIT cell
-                    const statusCell = document.createElement("td");
-                    const badge = document.createElement("span");
-
-                    let statusMessage = item.status || "";
-                    let unitMessage = item.unit ? ` at ${item.unit}` : "";
-
-                    if (
-                        item.honoraria_status &&
-                        item.honoraria_status.toLowerCase() !== "no status"
-                    ) {
-                        statusMessage = item.honoraria_status;
-                    }
-
-                    if (statusMessage.toLowerCase() === "done") {
-                        unitMessage = "";
-                    }
-
-                    badge.className = getStatusClass(statusMessage || "");
-                    badge.textContent = statusMessage + unitMessage;
-
-                    statusCell.appendChild(badge);
-                    row.appendChild(statusCell);
-
-                    tableBodies.all.appendChild(row);
-
-                    // Clone row properly
-                    if (statusMessage.toLowerCase() === "done") {
-                        tableBodies.done.appendChild(row.cloneNode(true));
-                    } else if (statusMessage.toLowerCase() === "ongoing") {
-                        tableBodies.ongoing.appendChild(row.cloneNode(true));
-                    } else if (statusMessage.toLowerCase() === "overdue") {
-                        tableBodies.overdue.appendChild(row.cloneNode(true));
-                    } else if (statusMessage.toLowerCase() === "pending") {
-                        tableBodies.pending.appendChild(row.cloneNode(true));
-                    }
-                });
-
-                // Add event listener for row click
-                document
-                    .querySelectorAll("#procurementTable tr")
-                    .forEach((row) => {
-                        row.addEventListener("click", function (event) {
-                            const prNumberCell = event.target.closest("td");
-                            if (prNumberCell && prNumberCell.parentElement) {
-                                const procurementId = prNumberCell.textContent;
-                                openProcurementModal({
-                                    procurement_id: procurementId,
-                                });
-                            }
-                        });
-                    });
-            } else {
-                const emptyMessage = document.createElement("tr");
-                const emptyCell = document.createElement("td");
-                emptyCell.setAttribute("colspan", "3");
-                emptyCell.textContent =
-                    "No procurement records found for the selected year.";
-                emptyMessage.appendChild(emptyCell);
-                tableBodies.all.appendChild(emptyMessage);
-            }
-        })
-        .catch((error) =>
-            console.error("Error fetching procurement data:", error)
-        );
-}
-
-// FETCH PROCUREMENT DATA FOR MODAL
-function fetchProcurementRequirements(saroNo) {
-    const url =
-        saroNo === ""
-            ? "/api/fetch-procurement-ilcdb"
-            : `/api/fetch-procurement-ilcdb?saro_no=${saroNo}`;
-
-    fetch(url)
-        .then((response) => response.json())
-        .then((data) => {
-            const tableBodies = {
-                all: document.getElementById("procurementTable"),
-                pending: document.getElementById("procurementTablePending"),
-                ongoing: document.getElementById("procurementTableOngoing"),
-                overdue: document.getElementById("procurementTableOverdue"),
-                done: document.getElementById("procurementTableDone"),
-            };
-
-            // Clear all table bodies
-            Object.values(tableBodies).forEach(
-                (tableBody) => (tableBody.innerHTML = "")
-            );
-
-            if (data.length > 0) {
-                // Sort data by status order and maintain original order for FIFO
-                const statusOrder = {
-                    overdue: 1,
-                    ongoing: 2,
-                    pending: 3,
-                    done: 4,
+                    "for dv creation": 2,
+                    "for iar / par / ics / rfi creation": 3,
+                    "for ors creation": 4,
+                    "for obligation": 5,
+                    "for payment processing": 6,
+                    "waiting for budget": 7,
+                    done: 8,
                 };
 
                 data.sort((a, b) => {
@@ -312,10 +180,10 @@ function fetchProcurementRequirements(saroNo) {
 
                     // Sort by status first
                     const statusComparison =
-                        (statusOrder[statusA] || 5) -
-                        (statusOrder[statusB] || 5);
+                        (statusOrder[statusA] || 9) -
+                        (statusOrder[statusB] || 9);
 
-                    // If statuses are the same, maintain original FIFO order
+                    // Maintain original FIFO order if statuses are the same
                     return statusComparison !== 0
                         ? statusComparison
                         : data.indexOf(a) - data.indexOf(b);
@@ -323,82 +191,56 @@ function fetchProcurementRequirements(saroNo) {
 
                 data.forEach((item) => {
                     const row = document.createElement("tr");
+                    row.setAttribute("data-procurement-id", item.procurement_id);
 
-                    // PR NUMBER cell (procurement_id)
+                    // PR NUMBER cell
                     const prNumberCell = document.createElement("td");
                     prNumberCell.textContent = item.procurement_id;
-                    prNumberCell.style.cursor = "pointer"; // Add cursor pointer for visual feedback
                     row.appendChild(prNumberCell);
 
                     // CATEGORY cell
                     const categoryCell = document.createElement("td");
                     categoryCell.textContent =
-                        item.procurement_category || "N/A"; // Add category cell
+                        item.procurement_category || "N/A";
                     row.appendChild(categoryCell);
 
-                    // ACTIVITY cell
+                    // ACTIVITY NAME cell
                     const activityCell = document.createElement("td");
-                    activityCell.textContent = item.activity;
+                    activityCell.textContent = item.activity || "N/A";
                     row.appendChild(activityCell);
 
-                    // STATUS & UNIT cell (dynamically set from the API response)
+                    // STATUS cell
                     const statusCell = document.createElement("td");
                     const badge = document.createElement("span");
 
-                    let statusMessage = item.status || ""; // Default to empty if no status
-                    let unitMessage = item.unit ? ` at ${item.unit}` : ""; // Default to empty if no unit
-
-                    // Check if honoraria status is available
-                    if (
-                        item.honoraria_status &&
-                        item.honoraria_status.toLowerCase() !== "no status"
-                    ) {
-                        statusMessage = item.honoraria_status; // Use honoraria status if it's not 'no status'
-                    }
-
-                    // If status is "done", remove the unit part
-                    if (statusMessage.toLowerCase() === "done") {
-                        unitMessage = ""; // Don't append the unit when status is "done"
-                    }
-
-                    // Combine status and unit for display
-                    badge.className = getStatusClass(statusMessage || ""); // Apply appropriate badge class
-                    badge.textContent = statusMessage + unitMessage; // Combine status and unit for display
-
+                    const statusMessage = (item.status || "").toLowerCase();
+                    badge.className = getStatusClass(statusMessage);
+                    badge.textContent = item.status || "Unknown Status";
                     statusCell.appendChild(badge);
                     row.appendChild(statusCell);
 
-                    tableBodies.all.appendChild(row); // Append the original row to "All" only
+                    // Append row to the "all" table
+                    tableBodies.all.appendChild(row);
 
-                    if (statusMessage.toLowerCase() === "done") {
+                    // Append row to specific table based on status
+                    if (statusMessage === "done") {
                         tableBodies.done.appendChild(row.cloneNode(true));
-                    } else if (statusMessage.toLowerCase() === "ongoing") {
-                        tableBodies.ongoing.appendChild(row.cloneNode(true));
-                    } else if (statusMessage.toLowerCase() === "overdue") {
+                    } else if (statusMessage === "overdue") {
                         tableBodies.overdue.appendChild(row.cloneNode(true));
-                    } else if (statusMessage.toLowerCase() === "pending") {
-                        tableBodies.pending.appendChild(row.cloneNode(true));
+                    } else if (
+                        ["for dv creation", "for iar / par / ics / rfi creation", "for ors creation", 
+                         "for obligation", "for payment processing", "waiting for budget"]
+                        .includes(statusMessage)
+                    ) {
+                        tableBodies.all.appendChild(row.cloneNode(true)); // All grouped statuses added under "all"
                     }
-                });
-
-                // Add event listener to each table body for delegation
-                Object.values(tableBodies).forEach((tableBody) => {
-                    tableBody.addEventListener("click", function (event) {
-                        const prNumberCell = event.target.closest("td");
-                        if (prNumberCell && prNumberCell.parentElement) {
-                            const procurementId = prNumberCell.textContent;
-                            const row = prNumberCell.parentElement;
-                            openProcurementModal({
-                                procurement_id: procurementId,
-                            });
-                        }
-                    });
                 });
             } else {
                 const emptyMessage = document.createElement("tr");
                 const emptyCell = document.createElement("td");
-                emptyCell.setAttribute("colspan", "3");
-                emptyCell.textContent = "No procurement records found.";
+                emptyCell.setAttribute("colspan", "4"); // Adjust column span based on the table structure
+                emptyCell.textContent =
+                    "No procurement records found for the selected SARO.";
                 emptyMessage.appendChild(emptyCell);
                 tableBodies.all.appendChild(emptyMessage);
             }
@@ -407,6 +249,116 @@ function fetchProcurementRequirements(saroNo) {
             console.error("Error fetching procurement requirements:", error)
         );
 }
+
+// FETCH PROCUREMENT DATA FOR MODAL
+function fetchProcurementRequirements(saroNo) {
+    const url = saroNo === ""
+        ? "/api/fetch-procurement-ilcdb"
+        : `/api/fetch-procurement-ilcdb?saro_no=${saroNo}`;
+
+        fetch(url)
+        .then((response) => response.json())
+        .then((data) => {
+            const tableBodies = {
+                all: document.getElementById("procurementTable"),
+                overdue: document.getElementById("procurementTableOverdue"),
+                done: document.getElementById("procurementTableDone"),
+            };
+
+            // Clear old rows in the table bodies
+            Object.values(tableBodies).forEach(
+                (tableBody) => (tableBody.innerHTML = "")
+            );
+
+            if (data.length > 0) {
+                // Sort data by status order and maintain original order (FIFO)
+                const statusOrder = {
+                    overdue: 1,
+                    "for dv creation": 2,
+                    "for iar / par / ics / rfi creation": 3,
+                    "for ors creation": 4,
+                    "for obligation": 5,
+                    "for payment processing": 6,
+                    "waiting for budget": 7,
+                    done: 8,
+                };
+
+                data.sort((a, b) => {
+                    const statusA = (a.status || "unknown").toLowerCase();
+                    const statusB = (b.status || "unknown").toLowerCase();
+
+                    // Sort by status first
+                    const statusComparison =
+                        (statusOrder[statusA] || 9) -
+                        (statusOrder[statusB] || 9);
+
+                    // Maintain original FIFO order if statuses are the same
+                    return statusComparison !== 0
+                        ? statusComparison
+                        : data.indexOf(a) - data.indexOf(b);
+                });
+
+                data.forEach((item) => {
+                    const row = document.createElement("tr");
+                    row.setAttribute("data-procurement-id", item.procurement_id);
+
+                    // PR NUMBER cell
+                    const prNumberCell = document.createElement("td");
+                    prNumberCell.textContent = item.procurement_id;
+                    row.appendChild(prNumberCell);
+
+                    // CATEGORY cell
+                    const categoryCell = document.createElement("td");
+                    categoryCell.textContent =
+                        item.procurement_category || "N/A";
+                    row.appendChild(categoryCell);
+
+                    // ACTIVITY NAME cell
+                    const activityCell = document.createElement("td");
+                    activityCell.textContent = item.activity || "N/A";
+                    row.appendChild(activityCell);
+
+                    // STATUS cell
+                    const statusCell = document.createElement("td");
+                    const badge = document.createElement("span");
+
+                    const statusMessage = (item.status || "").toLowerCase();
+                    badge.className = getStatusClass(statusMessage);
+                    badge.textContent = item.status || "Unknown Status";
+                    statusCell.appendChild(badge);
+                    row.appendChild(statusCell);
+
+                    // Append row to the "all" table
+                    tableBodies.all.appendChild(row);
+
+                    // Append row to specific table based on status
+                    if (statusMessage === "done") {
+                        tableBodies.done.appendChild(row.cloneNode(true));
+                    } else if (statusMessage === "overdue") {
+                        tableBodies.overdue.appendChild(row.cloneNode(true));
+                    } else if (
+                        ["for dv creation", "for iar / par / ics / rfi creation", "for ors creation", 
+                         "for obligation", "for payment processing", "waiting for budget"]
+                        .includes(statusMessage)
+                    ) {
+                        tableBodies.all.appendChild(row.cloneNode(true)); // All grouped statuses added under "all"
+                    }
+                });
+            } else {
+                const emptyMessage = document.createElement("tr");
+                const emptyCell = document.createElement("td");
+                emptyCell.setAttribute("colspan", "4"); // Adjust column span based on the table structure
+                emptyCell.textContent =
+                    "No procurement records found for the selected SARO.";
+                emptyMessage.appendChild(emptyCell);
+                tableBodies.all.appendChild(emptyMessage);
+            }
+        })
+        .catch((error) =>
+            console.error("Error fetching procurement requirements:", error)
+        );
+}
+
 // Store Bootstrap modal instance globally
 let bootstrapModalInstance = null;
 
