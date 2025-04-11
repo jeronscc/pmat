@@ -224,7 +224,7 @@ button {
 
 .record-box th,
 .record-box td {
-    padding: 14px 15px; /* Added more padding for a cleaner look */
+    padding: 11px 12px; /* Added more padding for a cleaner look */
     text-align: center;
     word-wrap: break-word;
 }
