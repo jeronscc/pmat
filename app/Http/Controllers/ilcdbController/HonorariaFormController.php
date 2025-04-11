@@ -56,6 +56,8 @@ class HonorariaFormController extends Controller
             'dt_submitted'   => 'nullable|date',
             'dt_received'    => 'nullable|date',
             'budget_spent'   => 'nullable|numeric',
+            'ntca_no'   => 'nullable|string',
+            'quarter'   => 'nullable|string',
         ]);
 
         try {
@@ -89,9 +91,19 @@ class HonorariaFormController extends Controller
                     ->update([
                         'dt_submitted' => $validatedData['dt_submitted'] ? Carbon::parse($validatedData['dt_submitted'])->format('Y-m-d H:i:s') : null,
                         'dt_received'  => $validatedData['dt_received'] ? Carbon::parse($validatedData['dt_received'])->format('Y-m-d H:i:s') : null,
+                        'ntca_no' => $validatedData['ntca_no'] ?? null,
+                        'quarter' => $validatedData['quarter'] ?? null,
                         'budget_spent' => $validatedData['budget_spent'] ?? null,
                         'unit'         => $unit,
                         'status'       => $status,
+                    ]);
+
+                // Update procurement table
+                    DB::connection('ilcdb')->table('procurement')
+                    ->where('procurement_id', $validatedData['procurement_id'])
+                    ->update([
+                        'ntca_no' => $validatedData['ntca_no'] ?? null,
+                        'quarter' => $validatedData['quarter'] ?? null,
                     ]);
 
                 // Assuming that the honoraria_form record has a 'quarter' column and a 'saro_no' foreign key
