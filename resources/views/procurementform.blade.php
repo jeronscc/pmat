@@ -46,7 +46,7 @@
                 </form>
             </li>
             <li>
-                <form action="">
+                <form action="{{ route('accounts') }}">
                     <button type="submit">
                         <i class="fas fa-users"></i><img src="/assets/account_icon.png" alt=""> Accounts
                     </button>
