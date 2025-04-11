@@ -439,7 +439,7 @@
                                 </select>
                             </div>
                             <div class="mb-3">
-                                <label for="pr-number" class="form-label">PR/TRANSACTION NUMBER</label>
+                                <label for="pr-number" class="form-label">PR NUMBER</label>
                                 <input type="text" class="form-control" id="pr-number" placeholder="Enter PR Number">
                             </div>
                             <div class="mb-3">
