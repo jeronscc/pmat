@@ -106,20 +106,13 @@ function fetchProcurementForSaro(saroNo) {
                     statusCell.appendChild(badge);
                     row.appendChild(statusCell);
 
-                    // Append row to the "all" table
-                    tableBodies.all.appendChild(row);
-
-                    // Append row to specific table based on status
+                    // Append row to the appropriate table body
                     if (statusMessage === "done") {
-                        tableBodies.done.appendChild(row.cloneNode(true));
+                        tableBodies.done.appendChild(row);
                     } else if (statusMessage === "overdue") {
-                        tableBodies.overdue.appendChild(row.cloneNode(true));
-                    } else if (
-                        ["for dv creation", "for iar / par / ics / rfi creation", "for ors creation", 
-                         "for obligation", "for payment processing", "waiting for budget"]
-                        .includes(statusMessage)
-                    ) {
-                        tableBodies.all.appendChild(row.cloneNode(true)); // All grouped statuses added under "all"
+                        tableBodies.overdue.appendChild(row);
+                    } else {
+                        tableBodies.all.appendChild(row);
                     }
                 });
             } else {
@@ -219,20 +212,13 @@ function fetchProcurementForYear(year) {
                     statusCell.appendChild(badge);
                     row.appendChild(statusCell);
 
-                    // Append row to the "all" table
-                    tableBodies.all.appendChild(row);
-
-                    // Append row to specific table based on status
+                    // Append row to the appropriate table body
                     if (statusMessage === "done") {
-                        tableBodies.done.appendChild(row.cloneNode(true));
+                        tableBodies.done.appendChild(row);
                     } else if (statusMessage === "overdue") {
-                        tableBodies.overdue.appendChild(row.cloneNode(true));
-                    } else if (
-                        ["for dv creation", "for iar / par / ics / rfi creation", "for ors creation", 
-                         "for obligation", "for payment processing", "waiting for budget"]
-                        .includes(statusMessage)
-                    ) {
-                        tableBodies.all.appendChild(row.cloneNode(true)); // All grouped statuses added under "all"
+                        tableBodies.overdue.appendChild(row);
+                    } else {
+                        tableBodies.all.appendChild(row);
                     }
                 });
             } else {
@@ -328,20 +314,13 @@ function fetchProcurementRequirements(saroNo) {
                     statusCell.appendChild(badge);
                     row.appendChild(statusCell);
 
-                    // Append row to the "all" table
-                    tableBodies.all.appendChild(row);
-
-                    // Append row to specific table based on status
+                    // Append row to the appropriate table body
                     if (statusMessage === "done") {
-                        tableBodies.done.appendChild(row.cloneNode(true));
+                        tableBodies.done.appendChild(row);
                     } else if (statusMessage === "overdue") {
-                        tableBodies.overdue.appendChild(row.cloneNode(true));
-                    } else if (
-                        ["for dv creation", "for iar / par / ics / rfi creation", "for ors creation", 
-                         "for obligation", "for payment processing", "waiting for budget"]
-                        .includes(statusMessage)
-                    ) {
-                        tableBodies.all.appendChild(row.cloneNode(true)); // All grouped statuses added under "all"
+                        tableBodies.overdue.appendChild(row);
+                    } else {
+                        tableBodies.all.appendChild(row);
                     }
                 });
             } else {
@@ -474,60 +453,59 @@ function fetchProcurementData(year = "", status = "all") {
         .then((data) => {
             const tableBodies = {
                 all: document.getElementById("procurementTable"),
-                pending: document.getElementById("procurementTablePending"),
-                ongoing: document.getElementById("procurementTableOngoing"),
                 overdue: document.getElementById("procurementTableOverdue"),
                 done: document.getElementById("procurementTableDone"),
             };
 
             Object.values(tableBodies).forEach(
                 (tableBody) => (tableBody.innerHTML = "")
-            ); // ✅ Clear old rows
+            ); // Clear old rows
 
             data.forEach((item) => {
                 const row = document.createElement("tr");
-                row.setAttribute("data-procurement-id", item.procurement_id); // ✅ Ensure each row has a unique identifier
+                row.setAttribute("data-procurement-id", item.procurement_id); // Unique row identifier
 
+                // PR NUMBER cell
                 const prNumberCell = document.createElement("td");
                 prNumberCell.textContent = item.procurement_id;
                 row.appendChild(prNumberCell);
 
+                // CATEGORY cell
                 const categoryCell = document.createElement("td");
-                categoryCell.textContent = item.procurement_category || "N/A"; // Add category cell
+                categoryCell.textContent = item.procurement_category || "N/A";
                 row.appendChild(categoryCell);
 
+                // ACTIVITY NAME cell
                 const activityCell = document.createElement("td");
-                activityCell.textContent = item.activity;
+                activityCell.textContent = item.activity || "N/A";
                 row.appendChild(activityCell);
 
+                // STATUS cell
                 const statusCell = document.createElement("td");
                 const badge = document.createElement("span");
 
-                let statusMessage = item.status || "";
-                let unitMessage = item.unit ? ` at ${item.unit}` : "";
-                if (statusMessage.toLowerCase() === "done") unitMessage = "";
-
-                badge.className = getStatusClass(item.status || "");
-                badge.textContent = statusMessage + unitMessage;
+                const statusMessage = (item.status || "").toLowerCase();
+                badge.className = getStatusClass(statusMessage);
+                badge.textContent = item.status || "Unknown Status";
 
                 statusCell.appendChild(badge);
                 row.appendChild(statusCell);
 
-                tableBodies.all.appendChild(row);
-                if (statusMessage.toLowerCase() === "done")
+                // Append row to the appropriate table body
+                if (statusMessage === "done") {
                     tableBodies.done.appendChild(row);
-                else if (statusMessage.toLowerCase() === "pending")
-                    tableBodies.pending.appendChild(row);
-                else if (statusMessage.toLowerCase() === "ongoing")
-                    tableBodies.ongoing.appendChild(row);
-                else if (statusMessage.toLowerCase() === "overdue")
+                } else if (statusMessage === "overdue") {
                     tableBodies.overdue.appendChild(row);
+                } else {
+                    tableBodies.all.appendChild(row);
+                }
             });
         })
         .catch((error) =>
             console.error("Error fetching procurement data:", error)
         );
 }
+
 // Event listener for the year filter
 document.getElementById("year")?.addEventListener("change", function () {
     const yearFilter = this.value;
@@ -605,8 +583,6 @@ setInterval(checkOverdue, 5000); // Check every 5 seconds
 function updateProcurementTable(data) {
     const tableBodies = {
         all: document.getElementById("procurementTable"),
-        pending: document.getElementById("procurementTablePending"),
-        ongoing: document.getElementById("procurementTableOngoing"),
         overdue: document.getElementById("procurementTableOverdue"),
         done: document.getElementById("procurementTableDone"),
     };
@@ -618,7 +594,16 @@ function updateProcurementTable(data) {
 
     if (data.length > 0) {
         // Sort data by status order and maintain original order for FIFO
-        const statusOrder = { overdue: 1, ongoing: 2, pending: 3, done: 4 };
+        const statusOrder = {
+            overdue: 1,
+            "for dv creation": 2,
+            "for iar / par / ics / rfi creation": 3,
+            "for ors creation": 4,
+            "for obligation": 5,
+            "for payment processing": 6,
+            "waiting for budget": 7,
+            done: 8,
+        };
 
         data.sort((a, b) => {
             const statusA = (a.status || "unknown").toLowerCase();
@@ -626,7 +611,7 @@ function updateProcurementTable(data) {
 
             // Sort by status first
             const statusComparison =
-                (statusOrder[statusA] || 5) - (statusOrder[statusB] || 5);
+                (statusOrder[statusA] || 9) - (statusOrder[statusB] || 9);
 
             // If statuses are the same, maintain original FIFO order
             return statusComparison !== 0
@@ -637,44 +622,39 @@ function updateProcurementTable(data) {
         data.forEach((item) => {
             const row = document.createElement("tr");
 
+            // PR NUMBER cell
             const prNumberCell = document.createElement("td");
             prNumberCell.textContent = item.procurement_id;
             row.appendChild(prNumberCell);
 
+            // CATEGORY cell
             const categoryCell = document.createElement("td");
-            categoryCell.textContent = item.procurement_category || "N/A"; // Add category cell
+            categoryCell.textContent = item.procurement_category || "N/A";
             row.appendChild(categoryCell);
 
+            // ACTIVITY NAME cell
             const activityCell = document.createElement("td");
-            activityCell.textContent = item.activity;
+            activityCell.textContent = item.activity || "N/A";
             row.appendChild(activityCell);
 
+            // STATUS & UNIT cell
             const statusCell = document.createElement("td");
             const badge = document.createElement("span");
 
-            let statusMessage = item.status || "";
-            let unitMessage = item.unit ? ` at ${item.unit}` : "";
-
-            if (statusMessage.toLowerCase() === "done") {
-                unitMessage = "";
-            }
-
-            badge.className = getStatusClass(item.status || "");
-            badge.textContent = statusMessage + unitMessage;
+            const statusMessage = (item.status || "").toLowerCase();
+            badge.className = getStatusClass(statusMessage);
+            badge.textContent = item.status || "Unknown Status";
 
             statusCell.appendChild(badge);
             row.appendChild(statusCell);
 
-            tableBodies.all.appendChild(row); // Append the original row to "All" only
-
-            if (statusMessage.toLowerCase() === "done") {
-                tableBodies.done.appendChild(row.cloneNode(true));
-            } else if (statusMessage.toLowerCase() === "ongoing") {
-                tableBodies.ongoing.appendChild(row.cloneNode(true));
-            } else if (statusMessage.toLowerCase() === "overdue") {
-                tableBodies.overdue.appendChild(row.cloneNode(true));
-            } else if (statusMessage.toLowerCase() === "pending") {
-                tableBodies.pending.appendChild(row.cloneNode(true));
+            // Append row to the appropriate table body
+            if (statusMessage === "done") {
+                tableBodies.done.appendChild(row);
+            } else if (statusMessage === "overdue") {
+                tableBodies.overdue.appendChild(row);
+            } else {
+                tableBodies.all.appendChild(row);
             }
         });
 
@@ -690,14 +670,16 @@ function updateProcurementTable(data) {
             });
         });
     } else {
+        // Display message if no data is available
         const emptyMessage = document.createElement("tr");
         const emptyCell = document.createElement("td");
-        emptyCell.setAttribute("colspan", "3");
+        emptyCell.setAttribute("colspan", "4"); // Match table column count
         emptyCell.textContent = "No procurement records found.";
         emptyMessage.appendChild(emptyCell);
         tableBodies.all.appendChild(emptyMessage);
     }
 }
+
 
 // Event listener for the year filter
 document.getElementById("year")?.addEventListener("change", function () {

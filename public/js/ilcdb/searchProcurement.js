@@ -48,7 +48,7 @@ function getStatusClass(status) {
 // Function to search for procurement based on the search term
 function searchProcurement() {
     const query = document.getElementById('searchBar').value;
-    console.log("Search query: ", query);  // Debugging log to check the query value
+    console.log("Search query: ", query); // Debugging log to check the query value
 
     // If the query is empty, do not fetch the data
     if (!query.trim()) {
@@ -57,85 +57,79 @@ function searchProcurement() {
     }
 
     fetch(`/api/search-procurement-ilcdb?query=${query}`)
-        .then(response => {
+        .then((response) => {
             if (!response.ok) {
                 console.error('Failed to fetch data:', response.status);
                 return [];
             }
             return response.json();
         })
-        .then(data => {
+        .then((data) => {
             const tableBodies = {
                 all: document.getElementById('procurementTable'),
-                pending: document.getElementById('procurementTablePending'),
-                ongoing: document.getElementById('procurementTableOngoing'),
                 overdue: document.getElementById('procurementTableOverdue'),
-                done: document.getElementById('procurementTableDone')
+                done: document.getElementById('procurementTableDone'),
             };
 
             // Clear any existing rows in the tables
-            Object.values(tableBodies).forEach(tableBody => tableBody.innerHTML = '');
+            Object.values(tableBodies).forEach((tableBody) => (tableBody.innerHTML = ''));
 
             if (data.length > 0) {
-                data.forEach(item => {
-                    const row = document.createElement('tr');
-                    row.setAttribute('data-procurement-id', item.procurement_id); // Ensure each row has a unique identifier
+                data.forEach((item) => {
+                    const row = document.createElement("tr");
+                    row.setAttribute("data-procurement-id", item.procurement_id);
 
-                    // PR NUMBER cell (procurement_id)
-                    const prNumberCell = document.createElement('td');
+                    // PR NUMBER cell
+                    const prNumberCell = document.createElement("td");
                     prNumberCell.textContent = item.procurement_id;
                     row.appendChild(prNumberCell);
 
-                    const categoryCell = document.createElement('td');
-                    categoryCell.textContent = item.category || 'N/A'; // Add category cell
+                    // CATEGORY cell
+                    const categoryCell = document.createElement("td");
+                    categoryCell.textContent = item.procurement_category || "N/A";
                     row.appendChild(categoryCell);
 
-                    // ACTIVITY cell
-                    const activityCell = document.createElement('td');
-                    activityCell.textContent = item.activity;
+                    // ACTIVITY NAME cell
+                    const activityCell = document.createElement("td");
+                    activityCell.textContent = item.activity || "N/A";
                     row.appendChild(activityCell);
 
-                    // STATUS & UNIT cell
-                    const statusCell = document.createElement('td');
-                    const badge = document.createElement('span');
+                    // STATUS cell
+                    const statusCell = document.createElement("td");
+                    const badge = document.createElement("span");
 
-                    let statusMessage = item.status || ''; // If no status, it will be empty
-                     // If unit exists, append it
-
-                    // If status is "done", do not append the unit
-                    if (statusMessage.toLowerCase() === 'done') {
-                        unitMessage = ''; // Don't append the unit when status is "done"
-                    }
-
-                    // Combine status and unit
-                    badge.className = getStatusClass(item.status || ''); // Apply appropriate badge class
-                    badge.textContent = statusMessage; // Status and Unit
-
+                    const statusMessage = (item.status || "").toLowerCase();
+                    badge.className = getStatusClass(statusMessage);
+                    badge.textContent = item.status || "Unknown Status";
                     statusCell.appendChild(badge);
                     row.appendChild(statusCell);
 
-                    // Append the row to the appropriate table based on the status
-                    tableBodies.all.appendChild(row);
-                    if (statusMessage.toLowerCase() === 'done') tableBodies.done.appendChild(row.cloneNode(true));
-                    else if (statusMessage.toLowerCase() === 'pending') tableBodies.pending.appendChild(row.cloneNode(true));
-                    else if (statusMessage.toLowerCase() === 'ongoing') tableBodies.ongoing.appendChild(row.cloneNode(true));
-                    else if (statusMessage.toLowerCase() === 'overdue') tableBodies.overdue.appendChild(row.cloneNode(true));
+                    // Append row to the appropriate table body
+                    if (statusMessage === "done") {
+                        tableBodies.done.appendChild(row);
+                    } else if (statusMessage === "overdue") {
+                        tableBodies.overdue.appendChild(row);
+                    } else {
+                        tableBodies.all.appendChild(row);
+                    }
                 });
             } else {
-                Object.values(tableBodies).forEach(tableBody => {
+                Object.values(tableBodies).forEach((tableBody) => {
                     const emptyMessage = document.createElement('tr');
                     const emptyCell = document.createElement('td');
-                    emptyCell.setAttribute('colspan', '4');
+                    emptyCell.setAttribute('colspan', '4'); // Match column count
                     emptyCell.textContent = 'No procurement records found for the search term.';
                     emptyMessage.appendChild(emptyCell);
                     tableBody.appendChild(emptyMessage);
                 });
             }
         })
-        .catch(error => {
+        .catch((error) => {
             console.error('Error fetching procurement data:', error);
         });
 }
+
+
 
 // Function to update the procurement table
 function updateProcurementTable(data) {
