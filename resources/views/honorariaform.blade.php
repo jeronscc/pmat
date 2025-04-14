@@ -90,11 +90,15 @@
                             <h3><b>Actual Amount: </b><span id="procurement-pr-amount">{{ number_format($pr_amount, 2) }}</span></h3>
                         </div>
 
+                        <hr class="my-4" style="border-top: 2px solid rgba(0, 0, 0, 0.6);">
+                        <!-- Hidden fields to pass along the procurement id and activity -->
+                        <input type="hidden" id="procurementId" name="procurement_id" value="{{ $prNumber }}">
+
                         <!-- Update Honoraria Form -->
                         <form id="honorariaForm">
                             @csrf
                             <!-- Hidden field for procurement_id (using pr_number from URL) -->
-                            <input type="hidden" name="procurement_id" value="{{ $prNumber }}">
+                            <input type="hidden" id="procurementId" name="procurement_id" value="{{ $prNumber }}">
 
                             <hr class="my-4" style="border-top: 2px solid rgba(0, 0, 0, 0.6);">
                             <h2 class="fw-bold">Honoraria for Speakers Requirements</h2>
@@ -114,24 +118,50 @@
                                         <tr>
                                             <td>
                                                 <button type="button" class="btn btn-dark" data-bs-toggle="modal"
-                                                    data-bs-target="#requirementsModal">
+                                                    data-bs-target="#requirementsModal1">
                                                     Upload Requirements
                                                 </button>
                                             </td>
                                             <td>
-                                                <input type="datetime-local" class="form-control" id="dateSubmitted" name="dt_submitted"
-                                                    value="{{ isset($record->dt_submitted) ? \Carbon\Carbon::parse($record->dt_submitted)->format('Y-m-d\TH:i') : '' }}">
+                                                <input type="datetime-local" class="form-control" id="dateSubmitted1" name="dt_submitted1" value="{{ $record->dt_submitted1 ?? '' }}">
                                             </td>
                                             <td>
-                                                <input type="datetime-local" class="form-control" id="dateReturned" name="dt_received"
-                                                    value="{{ isset($record->dt_received) ? \Carbon\Carbon::parse($record->dt_received)->format('Y-m-d\TH:i') : '' }}">
+                                                <input type="datetime-local" class="form-control" id="dateReturned1" name="dt_received1" value="{{ $record->dt_received1 ?? '' }}">
                                             </td>
-                                            <td><span class="indicator" id="indicator" style="display: inline-block; width: 80px; padding: 5px; border-radius: 5px; text-align: center;"></span></td>
+                                            <td><span class="indicator" id="indicator1" style="display: inline-block; width: 80px; padding: 5px; border-radius: 5px; text-align: center;"></span></td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
-                            
+                            <h3>Accounting Unit</h3>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Requirements</th>
+                                            <th>Date Submitted</th>
+                                            <th>Date Returned</th>
+                                            <th>Indicator</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#requirementsModal2">
+                                                    Upload Requirements
+                                                </button>
+                                            </td>
+                                            <td>
+                                                <input type="datetime-local" class="form-control" id="dateSubmitted2" name="dt_submitted2" value="{{ $record->dt_submitted2 ?? '' }}">
+                                            </td>
+                                            <td>
+                                                <input type="datetime-local" class="form-control" id="dateReturned2" name="dt_received2" value="{{ $record->dt_received2 ?? '' }}">
+                                            </td>
+                                            <td><span class="indicator" id="indicator2" style="display: inline-block; width: 80px; padding: 5px; border-radius: 5px; text-align: center;"></span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                             <h3>NTCA</h3>
                             <div class="table-responsive">
                                 <table class="table">
@@ -148,12 +178,12 @@
                                                     value="{{ old('ntca_no', $record->ntca_no ?? '') }}">
                                             </td>
                                             <td>
-                                                <select class="form-select" id="quarter" name="quarter">
-                                                    <option value="" disabled>Select Current Quarter</option>
-                                                    <option value="First Quarter"  {{ old('quarter', $record->quarter ?? '') == 'First Quarter'  ? 'selected' : '' }}>First Quarter</option>
-                                                    <option value="Second Quarter" {{ old('quarter', $record->quarter ?? '') == 'Second Quarter' ? 'selected' : '' }}>Second Quarter</option>
-                                                    <option value="Third Quarter"  {{ old('quarter', $record->quarter ?? '') == 'Third Quarter'  ? 'selected' : '' }}>Third Quarter</option>
-                                                    <option value="Fourth Quarter" {{ old('quarter', $record->quarter ?? '') == 'Fourth Quarter' ? 'selected' : '' }}>Fourth Quarter</option>
+                                                <select class="form-select" id="quarter" name="quarter" data-saved-value="{{ $record->quarter ?? '' }}">
+                                                    <option value="" disabled {{ empty($record->quarter) ? 'selected' : '' }}>Select Current Quarter</option>
+                                                    <option value="First Quarter" {{ $record->quarter == 'First Quarter' ? 'selected' : '' }}>First Quarter</option>
+                                                    <option value="Second Quarter" {{ $record->quarter == 'Second Quarter' ? 'selected' : '' }}>Second Quarter</option>
+                                                    <option value="Third Quarter" {{ $record->quarter == 'Third Quarter' ? 'selected' : '' }}>Third Quarter</option>
+                                                    <option value="Fourth Quarter" {{ $record->quarter == 'Fourth Quarter' ? 'selected' : '' }}>Fourth Quarter</option>
                                                 </select>
                                             </td>
                                         </tr>
@@ -188,14 +218,14 @@
                     </div>
 
                     <!-- Modals -->
-                    <div class="modal fade" id="requirementsModal" tabindex="-1" aria-labelledby="modalTitle" aria-hidden="true">
+                    <div class="modal fade" id="requirementsModal1" tabindex="-1" aria-labelledby="modalTitle" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
                                 <div class="modal-header bg-dark text-white">
                                     <h5 class="modal-title" id="modalTitle">UPLOAD REQUIREMENTS</h5>
                                 </div>
                                 <div class="modal-body">
-                                    <form id="requirementsForm" enctype="multipart/form-data">
+                                    <form id="requirementsForm1" enctype="multipart/form-data">
                                         @csrf
                                         <input type="hidden" id="procurement_id" name="procurement_id" value="{{ $prNumber }}">
                                         <!-- Reminder about file requirements -->
@@ -204,85 +234,109 @@
                                         </div>
                                         <!-- ORS File Upload -->
                                         <div class="mb-3">
-                                            <label for="orsFile" class="form-label">Upload ORS</label>
-                                            <input class="form-control" type="file" id="orsFile" name="orsFile">
-                                            <div id="uploadedFilesListORS"></div>
+                                            <label for="orsFile1" class="form-label">Upload ORS</label>
+                                            <input class="form-control" type="file" id="orsFile1" name="orsFile">
+                                            <div id="orsFile1Link"></div>
                                         </div>
-
-                                        <!-- DV File Upload -->
-                                        <div class="mb-3">
-                                            <label for="dvFile" class="form-label">Upload DV</label>
-                                            <input class="form-control" type="file" id="dvFile" name="dvFile">
-                                            <div id="uploadedFilesListDV"></div>
-                                        </div>
-
                                         <!-- Service Contract Upload -->
                                         <div class="mb-3">
-                                            <label for="contractFile" class="form-label">Upload Service Contract</label>
-                                            <input class="form-control" type="file" id="contractFile" name="contractFile">
-                                            <div id="uploadedFilesListContract"></div>
+                                            <label for="contractFile1" class="form-label">Upload Service Contract</label>
+                                            <input class="form-control" type="file" id="contractFile1" name="contractFile">
+                                            <div id="contractFile1Link"></div>
                                         </div>
 
                                         <!-- Certificate Honoraria Classification Upload -->
                                         <div class="mb-3">
-                                            <label for="classificationFile" class="form-label">Upload Certificate Honoraria Classification</label>
-                                            <input class="form-control" type="file" id="classificationFile" name="classificationFile">
-                                            <div id="uploadedFilesListClassification"></div>
-                                        </div>
-
-                                        <!-- Terminal Report Upload -->
-                                        <div class="mb-3">
-                                            <label for="reportFile" class="form-label">Upload Terminal Report</label>
-                                            <input class="form-control" type="file" id="reportFile" name="reportFile">
-                                            <div id="uploadedFilesListReport"></div>
-                                        </div>
-
-                                        <!-- Attendance Upload -->
-                                        <div class="mb-3">
-                                            <label for="attendanceFile" class="form-label">Upload Attendance</label>
-                                            <input class="form-control" type="file" id="attendanceFile" name="attendanceFile">
-                                            <div id="uploadedFilesListAttendance"></div>
+                                            <label for="classificationFile1" class="form-label">Upload Certificate Honoraria Classification</label>
+                                            <input class="form-control" type="file" id="classificationFile1" name="classificationFile">
+                                            <div id="classificationFile1Link"></div>
                                         </div>
 
                                         <!-- Resume/CV Upload -->
                                         <div class="mb-3">
-                                            <label for="resumeFile" class="form-label">Upload Resume/CV</label>
-                                            <input class="form-control" type="file" id="resumeFile" name="resumeFile">
-                                            <div id="uploadedFilesListResume"></div>
+                                            <label for="resumeFile1" class="form-label">Upload Resume/CV</label>
+                                            <input class="form-control" type="file" id="resumeFile1" name="resumeFile">
+                                            <div id="resumeFile1Link"></div>
                                         </div>
 
                                         <!-- Government ID Upload -->
                                         <div class="mb-3">
-                                            <label for="govidFile" class="form-label">Upload Government ID</label>
-                                            <input class="form-control" type="file" id="govidFile" name="govidFile">
-                                            <div id="uploadedFilesListGovID"></div>
+                                            <label for="govidFile1" class="form-label">Upload Government ID</label>
+                                            <input class="form-control" type="file" id="govidFile1" name="govidFile">
+                                            <div id="govidFile1Link"></div>
                                         </div>
 
                                         <!-- Payslip/Certificate of Gross Income Upload -->
                                         <div class="mb-3">
-                                            <label for="payslipFile" class="form-label">Upload Payslip/Certificate of Gross Income</label>
-                                            <input class="form-control" type="file" id="payslipFile" name="payslipFile">
-                                            <div id="uploadedFilesListPayslip"></div>
+                                            <label for="payslipFile1" class="form-label">Upload Payslip/Certificate of Gross Income</label>
+                                            <input class="form-control" type="file" id="payslipFile1" name="payslipFile">
+                                            <div id="payslipFile1Link"></div>
                                         </div>
 
                                         <!-- TIN and Bank Account Details Upload -->
                                         <div class="mb-3">
-                                            <label for="bankFile" class="form-label">Upload TIN and Bank Account Details</label>
-                                            <input class="form-control" type="file" id="bankFile" name="bankFile">
-                                            <div id="uploadedFilesListBank"></div>
+                                            <label for="bankFile1" class="form-label">Upload TIN and Bank Account Details</label>
+                                            <input class="form-control" type="file" id="bankFile1" name="bankFile">
+                                            <div id="bankFile1Link"></div>
+                                        </div>
+
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                    <button type="button" class="btn btn-primary" id="saveBtn1">Save</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--Modal 2-->
+                    <div class="modal fade" id="requirementsModal2" tabindex="-1" aria-labelledby="modalTitle" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header bg-dark text-white">
+                                    <h5 class="modal-title" id="modalTitle">UPLOAD REQUIREMENTS</h5>
+                                </div>
+                                <div class="modal-body">
+                                    <form id="requirementsForm2" enctype="multipart/form-data">
+                                        @csrf
+                                        <input type="hidden" id="procurement_id" name="procurement_id" value="{{ $prNumber }}">
+                                        <!-- Reminder about file requirements -->
+                                        <div class="alert alert-info">
+                                            Only PDF files are accepted. The file size must not exceed 5 MB.
+                                        </div>
+
+                                        <!-- DV File Upload -->
+                                        <div class="mb-3">
+                                            <label for="dvFile2" class="form-label">Upload DV</label>
+                                            <input class="form-control" type="file" id="dvFile2" name="dvFile">
+                                            <div id="dvFile2Link"></div>
+                                        </div>
+
+                                        <!-- Terminal Report Upload -->
+                                        <div class="mb-3">
+                                            <label for="reportFile2" class="form-label">Upload Terminal Report</label>
+                                            <input class="form-control" type="file" id="reportFile2" name="reportFile">
+                                            <div id="reportFile2Link"></div>
+                                        </div>
+
+                                        <!-- Attendance Upload -->
+                                        <div class="mb-3">
+                                            <label for="attendanceFile2" class="form-label">Upload Attendance</label>
+                                            <input class="form-control" type="file" id="attendanceFile2" name="attendanceFile">
+                                            <div id="attendanceFile2Link"></div>
                                         </div>
 
                                         <!-- Certificate of Services Rendered Upload -->
                                         <div class="mb-3">
-                                            <label for="certFile" class="form-label">Upload Certificate of Services Rendered</label>
-                                            <input class="form-control" type="file" id="certFile" name="certFile">
-                                            <div id="uploadedFilesListCert"></div>
+                                            <label for="certFile2" class="form-label">Upload Certificate of Services Rendered</label>
+                                            <input class="form-control" type="file" id="certFile2" name="certFile">
+                                            <div id="certFile2Link"></div>
                                         </div>
                                     </form>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                    <button type="button" class="btn btn-primary" id="saveBtn">Save</button>
+                                    <button type="button" class="btn btn-primary" id="saveBtn2">Save</button>
                                 </div>
                             </div>
                         </div>
@@ -296,7 +350,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Custom JS -->
     <script src="/js/menu.js"></script>
-    <script src="/js/ilcdb/honorariaUploadCheck.js"></script>
+    <!--<script src="/js/ilcdb/honorariaUploadCheck.js"></script>-->
     <script src="/js/ilcdb/honorariaformIndicator.js"></script>
     <script src="/js/ilcdb/requirementsUpload.js"></script>
 </body>
