@@ -168,12 +168,14 @@
                             <li class="nav-item">
                                 <a class="nav-link active" style="color: black;" id="tabAll-tab" data-bs-toggle="tab" href="#tabAll">All</a>
                             </li>
+                            <!--
                             <li class="nav-item">
                                 <a class="nav-link" style="color: black;" id="tabOngoing-tab" data-bs-toggle="tab" href="#tabPending">Pending</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" style="color: black;" id="tabOngoing-tab" data-bs-toggle="tab" href="#tabOngoing">Ongoing</a>
                             </li>
+                            -->
                             <li class="nav-item">
                                 <a class="nav-link" style="color: black;" id="tabOverdue-tab" data-bs-toggle="tab" href="#tabOverdue">Overdue</a>
                             </li>
@@ -340,10 +342,6 @@
                                     <input type="text" class="form-control" id="saro_number" name="saro_number" required>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="saroDesc" class="form-label">DESCRIPTION</label>
-                                    <textarea class="form-control" rows="3" id="saroDesc" name="saroDesc" placeholder="Enter Description" required></textarea>
-                                </div>
-                                <div class="mb-3">
                                     <label for="saro_year" class="form-label">YEAR</label>
                                     <select class="form-select" id="saro_year" name="saro_year" required>
                                         <option value="" disabled selected>Select Year</option>
@@ -362,6 +360,10 @@
                                 <div class="mb-3">
                                     <label for="date_released" class="form-label">DATE RELEASED</label>
                                     <input type="date" class="form-control" id="date_released" name="date_released" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="saroDesc" class="form-label">DESCRIPTION</label>
+                                    <textarea class="form-control" rows="3" id="saroDesc" name="saroDesc" placeholder="Enter Description" required></textarea>
                                 </div>
                             </div>
 

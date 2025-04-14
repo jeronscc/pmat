@@ -86,7 +86,7 @@ function searchProcurement() {
 
                     // CATEGORY cell
                     const categoryCell = document.createElement("td");
-                    categoryCell.textContent = item.procurement_category || "N/A";
+                    categoryCell.textContent = item.category ;
                     row.appendChild(categoryCell);
 
                     // ACTIVITY NAME cell
@@ -104,11 +104,14 @@ function searchProcurement() {
                     statusCell.appendChild(badge);
                     row.appendChild(statusCell);
 
+                    
                     // Append row to the appropriate table body
                     if (statusMessage === "done") {
                         tableBodies.done.appendChild(row);
+                        tableBodies.all.appendChild(row.cloneNode(true)); // Clone the row for the all table
                     } else if (statusMessage === "overdue") {
                         tableBodies.overdue.appendChild(row);
+                        tableBodies.all.appendChild(row.cloneNode(true)); // Clone the row for the all table
                     } else {
                         tableBodies.all.appendChild(row);
                     }
@@ -146,7 +149,7 @@ function updateProcurementTable(data) {
             row.appendChild(prNumberCell);
 
             const categoryCell = document.createElement('td');
-            categoryCell.textContent = item.procurement_category || 'N/A'; // Add category cell
+            categoryCell.textContent = item.category  ; // Add category cell
             row.appendChild(categoryCell);
 
             // ACTIVITY cell

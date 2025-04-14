@@ -7,10 +7,106 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     const procurementId = procurementIdElement.value;
-    const procurementUpdateUrl = "/api/procurement/update";  // Use the API route for procurement update
+    const procurementUpdateUrl = "/api/procurement/update"; // Use the API route for procurement update
 
     // Initialize the status tracking after checking file uploads
     initializeFileUploadStatuses(procurementId);
+
+    // Handle the ntca_no field
+    const ntcaNoField = document.getElementById('ntca_no');
+    if (ntcaNoField) {
+        // Disable the field if it already has a value
+        if (ntcaNoField.value) {
+            ntcaNoField.setAttribute('readonly', 'true');
+        }
+
+        // Add an event listener to disable the field once a value is entered
+        ntcaNoField.addEventListener('change', function () {
+            if (ntcaNoField.value) {
+                ntcaNoField.setAttribute('readonly', 'true');
+            }
+        });
+    }
+
+    // Handle the quarter dropdown
+    const quarterField = document.getElementById('quarter');
+    if (quarterField) {
+        // Check if the dropdown already has a saved value
+        const savedQuarter = quarterField.getAttribute('data-saved-value'); // Get the saved value from the data attribute
+        if (savedQuarter) {
+            quarterField.value = savedQuarter; // Set the saved value as the selected option
+
+            // Make the dropdown read-only by preventing interaction
+            quarterField.addEventListener('mousedown', function (e) {
+                e.preventDefault(); // Prevent the dropdown from opening
+            });
+        }
+
+        // Add an event listener to make the dropdown read-only once a value is selected
+        quarterField.addEventListener('change', function () {
+            if (quarterField.value) {
+                quarterField.addEventListener('mousedown', function (e) {
+                    e.preventDefault(); // Prevent the dropdown from opening
+                });
+            }
+        });
+    }
+
+    // Lock ntca_no and quarter if date fields are incomplete
+    function lockNtcaAndQuarter() {
+        let allDatesCompleted = true;
+
+        // Check if all date fields are completed
+        for (let i = 1; i <= 6; i++) {
+            const dateSubmitted = document.getElementById(`dateSubmitted${i}`);
+            const dateReturned = document.getElementById(`dateReturned${i}`);
+
+            if (!dateSubmitted || !dateReturned) continue;
+
+            if (!(dateSubmitted.value && dateReturned.value)) {
+                allDatesCompleted = false;
+                break;
+            }
+        }
+
+        // Lock ntca_no and quarter if dates are not completed
+        if (!allDatesCompleted) {
+            if (ntcaNoField) {
+                ntcaNoField.setAttribute('readonly', 'true');
+            }
+            if (quarterField) {
+                quarterField.addEventListener('mousedown', function (e) {
+                    e.preventDefault(); // Prevent the dropdown from opening
+                });
+            }
+        } else {
+            // Unlock ntca_no and quarter if all dates are completed
+            if (ntcaNoField) {
+                ntcaNoField.removeAttribute('readonly');
+            }
+            if (quarterField) {
+                quarterField.removeEventListener('mousedown', function (e) {
+                    e.preventDefault();
+                });
+            }
+        }
+    }
+
+    // Initial lock check on page load
+    lockNtcaAndQuarter();
+
+    // Add event listeners to date fields to recheck lock status on change
+    for (let i = 1; i <= 6; i++) {
+        const dateSubmitted = document.getElementById(`dateSubmitted${i}`);
+        const dateReturned = document.getElementById(`dateReturned${i}`);
+
+        if (dateSubmitted) {
+            dateSubmitted.addEventListener('change', lockNtcaAndQuarter);
+        }
+        if (dateReturned) {
+            dateReturned.addEventListener('change', lockNtcaAndQuarter);
+        }
+    }
 
     document.getElementById('saveChanges').addEventListener('click', function (e) {
         e.preventDefault();
@@ -18,6 +114,13 @@ document.addEventListener('DOMContentLoaded', function () {
         // Temporarily remove the 'disabled' attribute from all fields before submitting
         const allDateFields = document.querySelectorAll('input[id^="dateSubmitted"], input[id^="dateReturned"]');
         allDateFields.forEach(field => field.removeAttribute('disabled'));
+
+        // Remove 'disabled' from the quarter dropdown before submitting
+        if (quarterField) {
+            quarterField.removeEventListener('mousedown', function (e) {
+                e.preventDefault();
+            });
+        }
 
         let formData = new FormData(document.getElementById('procurementForm'));
 
@@ -46,6 +149,10 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(response => response.json())
             .then(data => {
                 alert(data.message);
+
+                // After saving, reapply lock logic
+                lockNtcaAndQuarter();
+
                 window.location.href = '/homepage-ilcdb'; // Refresh the page after saving
             })
             .catch(error => {
@@ -350,6 +457,4 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
     }
-
-
 });
