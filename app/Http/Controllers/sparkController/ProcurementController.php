@@ -209,7 +209,7 @@ class ProcurementController extends Controller
             SELECT 
                 procurement_id, 
                 activity, 
-                dt_submitted
+                COALESCE(dt_submitted1, dt_submitted2) AS dt_submitted
             FROM honoraria_form 
             WHERE status = 'Overdue'
     
