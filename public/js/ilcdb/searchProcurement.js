@@ -100,7 +100,7 @@ function searchProcurement() {
 
                     const statusMessage = (item.status || "").toLowerCase();
                     badge.className = getStatusClass(statusMessage);
-                    badge.textContent = item.status || "Unknown Status";
+                    badge.textContent = item.status;
                     statusCell.appendChild(badge);
                     row.appendChild(statusCell);
 

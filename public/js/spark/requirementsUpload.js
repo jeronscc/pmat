@@ -1,89 +1,93 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const procurementId = document.getElementById('procurement_id')?.value;
-    if (!procurementId) {
-        alert('Error: Procurement ID is missing.');
-        return;
+    const modals = [1, 2];
+
+    modals.forEach(modalNumber => {
+        const saveButton = document.getElementById(`saveBtn${modalNumber}`);
+        if (saveButton) {
+            saveButton.addEventListener('click', function () {
+                if (areAllFilesSelected(modalNumber)) {
+                    uploadFiles(modalNumber); // ✅ Proceed only if all files are selected
+                } else {
+                    alert(`Please upload all required files before saving Modal ${modalNumber}.`);
+                }
+            });
+        }
+    });
+
+    function areAllFilesSelected(modalNumber) {
+        const form = document.getElementById(`requirementsForm${modalNumber}`);
+        if (!form) return false;
+
+        const fileInputs = form.querySelectorAll('input[type="file"]');
+        for (const fileInput of fileInputs) {
+            if (fileInput.files.length === 0) {
+                return false; // ❌ Missing a required file
+            }
+        }
+        return true; // ✅ All files are selected
     }
 
-    // Fetch uploaded files when the page loads
-    fetchUploadedFiles(procurementId);
+    function uploadFiles(modalNumber) {
+        const form = document.getElementById(`requirementsForm${modalNumber}`);
+        if (!form) {
+            console.error(`Error: Form requirementsForm${modalNumber} not found.`);
+            return;
+        }
 
-    // Save button click event listener for form 1
-    const saveBtn1 = document.getElementById('saveBtn');
-    if (saveBtn1) {
-        saveBtn1.addEventListener('click', function () {
-            const form = document.getElementById('requirementsForm');
-            if (!form) {
-                console.error("Form not found.");
-                return;
-            }
+        const formData = new FormData(form);
+        const procurementId = document.getElementById('procurementId')?.value;
+        if (!procurementId) {
+            alert('Error: Procurement ID is missing.');
+            return;
+        }
 
-            const formData = new FormData(form);
-            formData.append('procurement_id', procurementId);
+        formData.append('procurement_id', procurementId);
+        formData.append('modal', modalNumber); // ✅ Send modal number
 
-            console.log("Sending form data:", [...formData.entries()]); // Debugging log
+        console.log(`Uploading files for modal ${modalNumber}:`, [...formData.entries()]);
 
-            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
-            if (!csrfToken) {
-                console.error("Error: CSRF token not found.");
-                return;
-            }
+        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+        if (!csrfToken) {
+            console.error("Error: CSRF token not found.");
+            return;
+        }
 
-            fetch('/api/spark/requirements/upload', {
-                method: 'POST',
-                headers: { 'X-CSRF-TOKEN': csrfToken },
-                body: formData
+        fetch(`/api/spark/requirements/upload`, {
+            method: 'POST',
+            headers: { 'X-CSRF-TOKEN': csrfToken },
+            body: formData
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log(`Server response for modal ${modalNumber}:`, data);
+                if (data.success) {
+                    //alert(data.message);
+
+                    // Fetch uploaded files to update the UI dynamically
+                    fetchUploadedFiles(procurementId, modalNumber);
+
+                    // Refresh the entire page after a short delay
+                    setTimeout(() => {
+                        location.reload();
+                    }, 1000); // Delay to ensure fetch completes before reload
+                } else {
+                    alert("Upload failed: " + (data.message || "Unknown error."));
+                }
             })
-                .then(response => response.json())
-                .then(data => {
-                    console.log("Server response:", data); // Log response
-
-                    if (data.success) {
-                        //alert(data.message);
-                        // Important: Fetch files again after successful upload
-                        fetchUploadedFiles(procurementId);
-
-                        setTimeout(() => {
-                            location.reload();
-                        }, 1000); // Delay to ensure fetch completes before reload
-                        
-                    } else {
-                        alert("Upload failed: " + (data.message || "Unknown error."));
-                    }
-                })
-                .catch(error => {
-                    console.error("Error during upload:", error);
-                    alert("Upload failed. Check console for details.");
-                });
-        });
+            .catch(error => {
+                console.error("Error during upload:", error);
+                alert("Upload failed. Check console for details.");
+            });
     }
 
-    // Function to fetch and display uploaded files
-    function fetchUploadedFiles(procurementId) {
+    function fetchUploadedFiles(procurementId, modalNumber) {
         fetch(`/api/spark/requirements/${procurementId}`)
             .then(response => response.json())
             .then(data => {
-                console.log("Fetched files data:", data); // Log the fetched data for debugging
-
-                if (data.success && data.files) {
-                    // Ensure files is an array
-                    const files = Array.isArray(data.files) ? data.files : Object.values(data.files);
-                    console.log("Processing files:", files); // Log processed files array
-
-                    // Display each file type
-                    displayFilesForRequirement('ORS', files);
-                    displayFilesForRequirement('DV', files);
-                    displayFilesForRequirement('Contract', files);
-                    displayFilesForRequirement('Classification', files);
-                    displayFilesForRequirement('Report', files);
-                    displayFilesForRequirement('Attendance', files);
-                    displayFilesForRequirement('Resume', files);
-                    displayFilesForRequirement('GovID', files);
-                    displayFilesForRequirement('Payslip', files);
-                    displayFilesForRequirement('Bank', files);
-                    displayFilesForRequirement('Cert', files);
+                if (data.success) {
+                    displayUploadedFiles(data.files, modalNumber);
                 } else {
-                    console.error("Failed to fetch uploaded files or no files found:", data.message);
+                    console.error("Failed to fetch uploaded files:", data.message);
                 }
             })
             .catch(error => {
@@ -91,45 +95,20 @@ document.addEventListener('DOMContentLoaded', function () {
             });
     }
 
-    // Function to display files for a specific requirement
-    function displayFilesForRequirement(requirementType, files) {
-        // Get the file list container for this requirement
-        const fileListContainer = document.getElementById(`uploadedFilesList${requirementType}`);
-        if (!fileListContainer) {
-            console.error(`Container for ${requirementType} not found: uploadedFilesList${requirementType}`);
-            return;
-        }
+    function displayUploadedFiles(files, modalNumber) {
+        files.forEach(file => {
+            const fileInput = document.getElementById(`${file.requirement_name}${modalNumber}`);
+            const fileLinkContainer = document.getElementById(`${file.requirement_name}${modalNumber}Link`);
+            if (fileInput && fileLinkContainer) {
+                fileInput.style.display = 'none'; // Hide the file input
 
-        // Get the file input associated with this requirement
-        // Fixed: Handle TravelOrder properly with lowercase first letter in ID (travelOrderFile)
-        const fileInputId = requirementType === 'TravelOrder' ? 'travelOrderFile' : `${requirementType.toLowerCase()}File`;
-        const fileInput = document.getElementById(fileInputId);
-
-        // Clear existing content
-        fileListContainer.innerHTML = '';
-
-        // Find files for this requirement type - consider multiple possible formats
-        const matchingFiles = files.filter(file => {
-            if (!file.requirement_name) return false;
-
-            // Check for various formats of the requirement name
-            const reqName = file.requirement_name.toLowerCase();
-            const searchType = requirementType.toLowerCase();
-
-            return reqName.includes(searchType) ||
-                reqName.includes(searchType.replace(/([A-Z])/g, ' $1').trim().toLowerCase()) ||  // Check with spaces
-                reqName.includes(searchType.replace(/([A-Z])/g, '_$1').trim().toLowerCase());    // Check with underscores
-        });
-
-        console.log(`Files matching ${requirementType}:`, matchingFiles);
-
-        // If we have matching files, show them and hide the file input
-        if (matchingFiles.length > 0) {
-            matchingFiles.forEach(file => {
                 // Create the file link
                 const fileLink = document.createElement('a');
+                fileLink.href = `/${file.file_path}`;
 
+                // Get the file size (assuming it's in bytes)
                 const fileSize = file.size || 0; // Default to 0 if size is missing or invalid
+
                 // Format the file size to KB or MB
                 let formattedFileSize = '';
                 if (fileSize < 1024) {
@@ -140,45 +119,34 @@ document.addEventListener('DOMContentLoaded', function () {
                     formattedFileSize = `${(fileSize / 1048576).toFixed(2)} MB`;
                 }
 
-                fileLink.href = `/${file.file_path}`;
-                fileLink.textContent = file.original_filename || `View ${requirementType} (${formattedFileSize})`;
+                // Set the link text content (including requirement name and file size)
+                fileLink.textContent = `View ${file.requirement_name} (${formattedFileSize})`;
                 fileLink.target = '_blank';
-                fileLink.classList.add('text-primary', 'fw-bold');
+                fileLink.style.fontWeight = 'bold';
 
-                // Create a container for the link
-                const linkContainer = document.createElement('div');
-                linkContainer.classList.add('mt-2', 'mb-2');
-                linkContainer.appendChild(fileLink);
+                // Clear existing content and append the new file link
+                fileLinkContainer.innerHTML = '';
+                fileLinkContainer.appendChild(fileLink);
 
-                // Add the link to the file list container
-                fileListContainer.appendChild(linkContainer);
-
-                if (fileInput) {
-                    // Hide the file input since we already have a file
-                    fileInput.style.display = 'none';
-                    fileInput.disabled = true;
-
-                    // Explicitly log when we're hiding an input
-                    console.log(`Hiding input for ${requirementType} (ID: ${fileInputId})`);
-                }
-            });
-        } else {
-            // Make sure the file input is visible if no files exist
-            if (fileInput) {
-                fileInput.style.display = '';
-                fileInput.disabled = false;
-
-                // Explicitly log when we're showing an input
-                console.log(`Showing input for ${requirementType} (ID: ${fileInputId})`);
+                // Show the uploaded file link in other modals that need it
+                modals.forEach(otherModalNumber => {
+                    if (otherModalNumber !== modalNumber) {
+                        const otherFileLinkContainer = document.getElementById(`${file.requirement_name}${otherModalNumber}Link`);
+                        if (otherFileLinkContainer) {
+                            otherFileLinkContainer.style.display = 'block';  // Ensure it's visible
+                            otherFileLinkContainer.innerHTML = '';  // Clear existing content
+                            otherFileLinkContainer.appendChild(fileLink.cloneNode(true)); // Append the link in other modal
+                        }
+                    }
+                });
             }
-        }
+        });
     }
 
-    // Event listener to open the modal and fetch uploaded files
-    const requirementsModal1 = document.getElementById('requirementsModal1');
-    if (requirementsModal1) {
-        requirementsModal1.addEventListener('shown.bs.modal', function () {
-            fetchUploadedFiles(procurementId);
+    const procurementId = document.getElementById('procurementId')?.value;
+    if (procurementId) {
+        modals.forEach(modalNumber => {
+            fetchUploadedFiles(procurementId, modalNumber);
         });
     }
 });

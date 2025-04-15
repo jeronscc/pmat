@@ -53,81 +53,119 @@ class HonorariaFormController extends Controller
     {
         $validatedData = $request->validate([
             'procurement_id' => 'required|exists:spark.honoraria_form,procurement_id',
-            'dt_submitted'   => 'nullable|date',
-            'dt_received'    => 'nullable|date',
+            'dt_submitted1'  => 'nullable|date',
+            'dt_received1'   => 'nullable|date',
+            'dt_submitted2'  => 'nullable|date',
+            'dt_received2'   => 'nullable|date',
+            'ntca_no'   => 'nullable|string',
+            'quarter'   => 'nullable|string',
             'budget_spent'   => 'nullable|numeric',
         ]);
 
         try {
-            Log::info("Received Data: ", $validatedData);
-
-            // Fetch existing record
-            $record = DB::connection('spark')->table('honoraria_form')
-                ->where('procurement_id', $validatedData['procurement_id'])
-                ->first();
-
-            $unit = $record->unit ?? '';
-            if ($validatedData['dt_submitted']) {
+            // Determine the unit based on the latest submitted date
+            $unit = null;
+            if ($validatedData['dt_submitted2']) {
+                $unit = 'Accounting Unit';
+            } elseif ($validatedData['dt_submitted1']) {
                 $unit = 'Budget Unit';
+            } 
+
+            // Initialize status to null
+            $status = null;
+
+            // Handle status for Budget Unit
+            if ($unit === 'Budget Unit') {
+                if ($validatedData['dt_submitted1'] && !$validatedData['dt_received1']) {
+                    // If dt_submitted1 is filled and dt_received1 is not, set status to ""
+                    $status = 'For Obligation';
+                } elseif ($validatedData['dt_received1']) {
+                    // If dt_received3 is filled, set status to "Pending"
+                    $status = 'Returned to User';
+                }
             }
 
-            // Determine status
-            $status = match (true) {
-                (!$validatedData['dt_submitted'] && !$validatedData['dt_received']) => null,
-                ($validatedData['dt_submitted'] && !$validatedData['dt_received']) => 'Ongoing',
-                ($validatedData['dt_received'] && !$validatedData['budget_spent']) => 'Pending',
-                ($validatedData['budget_spent']) => 'Done',
-                default => 'Done',
-            };
+            // Handle status for Accounting Unit
+            if ($unit === 'Accounting Unit') {
+                if ($validatedData['dt_submitted2'] && !$validatedData['dt_received2']) {
+                    // If dt_submitted2 is filled and dt_received2 is not, set status to "Pending"
+                    $status = 'For payment processing';
+                } elseif ($validatedData['dt_received2']) {
+                    // If dt_received2 is filled, set status to "Pending"
+                    $status = 'Waiting for Budget';
+                }
+            }
 
-            Log::info("Calculated Status: " . $status);
+            // Handle status for when all fields are filled (Done)
+            if ($validatedData['budget_spent']) {
+                $status = 'Done';
+            }
 
-            DB::connection('spark')->transaction(function () use ($validatedData, $unit, $status, $record) {
-                // Update honoraria_form
+            // Wrap the update and budget deduction in a transaction.
+            DB::connection('spark')->transaction(function () use ($validatedData, $unit, $status) {
+                // Update the procurement_form record.
                 DB::connection('spark')->table('honoraria_form')
                     ->where('procurement_id', $validatedData['procurement_id'])
                     ->update([
-                        'dt_submitted' => $validatedData['dt_submitted'] ? Carbon::parse($validatedData['dt_submitted'])->format('Y-m-d H:i:s') : null,
-                        'dt_received'  => $validatedData['dt_received'] ? Carbon::parse($validatedData['dt_received'])->format('Y-m-d H:i:s') : null,
-                        'budget_spent' => $validatedData['budget_spent'] ?? null,
-                        'unit'         => $unit,
-                        'status'       => $status,
+                        'dt_submitted1' => $validatedData['dt_submitted1'] ?? null,
+                        'dt_received1'  => $validatedData['dt_received1'] ?? null,
+                        'dt_submitted2' => $validatedData['dt_submitted2'] ?? null,
+                        'dt_received2'  => $validatedData['dt_received2'] ?? null,
+                        'ntca_no' => $validatedData['ntca_no'] ?? null,
+                        'quarter' => $validatedData['quarter'] ?? null,
+
+                        'budget_spent'  => $validatedData['budget_spent'] ?? null,
+                        'unit'          => $unit,
+                        'status'        => $status,
                     ]);
 
-                // Assuming that the honoraria_form record has a 'quarter' column and a 'saro_no' foreign key
-                $quarter = $record->quarter ?? null;
-                $saroNo  = $record->saro_no ?? null;
+                // Also update the procurement table with ntca_no and quarter.
+                DB::connection('spark')->table('procurement')
+                    ->where('procurement_id', $validatedData['procurement_id'])
+                    ->update([
+                        'ntca_no' => $validatedData['ntca_no'] ?? null,
+                        'quarter' => $validatedData['quarter'] ?? null,
+                    ]);
 
-                if ($saroNo && $quarter && !empty($validatedData['budget_spent'])) {
-                    $column = match ($quarter) {
-                        'First Quarter'  => 'first_q',
-                        'Second Quarter' => 'second_q',
-                        'Third Quarter'  => 'third_q',
-                        'Fourth Quarter' => 'fourth_q',
-                        default          => null,
-                    };
+                // Retrieve procurement form details for quarter and saro_no
+                $record = DB::connection('spark')->table('honoraria_form')
+                    ->where('procurement_id', $validatedData['procurement_id'])
+                    ->first();
 
-                    if ($column) {
-                        // Deduct the budget_spent from the respective quarter column in the ntca table
+                if ($record && $record->budget_spent) {
+                    $column = null;
+                    switch ($record->quarter) {
+                        case 'First Quarter':
+                            $column = 'first_q';
+                            break;
+                        case 'Second Quarter':
+                            $column = 'second_q';
+                            break;
+                        case 'Third Quarter':
+                            $column = 'third_q';
+                            break;
+                        case 'Fourth Quarter':
+                            $column = 'fourth_q';
+                            break;
+                    }
+
+                    if ($column && $record->saro_no) {
+                        // Deduct the budget from the respective quarter in ntca table
                         DB::connection('spark')->table('ntca')
-                            ->where('saro_no', $saroNo)
-                            ->decrement($column, $validatedData['budget_spent']);
+                            ->where('saro_no', $record->saro_no)
+                            ->decrement($column, $record->budget_spent);
                     }
                 }
             });
 
             return response()->json([
-                'success' => true,
                 'message' => 'Honoraria form updated successfully!',
-                'status'  => $status . (($status === 'Ongoing' || $status === 'Pending') ? " at $unit" : ''),
+                'unit'    => $unit,
+                'status'  => $status
             ]);
         } catch (\Exception $e) {
-            Log::error('Honoraria update error: ' . $e->getMessage());
-            return response()->json([
-                'success' => false,
-                'message' => 'An error occurred while updating the honoraria form.',
-                'error'   => $e->getMessage(),
-            ], 500);
+            Log::error('Update Error: ' . $e->getMessage());
+            return response()->json(['message' => 'An error occurred while updating the form.'], 500);
         }
     }
 
@@ -141,7 +179,15 @@ class HonorariaFormController extends Controller
                 ], 400);
             }
 
-            $requiredFiles = ['orsFile', 'dvFile', 'contractFile', 'classificationFile', 'reportFile', 'attendanceFile', 'resumeFile', 'govidFile', 'payslipFile', 'bankFile', 'certFile'];
+            $modal = $request->input('modal'); // Get modal number from request
+
+            // Define required files for each modal separately
+            $modalFiles = [
+                1 => ['orsFile', 'contractFile', 'classificationFile', 'resumeFile', 'govidFile', 'payslipFile', 'bankFile'],
+                2 => ['dvFile', 'reportFile', 'attendanceFile', 'certFile'],
+            ];
+
+            $requiredFiles = $modalFiles[$modal] ?? []; // Only use files for this modal
 
             $uploads = [];
             $missingFiles = [];
@@ -157,24 +203,26 @@ class HonorariaFormController extends Controller
                         mkdir($uploadDir, 0777, true);
                     }
 
-                    $fileName = time() . '_' . $request->file($file)->getClientOriginalName();
+                    $uploadedFile = $request->file($file);
+                    $fileName = time() . '_' . $uploadedFile->getClientOriginalName();
                     $filePath = "uploads/requirements/{$request->procurement_id}/" . $fileName;
-                    $request->file($file)->move($uploadDir, $fileName);
+                    $uploadedFile->move($uploadDir, $fileName);
 
                     // Get the file size in bytes
                     $fileSize = filesize($uploadDir . '/' . $fileName);
-                    // Delete existing file entry if it exists
+
+                    // Delete any existing record for this file
                     DB::connection('spark')->table('requirements')
                         ->where('procurement_id', $request->procurement_id)
                         ->where('requirement_name', $file)
                         ->delete();
 
-                    // Store file path in the database
+                    // Insert the new file record with size
                     DB::connection('spark')->table('requirements')->insert([
-                        'procurement_id'    => $request->procurement_id,
-                        'requirement_name'  => $file,
-                        'file_path'         => $filePath,
-                        'size'             => $fileSize,
+                        'procurement_id'   => $request->procurement_id,
+                        'requirement_name' => $file,
+                        'file_path'        => $filePath,
+                        'size'             => $fileSize, // Store the file size
                     ]);
 
                     $uploads[] = $file;
@@ -183,6 +231,9 @@ class HonorariaFormController extends Controller
                 }
             }
 
+            Log::info('Uploaded Files:', $uploads);
+            Log::info('Missing Files:', $missingFiles);
+
             if (empty($uploads)) {
                 return response()->json([
                     'success' => false,
@@ -190,16 +241,9 @@ class HonorariaFormController extends Controller
                 ], 400);
             }
 
-            // Fetch the latest uploaded files after saving
-            $uploadedFiles = DB::connection('spark')
-                ->table('requirements')
-                ->where('procurement_id', $request->procurement_id)
-                ->get();
-
             return response()->json([
                 'success' => true,
                 'message' => 'Files uploaded successfully: ' . implode(', ', $uploads),
-                'files'   => $uploadedFiles, // ✅ Return updated files
             ]);
         } catch (\Exception $e) {
             Log::error('File upload failed: ' . $e->getMessage());
@@ -216,6 +260,7 @@ class HonorariaFormController extends Controller
         try {
             $files = DB::connection('spark')->table('requirements')
                 ->where('procurement_id', $procurement_id)
+                ->select('requirement_name', 'file_path', 'size') // Include size in the query
                 ->get();
 
             return response()->json([
@@ -232,38 +277,39 @@ class HonorariaFormController extends Controller
         }
     }
 
-    public function uploadedFilesCheck($procurement_id)
+    public function uploadedFilesCheck(Request $request, $procurement_id)
     {
-        $requiredFiles = [
-            'orsFile',
-            'dvFile',
-            'contractFile',
-            'classificationFile',
-            'reportFile',
-            'attendanceFile',
-            'resumeFile',
-            'govidFile',
-            'payslipFile',
-            'bankFile',
-            'certFile'
+        $modal = $request->input('modal');
+
+        // Define required files for each modal
+        $modalFiles = [
+            1 => ['orsFile', 'contractFile', 'classificationFile', 'resumeFile', 'govidFile', 'payslipFile', 'bankFile'],
+            2 => ['dvFile', 'reportFile', 'attendanceFile', 'certFile'],
         ];
 
+        // Get the required files for the specified modal
+        $requiredFiles = $modalFiles[$modal] ?? [];
+
+        // Fetch uploaded files for the specified modal from the database
         $uploadedFiles = DB::connection('spark')->table('requirements')
             ->where('procurement_id', $procurement_id)
             ->pluck('file_path', 'requirement_name')
             ->toArray();
+
+        // Calculate file status for the modal
+        $fileStatus = [];
+        foreach ($requiredFiles as $file) {
+            $fileStatus[$file . 'Uploaded'] = array_key_exists($file, $uploadedFiles);
+        }
+
+        // Determine missing files for the specified modal
         $missingFiles = array_diff($requiredFiles, array_keys($uploadedFiles));
 
-        $requirementsStatus = empty($missingFiles) ? 1 : 0;
-
-        DB::connection('spark')->table('honoraria_form')
-            ->where('procurement_id', $procurement_id)
-            ->update(['requirements' => $requirementsStatus]);
-
+        // Return the response
         return response()->json([
             'success' => true,
+            'fileStatus' => $fileStatus,
             'missingFiles' => $missingFiles,
-            'requirementsStatus' => $requirementsStatus
         ]);
     }
 }

@@ -102,7 +102,7 @@ function fetchProcurementForSaro(saroNo) {
 
                     const statusMessage = (item.status || "").toLowerCase();
                     badge.className = getStatusClass(statusMessage);
-                    badge.textContent = item.status || "Unknown Status";
+                    badge.textContent = item.status;
                     statusCell.appendChild(badge);
                     row.appendChild(statusCell);
 
@@ -209,7 +209,7 @@ function fetchProcurementForYear(year) {
 
                     const statusMessage = (item.status || "").toLowerCase();
                     badge.className = getStatusClass(statusMessage);
-                    badge.textContent = item.status || "Unknown Status";
+                    badge.textContent = item.status;
                     statusCell.appendChild(badge);
                     row.appendChild(statusCell);
 
@@ -312,7 +312,7 @@ function fetchProcurementRequirements(saroNo) {
 
                     const statusMessage = (item.status || "").toLowerCase();
                     badge.className = getStatusClass(statusMessage);
-                    badge.textContent = item.status || "Unknown Status";
+                    badge.textContent = item.status;
                     statusCell.appendChild(badge);
                     row.appendChild(statusCell);
 
@@ -489,7 +489,7 @@ function fetchProcurementData(year = "", status = "all") {
 
                 const statusMessage = (item.status || "").toLowerCase();
                 badge.className = getStatusClass(statusMessage);
-                badge.textContent = item.status || "Unknown Status";
+                badge.textContent = item.status;
 
                 statusCell.appendChild(badge);
                 row.appendChild(statusCell);
@@ -647,7 +647,7 @@ function updateProcurementTable(data) {
 
             const statusMessage = (item.status || "").toLowerCase();
             badge.className = getStatusClass(statusMessage);
-            badge.textContent = item.status || "Unknown Status";
+            badge.textContent = item.status;
 
             statusCell.appendChild(badge);
             row.appendChild(statusCell);
