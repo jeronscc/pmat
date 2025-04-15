@@ -81,7 +81,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function fetchUploadedFiles(procurementId, modalNumber) {
-        fetch(`/api/procurement/requirements/${procurementId}`)
+        fetch(`/api/requirements/${procurementId}`)
             .then(response => response.json())
             .then(data => {
                 if (data.success) {

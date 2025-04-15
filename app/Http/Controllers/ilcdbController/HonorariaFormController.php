@@ -260,6 +260,7 @@ class HonorariaFormController extends Controller
         try {
             $files = DB::connection('ilcdb')->table('requirements')
                 ->where('procurement_id', $procurement_id)
+                ->select('requirement_name', 'file_path', 'size') // Include size in the query
                 ->get();
 
             return response()->json([
