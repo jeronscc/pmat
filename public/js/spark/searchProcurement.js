@@ -56,7 +56,7 @@ function searchProcurement() {
         return;
     }
 
-    fetch(`/api/spark/search-procurement-ilcdb?query=${query}`)
+    fetch(`/api/spark/search-procurement-spark?query=${query}`)
         .then((response) => {
             if (!response.ok) {
                 console.error('Failed to fetch data:', response.status);
