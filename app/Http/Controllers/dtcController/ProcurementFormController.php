@@ -52,6 +52,8 @@ class ProcurementFormController extends Controller
             'dt_submitted6'  => 'nullable|date',
             'dt_received6'   => 'nullable|date',
             'budget_spent'   => 'nullable|numeric',
+            'ntca_no'   => 'nullable|string',
+            'quarter'   => 'nullable|string',
         ]);
 
         try {
@@ -144,10 +146,20 @@ class ProcurementFormController extends Controller
                         'dt_received5'  => $validatedData['dt_received5'] ?? null,
                         'dt_submitted6' => $validatedData['dt_submitted6'] ?? null,
                         'dt_received6'  => $validatedData['dt_received6'] ?? null,
+                        'ntca_no' => $validatedData['ntca_no'] ?? null,
+                        'quarter' => $validatedData['quarter'] ?? null,
                         'budget_spent'  => $validatedData['budget_spent'] ?? null,
                         'unit'          => $unit,
                         'status'        => $status,
                     ]);
+
+                // Also update the procurement table with ntca_no and quarter.
+                DB::connection('dtc')->table('procurement')
+                ->where('procurement_id', $validatedData['procurement_id'])
+                ->update([
+                    'ntca_no' => $validatedData['ntca_no'] ?? null,
+                    'quarter' => $validatedData['quarter'] ?? null,
+                ]);
 
                 // Retrieve procurement form details for quarter and saro_no
                 $record = DB::connection('dtc')->table('procurement_form')

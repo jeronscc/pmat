@@ -70,6 +70,8 @@ class OtherExpenseFormController extends Controller
             'dt_submitted'   => 'nullable|date',
             'dt_received'    => 'nullable|date',
             'budget_spent'   => 'nullable|numeric',
+            'ntca_no'   => 'nullable|string',
+            'quarter'   => 'nullable|string',
         ]);
 
         try {
@@ -106,10 +108,21 @@ class OtherExpenseFormController extends Controller
                         'dt_received'  => $validatedData['dt_received']
                             ? Carbon::parse($validatedData['dt_received'])->format('Y-m-d H:i:s')
                             : null,
+                        'ntca_no' => $validatedData['ntca_no'] ?? null,
+                        'quarter' => $validatedData['quarter'] ?? null,
                         'budget_spent' => $validatedData['budget_spent'] ?? null,
                         'status'       => $status,
                         'unit'         => $unit,
                     ]);
+
+                    // Update the procurement record
+                    DB::connection('dtc')->table('procurement')
+                        ->where('procurement_id', $validatedData['procurement_id'])
+                        ->update([
+                            'ntca_no' => $validatedData['ntca_no'] ?? null,
+                            'quarter' => $validatedData['quarter'] ?? null,
+                    ]);
+                
 
                 // Retrieve quarter and saro_no from the record
                 $quarter = $record->quarter ?? null;
