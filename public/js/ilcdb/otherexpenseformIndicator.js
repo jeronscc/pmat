@@ -1,16 +1,53 @@
 document.addEventListener('DOMContentLoaded', function () {
-    initializeStatusTracking();
-    toggleBudgetSpent();  // Initial check to lock/unlock budgetSpent
-    checkAndLockFields(); // Initial lock check on page load
+    const ntcaSelect = document.getElementById('ntca-number');
+    const saroNo = document.getElementById('saro-no-value').value;
+    let selectedNtcaValue = ''; // Placeholder for the pre-saved NTCA value
 
-    const otherexpenseUpdateUrl = "/api/otherexpense/update";  // Use the correct API route
+    // Simulate an existing record value (e.g., from the backend, like $record->ntca_no)
+    selectedNtcaValue = document.getElementById('selected-ntca-value').value; // Hidden input for existing value
 
+    if (saroNo) {
+        // Fetch NTCA options based on the saro_no
+        fetch(`/api/ntca-by-saro?saro_no=${encodeURIComponent(saroNo)}`)
+            .then(res => res.json())
+            .then(data => {
+                // Clear previous options and add the default one
+                ntcaSelect.innerHTML = '<option value="" disabled>Select NTCA Number</option>';
+
+                if (data.length === 0) {
+                    const option = document.createElement('option');
+                    option.value = '';
+                    option.textContent = 'No NTCA found';
+                    ntcaSelect.appendChild(option);
+                    return;
+                }
+
+                // Populate the dropdown with fetched NTCA numbers
+                data.forEach(item => {
+                    const option = document.createElement('option');
+                    option.value = item.ntca_no;
+                    option.textContent = item.ntca_no;
+                    ntcaSelect.appendChild(option);
+                });
+
+                // Set the dropdown to the pre-saved value (if any)
+                if (selectedNtcaValue) {
+                    ntcaSelect.value = selectedNtcaValue;
+                } else {
+                    // If there's no saved value, keep the placeholder as selected
+                    ntcaSelect.value = '';
+                }
+            })
+            .catch(err => console.error('Error fetching NTCA numbers:', err));
+    }
+
+    // Handle save changes
     document.getElementById('saveChanges').addEventListener('click', function (e) {
         e.preventDefault();
 
         const form = document.getElementById('otherexpenseForm');
         const formData = new FormData(form);
-
+        const ntcaNumber = ntcaSelect.value;
         const dateSubmitted = document.getElementById('dateSubmitted').value;
 
         // Validate required fields
@@ -19,7 +56,12 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
-        fetch(otherexpenseUpdateUrl, {
+        // Append selected NTCA number to the formData
+        if (ntcaNumber) {
+            formData.append('ntca_number', ntcaNumber);
+        }
+
+        fetch('/api/otherexpense/update', {
             method: 'POST',
             headers: {
                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
@@ -30,8 +72,20 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(data => {
                 if (data.success) {
                     alert(data.message);
-                    disableSaveButton();  // Disable the save button after success
-                    window.location.href = '/homepage-ilcdb'   // Refresh to reflect changes
+
+                    // Update the selected value after saving
+                    selectedNtcaValue = data.saved_ntca_number;
+
+                    // Reflect the saved value in the dropdown
+                    if (selectedNtcaValue) {
+                        ntcaSelect.value = selectedNtcaValue;
+                    } else {
+                        // If no value was saved, reset to default placeholder
+                        ntcaSelect.value = '';
+                    }
+
+                    // Optionally redirect or refresh
+                    window.location.href = '/homepage-ilcdb';
                 } else {
                     alert('Error: ' + data.message);
                 }
@@ -42,6 +96,8 @@ document.addEventListener('DOMContentLoaded', function () {
             });
     });
 
+    initializeStatusTracking();
+    
     document.getElementById('cancelChanges').addEventListener('click', function (e) {
         e.preventDefault();
         window.location.href = '/homepage-ilcdb';

@@ -137,6 +137,8 @@ Route::get('/fetch-procurement-ilcdb', function (Request $request) {
 });
 
 
+Route::get('/ntca-by-saro', [IlcdbSaroController::class, 'getNtcaBySaro']);
+
 
 //ILCDB SEARCH PROCUREMENTS
 Route::get('/search-procurement-ilcdb', function (Request $request) {
