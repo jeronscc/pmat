@@ -132,6 +132,35 @@
                                 </table>
                             </div>
 
+                            <h3>NTCA</h3>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>NTCA Number</th>
+                                            <th>Quarter</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <input type="text" class="form-control" id="ntca_no" name="ntca_no" placeholder="NTCA Number"
+                                                    value="{{ old('ntca_no', $record->ntca_no ?? '') }}">
+                                            </td>
+                                            <td>
+                                                <select class="form-select" id="quarter" name="quarter">
+                                                    <option value="" disabled>Select Current Quarter</option>
+                                                    <option value="First Quarter"  {{ old('quarter', $record->quarter ?? '') == 'First Quarter'  ? 'selected' : '' }}>First Quarter</option>
+                                                    <option value="Second Quarter" {{ old('quarter', $record->quarter ?? '') == 'Second Quarter' ? 'selected' : '' }}>Second Quarter</option>
+                                                    <option value="Third Quarter"  {{ old('quarter', $record->quarter ?? '') == 'Third Quarter'  ? 'selected' : '' }}>Third Quarter</option>
+                                                    <option value="Fourth Quarter" {{ old('quarter', $record->quarter ?? '') == 'Fourth Quarter' ? 'selected' : '' }}>Fourth Quarter</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
                             <div class="row">
                                 <div class="col-12 col-md-6 col-lg-4">
                                     <table class="table">
