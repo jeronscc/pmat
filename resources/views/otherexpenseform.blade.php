@@ -153,12 +153,15 @@
                                             </td>
                                             <td>
                                                 <select class="form-select" id="quarter" name="quarter">
-                                                    <option value="" disabled>Select Current Quarter</option>
-                                                    <option value="First Quarter"  {{ old('quarter', $record->quarter ?? '') == 'First Quarter'  ? 'selected' : '' }}>First Quarter</option>
+                                                    <!-- Placeholder option, no pre-selection -->
+                                                    <option value="" disabled {{ old('quarter', $record->quarter ?? '') == '' ? 'selected' : '' }}>Select Current Quarter</option>
+                                                    
+                                                    <option value="First Quarter" {{ old('quarter', $record->quarter ?? '') == 'First Quarter' ? 'selected' : '' }}>First Quarter</option>
                                                     <option value="Second Quarter" {{ old('quarter', $record->quarter ?? '') == 'Second Quarter' ? 'selected' : '' }}>Second Quarter</option>
-                                                    <option value="Third Quarter"  {{ old('quarter', $record->quarter ?? '') == 'Third Quarter'  ? 'selected' : '' }}>Third Quarter</option>
+                                                    <option value="Third Quarter" {{ old('quarter', $record->quarter ?? '') == 'Third Quarter' ? 'selected' : '' }}>Third Quarter</option>
                                                     <option value="Fourth Quarter" {{ old('quarter', $record->quarter ?? '') == 'Fourth Quarter' ? 'selected' : '' }}>Fourth Quarter</option>
                                                 </select>
+                                                                                             
                                             </td>
                                         </tr>
                                     </tbody>
