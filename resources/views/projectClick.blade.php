@@ -339,10 +339,6 @@
                                     <input type="text" class="form-control" id="saro_number" name="saro_number" required>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="saroDesc" class="form-label">DESCRIPTION</label>
-                                    <textarea class="form-control" rows="3" id="saroDesc" name="saroDesc" placeholder="Enter Description" required></textarea>
-                                </div>
-                                <div class="mb-3">
                                     <label for="saro_year" class="form-label">YEAR</label>
                                     <select class="form-select" id="saro_year" name="saro_year" required>
                                         <option value="" disabled selected>Select Year</option>
@@ -361,6 +357,10 @@
                                 <div class="mb-3">
                                     <label for="saro_date_released" class="form-label">DATE RELEASED</label>
                                     <input type="date" class="form-control" id="saro_date_released" name="saro_date_released" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="saroDesc" class="form-label">DESCRIPTION</label>
+                                    <textarea class="form-control" rows="3" id="saroDesc" name="saroDesc" placeholder="Enter Description" required></textarea>
                                 </div>
                             </div>
 
