@@ -79,18 +79,18 @@ class ProcurementFormController extends Controller
                     $status = 'For DV Creation';
                 } elseif ($validatedData['dt_received5']) {
                     // If dt_received5 is filled, set status to "Pending"
-                    $status = 'Returned to Uer';
+                    $status = 'Returned to User';
                 } elseif ($validatedData['dt_submitted4'] && !$validatedData['dt_received4']) {
                     // If dt_submitted4 is filled and dt_received4 is not, set status to ""
                     $status = 'For IAR / PAR / ICS / RFI creation';
                 } elseif ($validatedData['dt_received4']) {
-                    // If dt_received4 is filled, set status to "Returned to Uer"
+                    // If dt_received4 is filled, set status to "Returned to User"
                     $status = 'Returned to User';
                 } elseif ($validatedData['dt_submitted2'] && !$validatedData['dt_received2']) {
                     // If dt_submitted2 is filled and dt_received2 is not, set status to ""
                     $status = 'For ORS creation';
                 } elseif ($validatedData['dt_received2']) {
-                    // If dt_received2 is filled, set status to "Returned to Uer"
+                    // If dt_received2 is filled, set status to "Returned to User"
                     $status = 'Returned to User';
                 } elseif ($validatedData['dt_submitted1'] && !$validatedData['dt_received1']) {
                     // If dt_submitted1 is filled and dt_received1 is not, set status to ""

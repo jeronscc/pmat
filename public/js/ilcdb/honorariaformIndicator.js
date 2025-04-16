@@ -445,8 +445,12 @@ document.addEventListener('DOMContentLoaded', function () {
         const budgetSpentField = document.getElementById('budgetSpent');
         if (budgetSpentField) {
             if (allCompleted) {
-                budgetSpentField.removeAttribute('readonly');
-                budgetSpentField.removeAttribute('disabled');
+                if (!budgetSpentField.value) {
+                    budgetSpentField.removeAttribute('readonly');
+                    budgetSpentField.removeAttribute('disabled');
+                } else {
+                    budgetSpentField.setAttribute('readonly', 'true');
+                }
             } else {
                 budgetSpentField.setAttribute('readonly', 'true');
             }
