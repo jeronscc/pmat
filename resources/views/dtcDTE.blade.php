@@ -94,6 +94,7 @@
                         <form id="otherexpenseForm">
                             @csrf
                             <!-- Hidden field for procurement_id (using pr_number from URL) -->
+                            <input type="hidden" id="saro-no-value" value="{{ $procurement->saro_no }}">
                             <input type="hidden" name="procurement_id" value="{{ $prNumber }}">
 
                             <hr class="my-4" style="border-top: 2px solid rgba(0, 0, 0, 0.6);">
@@ -143,19 +144,21 @@
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td>
-                                                <input type="text" class="form-control" id="ntca_no" name="ntca_no" placeholder="NTCA Number"
-                                                    value="{{ old('ntca_no', $record->ntca_no ?? '') }}">
-                                            </td>
-                                            <td>
-                                                <select class="form-select" id="quarter" name="quarter">
-                                                    <option value="" disabled>Select Current Quarter</option>
-                                                    <option value="First Quarter"  {{ old('quarter', $record->quarter ?? '') == 'First Quarter'  ? 'selected' : '' }}>First Quarter</option>
-                                                    <option value="Second Quarter" {{ old('quarter', $record->quarter ?? '') == 'Second Quarter' ? 'selected' : '' }}>Second Quarter</option>
-                                                    <option value="Third Quarter"  {{ old('quarter', $record->quarter ?? '') == 'Third Quarter'  ? 'selected' : '' }}>Third Quarter</option>
-                                                    <option value="Fourth Quarter" {{ old('quarter', $record->quarter ?? '') == 'Fourth Quarter' ? 'selected' : '' }}>Fourth Quarter</option>
-                                                </select>
-                                            </td>
+                                        <td>
+                                            <select class="form-select" id="ntca-number" name="ntca_no">
+                                                <input type="hidden" id="selected-ntca-value" value="{{ $record->ntca_no ?? '' }}">
+                                                    <!-- SARO options will be populated dynamically -->
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <select class="form-select" id="quarter" name="quarter" data-saved-value="{{ $record->quarter ?? '' }}">
+                                                <option value="" disabled {{ empty($record->quarter) ? 'selected' : '' }}>Select Current Quarter</option>
+                                                <option value="First Quarter" {{ $record->quarter == 'First Quarter' ? 'selected' : '' }}>First Quarter</option>
+                                                <option value="Second Quarter" {{ $record->quarter == 'Second Quarter' ? 'selected' : '' }}>Second Quarter</option>
+                                                <option value="Third Quarter" {{ $record->quarter == 'Third Quarter' ? 'selected' : '' }}>Third Quarter</option>
+                                                <option value="Fourth Quarter" {{ $record->quarter == 'Fourth Quarter' ? 'selected' : '' }}>Fourth Quarter</option>
+                                            </select>
+                                        </td>
                                         </tr>
                                     </tbody>
                                 </table>

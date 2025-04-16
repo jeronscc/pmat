@@ -38,7 +38,7 @@ class ProcurementFormController extends Controller
     public function update(Request $request)
     {
         $validatedData = $request->validate([
-            'procurement_id' => 'required|exists:click.procurement_form,procurement_id',
+            'procurement_id' => 'required|exists:clicks.procurement_form,procurement_id',
             'dt_submitted1'  => 'nullable|date',
             'dt_received1'   => 'nullable|date',
             'dt_submitted2'  => 'nullable|date',
@@ -76,28 +76,28 @@ class ProcurementFormController extends Controller
             if ($unit === 'Supply Unit') {
                 if ($validatedData['dt_submitted5'] && !$validatedData['dt_received5']) {
                     // If dt_submitted5 is filled and dt_received5 is not, set status to "Pending"
-                    $status = 'Ongoing';
+                    $status = 'For DV Creation';
                 } elseif ($validatedData['dt_received5']) {
                     // If dt_received5 is filled, set status to "Pending"
-                    $status = 'Pending';
+                    $status = 'Returned to User';
                 } elseif ($validatedData['dt_submitted4'] && !$validatedData['dt_received4']) {
                     // If dt_submitted4 is filled and dt_received4 is not, set status to ""
-                    $status = 'Ongoing';
+                    $status = 'For IAR / PAR / ICS / RFI creation';
                 } elseif ($validatedData['dt_received4']) {
-                    // If dt_received4 is filled, set status to "Pending"
-                    $status = 'Pending';
+                    // If dt_received4 is filled, set status to "Returned to User"
+                    $status = 'Returned to User';
                 } elseif ($validatedData['dt_submitted2'] && !$validatedData['dt_received2']) {
                     // If dt_submitted2 is filled and dt_received2 is not, set status to ""
-                    $status = 'Ongoing';
+                    $status = 'For ORS creation';
                 } elseif ($validatedData['dt_received2']) {
-                    // If dt_received2 is filled, set status to "Pending"
-                    $status = 'Pending';
+                    // If dt_received2 is filled, set status to "Returned to User"
+                    $status = 'Returned to User';
                 } elseif ($validatedData['dt_submitted1'] && !$validatedData['dt_received1']) {
                     // If dt_submitted1 is filled and dt_received1 is not, set status to ""
-                    $status = 'Ongoing';
+                    $status = 'Request for Abstract, Philgeps posting (if applicable)';
                 } elseif ($validatedData['dt_received1']) {
                     // If dt_received1 is filled, set status to "Pending"
-                    $status = 'Pending';
+                    $status = 'Returned to User';
                 }
             }
 
@@ -105,10 +105,10 @@ class ProcurementFormController extends Controller
             if ($unit === 'Budget Unit') {
                 if ($validatedData['dt_submitted3'] && !$validatedData['dt_received3']) {
                     // If dt_submitted3 is filled and dt_received3 is not, set status to ""
-                    $status = 'Ongoing';
+                    $status = 'For Obligation';
                 } elseif ($validatedData['dt_received3']) {
                     // If dt_received3 is filled, set status to "Pending"
-                    $status = 'Pending';
+                    $status = 'Returned to User';
                 }
             }
 
@@ -116,10 +116,10 @@ class ProcurementFormController extends Controller
             if ($unit === 'Accounting Unit') {
                 if ($validatedData['dt_submitted6'] && !$validatedData['dt_received6']) {
                     // If dt_submitted6 is filled and dt_received6 is not, set status to "Pending"
-                    $status = 'Ongoing';
+                    $status = 'For payment processing';
                 } elseif ($validatedData['dt_received6']) {
                     // If dt_received6 is filled, set status to "Pending"
-                    $status = 'Pending';
+                    $status = 'Waiting for Budget';
                 }
             }
 
@@ -129,9 +129,9 @@ class ProcurementFormController extends Controller
             }
 
             // Wrap the update and budget deduction in a transaction.
-            DB::connection('click')->transaction(function () use ($validatedData, $unit, $status) {
+            DB::connection('clicks')->transaction(function () use ($validatedData, $unit, $status) {
                 // Update the procurement_form record.
-                DB::connection('click')->table('procurement_form')
+                DB::connection('clicks')->table('procurement_form')
                     ->where('procurement_id', $validatedData['procurement_id'])
                     ->update([
                         'dt_submitted1' => $validatedData['dt_submitted1'] ?? null,
@@ -148,21 +148,22 @@ class ProcurementFormController extends Controller
                         'dt_received6'  => $validatedData['dt_received6'] ?? null,
                         'ntca_no' => $validatedData['ntca_no'] ?? null,
                         'quarter' => $validatedData['quarter'] ?? null,
+
                         'budget_spent'  => $validatedData['budget_spent'] ?? null,
                         'unit'          => $unit,
                         'status'        => $status,
                     ]);
 
-                 // Also update the procurement table with ntca_no and quarter.
-                DB::connection('click')->table('procurement')
-                ->where('procurement_id', $validatedData['procurement_id'])
-                ->update([
-                    'ntca_no' => $validatedData['ntca_no'] ?? null,
-                    'quarter' => $validatedData['quarter'] ?? null,
-                ]);
+                // Also update the procurement table with ntca_no and quarter.
+                DB::connection('clicks')->table('procurement')
+                    ->where('procurement_id', $validatedData['procurement_id'])
+                    ->update([
+                        'ntca_no' => $validatedData['ntca_no'] ?? null,
+                        'quarter' => $validatedData['quarter'] ?? null,
+                    ]);
 
                 // Retrieve procurement form details for quarter and saro_no
-                $record = DB::connection('click')->table('procurement_form')
+                $record = DB::connection('clicks')->table('procurement_form')
                     ->where('procurement_id', $validatedData['procurement_id'])
                     ->first();
 
@@ -185,7 +186,7 @@ class ProcurementFormController extends Controller
 
                     if ($column && $record->saro_no) {
                         // Deduct the budget from the respective quarter in ntca table
-                        DB::connection('click')->table('ntca')
+                        DB::connection('clicks')->table('ntca')
                             ->where('saro_no', $record->saro_no)
                             ->decrement($column, $record->budget_spent);
                     }

@@ -95,7 +95,6 @@
                             @csrf
                             <!-- Hidden field for procurement_id (using pr_number from URL) -->
                             <input type="hidden" id="saro-no-value" value="{{ $procurement->saro_no }}">
-
                             <input type="hidden" name="procurement_id" value="{{ $prNumber }}">
 
                             <hr class="my-4" style="border-top: 2px solid rgba(0, 0, 0, 0.6);">

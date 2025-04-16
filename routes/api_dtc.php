@@ -128,7 +128,7 @@ Route::prefix('dtc')->middleware('api')->group(function () {
         return response()->json($mergedData);
     });
 
-
+    Route::get('/ntca-by-saro', [dtcSaroController::class, 'getNtcaBySaro']);
 
     //dtc SEARCH PROCUREMENTS
     Route::get('/search-procurement-dtc', function (Request $request) {
@@ -187,17 +187,17 @@ Route::prefix('dtc')->middleware('api')->group(function () {
     Route::get('/fetch-procurement-details', [DtcProcurementController::class, 'fetchProcurementDetails'])->name('fetchProcurementDetails');
     Route::post('/procurement/update', [DtcProcurementFormController::class, 'update']);
     Route::get('/fetch-combined-procurement', [DtcProcurementController::class, 'fetchCombinedProcurementData']);
-    Route::post('/honoraria/update', [DtcHonorariaFormController::class, 'updateHonoraria']);
+    //Route::post('/honoraria/update', [DtcHonorariaFormController::class, 'updateHonoraria']);
     Route::post('/otherexpense/update', [DtcOtherExpenseFormController::class, 'updateOtherExpense']);
     Route::get('/fetch-combined-procurement-data', [DtcProcurementController::class, 'fetchCombinedProcurementData']);
-    Route::post('/requirements/upload', [DtcHonorariaFormController::class, 'upload'])->name('requirements.upload');
+   // Route::post('/requirements/upload', [DtcHonorariaFormController::class, 'upload'])->name('requirements.upload');
     Route::get('/overdue-procurements', [DtcProcurementController::class, 'getOverdueProcurements']);
-    Route::get('/requirements/{procurement_id}', [DtcHonorariaFormController::class, 'getUploadedFiles']);
+    //Route::get('/requirements/{procurement_id}', [DtcHonorariaFormController::class, 'getUploadedFiles']);
     Route::post('/otherexpense/upload', [DtcOtherExpenseFormController::class, 'upload'])->name('otherexpense.upload');
     Route::get('/otherexpense/requirements/{procurement_id}', [DtcOtherExpenseFormController::class, 'getUploadedFiles']);
     Route::post('/procurement/upload', [DtcProcurementFormController::class, 'upload'])->name('procurement.upload');
     Route::get('/procurement/requirements/{procurement_id}', [DtcProcurementFormController::class, 'getUploadedFiles']);
-    Route::get('/uploadedHonorariaFilesCheck/{procurement_id}', [DtcHonorariaFormController::class, 'uploadedFilesCheck']);
+   // Route::get('/uploadedHonorariaFilesCheck/{procurement_id}', [DtcHonorariaFormController::class, 'uploadedFilesCheck']);
     Route::get('/uploadedTravelExpenseFileCheck/{procurement_id}', [DtcOtherExpenseFormController::class, 'uploadedFilesCheck']);
     Route::get('/uploadedProcurementFilesCheck/{procurement_id}', [DtcProcurementFormController::class, 'uploadedFilesCheck']);
     Route::post('/save-ntca', [DtcSaroController::class, 'saveNTCA']);

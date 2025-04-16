@@ -128,7 +128,7 @@ Route::prefix('spark')->middleware('api')->group(function () {
         return response()->json($mergedData);
     });
 
-
+    Route::get('/ntca-by-saro', [sparkSaroController::class, 'getNtcaBySaro']);
 
     //spark SEARCH PROCUREMENTS
     Route::get('/search-procurement-spark', function (Request $request) {

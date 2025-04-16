@@ -89,8 +89,8 @@ class OtherExpenseFormController extends Controller
 
             // Determine status based on provided dates and budget_spent
             $status = match (true) {
-                ($validatedData['dt_submitted'] && !$validatedData['dt_received']) => 'Ongoing',
-                ($validatedData['dt_received'] && !$validatedData['budget_spent']) => 'Pending',
+                ($validatedData['dt_submitted'] && !$validatedData['dt_received']) => 'For Obligation',
+                ($validatedData['dt_received'] && !$validatedData['budget_spent']) => 'Waiting for Budget',
                 ($validatedData['budget_spent']) => 'Done',
                 default => 'Done',
             };
@@ -116,13 +116,12 @@ class OtherExpenseFormController extends Controller
                     ]);
 
                 // Update the procurement record
-                DB::connection('click')->table('procurement')
+                    DB::connection('click')->table('procurement')
                     ->where('procurement_id', $validatedData['procurement_id'])
                     ->update([
                         'ntca_no' => $validatedData['ntca_no'] ?? null,
                         'quarter' => $validatedData['quarter'] ?? null,
-                ]);
-            
+                    ]);
 
                 // Retrieve quarter and saro_no from the record
                 $quarter = $record->quarter ?? null;

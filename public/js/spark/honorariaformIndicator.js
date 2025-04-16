@@ -6,6 +6,11 @@ document.addEventListener('DOMContentLoaded', function () {
         return;
     }
 
+    const saroNo = document.getElementById('saro-no-value').value;
+    let selectedNtcaValue = ''; // Placeholder for the pre-saved NTCA value
+
+    selectedNtcaValue = document.getElementById('selected-ntca-value').value; // Hidden input for existing value
+
     const procurementId = procurementIdElement.value;
     const procurementUpdateUrl = "/api/spark/honoraria/update"; // Use the API route for procurement update
 
@@ -13,19 +18,46 @@ document.addEventListener('DOMContentLoaded', function () {
     initializeFileUploadStatuses(procurementId);
 
     // Handle the ntca_no field
-    const ntcaNoField = document.getElementById('ntca_no');
+    const ntcaNoField = document.getElementById('ntca-number');
     if (ntcaNoField) {
-        // Disable the field if it already has a value
-        if (ntcaNoField.value) {
-            ntcaNoField.setAttribute('readonly', 'true');
+        // Disable the field if it already has a value from the hidden input (pre-saved value)
+        if (selectedNtcaValue) {
+            ntcaNoField.addEventListener('mousedown', function (e) {
+                e.preventDefault(); // Prevent the dropdown from opening
+            });
         }
+        // Fetch NTCA options based on procurementId (or any other parameter you wish)
+        fetch(`/api/spark/ntca-by-saro?saro_no=${encodeURIComponent(saroNo)}`)
+            .then(res => res.json())
+            .then(data => {
+                // Clear previous options and add the default one
+                ntcaNoField.innerHTML = '<option value="" disabled>Select NTCA Number</option>';
 
-        // Add an event listener to disable the field once a value is entered
-        ntcaNoField.addEventListener('change', function () {
-            if (ntcaNoField.value) {
-                ntcaNoField.setAttribute('readonly', 'true');
-            }
-        });
+                if (data.length === 0) {
+                    const option = document.createElement('option');
+                    option.value = '';
+                    option.textContent = 'No NTCA found';
+                    ntcaNoField.appendChild(option);
+                    return;
+                }
+
+                // Populate the dropdown with fetched NTCA numbers
+                data.forEach(item => {
+                    const option = document.createElement('option');
+                    option.value = item.ntca_no;
+                    option.textContent = item.ntca_no;
+                    ntcaNoField.appendChild(option);
+                });
+
+                // Set the dropdown to the pre-saved value (if any)
+                if (selectedNtcaValue) {
+                    ntcaNoField.value = selectedNtcaValue;
+                } else {
+                    // If there's no saved value, keep the placeholder as selected
+                    ntcaNoField.value = '';
+                }
+            })
+            .catch(err => console.error('Error fetching NTCA numbers:', err));
     }
 
     // Handle the quarter dropdown
@@ -42,14 +74,6 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         }
 
-        // Add an event listener to make the dropdown read-only once a value is selected
-        quarterField.addEventListener('change', function () {
-            if (quarterField.value) {
-                quarterField.addEventListener('mousedown', function (e) {
-                    e.preventDefault(); // Prevent the dropdown from opening
-                });
-            }
-        });
     }
 
     // Lock ntca_no and quarter if date fields are incomplete
@@ -72,7 +96,9 @@ document.addEventListener('DOMContentLoaded', function () {
         // Lock ntca_no and quarter if dates are not completed
         if (!allDatesCompleted) {
             if (ntcaNoField) {
-                ntcaNoField.setAttribute('readonly', 'true');
+                ntcaNoField.addEventListener('mousedown', function (e) {
+                    e.preventDefault(); // Prevent the dropdown from opening
+                });
             }
             if (quarterField) {
                 quarterField.addEventListener('mousedown', function (e) {
@@ -82,7 +108,9 @@ document.addEventListener('DOMContentLoaded', function () {
         } else {
             // Unlock ntca_no and quarter if all dates are completed
             if (ntcaNoField) {
-                ntcaNoField.removeAttribute('readonly');
+                ntcaNoField.removeEventListener('mousedown', function (e) {
+                    e.preventDefault(); // Prevent the dropdown from opening
+                });
             }
             if (quarterField) {
                 quarterField.removeEventListener('mousedown', function (e) {
@@ -122,7 +150,15 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         }
 
-        let formData = new FormData(document.getElementById('honorariaForm'));
+        const form = document.getElementById('honorariaForm');
+        const formData = new FormData(form);
+    
+        const ntcaNumber = ntcaNoField.value; // Get the selected NTCA number
+    
+        // Ensure NTCA number is added to the formData before submission
+        if (ntcaNumber) {
+            formData.append('ntca_no', ntcaNumber); // Append the selected NTCA number
+        }
 
         const dateSubmitted1 = document.getElementById('dateSubmitted1').value;
         if (!dateSubmitted1) {
@@ -409,8 +445,12 @@ document.addEventListener('DOMContentLoaded', function () {
         const budgetSpentField = document.getElementById('budgetSpent');
         if (budgetSpentField) {
             if (allCompleted) {
-                budgetSpentField.removeAttribute('readonly');
-                budgetSpentField.removeAttribute('disabled');
+                if (!budgetSpentField.value) {
+                    budgetSpentField.removeAttribute('readonly');
+                    budgetSpentField.removeAttribute('disabled');
+                } else {
+                    budgetSpentField.setAttribute('readonly', 'true');
+                }
             } else {
                 budgetSpentField.setAttribute('readonly', 'true');
             }

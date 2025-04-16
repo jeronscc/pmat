@@ -219,4 +219,16 @@ class SaroController extends Controller
             ], 500);
         }
     }
+    public function getNtcaBySaro(Request $request)
+    {
+        $saroNo = $request->query('saro_no');
+    
+        $ntcaNumbers = DB::connection('spark')
+            ->table('ntca')
+            ->select('ntca_no')
+            ->where('saro_no', $saroNo)
+            ->get();
+    
+        return response()->json($ntcaNumbers);
+    }
 }

@@ -128,7 +128,7 @@ Route::prefix('click')->middleware('api')->group(function () {
         return response()->json($mergedData);
     });
 
-
+    Route::get('/ntca-by-saro', [clickSaroController::class, 'getNtcaBySaro']);
 
     //click SEARCH PROCUREMENTS
     Route::get('/search-procurement-click', function (Request $request) {
@@ -187,17 +187,17 @@ Route::prefix('click')->middleware('api')->group(function () {
     Route::get('/fetch-procurement-details', [clickProcurementController::class, 'fetchProcurementDetails'])->name('fetchProcurementDetails');
     Route::post('/procurement/update', [clickProcurementFormController::class, 'update']);
     Route::get('/fetch-combined-procurement', [clickProcurementController::class, 'fetchCombinedProcurementData']);
-    Route::post('/honoraria/update', [clickHonorariaFormController::class, 'updateHonoraria']);
+    //Route::post('/honoraria/update', [clickHonorariaFormController::class, 'updateHonoraria']);
     Route::post('/otherexpense/update', [clickOtherExpenseFormController::class, 'updateOtherExpense']);
     Route::get('/fetch-combined-procurement-data', [clickProcurementController::class, 'fetchCombinedProcurementData']);
-    Route::post('/requirements/upload', [clickHonorariaFormController::class, 'upload'])->name('requirements.upload');
+    //Route::post('/requirements/upload', [clickHonorariaFormController::class, 'upload'])->name('requirements.upload');
     Route::get('/overdue-procurements', [clickProcurementController::class, 'getOverdueProcurements']);
-    Route::get('/requirements/{procurement_id}', [clickHonorariaFormController::class, 'getUploadedFiles']);
+    //Route::get('/requirements/{procurement_id}', [clickHonorariaFormController::class, 'getUploadedFiles']);
     Route::post('/otherexpense/upload', [clickOtherExpenseFormController::class, 'upload'])->name('otherexpense.upload');
     Route::get('/otherexpense/requirements/{procurement_id}', [clickOtherExpenseFormController::class, 'getUploadedFiles']);
     Route::post('/procurement/upload', [clickProcurementFormController::class, 'upload'])->name('procurement.upload');
     Route::get('/procurement/requirements/{procurement_id}', [clickProcurementFormController::class, 'getUploadedFiles']);
-    Route::get('/uploadedHonorariaFilesCheck/{procurement_id}', [clickHonorariaFormController::class, 'uploadedFilesCheck']);
+    //Route::get('/uploadedHonorariaFilesCheck/{procurement_id}', [clickHonorariaFormController::class, 'uploadedFilesCheck']);
     Route::get('/uploadedTravelExpenseFileCheck/{procurement_id}', [clickOtherExpenseFormController::class, 'uploadedFilesCheck']);
     Route::get('/uploadedProcurementFilesCheck/{procurement_id}', [clickProcurementFormController::class, 'uploadedFilesCheck']);
     Route::post('/save-ntca', [clickSaroController::class, 'saveNTCA']);
