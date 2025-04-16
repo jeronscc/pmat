@@ -129,57 +129,122 @@ document.addEventListener('DOMContentLoaded', function () {
         dateSubmitted.addEventListener("change", function () {
             updateIndicator(dateSubmitted, dateReturned, indicator);
             toggleBudgetSpent();
-            checkAndLockFields();  // Check and lock after date change
         });
 
         dateReturned.addEventListener("change", function () {
             updateIndicator(dateSubmitted, dateReturned, indicator);
             toggleBudgetSpent();
-            checkAndLockFields();  // Check and lock after date change
         });
     }
 
-    function toggleBudgetSpent() {
-        const dateSubmitted = document.getElementById('dateSubmitted').value;
-        const dateReturned = document.getElementById('dateReturned').value;
-
-        const budgetSpentField = document.getElementById('budgetSpent');
-        if (dateSubmitted && dateReturned) {
-            budgetSpentField.removeAttribute('readonly');
-        } else {
-            budgetSpentField.setAttribute('readonly', 'true');
-        }
-    }
-
-    // Check if the form is completed and lock all fields if needed
-    function checkAndLockFields() {
-        const dateSubmitted = document.getElementById('dateSubmitted').value;
-        const dateReturned = document.getElementById('dateReturned').value;
-        const budgetSpent = document.getElementById('budgetSpent').value;
-
-        if (dateSubmitted && dateReturned && budgetSpent) {
-            lockAllFields();
-        }
-    }
-
-    function lockAllFields() {
-        document.getElementById('dateSubmitted').setAttribute('readonly', 'true');
-        document.getElementById('dateReturned').setAttribute('readonly', 'true');
-        document.getElementById('budgetSpent').setAttribute('readonly', 'true');
-
-        // Optionally disable the save button
-        const saveButton = document.getElementById('saveChanges');
-        if (saveButton) saveButton.setAttribute('disabled', 'true');
-    }
-
-    // Disable the save button after data is saved
-    function disableSaveButton() {
-        const saveButton = document.getElementById('saveChanges');
-        if (saveButton) {
-            saveButton.setAttribute('disabled', 'true');
-        }
-    }
-
-    // Initial lock check when page loads
+    toggleBudgetSpent();
     checkAndLockFields();
+});
+
+function toggleBudgetSpent() {
+    const dateSubmitted = document.getElementById('dateSubmitted').value;
+    const dateReturned = document.getElementById('dateReturned').value;
+    const ntcaSelect = document.getElementById('ntca-number');
+    const budgetSpentField = document.getElementById('budgetSpent');
+    const quarterField = document.getElementById('quarter');
+    const selectedNtcaValue = document.getElementById('selected-ntca-value').value;
+
+    // Enable or disable ntcaSelect based on dateSubmitted and dateReturned
+    if (dateSubmitted && dateReturned) {
+        ntcaSelect.removeAttribute('disabled');
+        quarterField.removeAttribute('disabled');
+    } else {
+        ntcaSelect.setAttribute('disabled', 'true');
+        quarterField.setAttribute('disabled', 'true');
+    }
+
+    // Enable or disable budgetSpentField based on all three fields
+    if (dateSubmitted && dateReturned && selectedNtcaValue && quarterField) {
+        budgetSpentField.removeAttribute('readonly');
+    } else {
+        budgetSpentField.setAttribute('readonly', 'true');
+    }
+}
+
+
+// Check if the form is completed and lock all fields if needed
+function checkAndLockFields() {
+    const dateSubmitted = document.getElementById('dateSubmitted');
+    const dateReturned = document.getElementById('dateReturned');
+    const budgetSpentField = document.getElementById('budgetSpent');
+    const quarterField = document.getElementById('quarter');
+    const ntcaSelect = document.getElementById('ntca-number');
+    const selectedNtcaValue = document.getElementById('selected-ntca-value').value; // Hidden input for saved value
+    const saveButton = document.getElementById('saveChanges');
+
+    let allFieldsHaveSavedValues = true;
+
+    // Disable fields if they have a saved value
+    if (dateSubmitted && dateSubmitted.value) {
+        dateSubmitted.setAttribute('readonly', 'true');
+    } else {
+        allFieldsHaveSavedValues = false;
+    }
+
+    if (dateReturned && dateReturned.value) {
+        dateReturned.setAttribute('readonly', 'true');
+    } else {
+        allFieldsHaveSavedValues = false;
+    }
+
+    if (budgetSpentField && budgetSpentField.value) {
+        budgetSpentField.setAttribute('readonly', 'true');
+    } else {
+        allFieldsHaveSavedValues = false;
+    }
+
+    if (quarterField && quarterField.value) {
+        quarterField.value = quarterField.value; // Ensure the value is retained
+        quarterField.addEventListener('mousedown', preventInteraction); // Prevent interaction
+        quarterField.addEventListener('keydown', preventInteraction); // Prevent keyboard interaction
+    } else {
+        allFieldsHaveSavedValues = false;
+        quarterField.removeEventListener('mousedown', preventInteraction); // Allow interaction
+        quarterField.removeEventListener('keydown', preventInteraction); // Allow keyboard interaction
+    }
+
+    if (ntcaSelect && selectedNtcaValue) {
+        ntcaSelect.value = selectedNtcaValue; // Set saved value
+        ntcaSelect.addEventListener('mousedown', preventInteraction); // Prevent interaction
+        ntcaSelect.addEventListener('keydown', preventInteraction); // Prevent keyboard interaction
+    } else {
+        allFieldsHaveSavedValues = false;
+        ntcaSelect.removeEventListener('mousedown', preventInteraction); // Allow interaction
+        ntcaSelect.removeEventListener('keydown', preventInteraction); // Allow keyboard interaction
+    }
+
+    // Disable the save button if all fields have saved values
+    if (saveButton) {
+        if (allFieldsHaveSavedValues) {
+            saveButton.setAttribute('disabled', 'true');
+        } else {
+            saveButton.removeAttribute('disabled');
+        }
+    }
+}
+
+// Prevent interaction with dropdowns
+function preventInteraction(event) {
+    event.preventDefault();
+}
+
+// Ensure the fields are locked on page load
+document.addEventListener('DOMContentLoaded', function () {
+    checkAndLockFields();
+
+    // Reapply locking logic after saving the form
+    const saveButton = document.getElementById('saveChanges');
+    if (saveButton) {
+        saveButton.addEventListener('click', function () {
+            // Simulate saving the form and reapply locking logic
+            setTimeout(() => {
+                checkAndLockFields();
+            }, 100); // Delay to ensure the form is saved before reapplying logic
+        });
+    }
 });
