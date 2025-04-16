@@ -38,7 +38,7 @@ class ProcurementFormController extends Controller
     public function update(Request $request)
     {
         $validatedData = $request->validate([
-            'procurement_id' => 'required|exists:clicks.procurement_form,procurement_id',
+            'procurement_id' => 'required|exists:click.procurement_form,procurement_id',
             'dt_submitted1'  => 'nullable|date',
             'dt_received1'   => 'nullable|date',
             'dt_submitted2'  => 'nullable|date',
@@ -129,9 +129,9 @@ class ProcurementFormController extends Controller
             }
 
             // Wrap the update and budget deduction in a transaction.
-            DB::connection('clicks')->transaction(function () use ($validatedData, $unit, $status) {
+            DB::connection('click')->transaction(function () use ($validatedData, $unit, $status) {
                 // Update the procurement_form record.
-                DB::connection('clicks')->table('procurement_form')
+                DB::connection('click')->table('procurement_form')
                     ->where('procurement_id', $validatedData['procurement_id'])
                     ->update([
                         'dt_submitted1' => $validatedData['dt_submitted1'] ?? null,
@@ -155,7 +155,7 @@ class ProcurementFormController extends Controller
                     ]);
 
                 // Also update the procurement table with ntca_no and quarter.
-                DB::connection('clicks')->table('procurement')
+                DB::connection('click')->table('procurement')
                     ->where('procurement_id', $validatedData['procurement_id'])
                     ->update([
                         'ntca_no' => $validatedData['ntca_no'] ?? null,
@@ -163,7 +163,7 @@ class ProcurementFormController extends Controller
                     ]);
 
                 // Retrieve procurement form details for quarter and saro_no
-                $record = DB::connection('clicks')->table('procurement_form')
+                $record = DB::connection('click')->table('procurement_form')
                     ->where('procurement_id', $validatedData['procurement_id'])
                     ->first();
 
@@ -186,7 +186,7 @@ class ProcurementFormController extends Controller
 
                     if ($column && $record->saro_no) {
                         // Deduct the budget from the respective quarter in ntca table
-                        DB::connection('clicks')->table('ntca')
+                        DB::connection('click')->table('ntca')
                             ->where('saro_no', $record->saro_no)
                             ->decrement($column, $record->budget_spent);
                     }
