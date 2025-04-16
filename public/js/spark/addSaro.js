@@ -122,7 +122,7 @@ function populateSARODropdown() {
             data.forEach(saro => {
                 const option = document.createElement('option');
                 option.value = saro.saro_no;
-                option.textContent = `${saro.saro_no} (${saro.year})`;
+                option.textContent = `${saro.saro_no}`;
                 saroSelect.appendChild(option);
             });
         })
